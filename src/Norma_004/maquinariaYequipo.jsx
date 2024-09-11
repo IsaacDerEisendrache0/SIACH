@@ -6,6 +6,7 @@ const RiskTable = () => {
     <div className="container">
       <table className="risk-table">
         <thead>
+            <h4>Tabla Maquinaria y equipo</h4>
           <tr>
             <td colSpan="2" className="header">Nombre de la maquinaria o equipo:</td>
             <td colSpan="4" className="header">ESPESADOR</td>

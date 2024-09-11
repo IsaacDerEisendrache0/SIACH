@@ -6,6 +6,7 @@ const RiskAssessment = () => {
     <div className="container">
       <table className="risk-table">
         <thead>
+            <h4>Tabla de equipos moviles</h4>
           <tr>
             <td colSpan="3" className="header">Nombre de la maquinaria o equipo:</td>
             <td colSpan="3" className="header">SCOOPTRAM 2</td>
