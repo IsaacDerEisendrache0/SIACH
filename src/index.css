@@ -1,0 +1,202 @@
+/* Asegúrate de que el cuerpo y el html ocupen el 100% de la altura */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+/* Contenedor principal para la aplicación */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Encabezado de la aplicación */
+.App-header {
+  flex: 1; /* Permite que el contenido principal empuje el footer hacia abajo */
+}
+
+/* Estilo del footer */
+.footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: auto; /* Empuja el footer al final del contenedor */
+  width: 100%;
+}
+
+/* Estilo de la barra de navegación */
+.navbar {
+  background-color: #007bff;
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+
+/* Estilo de los botones de la barra de navegación */
+.navbar button {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px; /* Botones redondeados */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Efecto hover para los botones */
+.navbar button:hover {
+  background-color: #0056b3;
+  transform: scale(1.1);
+}
+
+/* Estilo del texto principal */
+.text {
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+/* Ejemplo de ajuste para la tabla en Main.jsx */
+.table-container {
+  margin-bottom: 50px; /* Deja espacio para el footer */
+}
+
+/* Asegúrate de que otros contenedores de contenido tengan flexibilidad de altura */
+.data-section {
+  background-color: #ffffff; 
+  padding: 20px;
+  border-radius: 10px; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+
+.image-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.image-gallery img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.popup button {
+  margin: 5px;
+}
+
+/* styles.css */
+.image-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.danger-image {
+  width: 100px; /* Ajusta el tamaño de la imagen según lo necesites */
+  height: auto;
+  left: 15%;
+}
+
+
+/* General container */
+.container {
+  width: 100%;
+  padding: 20px;
+  background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
+}
+
+/* Header styling */
+.header {
+  background-color: #e63946;
+  color: white;
+  padding: 10px;
+}
+
+.header .job-info {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.header .activity-info {
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* Main table styling */
+.main-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.main-table th, .main-table td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: center;
+}
+
+/* Risk table styling */
+.risk-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.risk-table th, .risk-table td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: left;
+}
+
+/* EPP description styling */
+.epp-description {
+  background-color: #e63946;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Risk evaluation table styling */
+.risk-evaluation table, .risk-classification table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.risk-evaluation th, .risk-evaluation td, .risk-classification th, .risk-classification td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: center;
+}
+
+/* Table header background */
+.main-table th, .risk-table th, .risk-evaluation th, .risk-classification th {
+  background-color: #007bff;
+  color: white;
+}

@@ -1,0 +1,26 @@
+.table-container {
+  width: 100%;
+  overflow-x: auto; /* Habilita el desplazamiento horizontal si la tabla es demasiado ancha */
+}
+
+table {
+  width: 100%;
+  max-width: 100%; /* Asegura que la tabla no se extienda más allá del contenedor */
+  border-collapse: collapse;
+  font-size: 12px; /* Reduce el tamaño de la fuente */
+}
+
+td {
+  border: 1px solid black;
+  padding: 4px 8px; /* Reduce el padding para hacer la tabla más compacta */
+  text-align: left;
+  vertical-align: top; /* Alinea el texto en la parte superior de la celda */
+}
+
+td[colSpan="15"] {
+  border: none;
+}
+
+thead {
+  background-color: #f2f2f2;
+}

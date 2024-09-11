@@ -1,0 +1,67 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('https://d100mj7v0l85u5.cloudfront.net/s3fs-public/2023-10/equipos-de-seguridad.png'); /* URL de la imagen */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .login-box {
+    background: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente */
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    width: 300px;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .input-container {
+    margin-bottom: 1rem;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 30px; /* Hacer los campos redondeados */
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+  }
+  
+  input:focus {
+    border-color: #e71010; /* Cambiar el color del borde al hacer focus */
+  }
+  
+  .login-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #020613;
+    color: white;
+    border: none;
+    border-radius: 30px; /* Hacer el botón redondeado */
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .login-btn:hover {
+    background-color: #e71010;
+  }
+  
+  .error-msg {
+    color: red;
+    text-align: center;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #e71010;
+    font-weight: bold;
+  }
