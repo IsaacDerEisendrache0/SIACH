@@ -1,0 +1,151 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .header {
+    background-color: #f44336;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+  }
+  
+  .section-header {
+    font-weight: bold;
+  }
+  
+  .risk-table {
+    width: 100%;
+  }
+  
+  .machinery-img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .protection-img img {
+    width: 50px;
+    margin: 5px;
+  }
+  
+  .risk-icons img {
+    width: 60px;
+    margin: 5px;
+  }
+  
+  .risk-level {
+    background-color: #b3e5fc;
+    padding: 10px;
+    font-weight: bold;
+  }
+  
+  .observaciones {
+    text-align: left;
+  }
+  
+  .risk-icons {
+    display: flex;
+    justify-content: center;
+  }
+  
+  input[type="checkbox"] {
+    margin-right: 5px;
+  }
+  .machinery-img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .image-upload-section {
+    text-align: center;
+    padding: 10px;
+  }
+  .editable-input {
+    border: 1px solid #ccc;
+    padding: 5px;
+    width: 100%;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .header {
+    background-color: #f44336;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+  }
+  
+  .separator {
+    background-color: transparent;
+    border: none;
+  }
+  
+  .machinery-img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .epp-icons img {
+    width: 50px;
+    margin: 5px;
+  }
+  
+  .risk-table {
+    width: 100%;
+  }
+  
+  .epp-icons {
+    display: flex;
+    justify-content: center;
+  }
+  
+  td[colspan="8"] {
+    text-align: center;
+  }
+  
+  input[type="file"] {
+    margin-top: 10px;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 
+  }
