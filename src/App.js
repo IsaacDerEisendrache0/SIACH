@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import Norma17 from './Norma_17/norma_17'; // Ajusta la ruta para importar desde la carpeta
 import Norma04 from './Norma_004/norma_004'; // Importamos el componente de evaluación de riesgos N-004
+import Login from './componentes/Loginlogin'; // Importa el componente Login
 
 function Navigation() {
   const location = useLocation();
@@ -51,8 +52,6 @@ function HomePage() {
           Seleccionar Norma
         </button>
         <ul className="dropdown-menu" aria-labelledby="normasDropdown">
-          
-
           <li>
             <button
               className="dropdown-item"
@@ -109,7 +108,7 @@ function App() {
           <Navigation />
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<div>Login Page</div>} />
+            <Route path="/login" element={<Login />} /> {/* Actualiza esta línea */}
             <Route path="/main" element={<div>Main Page</div>} />
           </Routes>
         </header>
