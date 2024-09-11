@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import './Table04.css'; // Asegúrate de tener el archivo CSS para los estilos
 import Moviles from './moviles'; // Importamos el componente de la tabla Moviles
 import MaquinariaYequipo from './maquinariaYequipo'; // Importamos el componente de la tabla Maquinaria y Equipo
-
+import HerramientasMan from './herramientasMan'; // Importamos el componente de la tabla herramientasMan
 
 const App = () => {
-  const [selectedTable, setSelectedTable] = useState('Norma_004'); // Inicializamos con Norma_004
+  const [selectedTable, setSelectedTable] = useState(''); // Inicializamos sin ninguna tabla seleccionada
 
   const handleSelectTable = (table) => {
     setSelectedTable(table);
@@ -13,9 +13,6 @@ const App = () => {
 
   return (
     <div className="container mt-5">
-      {/* Mostrar la tabla de N-004 directamente */}
-
-
       {/* Botón desplegable para elegir las tablas */}
       <div className="dropdown mt-3">
         <button
@@ -46,10 +43,19 @@ const App = () => {
               Tabla de Maquinaria y Equipo
             </button>
           </li>
+          <li>
+            <button
+              className="dropdown-item"
+              type="button"
+              onClick={() => handleSelectTable('HerramientasMan')}
+            >
+              Tabla de Herramientas Manuales
+            </button>
+          </li>
         </ul>
       </div>
 
-      {/* Mostrar la tabla de Móviles si está seleccionada */}
+      {/* Mostrar la tabla seleccionada */}
       <div className="mt-3">
         {selectedTable === 'Moviles' && (
           <div>
@@ -60,6 +66,12 @@ const App = () => {
         {selectedTable === 'MaquinariaYequipo' && (
           <div>
             <MaquinariaYequipo /> {/* Mostramos el componente de Maquinaria y Equipo */}
+          </div>
+        )}
+
+        {selectedTable === 'HerramientasMan' && (
+          <div>
+            <HerramientasMan /> {/* Mostramos el componente de Herramientas Manuales */}
           </div>
         )}
       </div>

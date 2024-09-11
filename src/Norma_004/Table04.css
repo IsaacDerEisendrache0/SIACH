@@ -149,3 +149,47 @@
     border-collapse: collapse;
     margin: 20px 
   }
+  .table-container {
+    width: 100%;
+    margin: 20px 0;
+  }
+  
+  .risk-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+  
+  .risk-table, .risk-table td, .risk-table th {
+    border: 1px solid #000;
+  }
+  
+  .header {
+    background-color: #e74c3c;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .sub-header {
+    background-color: #ecf0f1;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .centered-img {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .risk-table td {
+    padding: 8px;
+    text-align: left;
+  }
+  
+  p {
+    margin: 0;
+    font-weight: bold;
+  }
+  
