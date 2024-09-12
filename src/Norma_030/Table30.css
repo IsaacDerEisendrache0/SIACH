@@ -1,119 +1,56 @@
 .table-container {
-    margin: 20px;
-    width: 100%;
+    padding: 20px;
   }
   
-  .safety-table {
+  .styled-table {
     width: 100%;
     border-collapse: collapse;
+    font-family: Arial, sans-serif;
     font-size: 12px;
-    border: 1px solid black;
   }
   
-  .safety-table th, .safety-table td {
-    border: 1px solid black;
-    padding: 5px;
-    text-align: left;
+  .company-header {
+    background-color: #f2c430;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
   }
   
-  .main-header {
-    background-color: #f1c40f;
-    color: black;
+  .subtitle-header {
+    background-color: #f2f2f2;
     text-align: center;
     font-weight: bold;
     padding: 10px;
-    position: relative;
   }
   
-  .header-logo {
-    width: 15%;
-    display: inline-block;
-    vertical-align: middle;
-  }
-  
-  .header-title {
-    display: inline-block;
-    text-align: center;
-    font-size: 18px;
-    width: 70%;
-  }
-  
-  .sub-header {
-    background-color: #f1c40f;
-    color: black;
-    text-align: center;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 5px;
-  }
-  
-  .area-header {
-    background-color: #e74c3c;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-    vertical-align: middle;
-    writing-mode: vertical-lr;
+  .vertical-header {
+    writing-mode: vertical-rl;
     transform: rotate(180deg);
-    padding: 10px;
-  }
-  
-  .condition-header, .agent-header {
-    background-color: #e74c3c;
-    color: white;
     text-align: center;
     font-weight: bold;
-    padding: 10px;
+    background-color: #f2f2f2;
   }
   
-  .apply-header {
-    background-color: #e74c3c;
-    color: white;
+  .styled-table th,
+  .styled-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
     text-align: center;
+  }
+  
+  .styled-table th {
+    background-color: #f2c430;
     font-weight: bold;
-    padding: 5px;
   }
   
-  .apply-cell {
-    text-align: center;
-    padding: 8px;
-  }
-  
-  .area-side-text {
-    writing-mode: vertical-lr;
-    text-align: center;
-    font-weight: bold;
-    font-size: 16px;
-  }
-  
-  .safety-table tbody td {
-    padding: 8px;
-  }
-  
-  .safety-table tbody td.apply-cell {
+  .styled-table td {
     text-align: center;
   }
   
-  .safety-table thead th {
-    padding: 8px;
+  .styled-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
   }
   
-  .safety-table .apply-header {
-    width: 5%;
-  }
-  
-  .safety-table .apply-cell {
-    width: 5%;
-  }
-  
-  .safety-table .area-header {
-    width: 5%;
-  }
-  
-  .safety-table .condition-header {
-    width: 50%;
-  }
-  
-  .safety-table .agent-header {
-    width: 40%;
+  .styled-table tbody tr:hover {
+    background-color: #ddd;
   }
