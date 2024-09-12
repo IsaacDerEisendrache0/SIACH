@@ -221,7 +221,7 @@
     padding: 8px;
   }
   
-  .evaluation-table td[colspan="3"], .evaluation-table td[colspan="4"] {
+  .evaluation-table td[colspan="3"], .evaluation-table td[colspan="3"] {
     text-align: left;
   }
   
