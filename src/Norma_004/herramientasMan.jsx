@@ -5,6 +5,8 @@ const ToolEvaluationTable = () => {
   // Opciones del menú desplegable para cada campo
   const opcionesConsecuencia = ['Catástrofe', 'Varias muertes', 'Muerte', 'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'];
   const opcionesExposicion = ['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente'];
+  const [observaciones, setObservaciones] = useState('Contar con un procedimiento seguro de trabajo, puede causar dolores musculares. Hacer buen uso de la herramienta');
+
   
   // Nuevas opciones de "Probabilidad"
   const opcionesProbabilidad = [
@@ -406,20 +408,41 @@ const ToolEvaluationTable = () => {
           <tr>
             <td colSpan="4">
               <ul className="risk-list">
-                <li>Golpes y cortes en manos</li>
-                <li>Lesiones oculares por partículas</li>
-                <li>Golpes en diferentes partes del cuerpo</li>
-                <li>Esguinces por sobreesfuerzos</li>
+                <li>Golpes y cortes en manos ocasionados por las propias herramientas durante el trabajo normal con las mismas</li>
+                <li>Lesiones oculares por partículas provenientes de los objetos que se trabajan y/o de la propia herramienta</li>
+                <li>Golpes en diferentes partes del cuerpo por despido de la propia herramienta o del material trabajado</li>
+                <li>Esguinces por sobreesfuerzos o gestos violentos</li>
               </ul>
+            </td>
+            <td colSpan="5">
+              <tr>
+                <select name=""></select>
+                <select name=""></select>
+                <select name=""></select>
+                <select name=""></select>
+                <select name=""></select>
+                <select name=""></select>
+                <select name=""></select>
+              </tr>
+
             </td>
 
           </tr>
         </tbody>
         <tfoot>
-          <tr>
-            <td className="footer-header" colSpan="4">Observaciones:</td>
-            <td colSpan="4">Contar con un procedimiento seguro de trabajo, puede causar dolores musculares. Hacer buen uso de la herramienta</td>
-          </tr>
+        <tr>
+  <td className="footer-header" colSpan="4">Observaciones:</td>
+  <td colSpan="4">
+    <textarea 
+      value={observaciones} 
+      onChange={(e) => setObservaciones(e.target.value)} 
+      rows="4" 
+      cols="50" 
+      placeholder="Escribe tus observaciones aquí"
+    />
+  </td>
+</tr>
+
         </tfoot>
       </table>
     </div>
