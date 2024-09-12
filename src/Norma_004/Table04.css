@@ -183,7 +183,8 @@
     text-align: center;
     padding: 40px;
     background-color: #f2f2f2;
-    vertical-align: middle; /* Alinea verticalmente el contenido de las celdas de imagen */
+    vertical-align: middle;
+    border-right: none; /* Remover la línea de la derecha */
   }
   
   .protection-cell {
@@ -191,6 +192,22 @@
     text-align: left;
     padding: 10px;
     vertical-align: top;
+    border-left: none; /* Remover la línea de la izquierda */
+  }
+  
+  .risk-list, .body-parts-list {
+    list-style-type: disc;
+    margin-left: 20px;
+  }
+  
+  .risk-list {
+    text-align: left;
+  }
+  
+  .body-parts-list {
+    text-align: left;
+    list-style-type: none;
+    margin-left: 0;
   }
   
   .footer-header {
@@ -203,4 +220,17 @@
   .evaluation-table td {
     padding: 8px;
   }
+  
+  .evaluation-table td[colspan="3"], .evaluation-table td[colspan="4"] {
+    text-align: left;
+  }
+  
+  .evaluation-table td[colspan="4"]:first-of-type {
+    border-right: none; /* Remover la línea derecha de las celdas que están unidas */
+  }
+  
+  .evaluation-table td[colspan="4"]:last-of-type {
+    border-left: none; /* Remover la línea izquierda de las celdas que están unidas */
+  }
+  
   

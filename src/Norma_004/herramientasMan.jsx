@@ -9,7 +9,7 @@ const ToolEvaluationTable = () => {
           <h5>Tabla de Herramientas Manuales</h5>
           <tr>
             <td className="header" colSpan="4">Nombre de la herramienta: Llave Stilson</td>
-            <td className="header">Área: Mina y Planta</td>
+            <td className="header"colSpan="6">Área: Mina y Planta</td>
           </tr>
           <tr>
             <td className="header">Energía utilizada:</td>
@@ -24,7 +24,7 @@ const ToolEvaluationTable = () => {
         </thead>
         <tbody>
           <tr>
-            <td className="image-cell" rowSpan="8">imagen</td>
+            <td className="image-cell" rowSpan="7">imagen</td>
             <td className="header" colSpan="3">Evaluación de riesgo de trabajo</td>
             <td className="header" colSpan="3">Equipo de Protección Personal sugerido</td>
           </tr>
@@ -33,7 +33,7 @@ const ToolEvaluationTable = () => {
             <td className="sub-header">Exposición</td>
             <td className="sub-header">Probabilidad</td>
             <td rowSpan="5" className="protection-cell">
-  
+              Guantes, Calzado contra impacto, Casco contra impacto, Overol
             </td>
           </tr>
           <tr>
@@ -41,7 +41,6 @@ const ToolEvaluationTable = () => {
             <td>Irregularmente</td>
             <td>Coincidencia muy rara, pero se sabe que ha ocurrido</td>
           </tr>
-
           <tr>
             <td colSpan="3" className="header">Clasificación de Magnitud de Riesgo</td>
           </tr>
@@ -55,18 +54,27 @@ const ToolEvaluationTable = () => {
             <td colSpan="3">Acción: Tolerable</td>
           </tr>
           <tr>
-            <td className="header" colSpan="7">Identificaciones de Riesgos:</td>
+            <td className="header" colSpan="4">Identificaciones de Riesgos:</td>
+            <td className="header" colSpan="5">Principales partes del cuerpo expuestas al riesgo:</td>
           </tr>
           <tr>
-            <td>Golpes y cortes en manos</td>
-            <td>Brazos y manos</td>
-            <td>Extremidades inferiores</td>
+            <td colSpan="3">
+              <ul className="risk-list">
+                <li>Golpes y cortes en manos</li>
+                <li>Lesiones oculares por partículas</li>
+                <li>Golpes en diferentes partes del cuerpo</li>
+                <li>Esguinces por sobreesfuerzos</li>
+              </ul>
+            </td>
+            <td>
+
+            </td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
             <td className="footer-header" colSpan="4">Observaciones:</td>
-            <td colSpan="3">Contar con un procedimiento seguro de trabajo, Puede causar dolores musculares. Hacer buen uso de la herramienta</td>
+            <td colSpan="4">Contar con un procedimiento seguro de trabajo, Puede causar dolores musculares. Hacer buen uso de la herramienta</td>
           </tr>
         </tfoot>
       </table>
