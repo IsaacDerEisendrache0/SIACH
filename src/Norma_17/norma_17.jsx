@@ -2,10 +2,52 @@ import React, { useState } from 'react';
 import './Table.css'; // Asegúrate de que este archivo esté disponible para aplicar los estilos
 
 const RiskAssessmentTable = () => {
-  // Estados para manejar la fecha, el área y el tiempo de exposición
   const [inspectionDate, setInspectionDate] = useState('2023-03-15');
   const [area, setArea] = useState('Producción');
   const [exposureTime, setExposureTime] = useState('8 hrs');
+
+  const [selectedHazards, setSelectedHazards] = useState({
+    heightFall: true,
+    temperatureExposure: false,
+    staticElectricity: true,
+    chemicalExposure: true,
+    radiationExposure: false,
+    biologicalAgents: false,
+    noiseExposure: true,
+    vibrationsExposure: false,
+    cuttingSurfaces: true,
+    levelFall: true,
+    ergonomicDamage: true,
+    materialHeating: false,
+    materialProjection: false,
+    maintenance: false
+  });
+
+  const handleHazardChange = (hazard) => {
+    setSelectedHazards((prevHazards) => ({
+      ...prevHazards,
+      [hazard]: !prevHazards[hazard]
+    }));
+  };
+
+  const isBodyPartExposed = (bodyPart) => {
+    switch (bodyPart) {
+      case 'Cabeza y Oídos':
+        return selectedHazards.heightFall || selectedHazards.noiseExposure || selectedHazards.materialProjection;
+      case 'Ojos y Cara':
+        return selectedHazards.radiationExposure || selectedHazards.chemicalExposure;
+      case 'Brazos y Manos':
+        return selectedHazards.materialProjection || selectedHazards.chemicalExposure;
+      case 'Tronco':
+        return selectedHazards.ergonomicDamage || selectedHazards.staticElectricity;
+      case 'Sistema respiratorio':
+        return selectedHazards.biologicalAgents || selectedHazards.chemicalExposure;
+      case 'Miembros inferiores':
+        return selectedHazards.heightFall || selectedHazards.levelFall;
+      default:
+        return false;
+    }
+  };
 
   return (
     <table className="risk-table">
@@ -13,39 +55,33 @@ const RiskAssessmentTable = () => {
         <tr>
           <td className="header" colSpan="6">Puesto de trabajo: Ayudante de empaque y envase.</td>
           <td className="header">
-            {/* Input para editar el área */}
             Área: 
             <input
               type="text"
               value={area}
               onChange={(e) => setArea(e.target.value)}
-              style={{ marginLeft: '10px' }}
             />
           </td>
         </tr>
         <tr>
           <td className="header" colSpan="6">Descripción de la actividad: Recibir, alistar, empacar y entregar productos en condiciones adecuadas de aseo e higiene.</td>
           <td className="header">
-            {/* Input para editar la fecha de inspección */}
             Fecha de inspección: 
             <input
               type="date"
               value={inspectionDate}
               onChange={(e) => setInspectionDate(e.target.value)}
-              style={{ marginLeft: '10px' }}
             />
           </td>
         </tr>
         <tr>
           <td className="header" colSpan="6">Principales partes del cuerpo expuestas al riesgo:</td>
           <td className="header">
-            {/* Input para editar el tiempo de exposición */}
             Tiempo de exposición: 
             <input
               type="text"
               value={exposureTime}
               onChange={(e) => setExposureTime(e.target.value)}
-              style={{ marginLeft: '10px' }}
             />
           </td>
         </tr>
@@ -61,15 +97,14 @@ const RiskAssessmentTable = () => {
       </thead>
       <tbody>
         <tr>
-          <td className="body-cell">X</td>
-          <td className="body-cell">X</td>
-          <td className="body-cell">X</td>
-          <td className="body-cell">X</td>
-          <td className="body-cell"></td>
-          <td className="body-cell">X</td>
+          <td className="body-cell">{isBodyPartExposed('Cabeza y Oídos') ? 'X' : ''}</td>
+          <td className="body-cell">{isBodyPartExposed('Ojos y Cara') ? 'X' : ''}</td>
+          <td className="body-cell">{isBodyPartExposed('Brazos y Manos') ? 'X' : ''}</td>
+          <td className="body-cell">{isBodyPartExposed('Tronco') ? 'X' : ''}</td>
+          <td className="body-cell">{isBodyPartExposed('Sistema respiratorio') ? 'X' : ''}</td>
+          <td className="body-cell">{isBodyPartExposed('Miembros inferiores') ? 'X' : ''}</td>
           <td className="image-cell">
-            {/* Espacio para las imágenes del cuerpo humano */}
-            <img src="ruta_de_imagen" alt="Protección" />
+            <img src="ruta_de_imagen" alt="Protección sugerida" />
           </td>
         </tr>
         <tr>
@@ -81,59 +116,143 @@ const RiskAssessmentTable = () => {
               <tbody>
                 <tr>
                   <td>1. Caídas de Altura:</td>
-                  <td><input type="checkbox" defaultChecked /></td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedHazards.heightFall}
+                      onChange={() => handleHazardChange('heightFall')}
+                    />
+                  </td>
                 </tr>
                 <tr>
                   <td>2. Exposición a Temperaturas:</td>
-                  <td><input type="checkbox" /></td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedHazards.temperatureExposure}
+                      onChange={() => handleHazardChange('temperatureExposure')}
+                    />
+                  </td>
                 </tr>
                 <tr>
                   <td>3. Exposición a Electricidad Estática:</td>
-                  <td><input type="checkbox" defaultChecked /></td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedHazards.staticElectricity}
+                      onChange={() => handleHazardChange('staticElectricity')}
+                    />
+                  </td>
                 </tr>
                 <tr>
                   <td>4. Exposición a sustancias Químicas:</td>
-                  <td><input type="checkbox" defaultChecked /></td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedHazards.chemicalExposure}
+                      onChange={() => handleHazardChange('chemicalExposure')}
+                    />
+                  </td>
                 </tr>
                 <tr>
                   <td>5. Exposición a Radiaciones:</td>
-                  <td><input type="checkbox" /></td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedHazards.radiationExposure}
+                      onChange={() => handleHazardChange('radiationExposure')}
+                    />
+                  </td>
                 </tr>
                 <tr>
                   <td>6. Exposición a Agentes Biológicos:</td>
-                  <td><input type="checkbox" /></td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedHazards.biologicalAgents}
+                      onChange={() => handleHazardChange('biologicalAgents')}
+                    />
+                  </td>
                 </tr>
                 <tr>
                   <td>7. Exposición a Ruido:</td>
-                  <td><input type="checkbox" defaultChecked /></td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedHazards.noiseExposure}
+                      onChange={() => handleHazardChange('noiseExposure')}
+                    />
+                  </td>
                 </tr>
                 <tr>
                   <td>8. Exposición a Vibraciones:</td>
-                  <td><input type="checkbox" /></td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedHazards.vibrationsExposure}
+                      onChange={() => handleHazardChange('vibrationsExposure')}
+                    />
+                  </td>
                 </tr>
                 <tr>
                   <td>9. Superficies cortantes:</td>
-                  <td><input type="checkbox" defaultChecked /></td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedHazards.cuttingSurfaces}
+                      onChange={() => handleHazardChange('cuttingSurfaces')}
+                    />
+                  </td>
                 </tr>
                 <tr>
                   <td>10. Caídas a nivel o desnivel:</td>
-                  <td><input type="checkbox" defaultChecked /></td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedHazards.levelFall}
+                      onChange={() => handleHazardChange('levelFall')}
+                    />
+                  </td>
                 </tr>
                 <tr>
                   <td>11. Daños Ergonómicos:</td>
-                  <td><input type="checkbox" defaultChecked /></td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedHazards.ergonomicDamage}
+                      onChange={() => handleHazardChange('ergonomicDamage')}
+                    />
+                  </td>
                 </tr>
                 <tr>
                   <td>12. Calentamiento de materia prima, subproducto o producto:</td>
-                  <td><input type="checkbox" /></td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedHazards.materialHeating}
+                      onChange={() => handleHazardChange('materialHeating')}
+                    />
+                  </td>
                 </tr>
                 <tr>
                   <td>13. Proyección de material o herramienta:</td>
-                  <td><input type="checkbox" /></td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedHazards.materialProjection}
+                      onChange={() => handleHazardChange('materialProjection')}
+                    />
+                  </td>
                 </tr>
                 <tr>
                   <td>14. Mantenimiento preventivo, correctivo o predictivo:</td>
-                  <td><input type="checkbox" /></td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedHazards.maintenance}
+                      onChange={() => handleHazardChange('maintenance')}
+                    />
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -146,15 +265,12 @@ const RiskAssessmentTable = () => {
         </tr>
         <tr>
           <td className="body-cell" colSpan="3">
-            {/* Espacio para imágenes del equipo utilizado */}
             <img src="ruta_de_imagen" alt="Equipo utilizado" />
           </td>
           <td className="body-cell" colSpan="3">
-            {/* Espacio para imágenes del equipo sugerido */}
             <img src="ruta_de_imagen" alt="Equipo sugerido" />
           </td>
           <td className="image-cell">
-            {/* Espacio para imágenes del cuerpo humano */}
             <img src="ruta_de_imagen" alt="Protección sugerida" />
           </td>
         </tr>
@@ -201,8 +317,8 @@ const RiskAssessmentTable = () => {
               <tbody>
                 <tr>
                   <td>10</td>
-                  <td>Bajo o Aceptable</td>
-                  <td>Tolerable</td>
+                  <td>Trivial</td>
+                  <td>No se necesita acción específica</td>
                 </tr>
               </tbody>
             </table>
