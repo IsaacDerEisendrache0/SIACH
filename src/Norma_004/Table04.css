@@ -152,17 +152,13 @@
 
   /*tabla de herramientas manuales*/
   .table-container {
-    margin: 20px;
+    padding: 10px;
+    width: 100%;
   }
   
   .evaluation-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
-  }
-  
-  .evaluation-table, .evaluation-table td, .evaluation-table th {
-    border: 1px solid black;
   }
   
   .header {
@@ -174,63 +170,40 @@
   }
   
   .sub-header {
-    background-color: #ecf0f1;
-    font-weight: bold;
+    background-color: #f1c40f;
     text-align: center;
+    padding: 6px;
   }
   
   .image-cell {
     text-align: center;
-    padding: 40px;
-    background-color: #f2f2f2;
-    vertical-align: middle;
-    border-right: none; /* Remover la línea de la derecha */
+    background-color: #ecf0f1;
+    height: 150px;
+    width: 150px;
   }
   
   .protection-cell {
-    background-color: #ecf0f1;
     text-align: left;
-    padding: 10px;
     vertical-align: top;
-    border-left: none; /* Remover la línea de la izquierda */
+    background-color: #ecf0f1;
+    padding: 8px;
   }
   
   .risk-list, .body-parts-list {
     list-style-type: disc;
-    margin-left: 20px;
-  }
-  
-  .risk-list {
-    text-align: left;
-  }
-  
-  .body-parts-list {
-    text-align: left;
-    list-style-type: none;
-    margin-left: 0;
+    padding-left: 20px;
   }
   
   .footer-header {
     background-color: #e74c3c;
     color: white;
     text-align: left;
-    font-weight: bold;
-  }
-  
-  .evaluation-table td {
     padding: 8px;
   }
   
-  .evaluation-table td[colspan="3"], .evaluation-table td[colspan="3"] {
-    text-align: left;
+  select {
+    width: 100%;
+    padding: 6px;
+    font-size: 14px;
   }
-  
-  .evaluation-table td[colspan="4"]:first-of-type {
-    border-right: none; /* Remover la línea derecha de las celdas que están unidas */
-  }
-  
-  .evaluation-table td[colspan="4"]:last-of-type {
-    border-left: none; /* Remover la línea izquierda de las celdas que están unidas */
-  }
-  
   
