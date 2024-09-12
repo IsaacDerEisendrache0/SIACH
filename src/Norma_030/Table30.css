@@ -1,0 +1,119 @@
+.table-container {
+    margin: 20px;
+    width: 100%;
+  }
+  
+  .safety-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    border: 1px solid black;
+  }
+  
+  .safety-table th, .safety-table td {
+    border: 1px solid black;
+    padding: 5px;
+    text-align: left;
+  }
+  
+  .main-header {
+    background-color: #f1c40f;
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    padding: 10px;
+    position: relative;
+  }
+  
+  .header-logo {
+    width: 15%;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  .header-title {
+    display: inline-block;
+    text-align: center;
+    font-size: 18px;
+    width: 70%;
+  }
+  
+  .sub-header {
+    background-color: #f1c40f;
+    color: black;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px;
+  }
+  
+  .area-header {
+    background-color: #e74c3c;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    padding: 10px;
+  }
+  
+  .condition-header, .agent-header {
+    background-color: #e74c3c;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 10px;
+  }
+  
+  .apply-header {
+    background-color: #e74c3c;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px;
+  }
+  
+  .apply-cell {
+    text-align: center;
+    padding: 8px;
+  }
+  
+  .area-side-text {
+    writing-mode: vertical-lr;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .safety-table tbody td {
+    padding: 8px;
+  }
+  
+  .safety-table tbody td.apply-cell {
+    text-align: center;
+  }
+  
+  .safety-table thead th {
+    padding: 8px;
+  }
+  
+  .safety-table .apply-header {
+    width: 5%;
+  }
+  
+  .safety-table .apply-cell {
+    width: 5%;
+  }
+  
+  .safety-table .area-header {
+    width: 5%;
+  }
+  
+  .safety-table .condition-header {
+    width: 50%;
+  }
+  
+  .safety-table .agent-header {
+    width: 40%;
+  }

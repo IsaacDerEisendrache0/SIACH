@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import Norma17 from './Norma_17/norma_17'; // Ajusta la ruta para importar desde la carpeta
 import Norma04 from './Norma_004/norma_004'; // Importamos el componente de evaluación de riesgos N-004
+import Norma030 from './Norma_030/norma_030'; // Ajusta la ruta de importación según tu estructura de archivos
 import Login from './componentes/Loginlogin'; // Importa el componente Login
 
 function Navigation() {
@@ -70,6 +71,15 @@ function HomePage() {
               N-004
             </button>
           </li>
+          <li>
+            <button
+              className="dropdown-item"
+              type="button"
+              onClick={() => handleSelectNorma('N-030')}
+            >
+              N-030
+            </button>
+          </li>
         </ul>
       </div>
 
@@ -81,11 +91,17 @@ function HomePage() {
         </div>
       )}
 
-      {/* Mostrar el componente de evaluación de riesgos si se selecciona esa norma */}
       {selectedNorma === 'Evaluación de Riesgos' && (
         <div className="mt-3">
           <h3>N-004 Seleccionada:</h3>
           <Norma04 /> {/* Mostrar el componente de evaluación de riesgos */}
+        </div>
+      )}
+
+      {selectedNorma === 'N-030' && (
+        <div className="mt-3">
+          <h3>N-030 Seleccionada:</h3>
+          <Norma030 /> {/* Mostrar el componente de Norma 030 */}
         </div>
       )}
     </div>
@@ -108,8 +124,9 @@ function App() {
           <Navigation />
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<Login />} /> {/* Actualiza esta línea */}
+            <Route path="/login" element={<Login />} />
             <Route path="/main" element={<div>Main Page</div>} />
+            <Route path="/norma030" element={<Norma030 />} /> {/* Ruta para Norma 030 */}
           </Routes>
         </header>
 
