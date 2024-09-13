@@ -20,7 +20,8 @@
 }
 
 .inner-table th {
-  background-color: #ff0000; /* Color de fondo para los encabezados */
+  background-color: #ff0000 !important; /* Color de fondo para los encabezados con !important para asegurar que se aplique */
+  color: #ffffff; /* Opcional: color del texto para asegurar que sea visible sobre el fondo rojo */
   font-weight: bold; /* Texto en negrita para los encabezados */
 }
 
@@ -33,4 +34,3 @@
   position: absolute; /* Posiciona el checkbox de forma absoluta */
   right: 0; /* Alinea el checkbox a la derecha */
 }
-
