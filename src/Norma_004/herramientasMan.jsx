@@ -5,9 +5,8 @@ const ToolEvaluationTable = () => {
   // Opciones del menú desplegable para cada campo
   const opcionesConsecuencia = ['Catástrofe', 'Varias muertes', 'Muerte', 'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'];
   const opcionesExposicion = ['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente'];
-  const [observaciones, setObservaciones] = useState('Contar con un procedimiento seguro de trabajo, puede causar dolores musculares. Hacer buen uso de la herramienta');
+  const [observaciones, setObservaciones] = useState('');
 
-  
   // Nuevas opciones de "Probabilidad"
   const opcionesProbabilidad = [
     'Es el resultado más probable y esperado',
@@ -26,6 +25,27 @@ const ToolEvaluationTable = () => {
   const [clasificacion, setClasificacion] = useState('Bajo o Aceptable');
   const [accion, setAccion] = useState('Tolerable');
   const [color, setColor] = useState('blue'); // Estado para el color, por defecto azul para lo más bajo
+  const [imagePreview, setImagePreview] = useState(null); // Estado para la previsualización de la imagen
+  const [errorMessage, setErrorMessage] = useState(''); // Estado para los errores al subir la imagen
+
+  // Función para manejar el archivo de imagen seleccionado
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    // Validar que el archivo sea una imagen
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setImagePreview(reader.result); // Guardar la URL de la imagen para previsualización
+        setErrorMessage(''); // Limpiar cualquier mensaje de error
+      };
+
+      reader.readAsDataURL(file);
+    } else {
+      setErrorMessage('Por favor selecciona un archivo de imagen válido.');
+    }
+  };
 
   // Función para calcular la Magnitud del Riesgo, Clasificación y Acción
   const calcularRiesgo = () => {
@@ -45,7 +65,6 @@ const ToolEvaluationTable = () => {
       'Raramente': 1,
     };
     
-    // Asignación de valores a las nuevas opciones de probabilidad
     const valoresProbabilidad = {
       'Es el resultado más probable y esperado': 5,
       'Es completamente posible, no será nada extraño': 4,
@@ -106,10 +125,25 @@ const ToolEvaluationTable = () => {
         </thead>
         <tbody>
           <tr>
-            <td className="image-cell" rowSpan="8">imagen</td>
+            <td className="image-cell" rowSpan="8" colSpan="3">
+              {/* Input para subir imagen */}
+              <input type="file" accept="image/*" onChange={handleImageChange} />
+              {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+
+              {/* Previsualización de la imagen */}
+              {imagePreview ? (
+                <img src={imagePreview} alt="Previsualización" style={{ width: '150px', height: '150px', marginTop: '10px' }} />
+              ) : (
+                <p>No hay imagen seleccionada</p>
+              )}
+            </td>
+            
             <td className="header" colSpan="3">Evaluación de riesgo de trabajo</td>
             <td className="header" colSpan="4">Equipo de Protección Personal sugerido</td>
           </tr>
+
+        
+
           <tr>
             <td className="sub-header">Consecuencia</td>
             <td className="sub-header">Exposición</td>
@@ -401,12 +435,13 @@ const ToolEvaluationTable = () => {
           <tr style={{ backgroundColor: color }}>
             <td colSpan="3">Acción: {accion}</td>
           </tr>
+          <tr></tr>
           <tr>
-            <td className="header" colSpan="3">Identificaciones de Riesgos:</td>
+            <td className="header" colSpan="6">Identificaciones de Riesgos:</td>
             <td className="header" colSpan="5">Principales partes del cuerpo expuestas al riesgo:</td>
           </tr>
           <tr>
-            <td colSpan="4">
+            <td colSpan="6">
               <ul className="risk-list">
                 <li>Golpes y cortes en manos ocasionados por las propias herramientas durante el trabajo normal con las mismas</li>
                 <li>Lesiones oculares por partículas provenientes de los objetos que se trabajan y/o de la propia herramienta</li>
@@ -416,13 +451,71 @@ const ToolEvaluationTable = () => {
             </td>
             <td colSpan="5">
               <tr>
-                <select value=""></select>
-                <select value=""></select>
-                <select value=""></select>
-                <select value=""></select>
-                <select value=""></select>
-                <select value=""></select>
-                <select value=""></select>
+                <select>
+                <option value="cabeza-oidos">Cabeza y oidos</option>
+                <option value="ojos-cara">Ojos y cara</option>
+                <option value="brazos-manos">Brazos y manos</option>
+                <option value="dedos">Dedos</option>
+                <option value="sistema-respiratorio">Sistema respiratorio</option>
+                <option value="tronco">Tronco</option>
+                <option value="extremidades-inferiores">Extremidades inferiores</option>
+                </select>
+                <select>
+                <option value="cabeza-oidos">Cabeza y oidos</option>
+                <option value="ojos-cara">Ojos y cara</option>
+                <option value="brazos-manos">Brazos y manos</option>
+                <option value="dedos">Dedos</option>
+                <option value="sistema-respiratorio">Sistema respiratorio</option>
+                <option value="tronco">Tronco</option>
+                <option value="extremidades-inferiores">Extremidades inferiores</option>
+                </select>
+                <select>
+                <option value="cabeza-oidos">Cabeza y oidos</option>
+                <option value="ojos-cara">Ojos y cara</option>
+                <option value="brazos-manos">Brazos y manos</option>
+                <option value="dedos">Dedos</option>
+                <option value="sistema-respiratorio">Sistema respiratorio</option>
+                <option value="tronco">Tronco</option>
+                <option value="extremidades-inferiores">Extremidades inferiores</option>
+                </select>
+                <select>
+                <option value="cabeza-oidos">Cabeza y oidos</option>
+                <option value="ojos-cara">Ojos y cara</option>
+                <option value="brazos-manos">Brazos y manos</option>
+                <option value="dedos">Dedos</option>
+                <option value="sistema-respiratorio">Sistema respiratorio</option>
+                <option value="tronco">Tronco</option>
+                <option value="extremidades-inferiores">Extremidades inferiores</option>
+                </select>
+                <select>
+                <option value="cabeza-oidos">Cabeza y oidos</option>
+                <option value="ojos-cara">Ojos y cara</option>
+                <option value="brazos-manos">Brazos y manos</option>
+                <option value="dedos">Dedos</option>
+                <option value="sistema-respiratorio">Sistema respiratorio</option>
+                <option value="tronco">Tronco</option>
+                <option value="extremidades-inferiores">Extremidades inferiores</option>
+                </select>
+                <select>
+                <option value="cabeza-oidos">Cabeza y oidos</option>
+                <option value="ojos-cara">Ojos y cara</option>
+                <option value="brazos-manos">Brazos y manos</option>
+                <option value="dedos">Dedos</option>
+                <option value="sistema-respiratorio">Sistema respiratorio</option>
+                <option value="tronco">Tronco</option>
+                <option value="extremidades-inferiores">Extremidades inferiores</option>
+                </select>
+                <select>
+                <option value="cabeza-oidos">Cabeza y oidos</option>
+                <option value="ojos-cara">Ojos y cara</option>
+                <option value="brazos-manos">Brazos y manos</option>
+                <option value="dedos">Dedos</option>
+                <option value="sistema-respiratorio">Sistema respiratorio</option>
+                <option value="tronco">Tronco</option>
+                <option value="extremidades-inferiores">Extremidades inferiores</option>
+                </select>
+
+
               </tr>
 
             </td>
