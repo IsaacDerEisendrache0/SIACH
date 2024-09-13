@@ -1,56 +1,43 @@
-.table-container {
-    padding: 20px;
-  }
-  
-  .styled-table {
+.styled-table {
     width: 100%;
     border-collapse: collapse;
-    font-family: Arial, sans-serif;
-    font-size: 12px;
+  }
+  
+  .styled-table th, .styled-table td {
+    padding: 12px 15px;
+    border: 1px solid #dddddd;
+    text-align: left;
+  }
+  
+  .styled-table thead tr {
+    background-color: #f2f2f2;
+    text-align: center;
   }
   
   .company-header {
-    background-color: #f2c430;
+    font-size: 18px;
     font-weight: bold;
-    text-align: center;
-    padding: 10px;
   }
   
   .subtitle-header {
-    background-color: #f2f2f2;
-    text-align: center;
-    font-weight: bold;
-    padding: 10px;
+    font-size: 14px;
   }
   
   .vertical-header {
-    writing-mode: vertical-rl;
+    writing-mode: vertical-lr;
     transform: rotate(180deg);
     text-align: center;
     font-weight: bold;
-    background-color: #f2f2f2;
   }
   
-  .styled-table th,
-  .styled-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
+  .table-container {
+    margin: 20px 0;
   }
   
-  .styled-table th {
-    background-color: #f2c430;
-    font-weight: bold;
-  }
-  
-  .styled-table td {
-    text-align: center;
-  }
-  
-  .styled-table tbody tr:nth-child(even) {
+  .styled-table tr:nth-child(even) {
     background-color: #f9f9f9;
   }
   
-  .styled-table tbody tr:hover {
-    background-color: #ddd;
+  input[type="checkbox"] {
+    margin-left: 10px;
   }
