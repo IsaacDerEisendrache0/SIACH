@@ -416,13 +416,13 @@ const ToolEvaluationTable = () => {
             </td>
             <td colSpan="5">
               <tr>
-                <select name=""></select>
-                <select name=""></select>
-                <select name=""></select>
-                <select name=""></select>
-                <select name=""></select>
-                <select name=""></select>
-                <select name=""></select>
+                <select value=""></select>
+                <select value=""></select>
+                <select value=""></select>
+                <select value=""></select>
+                <select value=""></select>
+                <select value=""></select>
+                <select value=""></select>
               </tr>
 
             </td>
