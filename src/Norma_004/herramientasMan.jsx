@@ -105,24 +105,52 @@ const ToolEvaluationTable = () => {
   }, [consecuencia, exposicion, probabilidad]);
 
   return (
+    
     <div className="table-container">
+      <h1>Tabla de herramientas manuales</h1>
       <table className="evaluation-table">
-        <thead>
-          <tr>
-            <td className="header" colSpan="4">Nombre de la herramienta: Llave Stilson</td>
-            <td className="header" colSpan="6">Área: Mina y Planta</td>
-          </tr>
-          <tr>
-            <td className="header">Energía utilizada:</td>
-            <td>Manual</td>
-            <td className="header">POE:</td>
-            <td>1</td>
-            <td className="header">Tiempo de exposición:</td>
-            <td>5 min</td>
-            <td className="header">Fecha de inspección:</td>
-            <td>04-abr-23</td>
-          </tr>
-        </thead>
+        
+      <thead>
+  <tr>
+    <td className="header" colSpan="4">Nombre de la herramienta: Llave Stilson</td>
+    <td className="header" colSpan="6">Área: Mina y Planta</td>
+  </tr>
+  <tr>
+    <td className="header" colSpan="" rowSpan="1">Energía utilizada:</td>
+    <td>
+      <input 
+        type="text" 
+        defaultValue="Manual" 
+        className="compact-input" 
+      />
+    </td>
+    <td className="header">POE:</td>
+    <td>
+      <input 
+        type="number" 
+        defaultValue="1" 
+        className="compact-input"
+      />
+    </td>
+    <td className="header">Tiempo de exposición:</td>
+    <td>
+      <input 
+        type="text" 
+        defaultValue="5 min" 
+        className="compact-input"
+      />
+    </td>
+    <td className="header">Fecha de inspección:</td>
+    <td>
+      <input 
+        type="date" 
+        defaultValue="2023-04-04" 
+        className="compact-input"
+      />
+    </td>
+  </tr>
+</thead>
+
         <tbody>
           <tr>
             <td className="image-cell" rowSpan="8" colSpan="3">

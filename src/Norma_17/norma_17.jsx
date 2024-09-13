@@ -153,6 +153,9 @@ const RiskAssessmentTable = () => {
             <table className="inner-table">
               <thead>
                 <tr>
+                  <th colSpan="2">Evaluación de riesgo de trabajo</th>
+                </tr>
+                <tr>
                   <th>Consecuencia</th>
                   <th>Exposición</th>
                   <th>Probabilidad</th>
@@ -209,7 +212,30 @@ const RiskAssessmentTable = () => {
             <div className="risk-action">
               Acción: {calculateRisk() > 400 ? 'Detención inmediata' : calculateRisk() > 200 ? 'Corrección inmediata' : calculateRisk() > 70 ? 'Corrección urgente' : calculateRisk() > 20 ? 'Debe corregirse' : 'Tolerable'}
             </div>
-          </td>
+            </td>
+          <td colSpan="2">
+            <table className="inner-table">
+              <thead>
+                <tr>
+                  <th colSpan="1">Clasificación de Magnitud de Riesgo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Magnitud del Riesgo:</td>
+                  <td>5</td>
+                </tr>
+                <tr>
+                  <td>Clasificación:</td>
+                  <td>Bajo o Aceptable</td>
+                </tr>
+                <tr>
+                  <td>Acción:</td>
+                  <td>Tolerable</td>
+                </tr>
+              </tbody>
+            </table>
+          </td> 
         </tr>
       </tbody>
     </table>
