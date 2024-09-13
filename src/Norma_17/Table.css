@@ -1,35 +1,67 @@
-body {
-  font-family: Arial, sans-serif;
-}
-
-table {
+/* Table.css */
+.risk-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-th, td {
-  border: 1px solid black;
-  padding: 8px;
+.header-section {
   text-align: center;
 }
 
-.header {
-  background-color: #f44336;
-  color: white;
-  font-weight: bold;
+.left-column, .right-column {
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .sub-header {
-  background-color: #cccccc;
   font-weight: bold;
 }
 
-.body-cell {
-  background-color: #ffffff;
+.yellow-title {
+  background-color: yellow;
+  font-weight: bold;
+  padding: 10px;
+  text-align: center;
 }
 
-.image-cell img {
-  max-width: 100px;
+.section-content {
+  margin-top: 10px;
+  height: 100px; /* Ajusta el tamaño según sea necesario */
+}
+
+.separator-line {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 10px 0;
+}
+
+.hazard-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.hazard-list .hazard-item {
+  margin-bottom: 5px;
+}
+
+.hazard-checklist {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.hazard-checklist li {
+  margin-bottom: 5px;
+}
+
+.hazard-checklist label {
+  display: flex;
+  align-items: center;
+}
+
+.hazard-checklist input[type="checkbox"] {
+  margin-right: 10px;
 }
 
 .inner-table {
@@ -37,8 +69,30 @@ th, td {
   border-collapse: collapse;
 }
 
-.inner-table td {
-  border: none;
+.inner-table th, .inner-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.inner-table th {
+  background-color: #f4f4f4;
+}
+
+/* Ajustes para las tablas adicionales */
+.inner-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.inner-table td, .inner-table th {
+  padding: 8px;
   text-align: left;
-  padding: 4px;
+}
+
+.inner-table th {
+  background-color: #f4f4f4;
+}
+
+.inner-table {
+  table-layout: fixed; /* Fija el ancho de las columnas para evitar el desbordamiento */
 }
