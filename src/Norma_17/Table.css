@@ -1,98 +1,36 @@
-/* Table.css */
-.risk-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.header-section {
-  text-align: center;
-}
-
-.left-column, .right-column {
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-.sub-header {
-  font-weight: bold;
-}
-
-.yellow-title {
-  background-color: yellow;
-  font-weight: bold;
-  padding: 10px;
-  text-align: center;
-}
-
-.section-content {
-  margin-top: 10px;
-  height: 100px; /* Ajusta el tamaño según sea necesario */
-}
-
-.separator-line {
-  border: none;
-  border-top: 1px solid #ddd;
-  margin: 10px 0;
-}
-
-.hazard-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.hazard-list .hazard-item {
-  margin-bottom: 5px;
-}
-
-.hazard-checklist {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.hazard-checklist li {
-  margin-bottom: 5px;
-}
-
-.hazard-checklist label {
-  display: flex;
-  align-items: center;
-}
-
-.hazard-checklist input[type="checkbox"] {
-  margin-right: 10px;
-}
-
+/* Estilo general de la tabla interna */
 .inner-table {
-  width: 100%;
-  border-collapse: collapse;
+  width: 80%; /* Ajusta el ancho de la tabla para que no ocupe todo el espacio disponible, pero permita centrado */
+  border-collapse: collapse; /* Elimina los espacios entre las celdas */
+  margin: 0 auto; /* Centra la tabla dentro de la celda */
+}
+
+/* Centra el contenido de las celdas que contienen tablas internas */
+.table-cell {
+  display: flex; /* Utiliza Flexbox para centrar la tabla */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  height: 100%; /* Asegura que la celda tenga altura completa */
 }
 
 .inner-table th, .inner-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
+  border: 1px solid #777777; /* Bordes de las celdas */
+  padding: 8px; /* Espaciado interno de las celdas */
+  text-align: center; /* Centrado del texto en las celdas */
 }
 
 .inner-table th {
-  background-color: #f4f4f4;
+  background-color: #ff0000; /* Color de fondo para los encabezados */
+  font-weight: bold; /* Texto en negrita para los encabezados */
 }
 
-/* Ajustes para las tablas adicionales */
-.inner-table {
-  width: 100%;
-  border-collapse: collapse;
+.hazard-item {
+  position: relative; /* Permite la colocación absoluta de los elementos hijos */
+  padding-right: 30px; /* Añade un espacio para el checkbox a la derecha */
 }
 
-.inner-table td, .inner-table th {
-  padding: 8px;
-  text-align: left;
+.hazard-checkbox {
+  position: absolute; /* Posiciona el checkbox de forma absoluta */
+  right: 0; /* Alinea el checkbox a la derecha */
 }
 
-.inner-table th {
-  background-color: #f4f4f4;
-}
-
-.inner-table {
-  table-layout: fixed; /* Fija el ancho de las columnas para evitar el desbordamiento */
-}
