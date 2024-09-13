@@ -96,7 +96,7 @@ const RiskAssessmentTable = () => {
             <table className="inner-table">
               <thead>
                 <tr>
-                  <th colSpan="3">Evaluación de riesgo de trabajo</th>
+                  <th colSpan="2">Evaluación de riesgo de trabajo</th>
                 </tr>
                 <tr>
                   <th>Consecuencia</th>
@@ -118,11 +118,11 @@ const RiskAssessmentTable = () => {
               </tbody>
             </table>
           </td>
-          <td colSpan="3">
+          <td colSpan="2">
             <table className="inner-table">
               <thead>
                 <tr>
-                  <th colSpan="2">Clasificación de Magnitud de Riesgo</th>
+                  <th colSpan="1">Clasificación de Magnitud de Riesgo</th>
                 </tr>
               </thead>
               <tbody>

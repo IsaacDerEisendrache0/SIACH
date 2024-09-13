@@ -105,8 +105,11 @@ const ToolEvaluationTable = () => {
   }, [consecuencia, exposicion, probabilidad]);
 
   return (
+    
     <div className="table-container">
+      <h1>Tabla de herramientas manuales</h1>
       <table className="evaluation-table">
+        
         <thead>
           <tr>
             <td className="header" colSpan="4">Nombre de la herramienta: Llave Stilson</td>

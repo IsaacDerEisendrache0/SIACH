@@ -1,154 +1,99 @@
-* {
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  td {
-    border: 1px solid black;
-    padding: 8px;
-    text-align: center;
-  }
-  
-  .header {
-    background-color: #f44336;
-    color: white;
-    font-weight: bold;
-    padding: 10px;
-  }
-  
-  .section-header {
-    font-weight: bold;
-  }
-  
-  .risk-table {
-    width: 100%;
-  }
-  
-  .machinery-img {
-    width: 100%;
-    height: auto;
-  }
-  
-  .protection-img img {
-    width: 50px;
-    margin: 5px;
-  }
-  
-  .risk-icons img {
-    width: 60px;
-    margin: 5px;
-  }
-  
-  .risk-level {
-    background-color: #b3e5fc;
-    padding: 10px;
-    font-weight: bold;
-  }
-  
-  .observaciones {
-    text-align: left;
-  }
-  
-  .risk-icons {
-    display: flex;
-    justify-content: center;
-  }
-  
-  input[type="checkbox"] {
-    margin-right: 5px;
-  }
-  .machinery-img {
-    width: 100%;
-    height: auto;
-  }
-  
-  .image-upload-section {
-    text-align: center;
-    padding: 10px;
-  }
-  .editable-input {
-    border: 1px solid #ccc;
-    padding: 5px;
-    width: 100%;
-  }
-  * {
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  td {
-    border: 1px solid black;
-    padding: 8px;
-    text-align: center;
-  }
-  
-  .header {
-    background-color: #f44336;
-    color: white;
-    font-weight: bold;
-    padding: 10px;
-  }
-  
-  .separator {
-    background-color: transparent;
-    border: none;
-  }
-  
-  .machinery-img {
-    width: 100%;
-    height: auto;
-  }
-  
-  .epp-icons img {
-    width: 50px;
-    margin: 5px;
-  }
-  
-  .risk-table {
-    width: 100%;
-  }
-  
-  .epp-icons {
-    display: flex;
-    justify-content: center;
-  }
-  
-  td[colspan="8"] {
-    text-align: center;
-  }
-  
-  input[type="file"] {
-    margin-top: 10px;
-  }
-  * {
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 
-  }
+
+/*Tabla de maquinaria y equipo*/
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  text-align: center;
+  color: #d32f2f;
+}
+
+.risk-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 14px;
+  text-align: left;
+}
+
+.risk-table th,
+.risk-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.risk-table th {
+  background-color: #f2f2f2;
+  text-align: center;
+}
+
+.header {
+  background-color: #d32f2f;
+  color: white;
+}
+
+.image-cell img {
+  width: 100%;
+  height: auto;
+}
+
+.nested-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+.nested-table th,
+.nested-table td {
+  border: 1px solid #ddd;
+  padding: 4px;
+  text-align: center;
+}
+
+.inspection {
+  text-align: center;
+  background-color: #f2f2f2;
+}
+
+.protection-images {
+  width: 50%;
+  vertical-align: top;
+}
+
+.risk-header {
+  text-align: center;
+  background-color: #d32f2f;
+  color: white;
+  font-weight: bold;
+}
+
+.risk-specific {
+  background-color: #f9f9f9;
+}
+
+.risk-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 10px;
+}
+
+.risk-content img {
+  width: 30px;
+  margin-right: 10px;
+}
+
+.risk-content p {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+}
+
+
 
   /*tabla de herramientas manuales*/
   .table-container {
