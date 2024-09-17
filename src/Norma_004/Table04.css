@@ -1,160 +1,153 @@
 
 /*Tabla de maquinaria y equipo*/
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  font-family: Arial, sans-serif;
-}
-
-h2 {
-  text-align: center;
-  color: #d32f2f;
-}
-
 .risk-table {
   width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-  font-size: 14px;
-  text-align: left;
-}
-
-.risk-table th,
-.risk-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-.risk-table th {
-  background-color: #f2f2f2;
-  text-align: center;
-}
-
-.header {
-  background-color: #d32f2f;
-  color: white;
-}
-
-.image-cell img {
-  width: 100%;
-  height: auto;
-}
-
-.nested-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0;
-}
-
-.nested-table th,
-.nested-table td {
-  border: 1px solid #ddd;
-  padding: 4px;
-  text-align: center;
-}
-
-.inspection {
-  text-align: center;
-  background-color: #f2f2f2;
-}
-
-.protection-images {
-  width: 50%;
-  vertical-align: top;
-}
-
-.risk-header {
-  text-align: center;
-  background-color: #d32f2f;
-  color: white;
-  font-weight: bold;
-}
-
-.risk-specific {
-  background-color: #f9f9f9;
-}
-
-.risk-content {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+}
+
+.row {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.column {
+  flex: 1;
   padding: 10px;
 }
 
-.risk-content img {
-  width: 30px;
-  margin-right: 10px;
+.image-column {
+  text-align: center;
 }
 
-.risk-content p {
+.image-preview {
+  width: 100%;
+  height: auto;
+  max-width: 300px;
+}
+
+.checklist-column {
   display: flex;
-  align-items: center;
-  margin: 5px 0;
+  flex-direction: column;
+}
+
+.danger-table {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.observaciones-container {
+  margin-top: 20px;
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
 }
 
 
 
-  /*tabla de herramientas manuales*/
+  /*TABLA DE HERRAMIENTA MANUALES*/
   .table-container {
-    padding: 10px;
-    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
   .evaluation-table {
     width: 100%;
     border-collapse: collapse;
+    margin-bottom: 20px;
   }
   
-  .header {
-    background-color: #e74c3c;
+  .evaluation-table th, 
+  .evaluation-table td {
+    border: 2px solid #ccc;
+    padding: 12px;
+    text-align: left;
+  }
+  
+  .evaluation-table thead th {
+    background-color: #007bff;
     color: white;
-    text-align: center;
     font-weight: bold;
-    padding: 8px;
-  }
-  
-  .sub-header {
-    background-color: #f1c40f;
     text-align: center;
-    padding: 6px;
   }
   
-  .image-cell {
-    text-align: center;
-    background-color: #ecf0f1;
-    height: 150px;
-    width: 150px;
-  }
-  
-  .protection-cell {
-    text-align: left;
-    vertical-align: top;
-    background-color: #ecf0f1;
-    padding: 8px;
-  }
-  
-  .risk-list, .body-parts-list {
-    list-style-type: disc;
-    padding-left: 20px;
-  }
-  
-  .footer-header {
-    background-color: #e74c3c;
+  .evaluation-table thead td {
+    background-color: #ff0000;
     color: white;
-    text-align: left;
-    padding: 8px;
+  }
+  
+  .evaluation-table tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+  }
+  
+  .evaluation-table tbody tr:nth-child(even) {
+    background-color: #ffffff;
+  }
+  
+  .evaluation-table .header {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .evaluation-table .sub-header {
+    background-color: #f0f0f0;
+    font-weight: bold;
+  }
+  
+  .evaluation-table .protection-cell {
+    background-color: #f7f7f7;
+  }
+  
+  textarea {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-sizing: border-box;
   }
   
   select {
     width: 100%;
-    padding: 6px;
-    font-size: 14px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #fff;
   }
-.compact-input {
-  width: 200px;  /* Set a smaller width */
-  padding: 4px;  /* Reduce padding */
-  font-size: 12px;  /* Smaller font size */
-}
-
+  
+  textarea:focus,
+  select:focus,
+  input:focus {
+    border-color: #ff0000;
+    outline: none;
+  }
+  
+  tr, td {
+    border: 1px solid #ddd;
+  }
+  
+  textarea {
+    resize: vertical;
+  }
+  
+  .evaluation-table tfoot td {
+    background-color: #f0f0f0;
+  }
+  
+  .evaluation-table td {
+    vertical-align: top;
+  }
+  
+  .evaluation-table img {
+    display: block;
+    margin: 0 auto;
+  }
   
