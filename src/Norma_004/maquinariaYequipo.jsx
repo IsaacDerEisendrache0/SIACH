@@ -262,7 +262,7 @@ const RiskTable = () => {
             <td colSpan="8" className="specific-risk-header">Riesgo Específico</td>
           </tr>
           <tr>
-            <td colSpan="" className="icons"><img src="risk01.png" alt="Riesgo" /></td>
+            <td colSpan="0" className="icons"><img src="risk01.png" alt="Riesgo" /></td>
             <td colSpan="1" className="icons"><img src="risk02.png" alt="Riesgo" /></td>
             <td colSpan="2" className="icons"><img src="risk03.png" alt="Riesgo" /></td>
           </tr>
