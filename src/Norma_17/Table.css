@@ -34,3 +34,9 @@
   position: absolute; /* Posiciona el checkbox de forma absoluta */
   right: 0; /* Alinea el checkbox a la derecha */
 }
+
+.protection-image {
+  width: 100px; /* Ajusta el tamaño según lo necesario */
+  height: auto;
+}
+
