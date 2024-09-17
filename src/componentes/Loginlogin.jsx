@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig'; // Asegúrate de que esta ruta sea correcta
-import './Login.css'; // Asegúrate de que el archivo de estilos exista si lo estás usando
+import { auth } from '../firebaseConfig';
+import 'bootstrap/dist/css/bootstrap.min.css'; 
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -15,7 +15,7 @@ function Login() {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/main'); // Redirige a la página principal después del inicio de sesión exitoso
+      navigate('/main');
     } catch (err) {
       console.error('Error de inicio de sesión:', err);
       setError('Credenciales incorrectas o error en el inicio de sesión');
@@ -23,32 +23,41 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <h2>Iniciar Sesión</h2>
+    <div className="d-flex align-items-center justify-content-center vh-100 bg-body-tertiary">
+      <main className="form-signin text-center" style={{ width: '300px' }}>
         <form onSubmit={handleSubmit}>
-          <div className="input-container">
-            <label>Email:</label>
+          <h1 className="h3 mb-3 fw-normal" style={{ color: '#007bff' }}>LOGIN</h1> {/* Cambiado a un azul bajito */}
+          <div className="form-floating mb-3">
             <input
               type="email"
+              className="form-control"
+              id="floatingInput"
+              placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+            <label htmlFor="floatingInput">Email</label>
           </div>
-          <div className="input-container">
-            <label>Contraseña:</label>
+          <div className="form-floating mb-3">
             <input
               type="password"
+              className="form-control"
+              id="floatingPassword"
+              placeholder="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            <label htmlFor="floatingPassword">Contraseña</label>
           </div>
-          <button type="submit" className="login-btn">Iniciar Sesión</button>
-          {error && <p className="error-msg">{error}</p>}
+          <button className="w-100 btn btn-lg mt-3" type="submit" style={{ backgroundColor: '#007bff', borderColor: '#007bff' }}> {/* Cambiado a un azul bajito */}
+            Iniciar Sesión
+          </button>
+          {error && <p className="text-danger mt-3">{error}</p>}
+          <p className="mt-5 mb-3 text-muted">&copy; 2023</p>
         </form>
-      </div>
+      </main>
     </div>
   );
 }
