@@ -61,62 +61,87 @@ const TableComponent = () => {
           </tr>
           <tr>
             <td>Caída de personas a distinto nivel.</td>
-            <td>X</td>
             <td></td>
             <td>
-              Vapores orgánicos
+            <input
+                type="checkbox"
+                checked={agentsStatus.chemical.vapors}
+                onChange={() => handleChange('chemical', 'vapors')}
+              />
+            </td>
+            <td>
+              
               <input
                 type="checkbox"
                 checked={agentsStatus.chemical.vapors}
                 onChange={() => handleChange('chemical', 'vapors')}
               />
             </td>
-            <td>X</td>
+            <td>  Vapores orgánicos </td>
             <td></td>
           </tr>
           <tr>
             <td>Caída de personas al mismo nivel.</td>
-            <td>X</td>
             <td></td>
             <td>
-              Gases
+            <input
+                type="checkbox"
+                checked={agentsStatus.chemical.vapors}
+                onChange={() => handleChange('chemical', 'vapors')}
+              />
+            </td>
+            <td>
+              
               <input
                 type="checkbox"
                 checked={agentsStatus.chemical.gases}
                 onChange={() => handleChange('chemical', 'gases')}
               />
             </td>
-            <td>X</td>
+            <td>Gases </td>
             <td></td>
           </tr>
           <tr>
             <td>Caída de objetos desprendidos.</td>
-            <td>X</td>
-            <td></td>
+            <td>.</td>
+            
             <td>
-              Aerosoles
+            <input
+                type="checkbox"
+                checked={agentsStatus.chemical.aerosols}
+                onChange={() => handleChange('chemical', 'aerosols')}
+              />
+            </td>
+            <td>
+              
               <input
                 type="checkbox"
                 checked={agentsStatus.chemical.aerosols}
                 onChange={() => handleChange('chemical', 'aerosols')}
               />
             </td>
-            <td>X</td>
+            <td> Aerosoles </td>
             <td></td>
           </tr>
           <tr>
             <td>Caída de objetos desgajados.</td>
-            <td>X</td>
             <td></td>
             <td>
-              Polvos
+            <input
+                type="checkbox"
+                checked={agentsStatus.chemical.aerosols}
+                onChange={() => handleChange('chemical', 'aerosols')}
+              />
+            </td>
+            <td>
+              
               <input
                 type="checkbox"
                 checked={agentsStatus.chemical.powders}
                 onChange={() => handleChange('chemical', 'powders')}
               />
             </td>
-            <td>X</td>
+            <td>Polvos</td>
             <td></td>
           </tr>
 
@@ -126,62 +151,86 @@ const TableComponent = () => {
           </tr>
           <tr>
             <td>Choque contra objetos inmóviles.</td>
-            <td>X</td>
             <td></td>
             <td>
-              Virus
+                 <input
+                type="checkbox"
+                checked={agentsStatus.chemical.aerosols}
+                onChange={() => handleChange('chemical', 'aerosols')}
+              />
+            </td>
+            <td>
+              
               <input
                 type="checkbox"
                 checked={agentsStatus.biological.viruses}
                 onChange={() => handleChange('biological', 'viruses')}
               />
             </td>
-            <td>X</td>
+            <td> Virus </td>
             <td></td>
           </tr>
           <tr>
             <td>Choque contra objetos móviles.</td>
-            <td>X</td>
             <td></td>
             <td>
-              Bacterias
+            <input
+                type="checkbox"
+                checked={agentsStatus.chemical.aerosols}
+                onChange={() => handleChange('chemical', 'aerosols')}
+              />
+            </td>
+            <td>
+              
               <input
                 type="checkbox"
                 checked={agentsStatus.biological.bacteria}
                 onChange={() => handleChange('biological', 'bacteria')}
               />
             </td>
-            <td>X</td>
+            <td> Bacterias </td>
             <td></td>
           </tr>
           <tr>
             <td>Golpes/cortes por objetos o herramientas.</td>
-            <td>X</td>
             <td></td>
             <td>
-              Hongos
+            <input
+                type="checkbox"
+                checked={agentsStatus.chemical.aerosols}
+                onChange={() => handleChange('chemical', 'aerosols')}
+              />
+            </td>
+            <td>
+              
               <input
                 type="checkbox"
                 checked={agentsStatus.biological.fungi}
                 onChange={() => handleChange('biological', 'fungi')}
               />
             </td>
-            <td>X</td>
+            <td> Hongos </td>
             <td></td>
           </tr>
           <tr>
             <td>Proyección de fragmentos o herramientas.</td>
-            <td>X</td>
             <td></td>
             <td>
-              Residuos Biológico-Infecciosos
+            <input
+                type="checkbox"
+                checked={agentsStatus.chemical.aerosols}
+                onChange={() => handleChange('chemical', 'aerosols')}
+              />
+            </td>
+            <td>
+              
               <input
                 type="checkbox"
                 checked={agentsStatus.biological.bioInfectiousWaste}
                 onChange={() => handleChange('biological', 'bioInfectiousWaste')}
               />
             </td>
-            <td>X</td>
+            <td> Residuos Biológico-Infecciosos </td>
             <td></td>
           </tr>
 
@@ -191,62 +240,86 @@ const TableComponent = () => {
           </tr>
           <tr>
             <td>Proyección de fluidos o materiales calientes.</td>
-            <td>X</td>
             <td></td>
             <td>
-              Iluminación
+            <input
+                type="checkbox"
+                checked={agentsStatus.chemical.aerosols}
+                onChange={() => handleChange('chemical', 'aerosols')}
+              />
+            </td>
+            <td>
+              
               <input
                 type="checkbox"
                 checked={agentsStatus.physical.lighting}
                 onChange={() => handleChange('physical', 'lighting')}
               />
             </td>
-            <td>X</td>
+            <td> Iluminación </td>
             <td></td>
           </tr>
           <tr>
             <td>Sobre esfuerzo por carga manual.</td>
-            <td>X</td>
             <td></td>
             <td>
-              Radiaciones ionizantes
+            <input
+                type="checkbox"
+                checked={agentsStatus.chemical.aerosols}
+                onChange={() => handleChange('chemical', 'aerosols')}
+              />
+            </td>
+            <td>
+              
               <input
                 type="checkbox"
                 checked={agentsStatus.physical.ionizingRadiation}
                 onChange={() => handleChange('physical', 'ionizingRadiation')}
               />
             </td>
-            <td>X</td>
+            <td>Radiaciones ionizantes</td>
             <td></td>
           </tr>
           <tr>
             <td>Exposición a temperaturas extremas ambientales.</td>
-            <td>X</td>
             <td></td>
             <td>
-              Radiaciones no ionizantes
+            <input
+                type="checkbox"
+                checked={agentsStatus.chemical.aerosols}
+                onChange={() => handleChange('chemical', 'aerosols')}
+              />
+            </td>
+            <td>
+              
               <input
                 type="checkbox"
                 checked={agentsStatus.physical.nonIonizingRadiation}
                 onChange={() => handleChange('physical', 'nonIonizingRadiation')}
               />
             </td>
-            <td>X</td>
+            <td>Radiaciones no ionizantes</td>
             <td></td>
           </tr>
           <tr>
             <td>Contactos eléctricos: directos e indirectos.</td>
-            <td>X</td>
             <td></td>
             <td>
-              Temperaturas extremas
+            <input
+                type="checkbox"
+                checked={agentsStatus.chemical.aerosols}
+                onChange={() => handleChange('chemical', 'aerosols')}
+              />
+            </td>
+            <td>
+              
               <input
                 type="checkbox"
                 checked={agentsStatus.physical.extremeTemperatures}
                 onChange={() => handleChange('physical', 'extremeTemperatures')}
               />
             </td>
-            <td>X</td>
+            <td>Temperaturas extremas</td>
             <td></td>
           </tr>
         </tbody>
