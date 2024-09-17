@@ -20,13 +20,13 @@ const RiskAssessmentTable = () => {
   });
 
   const bodyParts = {
-    'Caídas de Altura': ['Cabeza y Oídos', 'Ojos y Cara', 'Brazos y Manos', 'Tronco', 'Extremidades inferiores'],
-    'Exposición a Temperaturas': ['Cabeza y Oídos', 'Ojos y Cara', 'Brazos y Manos', 'Tronco', 'Extremidades inferiores'],
-    'Exposición a Electricidad Estática': ['Ojos y Cara', 'Brazos y Manos', 'Tronco'],
+    'Caídas de Altura': ['Cabeza y Oídos', 'Brazos y Manos', 'Tronco', 'Extremidades inferiores'],
+    'Exposición a Temperaturas': ['Ojos y Cara', 'Brazos y Manos', 'Tronco'],
+    'Exposición a Electricidad Estática': ['Brazos y Manos', 'Tronco'],
     'Exposición a Sustancias Químicas': ['Cabeza y Oídos', 'Ojos y Cara', 'Brazos y Manos', 'Tronco', 'Sistema respiratorio', 'Extremidades inferiores'],
     'Exposición a Radiaciones': ['Cabeza y Oídos', 'Ojos y Cara', 'Tronco', 'Extremidades inferiores'],
     'Exposición agentes Biológicos': ['Ojos y Cara', 'Tronco', 'Sistema respiratorio', 'Extremidades inferiores'],
-    'Exposición a Ruido': ['Cabeza y Oídos', 'Tronco'],
+    'Exposición a Ruido': ['Cabeza y Oídos'],
     'Exposición a Vibraciones': ['Brazos y Manos', 'Tronco', 'Extremidades inferiores'],
     'Superficies cortantes': ['Ojos y Cara', 'Brazos y Manos', 'Extremidades inferiores'],
     'Caídas a nivel o desnivel': ['Cabeza y Oídos', 'Ojos y Cara', 'Brazos y Manos', 'Tronco', 'Extremidades inferiores'],
@@ -37,20 +37,20 @@ const RiskAssessmentTable = () => {
   };
 
   const protectionImages = {
-    'Caídas de Altura': ['/images/10.png', '/images/34.png', '/body/32.png'], // Reemplaza con la ruta real de la imagen
-    'Exposición a Temperaturas': ['/images/6.png', '/images/30.png', '/images/21.png'],
-    'Exposición a Electricidad Estática': ['/images/6.png', '/images/4.png', '/images/21.png'],
-    'Exposición a Sustancias Químicas': 'path/to/chemical_suit.jpg',
-    'Exposición a Radiaciones': 'path/to/radiation_shield.jpg',
-    'Exposición agentes Biológicos': 'path/to/biological_mask.jpg',
-    'Exposición a Ruido': 'path/to/ear_protection.jpg',
-    'Exposición a Vibraciones': 'path/to/vibration_gloves.jpg',
-    'Superficies cortantes': 'path/to/cutting_gloves.jpg',
-    'Caídas a nivel o desnivel': 'path/to/safety_boots.jpg',
-    'Daños Ergonómicos': 'path/to/ergonomic_support.jpg',
-    'Calentamiento de materia prima, subproducto o producto': 'path/to/heat_resistant_gloves.jpg',
-    'Proyección de material o herramienta': 'path/to/face_shield.jpg',
-    'Mantenimiento preventivo, correctivo o predictivo': 'path/to/tool_kit.jpg',
+    'Caídas de Altura': ['/images/10.png', '/images/34.png'], // Reemplaza con la ruta real de la imagen
+    'Exposición a Temperaturas': ['/images/6.png'],
+    'Exposición a Electricidad Estática': ['/images/6.png', '/images/4.png'],
+    'Exposición a Sustancias Químicas': ['/images/7.png', '/images/13.png', '/images/6.png', '/images/17.png'],
+    'Exposición a Radiaciones': ['/images/16.png'], 
+    'Exposición agentes Biológicos': ['/images/18.png', '/images/16.png'], 
+    'Exposición a Ruido': ['/images/19.png', '/images/5.png'],
+    'Exposición a Vibraciones': ['/images/14.png', '/images/4.png'],
+    'Superficies cortantes': ['/images/6.png', '/images/1.png', '/images/21.png'],
+    'Caídas a nivel o desnivel':  ['/images/4.png'],
+    'Daños Ergonómicos':  ['/images/15.png'],
+    'Calentamiento de materia prima, subproducto o producto':  ['/images/6.png', '/images/15.png'],
+    'Proyección de material o herramienta':  ['/images/7.png', '/images/12.png'],
+    'Mantenimiento preventivo, correctivo o predictivo':  ['/images/12.png', '/images/3.png'],
   };
 
   const handleCheckboxChange = (event) => {
@@ -114,6 +114,26 @@ const RiskAssessmentTable = () => {
   const handleExposureChange = (event) => setExposure(Number(event.target.value));
   const handleProbabilityChange = (event) => setProbability(Number(event.target.value));
 
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+  const [selectedOption, setSelectedOption] = useState('');
+
+  const optionImages = {
+    option1: '/body/lvl1_head.png',
+    option2: '/body/lvl1_mid.png',
+    option3: '/body/lvl1_foot.png',
+    option4: '/body/lvl1_hand.png',
+    option5: '/body/lvl2_headmid.png',
+    option6: '/body/lvl2_handfoot.png',
+    option7: '/body/lvl2_headfoot.png',
+    option8: '/body/lvl2_headhand.png',
+    option9: '/body/lvl2_headmid.png',
+    option10: '/body/lvl2_midhand.png',
+    option11: '/body/lvl3_all.png',
+
+  };
 
   return (
     <table className="risk-table">
@@ -171,17 +191,35 @@ const RiskAssessmentTable = () => {
             </ul>
           </td>
           <td colSpan="3" className="right-section">
-            <div className="sub-header">Equipo de protección personal sugerido</div>
-            <div className="section-content">
-              {selectedImages.length > 0 ? (
-                selectedImages.map((image, index) => (
-                  <img key={index} src={image} alt={`Equipo de protección ${index}`} className="protection-image" />
-                ))
-              ) : (
-                <p>No hay equipo de protección seleccionado.</p>
-              )}
-            </div>
-          </td>
+  <div className="sub-header">Equipo de protección personal sugerido</div>
+  <div className="section-content">
+    <select value={selectedOption} onChange={handleOptionChange}>
+      <option value="">Selecciona la extremidad afectada</option>
+      <option value="option1">Cabeza</option>
+      <option value="option2">Tronco</option>
+      <option value="option3">Pies</option>
+      <option value="option4">Brazos</option>
+      <option value="option5">Cabeza y Tronco</option>
+      <option value="option6">Brazos y Pies</option>
+      <option value="option7">Cabeza y Pies</option>
+      <option value="option8">Cabeza y Brazos</option>
+      <option value="option9">Cabeza y Tronco</option>
+      <option value="option10">Tronco y Brazos</option>
+      <option value="option11">Todas las Extremidades</option>
+    </select>
+    {selectedOption && optionImages[selectedOption] && (
+      <img
+        src={optionImages[selectedOption]} // Ruta de la imagen basada en el valor seleccionado
+        alt={`Equipo de protección para ${selectedOption}`}
+        className="protection-image"
+      />
+    )}
+    {/* Mostrar las imágenes de protección seleccionadas */}
+    {selectedImages.length > 0 && selectedImages.map((image, index) => (
+      <img key={index} src={image} alt={`Equipo de protección ${index}`} className="protection-image" />
+    ))}
+  </div>
+</td>
         </tr>
         <tr>
           <td colSpan="7" className="separator-line" />
