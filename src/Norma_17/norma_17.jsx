@@ -36,6 +36,23 @@ const RiskAssessmentTable = () => {
     'Mantenimiento preventivo, correctivo o predictivo': ['Ojos y Cara', 'Brazos y Manos', 'Tronco'],
   };
 
+  const protectionImages = {
+    'Caídas de Altura': ['/images/10.png', '/images/34.png', '/body/32.png'], // Reemplaza con la ruta real de la imagen
+    'Exposición a Temperaturas': ['/images/6.png', '/images/30.png', '/images/21.png'],
+    'Exposición a Electricidad Estática': ['/images/6.png', '/images/4.png', '/images/21.png'],
+    'Exposición a Sustancias Químicas': 'path/to/chemical_suit.jpg',
+    'Exposición a Radiaciones': 'path/to/radiation_shield.jpg',
+    'Exposición agentes Biológicos': 'path/to/biological_mask.jpg',
+    'Exposición a Ruido': 'path/to/ear_protection.jpg',
+    'Exposición a Vibraciones': 'path/to/vibration_gloves.jpg',
+    'Superficies cortantes': 'path/to/cutting_gloves.jpg',
+    'Caídas a nivel o desnivel': 'path/to/safety_boots.jpg',
+    'Daños Ergonómicos': 'path/to/ergonomic_support.jpg',
+    'Calentamiento de materia prima, subproducto o producto': 'path/to/heat_resistant_gloves.jpg',
+    'Proyección de material o herramienta': 'path/to/face_shield.jpg',
+    'Mantenimiento preventivo, correctivo o predictivo': 'path/to/tool_kit.jpg',
+  };
+
   const handleCheckboxChange = (event) => {
     const hazard = event.target.name;
     setHazards({
@@ -67,6 +84,19 @@ const RiskAssessmentTable = () => {
     console.log('Risk:', risk); // Añade esto para ver el valor del riesgo en la consola
     return risk;
   };
+
+  const getSelectedHazardImages = () => {
+    const selectedHazards = Object.keys(hazards).filter(hazard => hazards[hazard]);
+    const uniqueImages = new Set();
+    selectedHazards.forEach(hazard => {
+      protectionImages[hazard].forEach(image => uniqueImages.add(image));
+    });
+    return Array.from(uniqueImages);
+  };
+  
+  const selectedImages = getSelectedHazardImages();
+  
+  
   
 
   // Función para obtener el color basado en el riesgo
@@ -83,6 +113,7 @@ const RiskAssessmentTable = () => {
   const handleConsequenceChange = (event) => setConsequence(Number(event.target.value));
   const handleExposureChange = (event) => setExposure(Number(event.target.value));
   const handleProbabilityChange = (event) => setProbability(Number(event.target.value));
+
 
   return (
     <table className="risk-table">
@@ -141,7 +172,15 @@ const RiskAssessmentTable = () => {
           </td>
           <td colSpan="3" className="right-section">
             <div className="sub-header">Equipo de protección personal sugerido</div>
-            <div className="section-content">[Espacio en blanco para futuras adiciones]</div>
+            <div className="section-content">
+              {selectedImages.length > 0 ? (
+                selectedImages.map((image, index) => (
+                  <img key={index} src={image} alt={`Equipo de protección ${index}`} className="protection-image" />
+                ))
+              ) : (
+                <p>No hay equipo de protección seleccionado.</p>
+              )}
+            </div>
           </td>
         </tr>
         <tr>
