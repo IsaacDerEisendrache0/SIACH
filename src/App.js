@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import Norma17 from './Norma_17/norma_17'; // Ajusta la ruta para importar desde la carpeta
-import Norma04 from './Norma_004/norma_004'; // Importamos el componente de evaluación de riesgos N-004
-import Norma030 from './Norma_030/norma_030'; // Ajusta la ruta de importación según tu estructura de archivos
-import Login from './componentes/Loginlogin'; // Importa el componente Login
+import Norma17 from './Norma_17/norma_17'; 
+import Norma04 from './Norma_004/norma_004'; 
+import Norma030 from './Norma_030/norma_030'; 
+import Login from './componentes/Loginlogin'; 
+import CarouselComponent from './componentes/CarouselComponent'; // Importa el componente del carrusel
+import LogoutButton from './componentes/LogoutButton'; // Importa el botón de logout
+import { getAuth, signOut } from 'firebase/auth';
 
+// Componente de Navegación
 function Navigation() {
   const location = useLocation();
   const showNavigation = !(location.pathname === '/login' || location.pathname === '/main');
@@ -24,12 +28,38 @@ function Navigation() {
           <Link to="/main">
             <button className="btn btn-primary">Ir a Main</button>
           </Link>
+          <Link to="/carousel">
+            <button className="btn btn-primary">Ver Carrusel</button> {/* Botón para navegar al carrusel */}
+          </Link>
         </>
       )}
     </div>
   );
 }
 
+// Página Principal (Main Page) con el botón de logout
+function Main() {
+  const auth = getAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/'); // Redirige a la página de inicio después de cerrar sesión
+    } catch (err) {
+      console.error('Error al cerrar sesión:', err);
+    }
+  };
+
+  return (
+    <div className="main-container">
+      <h1>Bienvenido a la Página Principal</h1>
+      <LogoutButton handleLogout={handleLogout} /> {/* Usa el componente LogoutButton */}
+    </div>
+  );
+}
+
+// Página de Inicio
 function HomePage() {
   const [selectedNorma, setSelectedNorma] = useState('');
 
@@ -41,7 +71,6 @@ function HomePage() {
     <div className="container mt-5">
       <h1 className="text">Bienvenido a la Página de Inicio</h1>
 
-      {/* Botón desplegable para elegir normas */}
       <div className="dropdown mt-3">
         <button
           className="btn btn-primary dropdown-toggle"
@@ -83,31 +112,31 @@ function HomePage() {
         </ul>
       </div>
 
-      {/* Mostrar el contenido según la norma seleccionada */}
       {selectedNorma === 'N-017' && (
         <div className="mt-3">
           <h3>N-017 Seleccionada:</h3>
-          <Norma17 /> {/* Mostrar el componente de Norma 017 */}
+          <Norma17 />
         </div>
       )}
 
       {selectedNorma === 'Evaluación de Riesgos' && (
         <div className="mt-3">
           <h3>N-004 Seleccionada:</h3>
-          <Norma04 /> {/* Mostrar el componente de evaluación de riesgos */}
+          <Norma04 />
         </div>
       )}
 
       {selectedNorma === 'N-030' && (
         <div className="mt-3">
           <h3>N-030 Seleccionada:</h3>
-          <Norma030 /> {/* Mostrar el componente de Norma 030 */}
+          <Norma030 />
         </div>
       )}
     </div>
   );
 }
 
+// Footer
 function Footer() {
   return (
     <footer className="footer mt-5">
@@ -116,6 +145,7 @@ function Footer() {
   );
 }
 
+// Componente principal de la aplicación
 function App() {
   return (
     <Router>
@@ -125,8 +155,9 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/main" element={<div>Main Page</div>} />
-            <Route path="/norma030" element={<Norma030 />} /> {/* Ruta para Norma 030 */}
+            <Route path="/main" element={<Main />} /> {/* Ruta actualizada para la página principal */}
+            <Route path="/norma030" element={<Norma030 />} />
+            <Route path="/carousel" element={<CarouselComponent />} /> {/* Nueva ruta para el carrusel */}
           </Routes>
         </header>
 

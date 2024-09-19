@@ -15,7 +15,7 @@ function Login() {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/main');
+      window.location.href = 'https://www.youtube.com/watch?v=2yH_JYFbteQ'; // Reemplaza ID_DEL_VIDEO con el ID del video
     } catch (err) {
       console.error('Error de inicio de sesión:', err);
       setError('Credenciales incorrectas o error en el inicio de sesión');
@@ -26,7 +26,7 @@ function Login() {
     <div className="d-flex align-items-center justify-content-center vh-100 bg-body-tertiary">
       <main className="form-signin text-center" style={{ width: '300px' }}>
         <form onSubmit={handleSubmit}>
-          <h1 className="h3 mb-3 fw-normal" style={{ color: '#007bff' }}>LOGIN</h1> {/* Cambiado a un azul bajito */}
+          <h1 className="h3 mb-3 fw-normal" style={{ color: '#007bff' }}>LOGIN</h1>
           <div className="form-floating mb-3">
             <input
               type="email"
@@ -51,7 +51,7 @@ function Login() {
             />
             <label htmlFor="floatingPassword">Contraseña</label>
           </div>
-          <button className="w-100 btn btn-lg mt-3" type="submit" style={{ backgroundColor: '#007bff', borderColor: '#007bff' }}> {/* Cambiado a un azul bajito */}
+          <button className="w-100 btn btn-lg mt-3" type="submit" style={{ backgroundColor: '#007bff', borderColor: '#007bff' }}>
             Iniciar Sesión
           </button>
           {error && <p className="text-danger mt-3">{error}</p>}

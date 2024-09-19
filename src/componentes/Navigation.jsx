@@ -1,13 +1,21 @@
-// src/componentes/Navigation.jsx
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import DropdownMenu from './DropdownMenu'; // Asegúrate de que la ruta sea correcta
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebaseConfig'; // Asegúrate de tener la configuración de Firebase importada
 
 function Navigation() {
   const location = useLocation();
-  
-  // Mostrar la navegación solo si no estamos en las páginas de Login o Main
+  const navigate = useNavigate();
   const showNavigation = !(location.pathname === '/login' || location.pathname === '/main');
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/login'); // Redirige a la página de login
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
+  };
 
   return (
     <div className="navbar">
@@ -22,10 +30,10 @@ function Navigation() {
           <Link to="/main">
             <button className="btn btn-primary">Ir a Main</button>
           </Link>
-          <Link to="/norma-17">
-            <button className="btn btn-primary">Ir a Norma 17</button>
+          <Link to="/carousel">
+            <button className="btn btn-primary">Ver Carrusel</button>
           </Link>
-          <DropdownMenu /> {/* Agrega el menú desplegable aquí */}
+          <button className="btn btn-danger" onClick={handleLogout}>Cerrar Sesión</button> {/* Botón de cerrar sesión */}
         </>
       )}
     </div>
