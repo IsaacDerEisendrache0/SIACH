@@ -1,8 +1,24 @@
 import React, { useState } from 'react';
 import './Table04.css';
 
+const protectionImages = {
+  'Caídas de Altura': ['/images/10.png', '/images/34.png'],
+  'Exposición a Temperaturas': ['/images/6.png'],
+  'Exposición a Electricidad Estática': ['/images/6.png', '/images/4.png'],
+  'Exposición a Sustancias Químicas': ['/images/7.png', '/images/13.png', '/images/6.png', '/images/17.png'],
+  'Exposición a Radiaciones': ['/images/16.png'],
+  'Exposición agentes Biológicos': ['/images/18.png', '/images/16.png'],
+  'Exposición a Ruido': ['/images/19.png', '/images/5.png'],
+  'Exposición a Vibraciones': ['/images/14.png', '/images/4.png'],
+  'Superficies cortantes': ['/images/6.png', '/images/1.png', '/images/21.png'],
+  'Caídas a nivel o desnivel': ['/images/4.png'],
+  'Daños Ergonómicos': ['/images/15.png'],
+  'Calentamiento de materia prima, subproducto o producto': ['/images/6.png', '/images/15.png'],
+  'Proyección de material o herramienta': ['/images/7.png', '/images/12.png'],
+  'Mantenimiento preventivo, correctivo o predictivo': ['/images/12.png', '/images/3.png'],
+};
+
 const RiskTable = () => {
-  // Opciones para los menús desplegables
   const opcionesConsecuencia = ['Catástrofe', 'Varias muertes', 'Muerte', 'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'];
   const opcionesExposicion = ['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente'];
   const opcionesProbabilidad = [
@@ -15,39 +31,56 @@ const RiskTable = () => {
   ];
   const opcionesTiempoExposicion = ['0-2 hrs', '2-4 hrs', '4-8 hrs', '8+ hrs'];
 
-  // Estado para los menús de riesgo
   const [consequence, setConsequence] = useState('Lesiones sin baja');
   const [exposure, setExposure] = useState('Ocasionalmente');
   const [probability, setProbability] = useState('Coincidencia extremadamente remota pero concebible');
   const [tiempoExposicion, setTiempoExposicion] = useState('4-8 hrs');
-
-  // Estado para la previsualización de la imagen
+  const [selectedImages, setSelectedImages] = useState([]);
   const [imagePreview, setImagePreview] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-
-  // Estado para identificación de peligros
   const [peligros, setPeligros] = useState([
-    { id: 1, nombre: 'Partes en Movimiento', siNo: false },
+    { id: 1, nombre: 'Caídas de Altura', siNo: false },
     { id: 2, nombre: 'Exposición a Temperaturas', siNo: false },
     { id: 3, nombre: 'Exposición a Electricidad Estática', siNo: false },
     { id: 4, nombre: 'Exposición a Sustancias Químicas', siNo: false },
     { id: 5, nombre: 'Exposición a Radiaciones', siNo: false },
-    { id: 6, nombre: 'Exposición a Ruido', siNo: true },
-    { id: 7, nombre: 'Exposición a Vibraciones', siNo: false },
-    { id: 8, nombre: 'Superficies cortantes', siNo: true }
+    { id: 6, nombre: 'Exposición agentes Biológicos', siNo: false },
+    { id: 7, nombre: 'Exposición a Ruido', siNo: false },
+    { id: 8, nombre: 'Exposición a Vibraciones', siNo: false },
+    { id: 9, nombre: 'Superficies cortantes', siNo: false },
+    { id: 10, nombre: 'Caídas a nivel o desnivel', siNo: false },
+    { id: 11, nombre: 'Daños Ergonómicos', siNo: false },
+    { id: 12, nombre: 'Calentamiento de materia prima, subproducto o producto', siNo: false },
+    { id: 13, nombre: 'Proyección de material o herramienta', siNo: false },
+    { id: 14, nombre: 'Mantenimiento preventivo, correctivo o predictivo', siNo: false }
   ]);
-
-  // Estado para observaciones generales
   const [observacionesGenerales, setObservacionesGenerales] = useState('');
 
-  // Función para actualizar el estado de cada peligro
   const handlePeligroChange = (index, valor) => {
     const nuevosPeligros = [...peligros];
     nuevosPeligros[index].siNo = valor;
     setPeligros(nuevosPeligros);
+
+    const newImages = [...selectedImages];
+    nuevosPeligros.forEach(peligro => {
+      if (peligro.siNo && protectionImages[peligro.nombre]) {
+        protectionImages[peligro.nombre].forEach((imageSrc) => {
+          if (!newImages.includes(imageSrc)) {
+            newImages.push(imageSrc);
+          }
+        });
+      } else if (!peligro.siNo && protectionImages[peligro.nombre]) {
+        protectionImages[peligro.nombre].forEach((imageSrc) => {
+          const imageIndex = newImages.indexOf(imageSrc);
+          if (imageIndex > -1) {
+            newImages.splice(imageIndex, 1);
+          }
+        });
+      }
+    });
+    setSelectedImages(newImages);
   };
 
-  // Función para manejar el archivo de imagen seleccionado
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
@@ -55,8 +88,8 @@ const RiskTable = () => {
       const reader = new FileReader();
 
       reader.onloadend = () => {
-        setImagePreview(reader.result); // Guardar la URL de la imagen para previsualización
-        setErrorMessage(''); // Limpiar cualquier mensaje de error
+        setImagePreview(reader.result);
+        setErrorMessage('');
       };
 
       reader.readAsDataURL(file);
@@ -65,7 +98,6 @@ const RiskTable = () => {
     }
   };
 
-  // Calcular la magnitud del riesgo (Multiplicación simple)
   const calcularMagnitudRiesgo = () => {
     const valoresConsecuencia = {
       'Catástrofe': 50,
@@ -85,8 +117,8 @@ const RiskTable = () => {
     };
 
     const valoresProbabilidad = {
-      'Es el resultado más probable y esperado': 5,
-      'Es completamente posible, no será nada extraño': 4,
+      'Es el resultado más probable y esperado': 10,
+      'Es completamente posible, no será nada extraño': 6,
       'Sería una secuencia o coincidencia rara pero posible, ha ocurrido': 3,
       'Coincidencia muy rara, pero se sabe que ha ocurrido': 2,
       'Coincidencia extremadamente remota pero concebible': 1,
@@ -96,47 +128,40 @@ const RiskTable = () => {
     return valoresConsecuencia[consequence] * valoresExposicion[exposure] * valoresProbabilidad[probability];
   };
 
-  const riskMagnitude = calcularMagnitudRiesgo();
-
-  // Clasificación de la magnitud del riesgo basada en el valor de la magnitud
-  const classifyRisk = (magnitude) => {
-    if (magnitude > 400) {
-      return "Muy Alto";
-    } else if (magnitude > 200) {
-      return "Alto";
-    } else if (magnitude > 70) {
-      return "Notable";
-    } else if (magnitude > 20) {
-      return "Moderado";
-    } else {
-      return "Bajo o Aceptable";
-    }
+  const calcularValorConsecuencia = () => {
+    const valoresConsecuencia = {
+      'Catástrofe': 50,
+      'Varias muertes': 25,
+      'Muerte': 15,
+      'Lesiones graves': 10,
+      'Lesiones con baja': 5,
+      'Lesiones sin baja': 1
+    };
+    return valoresConsecuencia[consequence];
   };
 
-  // Determinar el color de la clasificación
-  const getColorByRisk = (magnitude) => {
-    if (magnitude > 400) {
-      return 'red';      // Muy Alto
-    } else if (magnitude > 200) {
-      return 'orange';   // Alto
-    } else if (magnitude > 70) {
-      return 'yellow';   // Notable
-    } else if (magnitude > 20) {
-      return 'green';    // Moderado
-    } else {
-      return 'blue';     // Bajo o Aceptable
-    }
+  const calcularValorExposicion = () => {
+    const valoresExposicion = {
+      'Continuamente': 10,
+      'Frecuentemente': 6,
+      'Ocasionalmente': 3,
+      'Irregularmente': 2,
+      'Raramente': 1
+    };
+    return valoresExposicion[exposure];
   };
 
-  // Determinar la acción a tomar basada en la clasificación
-  const action = classifyRisk(riskMagnitude) === "Bajo o Aceptable" ? "Tolerable" : 
-                  classifyRisk(riskMagnitude) === "Moderado" ? "Debe corregirse" : 
-                  classifyRisk(riskMagnitude) === "Notable" ? "Corrección urgente" : 
-                  classifyRisk(riskMagnitude) === "Alto" ? "Corrección inmediata" : 
-                  "Detención inmediata";
-
-  // Obtener el color basado en la magnitud del riesgo
-  const riskColor = getColorByRisk(riskMagnitude);
+  const calcularValorProbabilidad = () => {
+    const valoresProbabilidad = {
+      'Es el resultado más probable y esperado': 10,
+      'Es completamente posible, no será nada extraño': 6,
+      'Sería una secuencia o coincidencia rara pero posible, ha ocurrido': 3,
+      'Coincidencia muy rara, pero se sabe que ha ocurrido': 2,
+      'Coincidencia extremadamente remota pero concebible': 1,
+      'Coincidencia prácticamente imposible, jamás ha ocurrido': 0.5
+    };
+    return valoresProbabilidad[probability];
+  };
 
   return (
     <div className="risk-table">
@@ -168,105 +193,129 @@ const RiskTable = () => {
         </thead>
         <tbody>
           <tr>
-            <td rowSpan="6" colSpan="2">
-              {/* Input para subir imagen */}
+            <td rowSpan="6" colSpan="1">
               <input type="file" accept="image/*" onChange={handleImageChange} />
               {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
-              {/* Previsualización de la imagen */}
               {imagePreview ? (
-                <img src={imagePreview} alt="Maquinaria" style={{ width: '150px', height: '150px', marginTop: '10px' }} />
+                <img src={imagePreview} alt="Maquinaria" style={{ width: '100%', height: 'auto', marginTop: '10px', maxWidth: '250px' }} />
               ) : (
                 <p>No hay imagen seleccionada</p>
               )}
             </td>
-            <table className="main-table danger-table">
-        <thead>
-          <tr>
-            <th>Identificación de peligros</th>
-            <th>Si/No</th>
+
+            <td colSpan="5">
+              <table className="compact-table no-border">
+                <thead>
+                  <tr>
+                    <th>Consecuencia</th>
+                    <th>Exposición</th>
+                    <th>Probabilidad</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <select value={consequence} onChange={(e) => setConsequence(e.target.value)}>
+                        {opcionesConsecuencia.map(opcion => (
+                          <option key={opcion} value={opcion}>{opcion}</option>
+                        ))}
+                      </select>
+                      <div>Valor: {calcularValorConsecuencia()}</div>
+                    </td>
+                    <td>
+                      <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
+                        {opcionesExposicion.map(opcion => (
+                          <option key={opcion} value={opcion}>{opcion}</option>
+                        ))}
+                      </select>
+                      <div>Valor: {calcularValorExposicion()}</div>
+                    </td>
+                    <td>
+                      <select value={probability} onChange={(e) => setProbability(e.target.value)}>
+                        {opcionesProbabilidad.map(opcion => (
+                          <option key={opcion} value={opcion}>{opcion}</option>
+                        ))}
+                      </select>
+                      <div>Valor: {calcularValorProbabilidad()}</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {peligros.map((peligro, index) => (
-            <tr key={peligro.id}>
-              <td style={{ width: '70%' }}>{peligro.nombre}</td>
-              <td style={{ width: '30%' }}>
-                <input
-                  type="checkbox"
-                  checked={peligro.siNo}
-                  onChange={(e) => handlePeligroChange(index, e.target.checked)}
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-            
+
+          <tr>
+            <td colSpan="5">
+              <table className="danger-table compact-table">
+                <thead>
+                  <tr>
+                    <th>Identificación de peligros</th>
+                    <th>Si/No</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {peligros.map((peligro, index) => (
+                    <tr key={peligro.id}>
+                      <td style={{ width: '70%' }}>{peligro.nombre}</td>
+                      <td style={{ width: '30%' }}>
+                        <input
+                          type="checkbox"
+                          checked={peligro.siNo}
+                          onChange={(e) => handlePeligroChange(index, e.target.checked)}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </td>
           </tr>
         </tbody>
       </table>
 
-      <table className="main-table">
-        <thead>
-          <tr>
-            <td colSpan="8" className="exposure">TIEMPO DE EXPOSICIÓN POR MANTENIMIENTO</td>
-          </tr>
-          <tr>
-            <td>Consecuencia</td>
-            <td>Exposición</td>
-            <td>Probabilidad</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <select value={consequence} onChange={(e) => setConsequence(e.target.value)}>
-                {opcionesConsecuencia.map(opcion => (
-                  <option key={opcion} value={opcion}>{opcion}</option>
-                ))}
-              </select>
-            </td>
-            <td>
-              <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
-                {opcionesExposicion.map(opcion => (
-                  <option key={opcion} value={opcion}>{opcion}</option>
-                ))}
-              </select>
-            </td>
-            <td>
-              <select value={probability} onChange={(e) => setProbability(e.target.value)}>
-                {opcionesProbabilidad.map(opcion => (
-                  <option key={opcion} value={opcion}>{opcion}</option>
-                ))}
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td colSpan="3" className="risk-magnitude-header">Clasificación de Magnitud de Riesgo</td>
-          </tr>
-          <tr style={{ backgroundColor: riskColor }}>
-            <td>Magnitud del Riesgo: {riskMagnitude}</td>
-            <td>Clasificación: {classifyRisk(riskMagnitude)}</td>
-            <td>Acción: {action}</td>
-          </tr>
-          <tr>
-            <td colSpan="5" className="suggested-equipment">Equipo de protección personal sugerido</td>
-          </tr>
-          <tr>
-            <td colSpan="1" className="icons"><img src="icon01.png" alt="Protección" /></td>
-           <img src="icon02.png" alt="Protección" />
-            <td colSpan="2" className="icons"><img src="icon03.png" alt="Protección" /></td>
-          </tr>
-          <tr>
-            <td colSpan="8" className="specific-risk-header">Riesgo Específico</td>
-          </tr>
-          <tr>
-            <td colSpan="0" className="icons"><img src="risk01.png" alt="Riesgo" /></td>
-            <td colSpan="1" className="icons"><img src="risk02.png" alt="Riesgo" /></td>
-            <td colSpan="2" className="icons"><img src="risk03.png" alt="Riesgo" /></td>
-          </tr>
-          {/* Campo de observaciones generales */}
+      <div className="horizontal-sections">
+        <div className="section">
+          <table className="main-table">
+            <thead>
+              <tr>
+                <td colSpan="5" className="suggested-equipment">Equipo de protección personal sugerido</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colSpan="5" className="icons">
+                  {selectedImages.length > 0 ? (
+                    selectedImages.map((imageSrc, index) => (
+                      <img key={index} src={imageSrc} alt={`Protección`} style={{ width: '50px', height: '50px', margin: '5px', objectFit: 'cover' }} />
+                    ))
+                  ) : (
+                    <p>No hay riesgos seleccionados</p>
+                  )}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="section">
+          <table className="main-table">
+            <thead>
+              <tr>
+                <td colSpan="8" className="specific-risk-header">Riesgo Específico</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colSpan="0" className="icons"><img src="risk01.png" alt="Riesgo" style={{ width: '50px', height: '50px', margin: '5px', objectFit: 'cover' }} /></td>
+                <td colSpan="1" className="icons"><img src="risk02.png" alt="Riesgo" style={{ width: '50px', height: '50px', margin: '5px', objectFit: 'cover' }} /></td>
+                <td colSpan="2" className="icons"><img src="risk03.png" alt="Riesgo" style={{ width: '50px', height: '50px', margin: '5px', objectFit: 'cover' }} /></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div className="observaciones-container">
         <label htmlFor="observaciones">Observaciones:</label>
         <textarea
@@ -278,8 +327,6 @@ const RiskTable = () => {
           cols="50"
         />
       </div>
-        </tbody>
-      </table>
     </div>
   );
 };
