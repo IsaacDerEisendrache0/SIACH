@@ -123,16 +123,51 @@
 }
 
 
-.protection-images-container {
-  display: flex; /* Utiliza flexbox para alinear horizontalmente */
-  flex-wrap: wrap; /* Permite que las imágenes se envuelvan si no hay suficiente espacio */
-  gap: 10px; /* Espacio entre las imágenes, ajusta según sea necesario */
+/* Asegúrate de que la celda ocupe todo el espacio disponible */
+.right-section {
+  vertical-align: top; /* Alinea verticalmente al inicio */
+  padding: 10px; /* Ajusta el padding según sea necesario */
 }
 
+/* Asegúrate de que el contenedor de imágenes no se expanda más allá del contenido */
+.protection-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra los elementos dentro de la sección */
+  width: 100%; /* Asegura que el contenedor use todo el ancho disponible */
+}
+
+
+.sub-header {
+  margin-bottom: 10px; /* Ajusta el espacio debajo del título */
+  font-weight: bold; /* Estilo opcional para el título */
+}
+
+.section-content {
+  display: flex;
+  flex-direction: column; /* Alinea el contenido en una columna */
+}
+
+/* Ajusta el tamaño del contenedor si es necesario */
+.protection-image-container {
+  width: 100%; /* Ajusta al ancho disponible */
+  max-width: 1200px; /* Ajusta el ancho máximo según sea necesario */
+  margin: 0 auto; /* Centra el contenedor dentro de su contenedor padre */
+}
+
+
 .protection-image {
-  max-width: 80px; /* Ajusta el tamaño máximo de las imágenes según sea necesario */
+  max-width: 70px; /* Ajusta el tamaño máximo de las imágenes */
+  height: auto; /* Mantiene la proporción de las imágenes */
+  border: 1px solid #ccc; /* Opcional: agrega un borde ligero */
+  border-radius: 5px; /* Opcional: agrega bordes redondeados */
+}
+
+.protection-image2 {
+  max-width:80%; /* Ajusta el tamaño máximo de la imagen */
   height: auto; /* Mantiene la proporción de la imagen */
 }
+
 
 
 

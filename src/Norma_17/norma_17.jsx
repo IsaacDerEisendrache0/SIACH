@@ -114,9 +114,18 @@ const RiskAssessmentTable = () => {
   const handleExposureChange = (event) => setExposure(Number(event.target.value));
   const handleProbabilityChange = (event) => setProbability(Number(event.target.value));
 
-  const handleOptionChange = (event) => {
-    setSelectedOption(event.target.value);
+  const [selectedOptionEquipoUtilizado, setSelectedOptionEquipoUtilizado] = useState('');
+  const [selectedOptionProteccionSugerida, setSelectedOptionProteccionSugerida] = useState('');
+
+
+  const handleOptionChangeEquipoUtilizado = (event) => {
+    setSelectedOptionEquipoUtilizado(event.target.value);
   };
+  
+  const handleOptionChangeProteccionSugerida = (event) => {
+    setSelectedOptionProteccionSugerida(event.target.value);
+  };
+  
 
   const [selectedOption, setSelectedOption] = useState('');
 
@@ -134,6 +143,7 @@ const RiskAssessmentTable = () => {
     option11: '/body/lvl3_all.png',
 
   };
+  
 
   return (
     <table className="risk-table">
@@ -190,10 +200,10 @@ const RiskAssessmentTable = () => {
               ))}
             </ul>
           </td>
-          <td colSpan="3" className="right-section right-aligned">
-            <div className="sub-header">Equipo de protección personal sugerido</div>
+          <td className="right-section right-aligned">
+            <div className="sub-header">Equipo utilizado<br></br></div>
             <div className="section-content">
-              <select value={selectedOption} onChange={handleOptionChange}>
+              <select value={selectedOptionEquipoUtilizado} onChange={handleOptionChangeEquipoUtilizado}>
                 <option value="">Selecciona la extremidad afectada</option>
                 <option value="option1">Cabeza</option>
                 <option value="option2">Tronco</option>
@@ -207,11 +217,40 @@ const RiskAssessmentTable = () => {
                 <option value="option10">Tronco y Brazos</option>
                 <option value="option11">Todas las Extremidades</option>
               </select>
-              {selectedOption && optionImages[selectedOption] && (
+              {selectedOptionEquipoUtilizado && optionImages[selectedOptionEquipoUtilizado] && (
                 <div className="protection-image-container">
                   <img
-                    src={optionImages[selectedOption]} // Ruta de la imagen basada en el valor seleccionado
-                    alt={`Equipo de protección para ${selectedOption}`}
+                    src={optionImages[selectedOptionEquipoUtilizado]}
+                    alt={`Equipo utilizado para ${selectedOptionEquipoUtilizado}`}
+                    className="protection-image2"
+                  />
+                </div>
+              )}
+            </div>
+          </td>
+          
+          <td colSpan="3" className="right-section right-aligned">
+            <div className="sub-header">Equipo de protección personal sugerido</div>
+            <div className="section-content">
+              <select value={selectedOptionProteccionSugerida} onChange={handleOptionChangeProteccionSugerida}>
+                <option value="">Selecciona la extremidad afectada</option>
+                <option value="option1">Cabeza</option>
+                <option value="option2">Tronco</option>
+                <option value="option3">Pies</option>
+                <option value="option4">Brazos</option>
+                <option value="option5">Cabeza y Tronco</option>
+                <option value="option6">Brazos y Pies</option>
+                <option value="option7">Cabeza y Pies</option>
+                <option value="option8">Cabeza y Brazos</option>
+                <option value="option9">Cabeza y Tronco</option>
+                <option value="option10">Tronco y Brazos</option>
+                <option value="option11">Todas las Extremidades</option>
+              </select>
+              {selectedOptionProteccionSugerida && optionImages[selectedOptionProteccionSugerida] && (
+                <div className="protection-image-container">
+                  <img
+                    src={optionImages[selectedOptionProteccionSugerida]}
+                    alt={`Equipo de protección sugerido para ${selectedOptionProteccionSugerida}`}
                     className="protection-image"
                   />
                 </div>
@@ -220,7 +259,7 @@ const RiskAssessmentTable = () => {
               {selectedImages.length > 0 && (
                 <div className="protection-image-container">
                   {selectedImages.map((image, index) => (
-                    <img key={index} src={image} alt={`Equipo de protección ${index}`} className="protection-image" />
+                    <img key={index} src={image} alt={`Protección ${index}`} className="protection-image" />
                   ))}
                 </div>
               )}
