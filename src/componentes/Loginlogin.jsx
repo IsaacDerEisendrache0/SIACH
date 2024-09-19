@@ -15,7 +15,7 @@ function Login() {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      window.location.href = 'https://www.youtube.com/watch?v=2yH_JYFbteQ'; // Reemplaza ID_DEL_VIDEO con el ID del video
+      navigate('/'); // Redirige a la página inicial de tu aplicación
     } catch (err) {
       console.error('Error de inicio de sesión:', err);
       setError('Credenciales incorrectas o error en el inicio de sesión');

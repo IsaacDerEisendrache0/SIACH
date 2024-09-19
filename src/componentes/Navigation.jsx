@@ -1,24 +1,26 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { signOut } from 'firebase/auth';
-import { auth } from '../firebaseConfig'; // Asegúrate de tener la configuración de Firebase importada
+import { getAuth, signOut } from 'firebase/auth';
 
 function Navigation() {
   const location = useLocation();
   const navigate = useNavigate();
-  const showNavigation = !(location.pathname === '/login' || location.pathname === '/main');
-
+  const auth = getAuth();
+  
+  // Función para manejar el cierre de sesión
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate('/login'); // Redirige a la página de login
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+      navigate('/login'); // Redirige a la página de inicio de sesión después de cerrar sesión
+    } catch (err) {
+      console.error('Error al cerrar sesión:', err);
     }
   };
 
+  const showNavigation = !(location.pathname === '/login' || location.pathname === '/main');
+
   return (
-    <div className="navbar">
+    <nav className="navbar">
       {showNavigation && (
         <>
           <Link to="/">
@@ -33,10 +35,15 @@ function Navigation() {
           <Link to="/carousel">
             <button className="btn btn-primary">Ver Carrusel</button>
           </Link>
-          <button className="btn btn-danger" onClick={handleLogout}>Cerrar Sesión</button> {/* Botón de cerrar sesión */}
+          <button
+            className="btn btn-danger ms-2" // Añadir margen a la izquierda para separación
+            onClick={handleLogout}
+          >
+            Cerrar Sesión
+          </button>
         </>
       )}
-    </div>
+    </nav>
   );
 }
 

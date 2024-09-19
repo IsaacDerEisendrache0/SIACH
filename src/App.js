@@ -31,6 +31,9 @@ function Navigation() {
           <Link to="/carousel">
             <button className="btn btn-primary">Ver Carrusel</button> {/* Botón para navegar al carrusel */}
           </Link>
+          <Link to="/Logout"> 
+            <button className="btn btn-primary">Cerrar sesión</button> { }
+          </Link>
         </>
       )}
     </div>
@@ -158,6 +161,7 @@ function App() {
             <Route path="/main" element={<Main />} /> {/* Ruta actualizada para la página principal */}
             <Route path="/norma030" element={<Norma030 />} />
             <Route path="/carousel" element={<CarouselComponent />} /> {/* Nueva ruta para el carrusel */}
+            <Route path="/logout" element={<LogoutButton />} /> {/* Nueva ruta para el carrusel */}
           </Routes>
         </header>
 
