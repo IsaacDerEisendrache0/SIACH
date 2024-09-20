@@ -1,5 +1,5 @@
 
-/*Tabla de maquinaria y equipo*/
+/*TABLA DE MAQUINARIA Y EQUIPO*/
 .risk-table {
   width: 100%;
   display: flex;
@@ -33,6 +33,7 @@ textarea {
   width: 100%;
   height: auto;
   max-width: 300px;
+  margin-top: 10px;
 }
 
 .danger-table {
@@ -53,6 +54,44 @@ textarea {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.image-observations-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.observations-section {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.observations-section textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+.risk-magnitude-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.risk-magnitude-bar {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
 }
 
 

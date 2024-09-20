@@ -98,36 +98,6 @@ const RiskTable = () => {
     }
   };
 
-  const calcularMagnitudRiesgo = () => {
-    const valoresConsecuencia = {
-      'Catástrofe': 50,
-      'Varias muertes': 25,
-      'Muerte': 15,
-      'Lesiones graves': 10,
-      'Lesiones con baja': 5,
-      'Lesiones sin baja': 1
-    };
-
-    const valoresExposicion = {
-      'Continuamente': 5,
-      'Frecuentemente': 4,
-      'Ocasionalmente': 3,
-      'Irregularmente': 2,
-      'Raramente': 1
-    };
-
-    const valoresProbabilidad = {
-      'Es el resultado más probable y esperado': 10,
-      'Es completamente posible, no será nada extraño': 6,
-      'Sería una secuencia o coincidencia rara pero posible, ha ocurrido': 3,
-      'Coincidencia muy rara, pero se sabe que ha ocurrido': 2,
-      'Coincidencia extremadamente remota pero concebible': 1,
-      'Coincidencia prácticamente imposible, jamás ha ocurrido': 0.5
-    };
-
-    return valoresConsecuencia[consequence] * valoresExposicion[exposure] * valoresProbabilidad[probability];
-  };
-
   const calcularValorConsecuencia = () => {
     const valoresConsecuencia = {
       'Catástrofe': 50,
@@ -163,6 +133,27 @@ const RiskTable = () => {
     return valoresProbabilidad[probability];
   };
 
+  const calcularMagnitudRiesgo = () => {
+    return Math.floor(calcularValorConsecuencia() * calcularValorExposicion() * calcularValorProbabilidad());
+  };
+
+  const obtenerColorPorRiesgo = (magnitud) => {
+    if (magnitud > 400) {
+      return 'red';
+    } else if (magnitud > 200) {
+      return 'orange';
+    } else if (magnitud > 70) {
+      return 'yellow';
+    } else if (magnitud > 20) {
+      return 'green';
+    } else {
+      return 'blue';
+    }
+  };
+
+  const magnitudRiesgo = calcularMagnitudRiesgo();
+  const colorMagnitud = obtenerColorPorRiesgo(magnitudRiesgo);
+
   return (
     <div className="risk-table">
       <table className="main-table">
@@ -194,17 +185,30 @@ const RiskTable = () => {
         <tbody>
           <tr>
             <td rowSpan="6" colSpan="1">
-              <input type="file" accept="image/*" onChange={handleImageChange} />
-              {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-
-              {imagePreview ? (
-                <img src={imagePreview} alt="Maquinaria" style={{ width: '100%', height: 'auto', marginTop: '10px', maxWidth: '250px' }} />
-              ) : (
-                <p>No hay imagen seleccionada</p>
-              )}
+              <div className="image-observations-container">
+                <div className="image-section">
+                  <input type="file" accept="image/*" onChange={handleImageChange} />
+                  {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+                  {imagePreview ? (
+                    <img src={imagePreview} alt="Maquinaria" className="image-preview" />
+                  ) : (
+                    <p>No hay imagen seleccionada</p>
+                  )}
+                </div>
+                <div className="observations-section">
+                  <label htmlFor="observaciones">Observaciones:</label>
+                  <textarea
+                    id="observaciones"
+                    value={observacionesGenerales}
+                    onChange={(e) => setObservacionesGenerales(e.target.value)}
+                    placeholder="Agregar observaciones generales aquí"
+                    rows="4"
+                    cols="30"
+                  />
+                </div>
+              </div>
             </td>
-
-            <td colSpan="5">
+            <td colSpan="4">
               <table className="compact-table no-border">
                 <thead>
                   <tr>
@@ -238,6 +242,15 @@ const RiskTable = () => {
                         ))}
                       </select>
                       <div>Valor: {calcularValorProbabilidad()}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colSpan="3">
+                      <div className="risk-magnitude-container">
+                        <div className="risk-magnitude-bar" style={{ backgroundColor: colorMagnitud }}>
+                          <span>{magnitudRiesgo}</span>
+                        </div>
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -314,18 +327,6 @@ const RiskTable = () => {
             </tbody>
           </table>
         </div>
-      </div>
-
-      <div className="observaciones-container">
-        <label htmlFor="observaciones">Observaciones:</label>
-        <textarea
-          id="observaciones"
-          value={observacionesGenerales}
-          onChange={(e) => setObservacionesGenerales(e.target.value)}
-          placeholder="Agregar observaciones generales aquí"
-          rows="4"
-          cols="50"
-        />
       </div>
     </div>
   );
