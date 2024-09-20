@@ -1,6 +1,63 @@
 import React, { useState } from 'react';
 import './Table17.css';
 
+const areas = [
+  {
+    nombre: 'Producción',
+    puestos: [
+      'Ayudante de empaque y envase',
+      'Ayudante de limpieza',
+      'Operador de peletizadora',
+      'Dosificador de micros',
+      'Operador de rolado',
+      'Operador de molino',
+      'Dosificador de mezclas',
+      'Coordinador de mantenimiento',
+      'Ayudante de mantenimiento',
+      'Operador de caldera',
+      'Ayudante de mantenimiento soldadura',
+      'Ayudante de mantenimiento eléctrico',
+      'Ayudante de mantenimiento mecánico',
+      'Embolsador',
+      'Auxiliar de calidad',
+      'Ayudante de albañil',
+      'Supervisor de planta',
+      'Recibidor de granos',
+      'Coordinador de empaque',
+      'Coordinador de seguridad e higiene',
+      'MVZ. Responsable',
+      'Superintendente de producción',
+      'Ingeniero en proyectos',
+    ],
+  },
+  {
+    nombre: 'Operación',
+    puestos: [
+      'Ayudante de almacén',
+      'Almacenista',
+      'Montacarguista',
+      'Operador de enmelazadora',
+      'Investigación y desarrollo',
+    ],
+  },
+  {
+    nombre: 'Envase y empaque',
+    puestos: [
+      'Envasador',
+      'Ayudante de empaque, envase (Cosedor)',
+      'Estibadores',
+      'Ayudante de empaque, envase (Circulante)',
+      'Ayudante de empaque, envase (amarrador)',
+    ],
+  },
+  {
+    nombre: 'Ventas',
+    puestos: ['Estibador', 'Repartidor', 'Chofer'],
+  },
+];
+
+
+
 const RiskAssessmentTable = () => {
   const [hazards, setHazards] = useState({
     'Caídas de Altura': false,
@@ -52,6 +109,23 @@ const RiskAssessmentTable = () => {
     'Proyección de material o herramienta':  ['/images/7.png', '/images/12.png'],
     'Mantenimiento preventivo, correctivo o predictivo':  ['/images/12.png', '/images/3.png'],
   };
+
+   // Coloca los hooks dentro del componente funcional
+  const [areaSeleccionada, setAreaSeleccionada] = useState(areas[0].nombre);
+  const [puestoSeleccionado, setPuestoSeleccionado] = useState('');
+  const [puestos, setPuestos] = useState(areas[0].puestos);
+
+  const handleAreaChange = (e) => {
+    const selectedArea = areas.find((area) => area.nombre === e.target.value);
+    setAreaSeleccionada(selectedArea.nombre);
+    setPuestos(selectedArea.puestos); // Actualiza los puestos según el área seleccionada
+    setPuestoSeleccionado(''); // Reinicia el puesto seleccionado cuando cambia el área
+  };
+
+  const handlePuestoChange = (e) => {
+    setPuestoSeleccionado(e.target.value);
+  };
+
 
   const handleCheckboxChange = (event) => {
     const hazard = event.target.name;
@@ -150,10 +224,20 @@ const RiskAssessmentTable = () => {
       <thead>
         <tr>
           <td className="no-border-cell" colSpan="7">
-            <div className="full-width-cell">
-              <div>Puesto de trabajo: Dosificador de micros</div>
-              <div>Descripción de la actividad: Preparación de microfórmulas, pesaje y mezclado de vitaminas, minerales y aditivos.</div>
-            </div>
+          <div className="full-width-cell">
+            <label htmlFor="puesto">Puesto:</label>
+            <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange}>
+              <option value="" disabled>
+                Seleccione un puesto
+              </option>
+              {puestos.map((puesto, index) => (
+                <option key={index} value={puesto}>
+                  {puesto}
+                </option>
+              ))}
+            </select>
+        <div>Descripción de la actividad: Preparación de microfórmulas, pesaje y mezclado de vitaminas, minerales y aditivos.</div>
+      </div>
           </td>
         </tr>
         <tr>
@@ -170,7 +254,16 @@ const RiskAssessmentTable = () => {
           </td>
           <td className="header right-aligned" colSpan="3">
             <div className="right-column">
-              <div>Área: <input type="text" defaultValue="Producción" /></div>
+              <div className="full-width-cell">
+                <label htmlFor="area">Área:</label>
+                <select id="area" value={areaSeleccionada} onChange={handleAreaChange}>
+                  {areas.map((area, index) => (
+                    <option key={index} value={area.nombre}>
+                      {area.nombre}
+                    </option>
+                  ))}
+                </select>
+          </div>              
               <div>Fecha de inspección: <input type="date" defaultValue="2023-09-13" /></div>
               <div>Tiempo de exposición: <input type="text" defaultValue="8hrs" /></div>
             </div>
