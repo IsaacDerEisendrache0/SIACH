@@ -7,7 +7,6 @@ import Norma04 from './Norma_004/norma_004';
 import Norma030 from './Norma_030/norma_030';
 import Login from './componentes/Loginlogin';
 import CarouselComponent from './componentes/CarouselComponent'; // Importa el componente del carrusel
-import LogoutButton from './componentes/LogoutButton'; // Importa el botón de logout
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 function Navigation() {
@@ -71,10 +70,10 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsAuthenticated(true);
-        navigate('/'); // Si el usuario está autenticado, redirige a la página principal
+        navigate('/'); // Redirige a la página principal si el usuario está autenticado
       } else {
         setIsAuthenticated(false);
-        navigate('/login'); // Si no está autenticado, redirige a la página de login
+        navigate('/login'); // Redirige a la página de login si no está autenticado
       }
       setLoading(false);
     });
@@ -92,9 +91,18 @@ function App() {
         {/* Muestra la navegación solo si el usuario está autenticado */}
         {isAuthenticated && <Navigation />}
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          {/* Ruta de Login */}
           <Route path="/login" element={<Login />} />
-          <Route path="/carousel" element={<CarouselComponent />} />
+
+          {/* Rutas protegidas */}
+          <Route
+            path="/"
+            element={isAuthenticated ? <HomePage /> : <Login />}
+          />
+          <Route
+            path="/carousel"
+            element={isAuthenticated ? <CarouselComponent /> : <Login />}
+          />
         </Routes>
       </header>
     </div>
