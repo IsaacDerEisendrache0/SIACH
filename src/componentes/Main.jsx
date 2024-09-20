@@ -11,7 +11,8 @@ function Main() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate('/login'); // Redirige a la página de inicio de sesión después de cerrar sesión
+      console.log('Sesión cerrada correctamente');
+      navigate('/login', { replace: true }); // Asegura que navega al login y no se pueda regresar con el botón de atrás
     } catch (err) {
       console.error('Error al cerrar sesión:', err);
     }

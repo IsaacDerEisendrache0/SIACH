@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import Norma17 from './Norma_17/norma_17'; 
-import Norma04 from './Norma_004/norma_004'; 
-import Norma030 from './Norma_030/norma_030'; 
-import Login from './componentes/Loginlogin'; 
+import Norma17 from './Norma_17/norma_17';
+import Norma04 from './Norma_004/norma_004';
+import Norma030 from './Norma_030/norma_030';
+import Login from './componentes/Loginlogin';
 import CarouselComponent from './componentes/CarouselComponent'; // Importa el componente del carrusel
 import LogoutButton from './componentes/LogoutButton'; // Importa el botón de logout
 import { getAuth, signOut } from 'firebase/auth';
@@ -13,7 +13,21 @@ import { getAuth, signOut } from 'firebase/auth';
 // Componente de Navegación
 function Navigation() {
   const location = useLocation();
-  const showNavigation = !(location.pathname === '/login' || location.pathname === '/main');
+  const navigate = useNavigate();
+  const auth = getAuth();
+
+  // Función para cerrar sesión
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/login', { replace: true }); // Redirige a la página de login
+    } catch (err) {
+      console.error('Error al cerrar sesión:', err);
+    }
+  };
+
+  // Evitar mostrar la barra de navegación en páginas específicas
+  const showNavigation = !(location.pathname === '/login');
 
   return (
     <div className="navbar">
@@ -25,15 +39,13 @@ function Navigation() {
           <Link to="/login">
             <button className="btn btn-primary">Iniciar Sesión</button>
           </Link>
-          <Link to="/main">
-            <button className="btn btn-primary">Ir a Main</button>
-          </Link>
+          
           <Link to="/carousel">
-            <button className="btn btn-primary">Ver Carrusel</button> {/* Botón para navegar al carrusel */}
+            <button className="btn btn-primary">Ver Carrusel</button>
           </Link>
-          <Link to="/Logout"> 
-            <button className="btn btn-primary">Cerrar sesión</button> { }
-          </Link>
+          <button className="btn btn-primary" onClick={handleLogout}>
+            Cerrar sesión
+          </button>
         </>
       )}
     </div>
@@ -41,26 +53,7 @@ function Navigation() {
 }
 
 // Página Principal (Main Page) con el botón de logout
-function Main() {
-  const auth = getAuth();
-  const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      navigate('/'); // Redirige a la página de inicio después de cerrar sesión
-    } catch (err) {
-      console.error('Error al cerrar sesión:', err);
-    }
-  };
-
-  return (
-    <div className="main-container">
-      <h1>Bienvenido a la Página Principal</h1>
-      <LogoutButton handleLogout={handleLogout} /> {/* Usa el componente LogoutButton */}
-    </div>
-  );
-}
 
 // Página de Inicio
 function HomePage() {
@@ -158,10 +151,9 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/main" element={<Main />} /> {/* Ruta actualizada para la página principal */}
+          
             <Route path="/norma030" element={<Norma030 />} />
             <Route path="/carousel" element={<CarouselComponent />} /> {/* Nueva ruta para el carrusel */}
-            <Route path="/logout" element={<LogoutButton />} /> {/* Nueva ruta para el carrusel */}
           </Routes>
         </header>
 
