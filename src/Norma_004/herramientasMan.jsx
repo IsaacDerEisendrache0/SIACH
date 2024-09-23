@@ -4,7 +4,7 @@ import './Table04.css'; // Archivo CSS para estilos
 const ToolEvaluationTable = () => {
   // Opciones del menú desplegable para cada campo
   const opcionesConsecuencia = ['Catástrofe', 'Varias muertes', 'Muerte', 'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'];
-  const opcionesExposicion = ['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente'];
+  const opcionesExposicion = ['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente','Remotamente'];
   const [observaciones, setObservaciones] = useState('');
 
   // Nuevas opciones de "Probabilidad"
@@ -55,7 +55,7 @@ const ToolEvaluationTable = () => {
       'Muerte': 25,
       'Lesiones graves': 15,
       'Lesiones con baja': 5,
-      'Lesiones sin baja': 1,
+      'Lesiones sin baja': 1
     };
     const valoresExposicion = {
       'Continuamente': 10,
@@ -72,7 +72,7 @@ const ToolEvaluationTable = () => {
       'Sería una secuencia o coincidencia rara pero posible, ha ocurrido': 3,
       'Coincidencia muy rara, pero se sabe que ha ocurrido': 1,
       'Coincidencia extremadamente remota pero concebible': 0.5,
-      'Coincidencia prácticamente imposible, jamás ha ocurrido': 0.1,
+      'Coincidencia prácticamente imposible, jamás ha ocurrido': 0.1
     };
 
     const magnitud = valoresRiesgo[consecuencia] * valoresExposicion[exposicion] * valoresProbabilidad[probabilidad];
@@ -117,7 +117,7 @@ const ToolEvaluationTable = () => {
     <td className="header" colSpan="6">Área: Mina y Planta</td>
   </tr>
   <tr>
-    <td className="header" colSpan="" rowSpan="1">Energía utilizada:</td>
+    <td className="header" colSpan="1" rowSpan="1">Energía utilizada:</td>
     <td>
       <input 
         type="text" 
@@ -163,7 +163,7 @@ const ToolEvaluationTable = () => {
               {imagePreview ? (
                 <img src={imagePreview} alt="Previsualización" style={{ width: '150px', height: '150px', marginTop: '10px' }} />
               ) : (
-                <p>No hay imagen seleccionada</p>
+                <p></p>
               )}
             </td>
             

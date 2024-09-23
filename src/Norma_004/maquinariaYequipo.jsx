@@ -93,8 +93,6 @@ const RiskTable = () => {
       };
 
       reader.readAsDataURL(file);
-    } else {
-      setErrorMessage('Por favor selecciona un archivo de imagen válido.');
     }
   };
 
@@ -160,7 +158,8 @@ const RiskTable = () => {
         <thead>
           <tr>
             <th colSpan="4">Nombre de la maquinaria o equipo:</th>
-            <th>Área:</th>
+            <input type="text" />
+           
             <th>PLANTA DE PASTAS</th>
           </tr>
           <tr>
