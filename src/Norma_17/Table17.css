@@ -120,9 +120,14 @@
 .hazard-checkbox {
   position: absolute; /* Posiciona el checkbox de forma absoluta */
   right: 0; /* Alinea el checkbox a la derecha */
+  
 }
-
-
+.hazard-list {
+  list-style-type: none;
+  margin-left: auto; /* Alinea la lista de peligros al margen izquierdo */
+  padding-left: 0; /* Elimina cualquier padding a la izquierda */
+  text-align: left; /* Asegura que el texto dentro de la lista esté alineado a la izquierda */
+}
 /* Asegúrate de que la celda ocupe todo el espacio disponible */
 .right-section {
   vertical-align: top; /* Alinea verticalmente al inicio */
@@ -168,6 +173,9 @@
   height: auto; /* Mantiene la proporción de la imagen */
 }
 
+.left-section {
+  padding-left: 10px; /* Ajusta el valor según lo necesario */
+  margin-left: 40px; /* Ajusta según lo necesario */
+  padding-right: 20px;
 
-
-
+}

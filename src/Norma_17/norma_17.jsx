@@ -272,11 +272,8 @@ const RiskAssessmentTable = () => {
       </thead>
       <tbody>
         <tr>
-          <td colSpan="7" className="separator-line" />
-        </tr>
-        <tr>
-          <td colSpan="4" className="left-section right-aligned">
-            <div className="sub-header">Identificación de peligros</div>
+          <td colSpan="2" className="left-section"> 
+            <tb className="sub-header">Identificación de peligros</tb>
             <ul className="hazard-list">
               {Object.keys(hazards).map(hazard => (
                 <li key={hazard} className="hazard-item">
