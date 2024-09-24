@@ -243,7 +243,7 @@ const RiskAssessmentTable = () => {
         <tr>
           <td className="header right-aligned" colSpan="4">
             <div className="left-column">
-              <div className="sub-header">Principales partes del cuerpo expuestas al riesgo:</div>
+              <div className="text1">Principales partes del cuerpo expuestas al riesgo:</div>
               <div className="risk-item">Cabeza y Oídos: <span className="risk-mark">{affectedBodyParts.includes('Cabeza y Oídos') ? 'X' : ''}</span></div>
               <div className="risk-item">Ojos y Cara: <span className="risk-mark">{affectedBodyParts.includes('Ojos y Cara') ? 'X' : ''}</span></div>
               <div className="risk-item">Brazos y Manos: <span className="risk-mark">{affectedBodyParts.includes('Brazos y Manos') ? 'X' : ''}</span></div>
@@ -254,7 +254,7 @@ const RiskAssessmentTable = () => {
           </td>
           <td className="header right-aligned" colSpan="3">
             <div className="right-column">
-              <div className="full-width-cell">
+              <div className="Date1">
                 <label htmlFor="area">Área:</label>
                 <select id="area" value={areaSeleccionada} onChange={handleAreaChange}>
                   {areas.map((area, index) => (
@@ -264,8 +264,8 @@ const RiskAssessmentTable = () => {
                   ))}
                 </select>
           </div>              
-              <div>Fecha de inspección: <input type="date" defaultValue="2023-09-13" /></div>
-              <div>Tiempo de exposición: <input type="text" defaultValue="8hrs" /></div>
+              <div className='Date1'>Fecha de inspección: <input type="date" defaultValue="2023-09-13" /></div>
+              <div className='Date1'>Tiempo de exposición: <input type="text" defaultValue="8hrs" /></div>
             </div>
           </td>
         </tr>
@@ -273,7 +273,7 @@ const RiskAssessmentTable = () => {
       <tbody>
         <tr>
           <td colSpan="2" className="left-section"> 
-            <tb className="sub-header">Identificación de peligros</tb>
+            <tb className="text1">Identificación de peligros</tb>
             <ul className="hazard-list">
               {Object.keys(hazards).map(hazard => (
                 <li key={hazard} className="hazard-item">

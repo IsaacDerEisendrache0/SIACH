@@ -41,7 +41,8 @@
   background-color: yellow; /* Color de fondo amarillo */
   font-weight: bold; /* Texto en negrita */
   text-align: center; /* Centrar el texto */
-  margin-bottom: 10px; /* Espacio debajo del título */
+  margin-bottom: 10px;
+  padding-right: 30px; /* Espacio debajo del título */
   
 }
 
@@ -69,6 +70,7 @@
 .risk-table {
   width: 100%; /* Asegura que la tabla ocupe todo el ancho disponible */
   border-collapse: collapse;
+  
 }
 
 .header, .left-section, .right-section {
@@ -78,6 +80,9 @@
 
 .right-aligned {
   text-align: right; /* Alinea el texto a la derecha */
+  padding-left: 10px; /* Ajusta el valor según lo necesario */
+  margin-left: 40px; /* Ajusta según lo necesario */
+  padding-right: 20px;
 }
 
 /* Asegúrate de que los contenedores internos usen todo el espacio disponible */
@@ -178,4 +183,25 @@
   margin-left: 40px; /* Ajusta según lo necesario */
   padding-right: 20px;
 
+}
+
+.risk-item {
+  
+  margin-left: 5px; /* Ajusta según lo necesario */
+}
+
+.text1 {
+  color: black;
+  background-color: yellow; /* Color de fondo amarillo */
+  font-weight: bold; /* Texto en negrita */
+  margin-bottom: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+  text-align: center;
+
+}
+
+
+.Date1 {
+  text-align: left; 
 }
