@@ -1,3 +1,5 @@
+// En App.js
+
 import React, { useState, useEffect } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -5,8 +7,9 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import Norma17 from './Norma_17/norma_17';
 import Norma04 from './Norma_004/norma_004';
 import Norma030 from './Norma_030/norma_030';
+import NormaNOMs from './Norma_NOMs/norma_noms'; // Importa el componente del asistente NOMs
 import Login from './componentes/Loginlogin';
-import CarouselComponent from './componentes/CarouselComponent'; // Importa el componente del carrusel
+import CarouselComponent from './componentes/CarouselComponent';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 function Navigation() {
@@ -50,12 +53,14 @@ function HomePage() {
           <li><button className="dropdown-item" type="button" onClick={() => handleSelectNorma('N-017')}>N-017</button></li>
           <li><button className="dropdown-item" type="button" onClick={() => handleSelectNorma('Evaluación de Riesgos')}>N-004</button></li>
           <li><button className="dropdown-item" type="button" onClick={() => handleSelectNorma('N-030')}>N-030</button></li>
+          <li><button className="dropdown-item" type="button" onClick={() => handleSelectNorma('Asistente NOMs')}>Asistente NOMs</button></li>
         </ul>
       </div>
 
       {selectedNorma === 'N-017' && <div className="mt-3"><h3>N-017 Seleccionada:</h3><Norma17 /></div>}
       {selectedNorma === 'Evaluación de Riesgos' && <div className="mt-3"><h3>N-004 Seleccionada:</h3><Norma04 /></div>}
       {selectedNorma === 'N-030' && <div className="mt-3"><h3>N-030 Seleccionada:</h3><Norma030 /></div>}
+      {selectedNorma === 'Asistente NOMs' && <div className="mt-3"><NormaNOMs /></div>}
     </div>
   );
 }
