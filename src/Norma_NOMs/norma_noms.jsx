@@ -1,80 +1,123 @@
-// En Norma_NOMs/norma_noms.jsx
-
 import React, { useState } from 'react';
 
 const NormaNOMs = () => {
-  const [formData, setFormData] = useState({
-    razonSocial: '',
-    rfc: '',
-    codigoPostal: '',
-    correoElectronico: '',
-    telefono: '',
-    estado: '',
-    sector: '',
-    actividadEconomica: ''
-  });
+  const [entidadFederativa, setEntidadFederativa] = useState('');
+  const [municipio, setMunicipio] = useState('');
+  const [numTrabajadores, setNumTrabajadores] = useState('');
+  const [division, setDivision] = useState('');
+  const [actividad, setActividad] = useState('');
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+  // Opciones para entidad federativa y municipio
+  const opcionesEntidadFederativa = [
+    'CHIHUAHUA', 'BAJA CALIFORNIA', 'SONORA', 'SINALOA', 'DURANGO',
+  ];
+
+  const opcionesMunicipio = {
+    'CHIHUAHUA': ['AQUILES SERDAN', 'CHIHUAHUA', 'JUAREZ', 'ETC'],
+    'BAJA CALIFORNIA': ['MEXICALI', 'TIJUANA', 'ENSENADA', 'ETC'],
+  };
+
+  // Opciones para división y actividad
+  const opcionesDivision = [
+    'AGRICULTURA, GANADERÍA, SILVICULTURA, PESCA Y CAZA',
+    'INDUSTRIAS EXTRACTIVAS',
+    'INDUSTRIAS DE TRANSFORMACIÓN',
+    'INDUSTRIA DE LA CONSTRUCCIÓN',
+    'INDUSTRIA ELÉCTRICA Y CAPTACIÓN Y SUMINISTRO DE AGUA POTABLE',
+    'COMERCIO',
+    'TRANSPORTES Y COMUNICACIONES',
+    'SERVICIOS PARA EMPRESAS, PERSONAS Y EL HOGAR',
+    'SERVICIOS SOCIALES Y COMUNALES',
+  ];
+
+  const opcionesActividad = {
+    'AGRICULTURA, GANADERÍA, SILVICULTURA, PESCA Y CAZA': [
+      'Agricultura',
+      'Cría y explotación de ganado y otras clases de animales',
+      'Explotación de bosques madereros',
+      'Pesca de altura y costera',
+      'Acuicultura',
+      'Caza',
+    ],
+    'INDUSTRIAS EXTRACTIVAS': ['Minería', 'Extracción de petróleo y gas'],
+    'INDUSTRIAS DE TRANSFORMACIÓN': ['Manufactura', 'Procesamiento de alimentos'],
+    // Añade más actividades según la división seleccionada
+  };
+
+  const handleEntidadFederativaChange = (e) => {
+    setEntidadFederativa(e.target.value);
+    setMunicipio('');
+  };
+
+  const handleDivisionChange = (e) => {
+    setDivision(e.target.value);
+    setActividad(''); // Reiniciar la actividad cuando cambia la división
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí puedes manejar la lógica para enviar los datos, como enviarlos a un backend o realizar alguna acción
-    console.log(formData);
+    console.log('Datos enviados:', { entidadFederativa, municipio, numTrabajadores, division, actividad });
   };
 
   return (
     <div className="container mt-5">
-      <h2>Asistente para Identificar NOMs</h2>
+      <h2>Asistente para identificar las NOMs</h2>
       <form onSubmit={handleSubmit}>
+        {/* Campo de Entidad Federativa */}
         <div className="mb-3">
-          <label htmlFor="razonSocial" className="form-label">Razón Social o Nombre</label>
-          <input type="text" className="form-control" id="razonSocial" name="razonSocial" value={formData.razonSocial} onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="rfc" className="form-label">RFC</label>
-          <input type="text" className="form-control" id="rfc" name="rfc" value={formData.rfc} onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="codigoPostal" className="form-label">Código Postal</label>
-          <input type="text" className="form-control" id="codigoPostal" name="codigoPostal" value={formData.codigoPostal} onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="correoElectronico" className="form-label">Correo Electrónico</label>
-          <input type="email" className="form-control" id="correoElectronico" name="correoElectronico" value={formData.correoElectronico} onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="telefono" className="form-label">Teléfono</label>
-          <input type="tel" className="form-control" id="telefono" name="telefono" value={formData.telefono} onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="estado" className="form-label">Estado</label>
-          <select className="form-select" id="estado" name="estado" value={formData.estado} onChange={handleChange} required>
-            <option value="">Selecciona...</option>
-            <option value="CDMX">Ciudad de México</option>
-            <option value="JAL">Jalisco</option>
-            <option value="NL">Nuevo León</option>
+          <label htmlFor="entidadFederativa" className="form-label">Entidad Federativa:</label>
+          <select className="form-select" id="entidadFederativa" value={entidadFederativa} onChange={handleEntidadFederativaChange} required>
+            <option value="">Seleccionar...</option>
+            {opcionesEntidadFederativa.map((opcion, index) => (
+              <option key={index} value={opcion}>{opcion}</option>
+            ))}
           </select>
         </div>
+
+        {/* Campo de Municipio */}
+        {entidadFederativa && (
+          <div className="mb-3">
+            <label htmlFor="municipio" className="form-label">Municipio o delegación:</label>
+            <select className="form-select" id="municipio" value={municipio} onChange={(e) => setMunicipio(e.target.value)} required>
+              <option value="">Seleccionar...</option>
+              {opcionesMunicipio[entidadFederativa]?.map((opcion, index) => (
+                <option key={index} value={opcion}>{opcion}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Campo de Número de Trabajadores */}
         <div className="mb-3">
-          <label htmlFor="sector" className="form-label">Sector</label>
-          <select className="form-select" id="sector" name="sector" value={formData.sector} onChange={handleChange} required>
-            <option value="">Selecciona...</option>
-            <option value="Publico">Público</option>
-            <option value="Privado">Privado</option>
-            <option value="Social">Social</option>
+          <label htmlFor="numTrabajadores" className="form-label">Número de trabajadores:</label>
+          <input type="text" className="form-control" id="numTrabajadores" value={numTrabajadores} onChange={(e) => setNumTrabajadores(e.target.value)} required />
+        </div>
+
+        {/* Campo de División */}
+        <div className="mb-3">
+          <label htmlFor="division" className="form-label">División de actividad económica:</label>
+          <select className="form-select" id="division" value={division} onChange={handleDivisionChange} required>
+            <option value="">Seleccionar...</option>
+            {opcionesDivision.map((opcion, index) => (
+              <option key={index} value={opcion}>{opcion}</option>
+            ))}
           </select>
         </div>
-        <div className="mb-3">
-          <label htmlFor="actividadEconomica" className="form-label">Actividad Económica Principal</label>
-          <input type="text" className="form-control" id="actividadEconomica" name="actividadEconomica" value={formData.actividadEconomica} onChange={handleChange} required />
-        </div>
-        <button type="submit" className="btn btn-primary">Buscar</button>
+
+        {/* Campo de Actividad (dependiente de División) */}
+        {division && (
+          <div className="mb-3">
+            <label htmlFor="actividad" className="form-label">Actividad:</label>
+            <select className="form-select" id="actividad" value={actividad} onChange={(e) => setActividad(e.target.value)} required>
+              <option value="">Seleccionar...</option>
+              {opcionesActividad[division]?.map((opcion, index) => (
+                <option key={index} value={opcion}>{opcion}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <button type="submit" className="btn btn-primary">Continuar</button>
       </form>
     </div>
   );
