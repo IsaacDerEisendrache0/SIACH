@@ -318,43 +318,44 @@ const RiskAssessmentTable = () => {
               )}
             </div>
           </td>
-          
-          <td colSpan="3" className="right-section right-aligned">
-            <div className="sub-header">Equipo de protección personal sugerido</div>
-            <div className="section-content">
-              <select value={selectedOptionProteccionSugerida} onChange={handleOptionChangeProteccionSugerida}>
-                <option value="">Selecciona la extremidad afectada</option>
-                <option value="option1">Cabeza</option>
-                <option value="option2">Tronco</option>
-                <option value="option3">Pies</option>
-                <option value="option4">Brazos</option>
-                <option value="option5">Cabeza y Tronco</option>
-                <option value="option6">Brazos y Pies</option>
-                <option value="option7">Cabeza y Pies</option>
-                <option value="option8">Cabeza y Brazos</option>
-                <option value="option9">Cabeza y Tronco</option>
-                <option value="option10">Tronco y Brazos</option>
-                <option value="option11">Todas las Extremidades</option>
-              </select>
-              {selectedOptionProteccionSugerida && optionImages[selectedOptionProteccionSugerida] && (
-                <div className="protection-image-container">
-                  <img
-                    src={optionImages[selectedOptionProteccionSugerida]}
-                    alt={`Equipo de protección sugerido para ${selectedOptionProteccionSugerida}`}
-                    className="protection-image"
-                  />
+            <td colSpan="3" className="right-section right-aligned">
+              <div className="sub-header">Equipo de protección personal sugerido</div>
+              <div className="body-and-hazards-container">
+                <select value={selectedOptionProteccionSugerida} onChange={handleOptionChangeProteccionSugerida}>
+                  <option value="">Selecciona la extremidad afectada</option>
+                  <option value="option1">Cabeza</option>
+                  <option value="option2">Tronco</option>
+                  <option value="option3">Pies</option>
+                  <option value="option4">Brazos</option>
+                  <option value="option5">Cabeza y Tronco</option>
+                  <option value="option6">Brazos y Pies</option>
+                  <option value="option7">Cabeza y Pies</option>
+                  <option value="option8">Cabeza y Brazos</option>
+                  <option value="option9">Cabeza y Tronco</option>
+                  <option value="option10">Tronco y Brazos</option>
+                  <option value="option11">Todas las Extremidades</option>
+                </select>
+                <div className="images-in-row">  {/* Nueva clase para alinear en fila */}
+                  {selectedOptionProteccionSugerida && optionImages[selectedOptionProteccionSugerida] && (
+                    <div className="body-image-left">
+                      <img
+                        src={optionImages[selectedOptionProteccionSugerida]}
+                        alt={`Equipo de protección sugerido para ${selectedOptionProteccionSugerida}`}
+                        className="protection-image"
+                      />
+                    </div>
+                  )}
+                  {/* Mostrar las imágenes de protección seleccionadas */}
+                  {selectedImages.length > 0 && (
+                    <div className="hazard-images-right">
+                      {selectedImages.map((image, index) => (
+                        <img key={index} src={image} alt={`Protección ${index}`} className="protection-image" />
+                      ))}
+                    </div>
+                  )}
                 </div>
-              )}
-              {/* Mostrar las imágenes de protección seleccionadas */}
-              {selectedImages.length > 0 && (
-                <div className="protection-image-container">
-                  {selectedImages.map((image, index) => (
-                    <img key={index} src={image} alt={`Protección ${index}`} className="protection-image" />
-                  ))}
-                </div>
-              )}
-            </div>
-          </td>
+              </div>
+            </td>
         </tr>
         <tr>
           <td colSpan="7" className="separator-line" />
@@ -417,7 +418,7 @@ const RiskAssessmentTable = () => {
           </table>
         </td>
           <td colSpan="3" className="right-aligned">
-            <div className="sub-header">Clasificación de Magnitud de Riesgo</div>
+            <div className="text1">Clasificación de Magnitud de Riesgo</div>
             <div className="risk-magnitude">
               Magnitud del Riesgo: {calculateRisk().toFixed(2)}
             </div>
