@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Table04.css'; // Asegúrate de tener el archivo CSS para los estilos
+
 import Moviles from './moviles'; // Importamos el componente de la tabla Moviles
 import MaquinariaYequipo from './maquinariaYequipo'; // Importamos el componente de la tabla Maquinaria y Equipo
 import HerramientasMan from './herramientasMan'; // Importamos el componente de la tabla herramientasMan

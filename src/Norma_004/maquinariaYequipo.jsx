@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './Table04.css';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const protectionImages = {
   'Caídas de Altura': ['/images/10.png', '/images/34.png'],
@@ -18,6 +20,20 @@ const protectionImages = {
   'Mantenimiento preventivo, correctivo o predictivo': ['/images/12.png', '/images/3.png'],
 };
 
+const specificRiskImages = [
+  'precaucion_Pmovimiento.png',
+  'precaucion_superficie_resbalosa.png',
+  'precaucion_sustancias_corrosivas.png',
+  'precaucion_vapores.png',
+  'riesgo_biologico.png',
+  'riesgo_caida.png',
+  'riesgo_electrico.png',
+  'riesgo_obstaculos.png',
+  'riesgo_radiacion_laser.png',
+  'riesgo_radiacion.png',
+  'riesgo_superficie_resbalosa.png'
+];
+
 const RiskTable = () => {
   const opcionesConsecuencia = ['Catástrofe', 'Varias muertes', 'Muerte', 'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'];
   const opcionesExposicion = ['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente'];
@@ -30,6 +46,7 @@ const RiskTable = () => {
     'Coincidencia prácticamente imposible, jamás ha ocurrido'
   ];
   const opcionesTiempoExposicion = ['0-2 hrs', '2-4 hrs', '4-8 hrs', '8+ hrs'];
+  const opcionesEnergia = ['Eléctrica', 'Manual', 'Mecánica', 'Hidráulica', 'Eólica'];
 
   const [consequence, setConsequence] = useState('Lesiones sin baja');
   const [exposure, setExposure] = useState('Ocasionalmente');
@@ -55,6 +72,10 @@ const RiskTable = () => {
     { id: 14, nombre: 'Mantenimiento preventivo, correctivo o predictivo', siNo: false }
   ]);
   const [observacionesGenerales, setObservacionesGenerales] = useState('');
+  const [selectedSpecificRiskImages, setSelectedSpecificRiskImages] = useState([]);
+  const [maquinariaNombre, setMaquinariaNombre] = useState('');
+  const [maquinariaDescripcion, setMaquinariaDescripcion] = useState('');
+  const [energiaUtilizada, setEnergiaUtilizada] = useState('Eléctrica');
 
   const handlePeligroChange = (index, valor) => {
     const nuevosPeligros = [...peligros];
@@ -93,6 +114,16 @@ const RiskTable = () => {
       };
 
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSpecificRiskImageChange = (imageName) => {
+    const updatedSelection = [...selectedSpecificRiskImages];
+    if (updatedSelection.includes(imageName)) {
+      setSelectedSpecificRiskImages(updatedSelection.filter(image => image !== imageName));
+    } else {
+      updatedSelection.push(imageName);
+      setSelectedSpecificRiskImages(updatedSelection);
     }
   };
 
@@ -137,166 +168,210 @@ const RiskTable = () => {
 
   const obtenerColorPorRiesgo = (magnitud) => {
     if (magnitud > 400) {
-      return 'red';
+      return { color: 'red', texto: 'Muy Alto: Detención inmediata', accion: 'Inmediata', clasificacion: 'Muy Alto' };
     } else if (magnitud > 200) {
-      return 'orange';
+      return { color: 'orange', texto: 'Alto: Corrección inmediata', accion: 'Urgente', clasificacion: 'Alto' };
     } else if (magnitud > 70) {
-      return 'yellow';
+      return { color: 'yellow', texto: 'Notable: Corrección urgente', accion: 'Programada', clasificacion: 'Moderado' };
     } else if (magnitud > 20) {
-      return 'green';
+      return { color: 'green', texto: 'Moderado: Debe corregirse', accion: 'Programada', clasificacion: 'Moderado' };
     } else {
-      return 'blue';
+      return { color: 'blue', texto: 'Bajo o Aceptable: Tolerable', accion: 'Sin acción requerida', clasificacion: 'Bajo' };
     }
   };
 
   const magnitudRiesgo = calcularMagnitudRiesgo();
-  const colorMagnitud = obtenerColorPorRiesgo(magnitudRiesgo);
+  const { color, texto, accion, clasificacion } = obtenerColorPorRiesgo(magnitudRiesgo);
+
+  const downloadPDF = () => {
+    const input = document.getElementById('pdf-content');
+
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('tabla_maquinaria.pdf');
+    });
+  };
 
   return (
-    <div className="risk-table">
-      <table className="main-table">
-        <thead>
-          <tr>
-            <th colSpan="4">Nombre de la maquinaria o equipo:</th>
-            <input type="text" />
-           
-            <th>PLANTA DE PASTAS</th>
-          </tr>
-          <tr>
-            <th colSpan="4">Descripción de la maquinaria o equipo:</th>
-            <th>Energía utilizada:</th>
-            <th>ELÉCTRICA</th>
-          </tr>
-          <tr>
-            <th colSpan="2">Localización esquemática de los riesgos en la maquinaria y/o equipo</th>
-            <th>POE:</th>
-            <th>0-4</th>
-            <th>Tiempo de exposición:</th>
-            <th>
-              <select value={tiempoExposicion} onChange={(e) => setTiempoExposicion(e.target.value)}>
-                {opcionesTiempoExposicion.map(opcion => (
-                  <option key={opcion} value={opcion}>{opcion}</option>
-                ))}
-              </select>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td rowSpan="6" colSpan="1">
-              <div className="image-observations-container">
-                <div className="image-section">
-                  <input type="file" accept="image/*" onChange={handleImageChange} />
-                  {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-                  {imagePreview ? (
-                    <img src={imagePreview} alt="Maquinaria" className="image-preview" />
-                  ) : (
-                    <p>No hay imagen seleccionada</p>
-                  )}
+    <div>
+      <div id="pdf-content" className="risk-table">
+        <table className="main-table">
+          <thead>
+            <tr>
+              <th colSpan="4">Nombre de la maquinaria o equipo:</th>
+              <th colSpan="2">
+                <input 
+                  type="text" 
+                  value={maquinariaNombre} 
+                  onChange={(e) => setMaquinariaNombre(e.target.value)} 
+                  placeholder="Ingrese el nombre de la maquinaria"
+                />
+              </th>
+            </tr>
+            <tr>
+              <th colSpan="4">Descripción de la maquinaria o equipo:</th>
+              <th colSpan="2">
+                <textarea
+                  value={maquinariaDescripcion}
+                  onChange={(e) => setMaquinariaDescripcion(e.target.value)}
+                  placeholder="Describa la maquinaria o equipo"
+                  rows="2"
+                  cols="30"
+                />
+              </th>
+            </tr>
+            <tr>
+              <th colSpan="4">Energía utilizada:</th>
+              <th colSpan="2">
+                <select 
+                  value={energiaUtilizada} 
+                  onChange={(e) => setEnergiaUtilizada(e.target.value)}
+                >
+                  {opcionesEnergia.map(opcion => (
+                    <option key={opcion} value={opcion}>{opcion}</option>
+                  ))}
+                </select>
+              </th>
+            </tr>
+            <tr>
+              <th colSpan="2">Localización esquemática de los riesgos en la maquinaria y/o equipo</th>
+              <th>POE:</th>
+              <th>0-4</th>
+              <th>Tiempo de exposición:</th>
+              <th>
+                <select value={tiempoExposicion} onChange={(e) => setTiempoExposicion(e.target.value)}>
+                  {opcionesTiempoExposicion.map(opcion => (
+                    <option key={opcion} value={opcion}>{opcion}</option>
+                  ))}
+                </select>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowSpan="6" colSpan="1">
+                <div className="image-observations-container">
+                  <div className="image-section">
+                    <input type="file" accept="image/*" onChange={handleImageChange} />
+                    {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+                    {imagePreview ? (
+                      <img src={imagePreview} alt="Maquinaria" className="image-preview" />
+                    ) : (
+                      <p>No hay imagen seleccionada</p>
+                    )}
+                  </div>
+                  <div className="observations-section">
+                    <label htmlFor="observaciones">Observaciones:</label>
+                    <textarea
+                      id="observaciones"
+                      value={observacionesGenerales}
+                      onChange={(e) => setObservacionesGenerales(e.target.value)}
+                      placeholder="Agregar observaciones generales aquí"
+                      rows="4"
+                      cols="30"
+                    />
+                  </div>
                 </div>
-                <div className="observations-section">
-                  <label htmlFor="observaciones">Observaciones:</label>
-                  <textarea
-                    id="observaciones"
-                    value={observacionesGenerales}
-                    onChange={(e) => setObservacionesGenerales(e.target.value)}
-                    placeholder="Agregar observaciones generales aquí"
-                    rows="4"
-                    cols="30"
-                  />
-                </div>
-              </div>
-            </td>
-            <td colSpan="4">
-              <table className="compact-table no-border">
-                <thead>
-                  <tr>
-                    <th>Consecuencia</th>
-                    <th>Exposición</th>
-                    <th>Probabilidad</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <select value={consequence} onChange={(e) => setConsequence(e.target.value)}>
-                        {opcionesConsecuencia.map(opcion => (
-                          <option key={opcion} value={opcion}>{opcion}</option>
-                        ))}
-                      </select>
-                      <div>Valor: {calcularValorConsecuencia()}</div>
-                    </td>
-                    <td>
-                      <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
-                        {opcionesExposicion.map(opcion => (
-                          <option key={opcion} value={opcion}>{opcion}</option>
-                        ))}
-                      </select>
-                      <div>Valor: {calcularValorExposicion()}</div>
-                    </td>
-                    <td>
-                      <select value={probability} onChange={(e) => setProbability(e.target.value)}>
-                        {opcionesProbabilidad.map(opcion => (
-                          <option key={opcion} value={opcion}>{opcion}</option>
-                        ))}
-                      </select>
-                      <div>Valor: {calcularValorProbabilidad()}</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan="3">
-                      <div className="risk-magnitude-container">
-                        <div className="risk-magnitude-bar" style={{ backgroundColor: colorMagnitud }}>
-                          <span>{magnitudRiesgo}</span>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-
-          <tr>
-            <td colSpan="5">
-              <table className="danger-table compact-table">
-                <thead>
-                  <tr>
-                    <th>Identificación de peligros</th>
-                    <th>Si/No</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {peligros.map((peligro, index) => (
-                    <tr key={peligro.id}>
-                      <td style={{ width: '70%' }}>{peligro.nombre}</td>
-                      <td style={{ width: '30%' }}>
-                        <input
-                          type="checkbox"
-                          checked={peligro.siNo}
-                          onChange={(e) => handlePeligroChange(index, e.target.checked)}
-                        />
+              </td>
+              <td colSpan="6">
+                <table className="compact-table no-border">
+                  <thead>
+                    <tr>
+                      <th>Consecuencia</th>
+                      <th>Exposición</th>
+                      <th>Probabilidad</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <select value={consequence} onChange={(e) => setConsequence(e.target.value)}>
+                          {opcionesConsecuencia.map(opcion => (
+                            <option key={opcion} value={opcion}>{opcion}</option>
+                          ))}
+                        </select>
+                        <div>Valor: {calcularValorConsecuencia()}</div>
+                      </td>
+                      <td>
+                        <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
+                          {opcionesExposicion.map(opcion => (
+                            <option key={opcion} value={opcion}>{opcion}</option>
+                          ))}
+                        </select>
+                        <div>Valor: {calcularValorExposicion()}</div>
+                      </td>
+                      <td>
+                        <select value={probability} onChange={(e) => setProbability(e.target.value)}>
+                          {opcionesProbabilidad.map(opcion => (
+                            <option key={opcion} value={opcion}>{opcion}</option>
+                          ))}
+                        </select>
+                        <div>Valor: {calcularValorProbabilidad()}</div>
                       </td>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                    <tr>
+                      <td colSpan="3">
+                        <div className="risk-magnitude-container">
+                          <div className="risk-magnitude-bar" style={{ backgroundColor: color, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <span>{magnitudRiesgo}</span>
+                            <span>{texto}</span>
+                            <span style={{ marginLeft: '20px' }}><strong>Acción:</strong> {accion}</span>
+                            <span style={{ marginLeft: '20px' }}><strong>Clasificación:</strong> {clasificacion}</span>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td colSpan="5">
+                <table className="danger-table compact-table">
+                  <thead>
+                    <tr>
+                      <th>Identificación de peligros</th>
+                      <th>Si/No</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {peligros.map((peligro, index) => (
+                      <tr key={peligro.id}>
+                        <td style={{ width: '70%' }}>{peligro.nombre}</td>
+                        <td style={{ width: '30%' }}>
+                          <input
+                            type="checkbox"
+                            checked={peligro.siNo}
+                            onChange={(e) => handlePeligroChange(index, e.target.checked)}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <div className="horizontal-sections">
         <div className="section">
           <table className="main-table">
             <thead>
               <tr>
-                <td colSpan="5" className="suggested-equipment">Equipo de protección personal sugerido</td>
+                <td colSpan="8" className="suggested-equipment">Equipo de protección personal sugerido</td>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td colSpan="5" className="icons">
+                <td colSpan="6" className="icons">
                   {selectedImages.length > 0 ? (
                     selectedImages.map((imageSrc, index) => (
                       <img key={index} src={imageSrc} alt={`Protección`} style={{ width: '50px', height: '50px', margin: '5px', objectFit: 'cover' }} />
@@ -319,14 +394,40 @@ const RiskTable = () => {
             </thead>
             <tbody>
               <tr>
-                <td colSpan="0" className="icons"><img src="risk01.png" alt="Riesgo" style={{ width: '50px', height: '50px', margin: '5px', objectFit: 'cover' }} /></td>
-                <td colSpan="1" className="icons"><img src="risk02.png" alt="Riesgo" style={{ width: '50px', height: '50px', margin: '5px', objectFit: 'cover' }} /></td>
-                <td colSpan="2" className="icons"><img src="risk03.png" alt="Riesgo" style={{ width: '50px', height: '50px', margin: '5px', objectFit: 'cover' }} /></td>
+                <td colSpan="8">
+                  {specificRiskImages.map((imageName, index) => (
+                    <label key={index} style={{ marginRight: '10px' }}>
+                      <input
+                        type="checkbox"
+                        value={imageName}
+                        checked={selectedSpecificRiskImages.includes(imageName)}
+                        onChange={() => handleSpecificRiskImageChange(imageName)}
+                      />
+                      {imageName.replace(/_/g, ' ').replace('.png', '')}
+                    </label>
+                  ))}
+                </td>
+              </tr>
+              <tr>
+                <td colSpan="8" className="icons">
+                  {selectedSpecificRiskImages.map((imageName, index) => (
+                    <img
+                      key={index}
+                      src={`/images/${imageName}`}
+                      alt="Riesgo Específico"
+                      style={{ width: '50px', height: '50px', margin: '5px', objectFit: 'cover' }}
+                    />
+                  ))}
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+
+      <button onClick={downloadPDF} className="download-button">
+        Descargar
+      </button>
     </div>
   );
 };
