@@ -205,3 +205,19 @@
 .Date1 {
   text-align: left; 
 }
+
+.body-image-left {
+  display: flex;
+  justify-content: flex-start; /* Alinea la imagen a la izquierda */
+  margin-right: 20px; /* Espaciado entre la imagen y otros elementos si es necesario */
+}
+
+
+
+
+.images-in-row {
+  display: flex; /* Alinea las imágenes en fila */
+  gap: 0px; /* Reduce al máximo el espacio entre las imágenes */
+  align-items: center; /* Centra verticalmente las imágenes */
+}
+
