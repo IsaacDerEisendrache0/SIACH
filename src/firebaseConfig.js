@@ -3,12 +3,12 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBr3YCZT4vAUMPi_bgkTGyALx0rZzt5wYA",
-  authDomain: "siach-36698.firebaseapp.com",
-  projectId: "siach-36698",
-  storageBucket: "siach-36698.appspot.com",
-  messagingSenderId: "595971594609",
-  appId: "1:595971594609:web:1b6ec05a09913555d2fed0"
+  apiKey: "AIzaSyBYqInVt7UjKxKmELfMnW_BkTJr0erKf7o",
+  authDomain: "siach-df969.firebaseapp.com",
+  projectId: "siach-df969",
+  storageBucket: "siach-df969.appspot.com",
+  messagingSenderId: "506973198690",
+  appId: "1:506973198690:web:e603297d7df67362c3f43b"
 };
 
 // Inicializa Firebase
