@@ -14,14 +14,14 @@
 }
 
 .main-table th, .main-table td {
-  border: 1px solid black;
+  border: 1px solid #ff0000; /* Borde rojo */
   padding: 8px;
   text-align: left;
 }
 
 .main-table th {
-  background-color: #f2f2f2;
-  color: red; /* Color de los subtítulos */
+  background-color: #ff0000; /* Fondo rojo */
+  color: white; /* Texto en blanco */
 }
 
 .compact-table {
@@ -32,6 +32,7 @@
 .compact-table th, .compact-table td {
   padding: 5px;
   text-align: left;
+  border: 1px solid #ff0000; /* Borde rojo */
 }
 
 .no-border th, .no-border td {
@@ -45,6 +46,7 @@
 textarea {
   width: 100%;
   resize: vertical;
+  border: 1px solid #ff0000; /* Borde rojo */
 }
 
 .image-preview {
@@ -94,6 +96,7 @@ textarea {
 .observations-section textarea {
   width: 100%;
   resize: vertical;
+  border: 1px solid #ff0000; /* Borde rojo */
 }
 
 .risk-magnitude-container {
@@ -110,10 +113,11 @@ textarea {
   color: white;
   font-weight: bold;
   border-radius: 5px;
+  background-color: #ff0000; /* Barra de riesgo en rojo */
 }
 
 .download-button {
-  background-color: #4CAF50; /* Verde */
+  background-color: #ff0000; /* Rojo */
   color: white;
   padding: 10px 20px;
   margin-top: 20px;
@@ -124,112 +128,117 @@ textarea {
 }
 
 .download-button:hover {
-  background-color: #45a049; /* Verde más oscuro */
+  background-color: #cc0000; /* Rojo más oscuro */
 }
 
 
 
 
+
   /*TABLA DE HERRAMIENTA MANUALES*/
-  .table-container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .evaluation-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-  }
-  
-  .evaluation-table th, 
-  .evaluation-table td {
-    border: 2px solid #ccc;
-    padding: 12px;
-    text-align: left;
-  }
-  
-  .evaluation-table thead th {
-    background-color: #007bff;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-  }
-  
-  .evaluation-table thead td {
-    background-color: #ff0000;
-    color: white;
-  }
-  
-  .evaluation-table tbody tr:nth-child(odd) {
-    background-color: #f2f2f2;
-  }
-  
-  .evaluation-table tbody tr:nth-child(even) {
-    background-color: #ffffff;
-  }
-  
-  .evaluation-table .header {
-    background-color: #007bff;
-    color: white;
-    font-weight: bold;
-  }
-  
-  .evaluation-table .sub-header {
-    background-color: #f0f0f0;
-    font-weight: bold;
-  }
-  
-  .evaluation-table .protection-cell {
-    background-color: #f7f7f7;
-  }
-  
-  textarea {
-    width: 100%;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    box-sizing: border-box;
-  }
-  
-  select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    background-color: #fff;
-  }
-  
-  textarea:focus,
-  select:focus,
-  input:focus {
-    border-color: #ff0000;
-    outline: none;
-  }
-  
-  tr, td {
-    border: 1px solid #ddd;
-  }
-  
-  textarea {
-    resize: vertical;
-  }
-  
-  .evaluation-table tfoot td {
-    background-color: #f0f0f0;
-  }
-  
-  .evaluation-table td {
-    vertical-align: top;
-  }
-  
-  .evaluation-table img {
-    display: block;
-    margin: 0 auto;
-  }
-  
+.table-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 15px; /* Reducir el padding */
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.evaluation-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px; /* Reducir el margen inferior */
+}
+
+.evaluation-table th, 
+.evaluation-table td {
+  border: 1px solid #ff0000; /* Cambiar a borde rojo */
+  padding: 8px; /* Reducir el padding */
+  text-align: left;
+  font-size: 14px; /* Reducir el tamaño de la fuente */
+}
+
+.evaluation-table thead th {
+  background-color: #ff0000; /* Cambiar a fondo rojo */
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+.evaluation-table thead td {
+  background-color: #ff0000; /* Cambiar a fondo rojo */
+  color: white;
+}
+
+.evaluation-table tbody tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+
+.evaluation-table tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+.evaluation-table .header {
+  background-color: #ff0000; /* Cambiar a fondo rojo */
+  color: white;
+  font-weight: bold;
+}
+
+.evaluation-table .sub-header {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.evaluation-table .protection-cell {
+  background-color: #f7f7f7;
+}
+
+textarea {
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #ff0000; /* Cambiar borde a rojo */
+  padding: 8px; /* Reducir el padding */
+  box-sizing: border-box;
+  font-size: 14px; /* Reducir tamaño de la fuente */
+}
+
+select {
+  width: 100%;
+  padding: 6px; /* Reducir el padding */
+  border: 1px solid #ff0000; /* Cambiar borde a rojo */
+  border-radius: 5px;
+  margin-bottom: 8px; /* Reducir el margen inferior */
+  background-color: #fff;
+  font-size: 14px; /* Reducir tamaño de la fuente */
+}
+
+textarea:focus,
+select:focus,
+input:focus {
+  border-color: #ff0000;
+  outline: none;
+}
+
+tr, td {
+  border: 1px solid #ff0000; /* Cambiar borde a rojo */
+}
+
+textarea {
+  resize: vertical;
+}
+
+.evaluation-table tfoot td {
+  background-color: #f0f0f0;
+}
+
+.evaluation-table td {
+  vertical-align: top;
+}
+
+.evaluation-table img {
+  display: block;
+  margin: 0 auto;
+  max-width: 40px; /* Reducir el tamaño máximo de las imágenes */
+  max-height: 40px; /* Reducir el tamaño máximo de las imágenes */
+}
