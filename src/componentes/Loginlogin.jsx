@@ -1,9 +1,9 @@
-// src/componentes/Login.jsx
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
+import './Login.css'; // Asegúrate de importar el CSS
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -23,8 +23,12 @@ function Login() {
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center vh-100 bg-body-tertiary">
-      <main className="form-signin text-center" style={{ width: '300px' }}>
+    <div className="login-container">
+      <video autoPlay muted loop className="video-background">
+        <source src="/videos/Bokeh_Background.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <main className="form-signin text-center" style={{ width: '300px', position: 'relative', zIndex: 1 }}>
         <form onSubmit={handleSubmit}>
           <h1 className="h3 mb-3 fw-normal" style={{ color: '#007bff' }}>LOGIN</h1>
           <div className="form-floating mb-3">
