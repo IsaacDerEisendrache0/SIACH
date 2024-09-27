@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import './Table04.css'; // Archivo CSS para estilos
 
 const ToolEvaluationTable = () => {
   // Opciones del menú desplegable para cada campo
   const opcionesConsecuencia = ['Catástrofe', 'Varias muertes', 'Muerte', 'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'];
-  const opcionesExposicion = ['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente','Remotamente'];
+  const opcionesExposicion = ['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente', 'Remotamente'];
   const [observaciones, setObservaciones] = useState('');
 
   // Nuevas opciones de "Probabilidad"
@@ -63,9 +65,9 @@ const ToolEvaluationTable = () => {
       'Ocasionalmente': 3,
       'Irregularmente': 2,
       'Raramente': 1,
-      'Remotamente':0.5
+      'Remotamente': 0.5
     };
-    
+
     const valoresProbabilidad = {
       'Es el resultado más probable y esperado': 10,
       'Es completamente posible, no será nada extraño': 6,
@@ -105,52 +107,63 @@ const ToolEvaluationTable = () => {
     calcularRiesgo();
   }, [consecuencia, exposicion, probabilidad]);
 
+  // Función para descargar la tabla como PDF
+  const downloadPDF = () => {
+    const input = document.querySelector('.table-container');
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('tabla_herramientas_manual.pdf');
+    });
+  };
+
   return (
-    
     <div className="table-container">
       <h1>Tabla de herramientas manuales</h1>
       <table className="evaluation-table">
-        
-      <thead>
-  <tr>
-    <td className="header" colSpan="4">Nombre de la herramienta: Llave Stilson</td>
-    <td className="header" colSpan="6">Área: Mina y Planta</td>
-  </tr>
-  <tr>
-    <td className="header" colSpan="1" rowSpan="1">Energía utilizada:</td>
-    <td>
-      <input 
-        type="text" 
-        defaultValue="Manual" 
-        className="compact-input" 
-      />
-    </td>
-    <td className="header">POE:</td>
-    <td>
-      <input 
-        type="number" 
-        defaultValue="1" 
-        className="compact-input"
-      />
-    </td>
-    <td className="header">Tiempo de exposición:</td>
-    <td>
-      <input 
-        type="text" 
-        defaultValue="5 min" 
-        className="compact-input"
-      />
-    </td>
-    <td className="header">Fecha de inspección:</td>
-    <td>
-      <input 
-        type="date" 
-        defaultValue="2023-04-04" 
-        className="compact-input"
-      />
-    </td>
-  </tr>
-</thead>
+        <thead>
+          <tr>
+            <td className="header" colSpan="4">Nombre de la herramienta: Llave Stilson</td>
+            <td className="header" colSpan="6">Área: Mina y Planta</td>
+          </tr>
+          <tr>
+            <td className="header" colSpan="1" rowSpan="1">Energía utilizada:</td>
+            <td>
+              <input 
+                type="text" 
+                defaultValue="Manual" 
+                className="compact-input" 
+              />
+            </td>
+            <td className="header">POE:</td>
+            <td>
+              <input 
+                type="number" 
+                defaultValue="1" 
+                className="compact-input"
+              />
+            </td>
+            <td className="header">Tiempo de exposición:</td>
+            <td>
+              <input 
+                type="text" 
+                defaultValue="5 min" 
+                className="compact-input"
+              />
+            </td>
+            <td className="header">Fecha de inspección:</td>
+            <td>
+              <input 
+                type="date" 
+                defaultValue="2023-04-04" 
+                className="compact-input"
+              />
+            </td>
+          </tr>
+        </thead>
 
         <tbody>
           <tr>
@@ -161,7 +174,7 @@ const ToolEvaluationTable = () => {
 
               {/* Previsualización de la imagen */}
               {imagePreview ? (
-                <img src={imagePreview} alt="Previsualización" style={{ width: '150px', height: '150px', marginTop: '10px' }} />
+                <img src={imagePreview} alt="Previsualización" style={{ width: '100%', height: 'auto', marginTop: '10px' }} />
               ) : (
                 <p></p>
               )}
@@ -171,263 +184,155 @@ const ToolEvaluationTable = () => {
             <td className="header" colSpan="4">Equipo de Protección Personal sugerido</td>
           </tr>
 
-        
-
           <tr>
             <td className="sub-header">Consecuencia</td>
             <td className="sub-header">Exposición</td>
             <td className="sub-header">Probabilidad</td>
             <td rowSpan="6" className="protection-cell" colSpan="4">
-  <div>
-    <label>Seleccione Equipo de Protección Personal:</label>
-    <select>
-      <option value="casco-contra-impacto">Casco contra impacto</option>
-      <option value="casco-dielectrico">Casco dieléctrico</option>
-      <option value="capuchas">Capuchas</option>
-      <option value="anteojos-de-proteccion">Anteojos de protección</option>
-      <option value="goggles">Goggles</option>
-      <option value="pantalla-facial">Pantalla facial</option>
-      <option value="careta-para-soldador">Careta para soldador</option>
-      <option value="gafas-para-soldador">Gafas para soldador</option>
-      <option value="tapones-auditivos">Tapones auditivos</option>
-      <option value="conchas-acusticas">Conchas acústicas</option>
-      <option value="respirador-contra-particulas">Respirador contra partículas</option>
-      <option value="respirador-contra-gases-vapores">Respirador contra gases y vapores</option>
-      <option value="mascarilla-desechable">Mascarilla desechable</option>
-      <option value="equipo-respiracion-autonomo">Equipo de respiración autónomo</option>
-      <option value="guantes-contra-sustancias-quimicas">Guantes contra sustancias químicas</option>
-      <option value="guantes-dielectricos">Guantes dieléctricos</option>
-      <option value="guantes-contra-temperaturas-extremas">Guantes contra temperaturas extremas</option>
-      <option value="guantes">Guantes</option>
-      <option value="mangas">Mangas</option>
-      <option value="mandil-altas-temperaturas">Mandil contra altas temperaturas</option>
-      <option value="mandil-sustancias-quimicas">Mandil contra sustancias químicas</option>
-      <option value="overol">Overol</option>
-      <option value="bata">Bata</option>
-      <option value="ropa-sustancias-peligrosas">Ropa contra sustancias peligrosas</option>
-      <option value="calzado-ocupacional">Calzado ocupacional</option>
-      <option value="calzado-contra-impacto">Calzado contra impacto</option>
-      <option value="calzado-conductivo">Calzado conductivo</option>
-      <option value="calzado-dielectrico">Calzado dieléctrico</option>
-      <option value="calzado-sustancias-quimicas">Calzado contra sustancias químicas</option>
-      <option value="polainas">Polainas</option>
-      <option value="botas-impermeables">Botas impermeables</option>
-      <option value="proteccion-caidas-altura">Equipo de protección contra caídas de altura</option>
-      <option value="equipo-brigadista-incendio">Equipo para brigadista contra incendio</option>
-    </select>
-    <select>
-      <option value="casco-contra-impacto">Casco contra impacto</option>
-      <option value="casco-dielectrico">Casco dieléctrico</option>
-      <option value="capuchas">Capuchas</option>
-      <option value="anteojos-de-proteccion">Anteojos de protección</option>
-      <option value="goggles">Goggles</option>
-      <option value="pantalla-facial">Pantalla facial</option>
-      <option value="careta-para-soldador">Careta para soldador</option>
-      <option value="gafas-para-soldador">Gafas para soldador</option>
-      <option value="tapones-auditivos">Tapones auditivos</option>
-      <option value="conchas-acusticas">Conchas acústicas</option>
-      <option value="respirador-contra-particulas">Respirador contra partículas</option>
-      <option value="respirador-contra-gases-vapores">Respirador contra gases y vapores</option>
-      <option value="mascarilla-desechable">Mascarilla desechable</option>
-      <option value="equipo-respiracion-autonomo">Equipo de respiración autónomo</option>
-      <option value="guantes-contra-sustancias-quimicas">Guantes contra sustancias químicas</option>
-      <option value="guantes-dielectricos">Guantes dieléctricos</option>
-      <option value="guantes-contra-temperaturas-extremas">Guantes contra temperaturas extremas</option>
-      <option value="guantes">Guantes</option>
-      <option value="mangas">Mangas</option>
-      <option value="mandil-altas-temperaturas">Mandil contra altas temperaturas</option>
-      <option value="mandil-sustancias-quimicas">Mandil contra sustancias químicas</option>
-      <option value="overol">Overol</option>
-      <option value="bata">Bata</option>
-      <option value="ropa-sustancias-peligrosas">Ropa contra sustancias peligrosas</option>
-      <option value="calzado-ocupacional">Calzado ocupacional</option>
-      <option value="calzado-contra-impacto">Calzado contra impacto</option>
-      <option value="calzado-conductivo">Calzado conductivo</option>
-      <option value="calzado-dielectrico">Calzado dieléctrico</option>
-      <option value="calzado-sustancias-quimicas">Calzado contra sustancias químicas</option>
-      <option value="polainas">Polainas</option>
-      <option value="botas-impermeables">Botas impermeables</option>
-      <option value="proteccion-caidas-altura">Equipo de protección contra caídas de altura</option>
-      <option value="equipo-brigadista-incendio">Equipo para brigadista contra incendio</option>
-    </select>
-    <select>
-      <option value="casco-contra-impacto">Casco contra impacto</option>
-      <option value="casco-dielectrico">Casco dieléctrico</option>
-      <option value="capuchas">Capuchas</option>
-      <option value="anteojos-de-proteccion">Anteojos de protección</option>
-      <option value="goggles">Goggles</option>
-      <option value="pantalla-facial">Pantalla facial</option>
-      <option value="careta-para-soldador">Careta para soldador</option>
-      <option value="gafas-para-soldador">Gafas para soldador</option>
-      <option value="tapones-auditivos">Tapones auditivos</option>
-      <option value="conchas-acusticas">Conchas acústicas</option>
-      <option value="respirador-contra-particulas">Respirador contra partículas</option>
-      <option value="respirador-contra-gases-vapores">Respirador contra gases y vapores</option>
-      <option value="mascarilla-desechable">Mascarilla desechable</option>
-      <option value="equipo-respiracion-autonomo">Equipo de respiración autónomo</option>
-      <option value="guantes-contra-sustancias-quimicas">Guantes contra sustancias químicas</option>
-      <option value="guantes-dielectricos">Guantes dieléctricos</option>
-      <option value="guantes-contra-temperaturas-extremas">Guantes contra temperaturas extremas</option>
-      <option value="guantes">Guantes</option>
-      <option value="mangas">Mangas</option>
-      <option value="mandil-altas-temperaturas">Mandil contra altas temperaturas</option>
-      <option value="mandil-sustancias-quimicas">Mandil contra sustancias químicas</option>
-      <option value="overol">Overol</option>
-      <option value="bata">Bata</option>
-      <option value="ropa-sustancias-peligrosas">Ropa contra sustancias peligrosas</option>
-      <option value="calzado-ocupacional">Calzado ocupacional</option>
-      <option value="calzado-contra-impacto">Calzado contra impacto</option>
-      <option value="calzado-conductivo">Calzado conductivo</option>
-      <option value="calzado-dielectrico">Calzado dieléctrico</option>
-      <option value="calzado-sustancias-quimicas">Calzado contra sustancias químicas</option>
-      <option value="polainas">Polainas</option>
-      <option value="botas-impermeables">Botas impermeables</option>
-      <option value="proteccion-caidas-altura">Equipo de protección contra caídas de altura</option>
-      <option value="equipo-brigadista-incendio">Equipo para brigadista contra incendio</option>
-    </select>
-    <select>
-      <option value="casco-contra-impacto">Casco contra impacto</option>
-      <option value="casco-dielectrico">Casco dieléctrico</option>
-      <option value="capuchas">Capuchas</option>
-      <option value="anteojos-de-proteccion">Anteojos de protección</option>
-      <option value="goggles">Goggles</option>
-      <option value="pantalla-facial">Pantalla facial</option>
-      <option value="careta-para-soldador">Careta para soldador</option>
-      <option value="gafas-para-soldador">Gafas para soldador</option>
-      <option value="tapones-auditivos">Tapones auditivos</option>
-      <option value="conchas-acusticas">Conchas acústicas</option>
-      <option value="respirador-contra-particulas">Respirador contra partículas</option>
-      <option value="respirador-contra-gases-vapores">Respirador contra gases y vapores</option>
-      <option value="mascarilla-desechable">Mascarilla desechable</option>
-      <option value="equipo-respiracion-autonomo">Equipo de respiración autónomo</option>
-      <option value="guantes-contra-sustancias-quimicas">Guantes contra sustancias químicas</option>
-      <option value="guantes-dielectricos">Guantes dieléctricos</option>
-      <option value="guantes-contra-temperaturas-extremas">Guantes contra temperaturas extremas</option>
-      <option value="guantes">Guantes</option>
-      <option value="mangas">Mangas</option>
-      <option value="mandil-altas-temperaturas">Mandil contra altas temperaturas</option>
-      <option value="mandil-sustancias-quimicas">Mandil contra sustancias químicas</option>
-      <option value="overol">Overol</option>
-      <option value="bata">Bata</option>
-      <option value="ropa-sustancias-peligrosas">Ropa contra sustancias peligrosas</option>
-      <option value="calzado-ocupacional">Calzado ocupacional</option>
-      <option value="calzado-contra-impacto">Calzado contra impacto</option>
-      <option value="calzado-conductivo">Calzado conductivo</option>
-      <option value="calzado-dielectrico">Calzado dieléctrico</option>
-      <option value="calzado-sustancias-quimicas">Calzado contra sustancias químicas</option>
-      <option value="polainas">Polainas</option>
-      <option value="botas-impermeables">Botas impermeables</option>
-      <option value="proteccion-caidas-altura">Equipo de protección contra caídas de altura</option>
-      <option value="equipo-brigadista-incendio">Equipo para brigadista contra incendio</option>
-    </select>
-    <select>
-      <option value="casco-contra-impacto">Casco contra impacto</option>
-      <option value="casco-dielectrico">Casco dieléctrico</option>
-      <option value="capuchas">Capuchas</option>
-      <option value="anteojos-de-proteccion">Anteojos de protección</option>
-      <option value="goggles">Goggles</option>
-      <option value="pantalla-facial">Pantalla facial</option>
-      <option value="careta-para-soldador">Careta para soldador</option>
-      <option value="gafas-para-soldador">Gafas para soldador</option>
-      <option value="tapones-auditivos">Tapones auditivos</option>
-      <option value="conchas-acusticas">Conchas acústicas</option>
-      <option value="respirador-contra-particulas">Respirador contra partículas</option>
-      <option value="respirador-contra-gases-vapores">Respirador contra gases y vapores</option>
-      <option value="mascarilla-desechable">Mascarilla desechable</option>
-      <option value="equipo-respiracion-autonomo">Equipo de respiración autónomo</option>
-      <option value="guantes-contra-sustancias-quimicas">Guantes contra sustancias químicas</option>
-      <option value="guantes-dielectricos">Guantes dieléctricos</option>
-      <option value="guantes-contra-temperaturas-extremas">Guantes contra temperaturas extremas</option>
-      <option value="guantes">Guantes</option>
-      <option value="mangas">Mangas</option>
-      <option value="mandil-altas-temperaturas">Mandil contra altas temperaturas</option>
-      <option value="mandil-sustancias-quimicas">Mandil contra sustancias químicas</option>
-      <option value="overol">Overol</option>
-      <option value="bata">Bata</option>
-      <option value="ropa-sustancias-peligrosas">Ropa contra sustancias peligrosas</option>
-      <option value="calzado-ocupacional">Calzado ocupacional</option>
-      <option value="calzado-contra-impacto">Calzado contra impacto</option>
-      <option value="calzado-conductivo">Calzado conductivo</option>
-      <option value="calzado-dielectrico">Calzado dieléctrico</option>
-      <option value="calzado-sustancias-quimicas">Calzado contra sustancias químicas</option>
-      <option value="polainas">Polainas</option>
-      <option value="botas-impermeables">Botas impermeables</option>
-      <option value="proteccion-caidas-altura">Equipo de protección contra caídas de altura</option>
-      <option value="equipo-brigadista-incendio">Equipo para brigadista contra incendio</option>
-    </select>
-    <select>
-      <option value="casco-contra-impacto">Casco contra impacto</option>
-      <option value="casco-dielectrico">Casco dieléctrico</option>
-      <option value="capuchas">Capuchas</option>
-      <option value="anteojos-de-proteccion">Anteojos de protección</option>
-      <option value="goggles">Goggles</option>
-      <option value="pantalla-facial">Pantalla facial</option>
-      <option value="careta-para-soldador">Careta para soldador</option>
-      <option value="gafas-para-soldador">Gafas para soldador</option>
-      <option value="tapones-auditivos">Tapones auditivos</option>
-      <option value="conchas-acusticas">Conchas acústicas</option>
-      <option value="respirador-contra-particulas">Respirador contra partículas</option>
-      <option value="respirador-contra-gases-vapores">Respirador contra gases y vapores</option>
-      <option value="mascarilla-desechable">Mascarilla desechable</option>
-      <option value="equipo-respiracion-autonomo">Equipo de respiración autónomo</option>
-      <option value="guantes-contra-sustancias-quimicas">Guantes contra sustancias químicas</option>
-      <option value="guantes-dielectricos">Guantes dieléctricos</option>
-      <option value="guantes-contra-temperaturas-extremas">Guantes contra temperaturas extremas</option>
-      <option value="guantes">Guantes</option>
-      <option value="mangas">Mangas</option>
-      <option value="mandil-altas-temperaturas">Mandil contra altas temperaturas</option>
-      <option value="mandil-sustancias-quimicas">Mandil contra sustancias químicas</option>
-      <option value="overol">Overol</option>
-      <option value="bata">Bata</option>
-      <option value="ropa-sustancias-peligrosas">Ropa contra sustancias peligrosas</option>
-      <option value="calzado-ocupacional">Calzado ocupacional</option>
-      <option value="calzado-contra-impacto">Calzado contra impacto</option>
-      <option value="calzado-conductivo">Calzado conductivo</option>
-      <option value="calzado-dielectrico">Calzado dieléctrico</option>
-      <option value="calzado-sustancias-quimicas">Calzado contra sustancias químicas</option>
-      <option value="polainas">Polainas</option>
-      <option value="botas-impermeables">Botas impermeables</option>
-      <option value="proteccion-caidas-altura">Equipo de protección contra caídas de altura</option>
-      <option value="equipo-brigadista-incendio">Equipo para brigadista contra incendio</option>
-    </select>
-    <select>
-      <option value="casco-contra-impacto">Casco contra impacto</option>
-      <option value="casco-dielectrico">Casco dieléctrico</option>
-      <option value="capuchas">Capuchas</option>
-      <option value="anteojos-de-proteccion">Anteojos de protección</option>
-      <option value="goggles">Goggles</option>
-      <option value="pantalla-facial">Pantalla facial</option>
-      <option value="careta-para-soldador">Careta para soldador</option>
-      <option value="gafas-para-soldador">Gafas para soldador</option>
-      <option value="tapones-auditivos">Tapones auditivos</option>
-      <option value="conchas-acusticas">Conchas acústicas</option>
-      <option value="respirador-contra-particulas">Respirador contra partículas</option>
-      <option value="respirador-contra-gases-vapores">Respirador contra gases y vapores</option>
-      <option value="mascarilla-desechable">Mascarilla desechable</option>
-      <option value="equipo-respiracion-autonomo">Equipo de respiración autónomo</option>
-      <option value="guantes-contra-sustancias-quimicas">Guantes contra sustancias químicas</option>
-      <option value="guantes-dielectricos">Guantes dieléctricos</option>
-      <option value="guantes-contra-temperaturas-extremas">Guantes contra temperaturas extremas</option>
-      <option value="guantes">Guantes</option>
-      <option value="mangas">Mangas</option>
-      <option value="mandil-altas-temperaturas">Mandil contra altas temperaturas</option>
-      <option value="mandil-sustancias-quimicas">Mandil contra sustancias químicas</option>
-      <option value="overol">Overol</option>
-      <option value="bata">Bata</option>
-      <option value="ropa-sustancias-peligrosas">Ropa contra sustancias peligrosas</option>
-      <option value="calzado-ocupacional">Calzado ocupacional</option>
-      <option value="calzado-contra-impacto">Calzado contra impacto</option>
-      <option value="calzado-conductivo">Calzado conductivo</option>
-      <option value="calzado-dielectrico">Calzado dieléctrico</option>
-      <option value="calzado-sustancias-quimicas">Calzado contra sustancias químicas</option>
-      <option value="polainas">Polainas</option>
-      <option value="botas-impermeables">Botas impermeables</option>
-      <option value="proteccion-caidas-altura">Equipo de protección contra caídas de altura</option>
-      <option value="equipo-brigadista-incendio">Equipo para brigadista contra incendio</option>
-    </select>
-  </div>
-</td>
-
+              <div>
+                <label>Seleccione Equipo de Protección Personal:</label>
+                <select>
+                  <option value="casco-contra-impacto">Casco contra impacto</option>
+                  <option value="casco-dielectrico">Casco dieléctrico</option>
+                  <option value="capuchas">Capuchas</option>
+                  <option value="anteojos-de-proteccion">Anteojos de protección</option>
+                  <option value="goggles">Goggles</option>
+                  <option value="pantalla-facial">Pantalla facial</option>
+                  <option value="careta-para-soldador">Careta para soldador</option>
+                  <option value="gafas-para-soldador">Gafas para soldador</option>
+                  <option value="tapones-auditivos">Tapones auditivos</option>
+                  <option value="conchas-acusticas">Conchas acústicas</option>
+                  <option value="respirador-contra-particulas">Respirador contra partículas</option>
+                  <option value="respirador-contra-gases-vapores">Respirador contra gases y vapores</option>
+                  <option value="mascarilla-desechable">Mascarilla desechable</option>
+                  <option value="equipo-respiracion-autonomo">Equipo de respiración autónomo</option>
+                  <option value="guantes-contra-sustancias-quimicas">Guantes contra sustancias químicas</option>
+                  <option value="guantes-dielectricos">Guantes dieléctricos</option>
+                  <option value="guantes-contra-temperaturas-extremas">Guantes contra temperaturas extremas</option>
+                  <option value="guantes">Guantes</option>
+                  <option value="mangas">Mangas</option>
+                  <option value="mandil-altas-temperaturas">Mandil contra altas temperaturas</option>
+                  <option value="mandil-sustancias-quimicas">Mandil contra sustancias químicas</option>
+                  <option value="overol">Overol</option>
+                  <option value="bata">Bata</option>
+                  <option value="ropa-sustancias-peligrosas">Ropa contra sustancias peligrosas</option>
+                  <option value="calzado-ocupacional">Calzado ocupacional</option>
+                  <option value="calzado-contra-impacto">Calzado contra impacto</option>
+                  <option value="calzado-conductivo">Calzado conductivo</option>
+                  <option value="calzado-dielectrico">Calzado dieléctrico</option>
+                  <option value="calzado-sustancias-quimicas">Calzado contra sustancias químicas</option>
+                  <option value="polainas">Polainas</option>
+                  <option value="botas-impermeables">Botas impermeables</option>
+                  <option value="proteccion-caidas-altura">Equipo de protección contra caídas de altura</option>
+                  <option value="equipo-brigadista-incendio">Equipo para brigadista contra incendio</option>
+                </select>
+                <select>
+                  <option value="casco-contra-impacto">Casco contra impacto</option>
+                  <option value="casco-dielectrico">Casco dieléctrico</option>
+                  <option value="capuchas">Capuchas</option>
+                  <option value="anteojos-de-proteccion">Anteojos de protección</option>
+                  <option value="goggles">Goggles</option>
+                  <option value="pantalla-facial">Pantalla facial</option>
+                  <option value="careta-para-soldador">Careta para soldador</option>
+                  <option value="gafas-para-soldador">Gafas para soldador</option>
+                  <option value="tapones-auditivos">Tapones auditivos</option>
+                  <option value="conchas-acusticas">Conchas acústicas</option>
+                  <option value="respirador-contra-particulas">Respirador contra partículas</option>
+                  <option value="respirador-contra-gases-vapores">Respirador contra gases y vapores</option>
+                  <option value="mascarilla-desechable">Mascarilla desechable</option>
+                  <option value="equipo-respiracion-autonomo">Equipo de respiración autónomo</option>
+                  <option value="guantes-contra-sustancias-quimicas">Guantes contra sustancias químicas</option>
+                  <option value="guantes-dielectricos">Guantes dieléctricos</option>
+                  <option value="guantes-contra-temperaturas-extremas">Guantes contra temperaturas extremas</option>
+                  <option value="guantes">Guantes</option>
+                  <option value="mangas">Mangas</option>
+                  <option value="mandil-altas-temperaturas">Mandil contra altas temperaturas</option>
+                  <option value="mandil-sustancias-quimicas">Mandil contra sustancias químicas</option>
+                  <option value="overol">Overol</option>
+                  <option value="bata">Bata</option>
+                  <option value="ropa-sustancias-peligrosas">Ropa contra sustancias peligrosas</option>
+                  <option value="calzado-ocupacional">Calzado ocupacional</option>
+                  <option value="calzado-contra-impacto">Calzado contra impacto</option>
+                  <option value="calzado-conductivo">Calzado conductivo</option>
+                  <option value="calzado-dielectrico">Calzado dieléctrico</option>
+                  <option value="calzado-sustancias-quimicas">Calzado contra sustancias químicas</option>
+                  <option value="polainas">Polainas</option>
+                  <option value="botas-impermeables">Botas impermeables</option>
+                  <option value="proteccion-caidas-altura">Equipo de protección contra caídas de altura</option>
+                  <option value="equipo-brigadista-incendio">Equipo para brigadista contra incendio</option>
+                </select>
+                <select>
+                  <option value="casco-contra-impacto">Casco contra impacto</option>
+                  <option value="casco-dielectrico">Casco dieléctrico</option>
+                  <option value="capuchas">Capuchas</option>
+                  <option value="anteojos-de-proteccion">Anteojos de protección</option>
+                  <option value="goggles">Goggles</option>
+                  <option value="pantalla-facial">Pantalla facial</option>
+                  <option value="careta-para-soldador">Careta para soldador</option>
+                  <option value="gafas-para-soldador">Gafas para soldador</option>
+                  <option value="tapones-auditivos">Tapones auditivos</option>
+                  <option value="conchas-acusticas">Conchas acústicas</option>
+                  <option value="respirador-contra-particulas">Respirador contra partículas</option>
+                  <option value="respirador-contra-gases-vapores">Respirador contra gases y vapores</option>
+                  <option value="mascarilla-desechable">Mascarilla desechable</option>
+                  <option value="equipo-respiracion-autonomo">Equipo de respiración autónomo</option>
+                  <option value="guantes-contra-sustancias-quimicas">Guantes contra sustancias químicas</option>
+                  <option value="guantes-dielectricos">Guantes dieléctricos</option>
+                  <option value="guantes-contra-temperaturas-extremas">Guantes contra temperaturas extremas</option>
+                  <option value="guantes">Guantes</option>
+                  <option value="mangas">Mangas</option>
+                  <option value="mandil-altas-temperaturas">Mandil contra altas temperaturas</option>
+                  <option value="mandil-sustancias-quimicas">Mandil contra sustancias químicas</option>
+                  <option value="overol">Overol</option>
+                  <option value="bata">Bata</option>
+                  <option value="ropa-sustancias-peligrosas">Ropa contra sustancias peligrosas</option>
+                  <option value="calzado-ocupacional">Calzado ocupacional</option>
+                  <option value="calzado-contra-impacto">Calzado contra impacto</option>
+                  <option value="calzado-conductivo">Calzado conductivo</option>
+                  <option value="calzado-dielectrico">Calzado dieléctrico</option>
+                  <option value="calzado-sustancias-quimicas">Calzado contra sustancias químicas</option>
+                  <option value="polainas">Polainas</option>
+                  <option value="botas-impermeables">Botas impermeables</option>
+                  <option value="proteccion-caidas-altura">Equipo de protección contra caídas de altura</option>
+                  <option value="equipo-brigadista-incendio">Equipo para brigadista contra incendio</option>
+                </select>
+                <select>
+                  <option value="casco-contra-impacto">Casco contra impacto</option>
+                  <option value="casco-dielectrico">Casco dieléctrico</option>
+                  <option value="capuchas">Capuchas</option>
+                  <option value="anteojos-de-proteccion">Anteojos de protección</option>
+                  <option value="goggles">Goggles</option>
+                  <option value="pantalla-facial">Pantalla facial</option>
+                  <option value="careta-para-soldador">Careta para soldador</option>
+                  <option value="gafas-para-soldador">Gafas para soldador</option>
+                  <option value="tapones-auditivos">Tapones auditivos</option>
+                  <option value="conchas-acusticas">Conchas acústicas</option>
+                  <option value="respirador-contra-particulas">Respirador contra partículas</option>
+                  <option value="respirador-contra-gases-vapores">Respirador contra gases y vapores</option>
+                  <option value="mascarilla-desechable">Mascarilla desechable</option>
+                  <option value="equipo-respiracion-autonomo">Equipo de respiración autónomo</option>
+                  <option value="guantes-contra-sustancias-quimicas">Guantes contra sustancias químicas</option>
+                  <option value="guantes-dielectricos">Guantes dieléctricos</option>
+                  <option value="guantes-contra-temperaturas-extremas">Guantes contra temperaturas extremas</option>
+                  <option value="guantes">Guantes</option>
+                  <option value="mangas">Mangas</option>
+                  <option value="mandil-altas-temperaturas">Mandil contra altas temperaturas</option>
+                  <option value="mandil-sustancias-quimicas">Mandil contra sustancias químicas</option>
+                  <option value="overol">Overol</option>
+                  <option value="bata">Bata</option>
+                  <option value="ropa-sustancias-peligrosas">Ropa contra sustancias peligrosas</option>
+                  <option value="calzado-ocupacional">Calzado ocupacional</option>
+                  <option value="calzado-contra-impacto">Calzado contra impacto</option>
+                  <option value="calzado-conductivo">Calzado conductivo</option>
+                  <option value="calzado-dielectrico">Calzado dieléctrico</option>
+                  <option value="calzado-sustancias-quimicas">Calzado contra sustancias químicas</option>
+                  <option value="polainas">Polainas</option>
+                  <option value="botas-impermeables">Botas impermeables</option>
+                  <option value="proteccion-caidas-altura">Equipo de protección contra caídas de altura</option>
+                  <option value="equipo-brigadista-incendio">Equipo para brigadista contra incendio</option>
+                </select>
+              </div>
+            </td>
           </tr>
           <tr>
             <td>
@@ -481,94 +386,85 @@ const ToolEvaluationTable = () => {
             <td colSpan="5">
               <tr>
                 <select>
-                <option value="cabeza-oidos">Cabeza y oidos</option>
-                <option value="ojos-cara">Ojos y cara</option>
-                <option value="brazos-manos">Brazos y manos</option>
-                <option value="dedos">Dedos</option>
-                <option value="sistema-respiratorio">Sistema respiratorio</option>
-                <option value="tronco">Tronco</option>
-                <option value="extremidades-inferiores">Extremidades inferiores</option>
+                  <option value="cabeza-oidos">Cabeza y oidos</option>
+                  <option value="ojos-cara">Ojos y cara</option>
+                  <option value="brazos-manos">Brazos y manos</option>
+                  <option value="dedos">Dedos</option>
+                  <option value="sistema-respiratorio">Sistema respiratorio</option>
+                  <option value="tronco">Tronco</option>
+                  <option value="extremidades-inferiores">Extremidades inferiores</option>
                 </select>
                 <select>
-                <option value="cabeza-oidos">Cabeza y oidos</option>
-                <option value="ojos-cara">Ojos y cara</option>
-                <option value="brazos-manos">Brazos y manos</option>
-                <option value="dedos">Dedos</option>
-                <option value="sistema-respiratorio">Sistema respiratorio</option>
-                <option value="tronco">Tronco</option>
-                <option value="extremidades-inferiores">Extremidades inferiores</option>
+                  <option value="cabeza-oidos">Cabeza y oidos</option>
+                  <option value="ojos-cara">Ojos y cara</option>
+                  <option value="brazos-manos">Brazos y manos</option>
+                  <option value="dedos">Dedos</option>
+                  <option value="sistema-respiratorio">Sistema respiratorio</option>
+                  <option value="tronco">Tronco</option>
+                  <option value="extremidades-inferiores">Extremidades inferiores</option>
                 </select>
                 <select>
-                <option value="cabeza-oidos">Cabeza y oidos</option>
-                <option value="ojos-cara">Ojos y cara</option>
-                <option value="brazos-manos">Brazos y manos</option>
-                <option value="dedos">Dedos</option>
-                <option value="sistema-respiratorio">Sistema respiratorio</option>
-                <option value="tronco">Tronco</option>
-                <option value="extremidades-inferiores">Extremidades inferiores</option>
+                  <option value="cabeza-oidos">Cabeza y oidos</option>
+                  <option value="ojos-cara">Ojos y cara</option>
+                  <option value="brazos-manos">Brazos y manos</option>
+                  <option value="dedos">Dedos</option>
+                  <option value="sistema-respiratorio">Sistema respiratorio</option>
+                  <option value="tronco">Tronco</option>
+                  <option value="extremidades-inferiores">Extremidades inferiores</option>
                 </select>
                 <select>
-                <option value="cabeza-oidos">Cabeza y oidos</option>
-                <option value="ojos-cara">Ojos y cara</option>
-                <option value="brazos-manos">Brazos y manos</option>
-                <option value="dedos">Dedos</option>
-                <option value="sistema-respiratorio">Sistema respiratorio</option>
-                <option value="tronco">Tronco</option>
-                <option value="extremidades-inferiores">Extremidades inferiores</option>
+                  <option value="cabeza-oidos">Cabeza y oidos</option>
+                  <option value="ojos-cara">Ojos y cara</option>
+                  <option value="brazos-manos">Brazos y manos</option>
+                  <option value="dedos">Dedos</option>
+                  <option value="sistema-respiratorio">Sistema respiratorio</option>
+                  <option value="tronco">Tronco</option>
+                  <option value="extremidades-inferiores">Extremidades inferiores</option>
                 </select>
                 <select>
-                <option value="cabeza-oidos">Cabeza y oidos</option>
-                <option value="ojos-cara">Ojos y cara</option>
-                <option value="brazos-manos">Brazos y manos</option>
-                <option value="dedos">Dedos</option>
-                <option value="sistema-respiratorio">Sistema respiratorio</option>
-                <option value="tronco">Tronco</option>
-                <option value="extremidades-inferiores">Extremidades inferiores</option>
+                  <option value="cabeza-oidos">Cabeza y oidos</option>
+                  <option value="ojos-cara">Ojos y cara</option>
+                  <option value="brazos-manos">Brazos y manos</option>
+                  <option value="dedos">Dedos</option>
+                  <option value="sistema-respiratorio">Sistema respiratorio</option>
+                  <option value="tronco">Tronco</option>
+                  <option value="extremidades-inferiores">Extremidades inferiores</option>
                 </select>
                 <select>
-                <option value="cabeza-oidos">Cabeza y oidos</option>
-                <option value="ojos-cara">Ojos y cara</option>
-                <option value="brazos-manos">Brazos y manos</option>
-                <option value="dedos">Dedos</option>
-                <option value="sistema-respiratorio">Sistema respiratorio</option>
-                <option value="tronco">Tronco</option>
-                <option value="extremidades-inferiores">Extremidades inferiores</option>
+                  <option value="cabeza-oidos">Cabeza y oidos</option>
+                  <option value="ojos-cara">Ojos y cara</option>
+                  <option value="brazos-manos">Brazos y manos</option>
+                  <option value="dedos">Dedos</option>
+                  <option value="sistema-respiratorio">Sistema respiratorio</option>
+                  <option value="tronco">Tronco</option>
+                  <option value="extremidades-inferiores">Extremidades inferiores</option>
                 </select>
-                <select>
-                <option value="cabeza-oidos">Cabeza y oidos</option>
-                <option value="ojos-cara">Ojos y cara</option>
-                <option value="brazos-manos">Brazos y manos</option>
-                <option value="dedos">Dedos</option>
-                <option value="sistema-respiratorio">Sistema respiratorio</option>
-                <option value="tronco">Tronco</option>
-                <option value="extremidades-inferiores">Extremidades inferiores</option>
-                </select>
-
-
               </tr>
-
             </td>
-
           </tr>
         </tbody>
         <tfoot>
-        <tr>
-  <td className="footer-header" colSpan="4">Observaciones:</td>
-  <td colSpan="4">
-    <textarea 
-      value={observaciones} 
-      onChange={(e) => setObservaciones(e.target.value)} 
-      rows="4" 
-      cols="50" 
-      placeholder="Escribe tus observaciones aquí"
-    />
-  </td>
-</tr>
-
+          <tr>
+            <td className="footer-header" colSpan="4">Observaciones:</td>
+            <td colSpan="4">
+              <textarea 
+                value={observaciones} 
+                onChange={(e) => setObservaciones(e.target.value)} 
+                rows="4" 
+                cols="50" 
+                placeholder="Escribe tus observaciones aquí"
+              />
+            </td>
+          </tr>
         </tfoot>
       </table>
+      
+      {/* Botón para descargar el PDF */}
+      <button onClick={downloadPDF} className="download-button">
+        Descargar PDF
+      </button>
     </div>
   );
 };
 
-export default ToolEvaluationTable
+export default ToolEvaluationTable;
