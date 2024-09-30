@@ -1,135 +1,204 @@
-import React from 'react';
-import './Table04.css'; // Asegúrate de tener el archivo CSS para los estilos
+import React, { useState } from 'react';
+import './Table04.css';
 
-const RiskAssessment = () => {
+const RiskTable = () => {
+  // Initial states for Consecuencia, Exposición, and Probabilidad
+  const [consequence, setConsequence] = useState(100); // Default: Catástrofe
+  const [exposure, setExposure] = useState(10); // Default: Continuously exposed
+  const [probability, setProbability] = useState(10); // Default: Most likely outcome
+
+  // State for handling the uploaded image
+  const [image, setImage] = useState(null);
+
+  // Function to handle image upload
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+    }
+  };
+
+  // Opciones de identificación de riesgos
+  const riskOptions = [
+    "Riesgo caída de piedra o golpe por objeto",
+    "Riesgo de incendio",
+    "Riesgo de atrapamiento o volcadura",
+    "Riesgo de choque o atropello",
+    "Riesgo de descarga eléctrica",
+    "Exposición a temperaturas elevadas y abatidas",
+    "Vibración",
+    "Riesgo inundación",
+    "Ventilación deficiente",
+    "Daños ergonómicos",
+    "Sustancias químicas",
+    "Poca iluminación",
+    "Partículas suspendidas en el ambiente",
+  ];
+
+  // Calcular la magnitud del riesgo
+  const riskMagnitude = consequence * exposure * probability;
+
+  // Determinar la clasificación del riesgo y la acción a tomar en función de la magnitud
+  let riskClassification = '';
+  let action = '';
+
+  if (riskMagnitude > 400) {
+    riskClassification = 'Muy Alto';
+    action = 'Detención inmediata';
+  } else if (riskMagnitude >= 200 && riskMagnitude <= 400) {
+    riskClassification = 'Alto';
+    action = 'Corrección inmediata';
+  } else if (riskMagnitude >= 70 && riskMagnitude < 200) {
+    riskClassification = 'Notable';
+    action = 'Corrección urgente';
+  } else {
+    riskClassification = 'Moderado o Bajo';
+    action = 'Monitoreo';
+  }
+
   return (
-    <div className="container">
-      <table className="risk-table">
-        <thead>
-            <h4>Tabla de equipos moviles</h4>
-          <tr>
-            <td colSpan="3" className="header">Nombre de la maquinaria o equipo:</td>
-            <td colSpan="3" className="header">SCOOPTRAM 2</td>
-            <td className="header">Área:</td>
-            <td className="header">INTERIOR MINA</td>
-          </tr>
-          <tr>
-            <td colSpan="3" className="header">Descripción de la maquinaria o equipo:</td>
-            <td colSpan="3" className="header">ACARREO DE MATERIAL</td>
-            <td className="header">Energía utilizada:</td>
-            <td className="header">DIESEL</td>
-          </tr>
-          <tr>
-            <td colSpan="4" className="header">Localización esquemática de los riesgos en la maquinaria y/o equipo</td>
-            <td className="header">POE:</td>
-            <td className="header">1</td>
-            <td className="header">Tiempo de exposición:</td>
-            <td className="header">12 HRS</td>
-          </tr>
-          <tr>
-            <td colSpan="4" rowSpan="6">
-              <img src="ruta_de_imagen" alt="Imagen de maquinaria" className="machinery-img" />
-            </td>
-            <td className="header" colSpan="2">Identificación de riesgos</td>
-            <td className="header" colSpan="2">Sistemas de seguridad</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td colSpan="2">Riesgo de incendio</td>
-            <td colSpan="2">Extintores</td>
-          </tr>
-          <tr>
-            <td colSpan="2">Riesgo de choque o atropello</td>
-            <td colSpan="2">Guardas, parachoques y protectores de calaveras</td>
-          </tr>
-          <tr>
-            <td colSpan="2">Vibración</td>
-            <td colSpan="2">Programa de mantenimiento</td>
-          </tr>
-          <tr>
-            <td colSpan="2">Riesgo de caída de piedra o golpe por objeto</td>
-            <td colSpan="2">Indicadores (torreta, luces, claxon, banderas, etc.)</td>
-          </tr>
-          <tr>
-            <td colSpan="2">Poca iluminación</td>
-            <td colSpan="2">Cinturón de seguridad</td>
-          </tr>
-          <tr>
-            <td colSpan="2">Exposición a temperaturas elevadas y abatidas</td>
-            <td colSpan="2"></td>
-          </tr>
-          <tr>
-            <td colSpan="2">Partículas suspendidas en el ambiente</td>
-            <td colSpan="2"></td>
-          </tr>
-          <tr>
-            <td colSpan="2">Riesgo de atrapamiento o volcadura</td>
-            <td colSpan="2"></td>
-          </tr>
-          <tr>
-            <td colSpan="2">Riesgo inundación</td>
-            <td colSpan="2"></td>
-          </tr>
-          <tr className="separator"></tr>
-          <tr>
-            <td colSpan="8" className="header">Principales partes del cuerpo expuestas al riesgo:</td>
-          </tr>
-          <tr>
-            <td>Cabeza y Oídos:</td>
-            <td>X</td>
-            <td>Ojos y Cara:</td>
-            <td>X</td>
-            <td>Sistema respiratorio:</td>
-            <td>X</td>
-            <td>Extremidades inferiores:</td>
-            <td>X</td>
-          </tr>
-          <tr>
-            <td>Brazos y Manos:</td>
-            <td>X</td>
-            <td>Tronco:</td>
-            <td></td>
-            <td colSpan="4"></td>
-          </tr>
-          <tr className="separator"></tr>
-          <tr>
-            <td colSpan="8" className="header">Evaluación de riesgo de trabajo</td>
-          </tr>
-          <tr>
-            <td>Consecuencia</td>
-            <td>Exposición</td>
-            <td>Probabilidad</td>
-            <td className="header" colSpan="5">Clasificación de Magnitud de Riesgo</td>
-          </tr>
-          <tr>
-            <td>Muerte</td>
-            <td>Frecuentemente</td>
-            <td>Coincidencia extremadamente remota pero concebible</td>
-            <td>Magnitud del Riesgo</td>
-            <td>75</td>
-            <td>Clasificación</td>
-            <td>Notable</td>
-            <td>Acción</td>
-            <td>Corrección urgente</td>
-          </tr>
-          <tr className="separator"></tr>
-          <tr>
-            <td colSpan="8" className="header">EPP sugerido</td>
-          </tr>
-          <tr>
-            <td colSpan="8" className="epp-icons">
-              <img src="ruta_proteccion1" alt="Protección 1" />
-              <img src="ruta_proteccion2" alt="Protección 2" />
-              <img src="ruta_proteccion3" alt="Protección 3" />
-              <img src="ruta_proteccion4" alt="Protección 4" />
-              <img src="ruta_proteccion5" alt="Protección 5" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <table className="risk-table">
+      <thead>
+        <tr>
+          <th colSpan="4" className="red">Nombre de la maquinaria o equipo:</th>
+          <th>MONTACARGAS EXTERIOR MINA</th>
+          <th className="red">Área:</th>
+          <th>EXTERIOR MINA</th>
+        </tr>
+        <tr>
+          <th colSpan="4" className="red">Descripción de la maquinaria o equipo:</th>
+          <th>LEVANTAMIENTO Y TRANSPORTE DE MATERIAL</th>
+          <th className="red">Energía utilizada:</th>
+          <th>DIESEL</th>
+        </tr>
+        <tr>
+          <th colSpan="4" className="red">Localización esquemática de los riesgos en maquinaria y/o equipo</th>
+          <th className="red">POE:</th>
+          <th>1</th>
+          <th className="red">Tiempo de exposición:</th>
+          <th>12 HRS</th>
+          <th className="red">Fecha de inspección:</th>
+          <th>19/07/2024</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          {/* Primera columna: Imagen */}
+          <td colSpan="5" rowSpan="3" className="image-section">
+            <input type="file" accept="image/*" onChange={handleImageUpload} />
+            {image ? (
+              <img src={image} alt="Uploaded Equipment" className="equipment-image" />
+            ) : (
+              <p>No image uploaded.</p>
+            )}
+          </td>
+          {/* Segunda columna: Identificación de riesgos */}
+          <td colSpan="3" rowSpan="1" className="risk-info">
+            <table className="inner-table">
+              <thead>
+                <tr>
+                  <th className="red">Identificación de riesgos</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* Mostrar solo 7 menús desplegables */}
+                {[...Array(7)].map((_, index) => (
+                  <tr key={index}>
+                    <td>
+                      <select>
+                        <option value="">Seleccione un riesgo</option>
+                        {riskOptions.map((opt, idx) => (
+                          <option key={idx} value={opt}>
+                            {opt}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </td>
+          {/* Tercera columna: Sistemas de seguridad */}
+          <td colSpan="3" className="safety-info">
+            <table className="inner-table">
+              <thead>
+                <tr>
+                  <th className="red">Sistemas de seguridad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Programa de mantenimiento</td></tr>
+                <tr><td>Extintores</td></tr>
+                <tr><td>Guardas, parachoques y protectores de calaveras</td></tr>
+                <tr><td>Freno de emergencia</td></tr>
+                <tr><td>Barandales y escaleras</td></tr>
+                <tr><td>Indicadores (torreta, luces, claxon, banderas, etc)</td></tr>
+                <tr><td>Sistema ANSUL</td></tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        {/* Sección de Evaluación de riesgos y EPP sugerido */}
+        <tr>
+          {/* Evaluación de riesgos */}
+          <td colSpan="6" className="risk-evaluation-section">
+            <table>
+              <thead>
+                <tr className="red">
+                  <th colSpan="4">Evaluación de riesgo de trabajo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Consecuencia</td>
+                  <td>Exposición</td>
+                  <td>Probabilidad</td>
+                </tr>
+                <tr>
+                  <td>Catástrofe</td>
+                  <td>Continuamente</td>
+                  <td>Es el resultado más probable y esperado</td>
+                </tr>
+                <tr>
+                  <td>{consequence}</td>
+                  <td>{exposure}</td>
+                  <td>{probability}</td>
+                </tr>
+              </tbody>
+            </table>
+            <table className="risk-classification">
+              <thead>
+                <tr className="red">
+                  <th colSpan="4">Clasificación de Magnitud de Riesgo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Magnitud del Riesgo: {riskMagnitude}</td>
+                  <td>Clasificación: {riskClassification}</td>
+                  <td>Acción: {action}</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          {/* EPP sugerido */}
+          <td colSpan="3" className="epp-section">
+            <div className="table-cell red">EPP sugerido</div>
+            <div className="epp-icons">
+              <img src="path-to-icon1.png" alt="EPP Icon 1" />
+              <img src="path-to-icon2.png" alt="EPP Icon 2" />
+              <img src="path-to-icon3.png" alt="EPP Icon 3" />
+              <img src="path-to-icon4.png" alt="EPP Icon 4" />
+              <img src="path-to-icon5.png" alt="EPP Icon 5" />
+              <img src="path-to-icon6.png" alt="EPP Icon 6" />
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   );
 };
 
-export default RiskAssessment;
+export default RiskTable;
