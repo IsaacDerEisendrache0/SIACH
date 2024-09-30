@@ -220,7 +220,7 @@ const RiskAssessmentTable = () => {
   
 
   return (
-    <table className="risk-table">
+    <table class="custom-table">
       <thead>
         <tr>
           <td className="no-border-cell" colSpan="7">

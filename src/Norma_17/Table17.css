@@ -13,11 +13,8 @@
   height: 100%; /* Asegura que la celda tenga altura completa */
 }
 
-.inner-table th, .inner-table td {
-  border: 1px solid #777777; /* Bordes de las celdas */
-  padding: 8px; /* Espaciado interno de las celdas */
-  text-align: center; /* Centrado del texto en las celdas */
-}
+
+
 
 .inner-table th {
   background-color: #ff0000 !important; /* Color de fondo para los encabezados con !important para asegurar que se aplique */
@@ -42,7 +39,7 @@
   font-weight: bold; /* Texto en negrita */
   text-align: center; /* Centrar el texto */
   margin-bottom: 10px;
-  padding-right: 30px; /* Espacio debajo del título */
+  padding-right: 0px; /* Espacio debajo del título */
   
 }
 
@@ -119,7 +116,7 @@
 
 .hazard-item {
   position: relative; /* Mantiene el checkbox relativo al contenedor */
-  padding-right: 30px; /* Espacio para el checkbox */
+  padding-right: 10px; /* Espacio para el checkbox */
 }
 
 .hazard-checkbox {
@@ -167,7 +164,7 @@
 
 
 .protection-image {
-  max-width: 70px; /* Ajusta el tamaño máximo de las imágenes */
+  max-width: 80px; /* Ajusta el tamaño máximo de las imágenes */
   height: auto; /* Mantiene la proporción de las imágenes */
   border: 1px solid #ccc; /* Opcional: agrega un borde ligero */
   border-radius: 5px; /* Opcional: agrega bordes redondeados */
@@ -217,7 +214,33 @@
 
 .images-in-row {
   display: flex; /* Alinea las imágenes en fila */
-  gap: 0px; /* Reduce al máximo el espacio entre las imágenes */
+  gap: 150px; /* Reduce al máximo el espacio entre las imágenes */
   align-items: center; /* Centra verticalmente las imágenes */
 }
 
+
+
+/*tabla*/
+
+/* Estilo general de la tabla interna */
+.custom-table {
+  width: 100%; /* Asegura que la tabla ocupe el 100% del ancho disponible */
+  border-collapse: collapse; /* Elimina los espacios entre las celdas */
+  margin: 0 auto; /* Centra la tabla dentro de la celda */
+}
+
+/* Centra el contenido de las celdas que contienen tablas internas */
+.custom-table-cell {
+  display: flex; /* Utiliza Flexbox para centrar la tabla */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  height: 100%; /* Asegura que la celda tenga altura completa */
+}
+
+.custom-table th, .custom-table td {
+  border: 1px solid #000000; /* Cambia el color de los bordes a negro */
+  padding: 8px; /* Espaciado interno de las celdas */
+  text-align: center; /* Centrado del texto en las celdas */
+}
+
+/* Resto del CSS... */
