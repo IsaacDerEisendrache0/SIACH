@@ -1,246 +1,280 @@
-/* Estilo general de la tabla interna */
-.inner-table {
-  width: 100%; /* Asegura que la tabla interna ocupe el 100% del ancho disponible */
-  border-collapse: collapse; /* Elimina los espacios entre las celdas */
-  margin: 0 auto; /* Centra la tabla dentro de la celda */
-}
+  /* Estilo general de la tabla interna */
+  .inner-table {
+    width: 100%; /* Asegura que la tabla interna ocupe el 100% del ancho disponible */
+    border-collapse: collapse; /* Elimina los espacios entre las celdas */
+    margin: 0 auto; /* Centra la tabla dentro de la celda */
+  }
 
-/* Centra el contenido de las celdas que contienen tablas internas */
-.table-cell {
-  display: flex; /* Utiliza Flexbox para centrar la tabla */
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
-  height: 100%; /* Asegura que la celda tenga altura completa */
-}
-
-
-
-
-.inner-table th {
-  background-color: #ff0000 !important; /* Color de fondo para los encabezados con !important para asegurar que se aplique */
-  color: #ffffff; /* Opcional: color del texto para asegurar que sea visible sobre el fondo rojo */
-  font-weight: bold; /* Texto en negrita para los encabezados */
-}
-
-/* Ajusta los márgenes y el posicionamiento para que las celdas rojas se mantengan alineadas */
-.header {
-  background-color: #e63946;
-  color: white;
-  padding: 10px;
-  text-align: center;
-  width: 100%; /* Asegura que la cabecera roja ocupe el 100% del espacio disponible */
-  box-sizing: border-box; /* Incluye padding y border dentro del ancho total */
-  
-}
-
-/* Subrayar títulos en amarillo */
-.sub-header {
-  background-color: yellow; /* Color de fondo amarillo */
-  font-weight: bold; /* Texto en negrita */
-  text-align: center; /* Centrar el texto */
-  margin-bottom: 10px;
-  padding-right: 0px; /* Espacio debajo del título */
-  
-}
-
-/* Mover las celdas hacia la derecha */
-.move-right {
-  margin-left: 20px; /* Ajusta el valor según lo necesario */
-}
-
-/* Ajustar el padding para mover el contenido hacia la derecha */
-.padding-right {
-  padding-left: 20px; /* Ajusta el valor según lo necesario */
-}
-
-.right-aligned {
-  text-align: right; /* Alinea el texto a la derecha */
-}
-
-.header-section, .left-column, .right-column, .section-content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Alinea los elementos a la izquierda dentro de la celda */
-}
-
-/* Asegúrate de que el padding no esté causando desalineación */
-.risk-table {
-  width: 100%; /* Asegura que la tabla ocupe todo el ancho disponible */
-  border-collapse: collapse;
-  
-}
-
-.header, .left-section, .right-section {
-  padding: 0; /* Asegura que no haya padding adicional */
-  
-}
-
-.right-aligned {
-  text-align: right; /* Alinea el texto a la derecha */
-  padding-left: 10px; /* Ajusta el valor según lo necesario */
-  margin-left: 40px; /* Ajusta según lo necesario */
-  padding-right: 20px;
-}
-
-/* Asegúrate de que los contenedores internos usen todo el espacio disponible */
-.container-full-width {
-  width: 100%; /* Asegura que el contenedor use todo el ancho disponible */
-}
-
-/* Clase para empujar contenido a la derecha usando margen automático a la izquierda */
-.push-right {
-  margin-left: auto;
-}
-
-/* Utilizando Flexbox para alinear elementos a la derecha de forma más precisa */
-.flex-right {
-  display: flex;
-  justify-content: flex-end; /* Alinea el contenido a la derecha */
-  width: 100%; /* Ajusta el ancho al 100% para un comportamiento responsivo */
-}
-
-.full-width-cell {
-  width: 100%; /* Asegura que la celda ocupe todo el ancho disponible */
-  white-space: normal; /* Permite que el texto se ajuste en múltiples líneas si es necesario */
-  text-align: left; /* Alinea el texto a la izquierda */
-  padding: 10px; /* Añade un poco de padding para que no quede tan pegado a los bordes */
-  box-sizing: border-box; /* Asegura que el padding se incluya en el ancho total */
-}
-
-.no-border-cell {
-  border: none; /* Elimina todos los bordes de la celda */
-  background-color: #e63946;
-  color: white;
-
-}
-
-.hazard-item {
-  position: relative; /* Mantiene el checkbox relativo al contenedor */
-  padding-right: 10px; /* Espacio para el checkbox */
-}
-
-.hazard-checkbox {
-  position: absolute; /* Posiciona el checkbox de forma absoluta */
-  right: 0; /* Alinea el checkbox a la derecha */
-  
-}
-.hazard-list {
-  list-style-type: none;
-  margin-left: auto; /* Alinea la lista de peligros al margen izquierdo */
-  padding-left: 0; /* Elimina cualquier padding a la izquierda */
-  text-align: left; /* Asegura que el texto dentro de la lista esté alineado a la izquierda */
-}
-/* Asegúrate de que la celda ocupe todo el espacio disponible */
-.right-section {
-  vertical-align: top; /* Alinea verticalmente al inicio */
-  padding: 10px; /* Ajusta el padding según sea necesario */
-}
-
-/* Asegúrate de que el contenedor de imágenes no se expanda más allá del contenido */
-.protection-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Centra los elementos dentro de la sección */
-  width: 100%; /* Asegura que el contenedor use todo el ancho disponible */
-}
-
-
-.sub-header {
-  margin-bottom: 10px; /* Ajusta el espacio debajo del título */
-  font-weight: bold; /* Estilo opcional para el título */
-}
-
-.section-content {
-  display: flex;
-  flex-direction: column; /* Alinea el contenido en una columna */
-}
-
-/* Ajusta el tamaño del contenedor si es necesario */
-.protection-image-container {
-  width: 100%; /* Ajusta al ancho disponible */
-  max-width: 1200px; /* Ajusta el ancho máximo según sea necesario */
-  margin: 0 auto; /* Centra el contenedor dentro de su contenedor padre */
-}
-
-
-.protection-image {
-  max-width: 80px; /* Ajusta el tamaño máximo de las imágenes */
-  height: auto; /* Mantiene la proporción de las imágenes */
-  border: 1px solid #ccc; /* Opcional: agrega un borde ligero */
-  border-radius: 5px; /* Opcional: agrega bordes redondeados */
-}
-
-.protection-image2 {
-  max-width:80%; /* Ajusta el tamaño máximo de la imagen */
-  height: auto; /* Mantiene la proporción de la imagen */
-}
-
-.left-section {
-  padding-left: 10px; /* Ajusta el valor según lo necesario */
-  margin-left: 40px; /* Ajusta según lo necesario */
-  padding-right: 20px;
-
-}
-
-.risk-item {
-  
-  margin-left: 5px; /* Ajusta según lo necesario */
-}
-
-.text1 {
-  color: black;
-  background-color: yellow; /* Color de fondo amarillo */
-  font-weight: bold; /* Texto en negrita */
-  margin-bottom: 10px;
-  padding-right: 10px;
-  padding-left: 10px;
-  text-align: center;
-
-}
-
-
-.Date1 {
-  text-align: left; 
-}
-
-.body-image-left {
-  display: flex;
-  justify-content: flex-start; /* Alinea la imagen a la izquierda */
-  margin-right: 20px; /* Espaciado entre la imagen y otros elementos si es necesario */
-}
+  /* Centra el contenido de las celdas que contienen tablas internas */
+  .table-cell {
+    display: flex; /* Utiliza Flexbox para centrar la tabla */
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    height: 100%; /* Asegura que la celda tenga altura completa */
+  }
 
 
 
 
-.images-in-row {
-  display: flex; /* Alinea las imágenes en fila */
-  gap: 150px; /* Reduce al máximo el espacio entre las imágenes */
-  align-items: center; /* Centra verticalmente las imágenes */
-}
+
+  .inner-table th {
+    background-color: #ff0000 !important; /* Color de fondo para los encabezados con !important para asegurar que se aplique */
+    color: #ffffff; /* Opcional: color del texto para asegurar que sea visible sobre el fondo rojo */
+    font-weight: bold; /* Texto en negrita para los encabezados */
+  }
+
+  /* Ajusta los márgenes y el posicionamiento para que las celdas rojas se mantengan alineadas */
+  .header {
+    background-color: #e63946;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    width: 100%; /* Asegura que la cabecera roja ocupe el 100% del espacio disponible */
+    box-sizing: border-box; /* Incluye padding y border dentro del ancho total */
+    
+  }
+
+  /* Subrayar títulos en amarillo */
+  .sub-header {
+    background-color: yellow; /* Color de fondo amarillo */
+    font-weight: bold; /* Texto en negrita */
+    text-align: center; /* Centrar el texto */
+    margin-bottom: 10px;
+    padding-right: 0px; /* Espacio debajo del título */
+    
+  }
+
+  /* Mover las celdas hacia la derecha */
+  .move-right {
+    margin-left: 20px; /* Ajusta el valor según lo necesario */
+  }
+
+  /* Ajustar el padding para mover el contenido hacia la derecha */
+  .padding-right {
+    padding-left: 20px; /* Ajusta el valor según lo necesario */
+  }
+
+  .right-aligned {
+    text-align: left;
+    /* Alinea el texto a la derecha */
+  }
+
+  .header-section, .left-column, .right-column, .section-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinea los elementos a la izquierda dentro de la celda */
+  }
+
+  /* Asegúrate de que el padding no esté causando desalineación */
+  .risk-table {
+    width: 100%; /* Asegura que la tabla ocupe todo el ancho disponible */
+    border-collapse: collapse;
+    
+  }
+
+  .header, .left-section, .right-section {
+    padding: 0; /* Asegura que no haya padding adicional */
+    
+  }
+
+  .right-aligned {
+    text-align: center; /* Alinea el texto a la derecha */
+    padding-left: 10px; /* Ajusta el valor según lo necesario */
+    margin-left: 40px; /* Ajusta según lo necesario */
+    padding-right: 20px;
+  }
+
+  /* Asegúrate de que los contenedores internos usen todo el espacio disponible */
+  .container-full-width {
+    width: 100%; /* Asegura que el contenedor use todo el ancho disponible */
+  }
+
+  /* Clase para empujar contenido a la derecha usando margen automático a la izquierda */
+  .push-right {
+    margin-left: auto;
+  }
+
+  /* Utilizando Flexbox para alinear elementos a la derecha de forma más precisa */
+  .flex-right {
+    display: flex;
+    justify-content: flex-end; /* Alinea el contenido a la derecha */
+    width: 100%; /* Ajusta el ancho al 100% para un comportamiento responsivo */
+  }
+
+  .full-width-cell {
+    width: 100%; /* Asegura que la celda ocupe todo el ancho disponible */
+    white-space: normal; /* Permite que el texto se ajuste en múltiples líneas si es necesario */
+    text-align: left; /* Alinea el texto a la izquierda */
+    padding: 10px; /* Añade un poco de padding para que no quede tan pegado a los bordes */
+    box-sizing: border-box; /* Asegura que el padding se incluya en el ancho total */
+  }
+
+  .no-border-cell {
+    border: none; /* Elimina todos los bordes de la celda */
+    background-color: #e63946;
+    color: white;
+
+  }
+
+  .hazard-item {
+    position: relative; /* Mantiene el checkbox relativo al contenedor */
+    padding-right: 10px; /* Espacio para el checkbox */
+  }
+
+  .hazard-checkbox {
+    position: absolute; /* Posiciona el checkbox de forma absoluta */
+    right: 0; /* Alinea el checkbox a la derecha */
+    
+  }
+  .hazard-list {
+    list-style-type: none;
+    margin-left: auto; /* Alinea la lista de peligros al margen izquierdo */
+    padding-left: 0; /* Elimina cualquier padding a la izquierda */
+    text-align: left; /* Asegura que el texto dentro de la lista esté alineado a la izquierda */
+  }
+  /* Asegúrate de que la celda ocupe todo el espacio disponible */
+  .right-section {
+    vertical-align: top; /* Alinea verticalmente al inicio */
+    padding: 10px; /* Ajusta el padding según sea necesario */
+  }
+
+  /* Asegúrate de que el contenedor de imágenes no se expanda más allá del contenido */
+  .protection-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra los elementos dentro de la sección */
+    width: 100%; /* Asegura que el contenedor use todo el ancho disponible */
+  }
+
+
+  .sub-header {
+    margin-bottom: 10px; /* Ajusta el espacio debajo del título */
+    font-weight: bold; /* Estilo opcional para el título */
+  }
+
+  .section-content {
+    display: flex;
+    flex-direction: column; /* Alinea el contenido en una columna */
+  }
+
+  /* Ajusta el tamaño del contenedor si es necesario */
+  .protection-image-container {
+    width: 100%; /* Ajusta al ancho disponible */
+    max-width: 1200px; /* Ajusta el ancho máximo según sea necesario */
+    margin: 0 auto; /* Centra el contenedor dentro de su contenedor padre */
+  }
+
+
+  .protection-image {
+    max-width: 70px; /* Ajusta el tamaño máximo de las imágenes */
+    height: auto; /* Mantiene la proporción de las imágenes */
+    border: 1px solid #ccc; /* Opcional: agrega un borde ligero */
+    border-radius: 5px; /* Opcional: agrega bordes redondeados */
+  }
+
+  .protection-image2 {
+    width: 150px; /* Fijar el ancho en píxeles */
+    height: 250px; /* Fijar la altura */
+    object-fit: contain; /* Mantiene la proporción de la imagen dentro de los límites */
+    display: block; /* Hace que la imagen se comporte como un bloque */
+    margin: 0 auto; /* Centra la imagen horizontalmente */
+  }
+
+  .protection-image3 {
+    width: 150px; /* Fijar el ancho en píxeles */
+    height: 250px; /* Fijar la altura */
+    object-fit: contain; /* Mantiene la proporción de la imagen dentro de los límites */
+    display: block; /* Hace que la imagen se comporte como un bloque */
+    margin: 0 auto; /* Centra la imagen horizontalmente */
+  }
+
+
+  .left-section {
+    padding-left: 10px; /* Ajusta el valor según lo necesario */
+    margin-left: 40px; /* Ajusta según lo necesario */
+    padding-right: 20px;
+
+  }
+
+  .risk-item {
+    
+    margin-left: 5px; /* Ajusta según lo necesario */
+  }
+
+  .text1 {
+    color: black;
+    background-color: yellow; /* Color de fondo amarillo */
+    font-weight: bold; /* Texto en negrita */
+    padding-left: 0px;  
+    text-align: center;
+    margin-bottom: 0px;
+    padding-right: 0px;
+
+  }
+
+  .text2 {
+    color: black;
+    background-color: yellow; /* Color de fondo amarillo */
+    font-weight: bold; /* Texto en negrita */
+    padding-left: 0px;  
+    text-align: center;
+    margin-bottom: 0px;
+    padding-right: 0px;
+    
+
+  }
+
+
+  .Date1 {
+    text-align: left; 
+  }
+
+  .body-image-left {
+    display: flex;
+    justify-content: flex-start; /* Alinea la imagen a la izquierda */
+    margin-right: 20px; /* Espaciado entre la imagen y otros elementos si es necesario */
+  }
+
+  .table-container {
+    margin: 0;
+    padding: 0;
+    display: inline-block; /* Asegura que la tabla no ocupe más espacio del necesario */
+  } 
 
 
 
-/*tabla*/
+  .images-in-row {
+    display: flex; /* Alinea las imágenes en fila */
+    gap: 0px; /* Reduce al máximo el espacio entre las imágenes */
+    align-items: center; /* Centra verticalmente las imágenes */
+  }
 
-/* Estilo general de la tabla interna */
-.custom-table {
-  width: 100%; /* Asegura que la tabla ocupe el 100% del ancho disponible */
-  border-collapse: collapse; /* Elimina los espacios entre las celdas */
-  margin: 0 auto; /* Centra la tabla dentro de la celda */
-}
 
-/* Centra el contenido de las celdas que contienen tablas internas */
-.custom-table-cell {
-  display: flex; /* Utiliza Flexbox para centrar la tabla */
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
-  height: 100%; /* Asegura que la celda tenga altura completa */
-}
 
-.custom-table th, .custom-table td {
-  border: 1px solid #000000; /* Cambia el color de los bordes a negro */
-  padding: 8px; /* Espaciado interno de las celdas */
-  text-align: center; /* Centrado del texto en las celdas */
-}
+  /*tabla*/
 
-/* Resto del CSS... */
+  /* Estilo general de la tabla interna */
+  .main-table table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-bottom: 20px !important;
+  }
+
+  .main-table th, .main-table td {
+    border: 1px solid black !important;
+    padding: 8px !important;
+    text-align: center !important;
+  }
+
+  .custom-table, .custom-table th, .custom-table td {
+    border: 1px solid black; /* Asegúrate de que esta regla tenga prioridad */
+    padding: 8px;
+    text-align: center;
+  }
+
+
+
+
+  /* tabla evaluacion de riesgo.*/
+
+

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import './Table17.css';
 
 const areas = [
@@ -217,111 +219,122 @@ const RiskAssessmentTable = () => {
     option11: '/body/lvl3_all.png',
 
   };
-  
 
+  const downloadPDF = () => {
+    const input = document.querySelector('.table-container');
+    
+    // Aumentamos la escala para una mejor calidad de imagen
+    html2canvas(input, { scale: 2 }).then((canvas) => {
+      // Recortar el canvas a la altura del contenido (sin espacio en blanco)
+      const imgData = canvas.toDataURL('image/png');
+      const imgWidth = 210; // Ancho A4 en mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width; // Escalamos proporcionalmente
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      
+      // Si la imagen es más alta que una página A4, la ajustamos
+      if (imgHeight > 297) {
+        const pageHeight = 297; // Altura de una página A4
+        let heightLeft = imgHeight;
+        let position = 0;
+        
+        // Añadir la primera parte de la tabla
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+  
+        // Si la tabla es más alta que la página, se divide en múltiples páginas
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+      } else {
+        // Si la imagen cabe en una sola página, solo la agregamos
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      }
+  
+      // Guardamos el PDF
+      pdf.save('tabla_herramientas_manual.pdf');
+    });
+  };
+  
+  
   return (
-    <table class="custom-table">
-      <thead>
-        <tr>
-          <td className="no-border-cell" colSpan="7">
-          <div className="full-width-cell">
-            <label htmlFor="puesto">Puesto:</label>
-            <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange}>
-              <option value="" disabled>
-                Seleccione un puesto
-              </option>
-              {puestos.map((puesto, index) => (
-                <option key={index} value={puesto}>
-                  {puesto}
+      <div class="main-table">
+        <table class="custom-table" className="table-container">
+        <thead>
+          <tr>
+            <td className="no-border-cell" colSpan="7">
+            <div className="full-width-cell">
+              <label htmlFor="puesto">Puesto:</label>
+              <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange}>
+                <option value="" disabled>
+                  Seleccione un puesto
                 </option>
-              ))}
-            </select>
-        <div>Descripción de la actividad: Preparación de microfórmulas, pesaje y mezclado de vitaminas, minerales y aditivos.</div>
-      </div>
-          </td>
-        </tr>
-        <tr>
-          <td className="header right-aligned" colSpan="4">
-            <div className="left-column">
-              <div className="text1">Principales partes del cuerpo expuestas al riesgo:</div>
-              <div className="risk-item">Cabeza y Oídos: <span className="risk-mark">{affectedBodyParts.includes('Cabeza y Oídos') ? 'X' : ''}</span></div>
-              <div className="risk-item">Ojos y Cara: <span className="risk-mark">{affectedBodyParts.includes('Ojos y Cara') ? 'X' : ''}</span></div>
-              <div className="risk-item">Brazos y Manos: <span className="risk-mark">{affectedBodyParts.includes('Brazos y Manos') ? 'X' : ''}</span></div>
-              <div className="risk-item">Tronco: <span className="risk-mark">{affectedBodyParts.includes('Tronco') ? 'X' : ''}</span></div>
-              <div className="risk-item">Sistema respiratorio: <span className="risk-mark">{affectedBodyParts.includes('Sistema respiratorio') ? 'X' : ''}</span></div>
-              <div className="risk-item">Extremidades inferiores: <span className="risk-mark">{affectedBodyParts.includes('Extremidades inferiores') ? 'X' : ''}</span></div>
-            </div>
-          </td>
-          <td className="header right-aligned" colSpan="3">
-            <div className="right-column">
-              <div className="Date1">
-                <label htmlFor="area">Área:</label>
-                <select id="area" value={areaSeleccionada} onChange={handleAreaChange}>
-                  {areas.map((area, index) => (
-                    <option key={index} value={area.nombre}>
-                      {area.nombre}
-                    </option>
-                  ))}
-                </select>
-          </div>              
-              <div className='Date1'>Fecha de inspección: <input type="date" defaultValue="2023-09-13" /></div>
-              <div className='Date1'>Tiempo de exposición: <input type="text" defaultValue="8hrs" /></div>
-            </div>
-          </td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td colSpan="2" className="left-section"> 
-            <tb className="text1">Identificación de peligros</tb>
-            <ul className="hazard-list">
-              {Object.keys(hazards).map(hazard => (
-                <li key={hazard} className="hazard-item">
-                  {hazard}
-                  <label className="hazard-checkbox">
-                    <input
-                      type="checkbox"
-                      name={hazard}
-                      checked={hazards[hazard]}
-                      onChange={handleCheckboxChange}
-                    />
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </td>
-          <td className="right-section right-aligned">
-            <div className="sub-header">Equipo utilizado<br></br></div>
-            <div className="section-content">
-              <select value={selectedOptionEquipoUtilizado} onChange={handleOptionChangeEquipoUtilizado}>
-                <option value="">Selecciona la extremidad afectada</option>
-                <option value="option1">Cabeza</option>
-                <option value="option2">Tronco</option>
-                <option value="option3">Pies</option>
-                <option value="option4">Brazos</option>
-                <option value="option5">Cabeza y Tronco</option>
-                <option value="option6">Brazos y Pies</option>
-                <option value="option7">Cabeza y Pies</option>
-                <option value="option8">Cabeza y Brazos</option>
-                <option value="option9">Cabeza y Tronco</option>
-                <option value="option10">Tronco y Brazos</option>
-                <option value="option11">Todas las Extremidades</option>
+                {puestos.map((puesto, index) => (
+                  <option key={index} value={puesto}>
+                    {puesto}
+                  </option>
+                ))}
               </select>
-              {selectedOptionEquipoUtilizado && optionImages[selectedOptionEquipoUtilizado] && (
-                <div className="protection-image-container">
-                  <img
-                    src={optionImages[selectedOptionEquipoUtilizado]}
-                    alt={`Equipo utilizado para ${selectedOptionEquipoUtilizado}`}
-                    className="protection-image2"
-                  />
-                </div>
-              )}
-            </div>
-          </td>
-            <td colSpan="3" className="right-section right-aligned">
-              <div className="sub-header">Equipo de protección personal sugerido</div>
-              <div className="body-and-hazards-container">
-                <select value={selectedOptionProteccionSugerida} onChange={handleOptionChangeProteccionSugerida}>
+          <div>Descripción de la actividad: Preparación de microfórmulas, pesaje y mezclado de vitaminas, minerales y aditivos.</div>
+        </div>
+            </td>
+          </tr>
+          <tr>
+            <td className="header right-aligned" colSpan="4">
+              <div className="left-column">
+                <div className="text1">Principales partes del cuerpo expuestas al riesgo:</div>
+                <div className="risk-item">Cabeza y Oídos: <span className="risk-mark">{affectedBodyParts.includes('Cabeza y Oídos') ? 'X' : ''}</span></div>
+                <div className="risk-item">Ojos y Cara: <span className="risk-mark">{affectedBodyParts.includes('Ojos y Cara') ? 'X' : ''}</span></div>
+                <div className="risk-item">Brazos y Manos: <span className="risk-mark">{affectedBodyParts.includes('Brazos y Manos') ? 'X' : ''}</span></div>
+                <div className="risk-item">Tronco: <span className="risk-mark">{affectedBodyParts.includes('Tronco') ? 'X' : ''}</span></div>
+                <div className="risk-item">Sistema respiratorio: <span className="risk-mark">{affectedBodyParts.includes('Sistema respiratorio') ? 'X' : ''}</span></div>
+                <div className="risk-item">Extremidades inferiores: <span className="risk-mark">{affectedBodyParts.includes('Extremidades inferiores') ? 'X' : ''}</span></div>
+              </div>
+            </td>
+            <td className="header right-aligned" colSpan="3">
+              <div className="right-column">
+                <div className="Date1">
+                  <label htmlFor="area">Área:</label>
+                  <select id="area" value={areaSeleccionada} onChange={handleAreaChange}>
+                    {areas.map((area, index) => (
+                      <option key={index} value={area.nombre}>
+                        {area.nombre}
+                      </option>
+                    ))}
+                  </select>
+            </div>              
+                <div className='Date1'>Fecha de inspección: <input type="date" defaultValue="2023-09-13" /></div>
+                <div className='Date1'>Tiempo de exposición: <input type="text" defaultValue="8hrs" /></div>
+              </div>
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colSpan="2" className="left-section"> 
+              <tb className="text1">Identificación de peligros</tb>
+              <ul className="hazard-list">
+                {Object.keys(hazards).map(hazard => (
+                  <li key={hazard} className="hazard-item">
+                    {hazard}
+                    <label className="hazard-checkbox">
+                      <input
+                        type="checkbox"
+                        name={hazard}
+                        checked={hazards[hazard]}
+                        onChange={handleCheckboxChange}
+                      />
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </td>
+            <td className="right-section right-aligned">
+              <div className="sub-header">Equipo utilizado<br></br></div>
+              <div className="section-content">
+                <select value={selectedOptionEquipoUtilizado} onChange={handleOptionChangeEquipoUtilizado}>
                   <option value="">Selecciona la extremidad afectada</option>
                   <option value="option1">Cabeza</option>
                   <option value="option2">Tronco</option>
@@ -335,105 +348,135 @@ const RiskAssessmentTable = () => {
                   <option value="option10">Tronco y Brazos</option>
                   <option value="option11">Todas las Extremidades</option>
                 </select>
-                <div className="images-in-row">  {/* Nueva clase para alinear en fila */}
-                  {selectedOptionProteccionSugerida && optionImages[selectedOptionProteccionSugerida] && (
-                    <div className="body-image-left">
-                      <img
-                        src={optionImages[selectedOptionProteccionSugerida]}
-                        alt={`Equipo de protección sugerido para ${selectedOptionProteccionSugerida}`}
-                        className="protection-image"
-                      />
-                    </div>
-                  )}
-                  {/* Mostrar las imágenes de protección seleccionadas */}
-                  {selectedImages.length > 0 && (
-                    <div className="hazard-images-right">
-                      {selectedImages.map((image, index) => (
-                        <img key={index} src={image} alt={`Protección ${index}`} className="protection-image" />
-                      ))}
-                    </div>
-                  )}
+                {selectedOptionEquipoUtilizado && optionImages[selectedOptionEquipoUtilizado] && (
+                  <div className="protection-image-container">
+                    <img
+                      src={optionImages[selectedOptionEquipoUtilizado]}
+                      alt={`Equipo utilizado para ${selectedOptionEquipoUtilizado}`}
+                      className="protection-image2"
+                    />
+                  </div>
+                )}
+              </div>
+            </td>
+              <td colSpan="3" className="right-section right-aligned">
+                <div className="sub-header">Equipo de protección personal sugerido</div>
+                <div className="body-and-hazards-container">
+                  <select value={selectedOptionProteccionSugerida} onChange={handleOptionChangeProteccionSugerida}>
+                    <option value="">Selecciona la extremidad afectada</option>
+                    <option value="option1">Cabeza</option>
+                    <option value="option2">Tronco</option>
+                    <option value="option3">Pies</option>
+                    <option value="option4">Brazos</option>
+                    <option value="option5">Cabeza y Tronco</option>
+                    <option value="option6">Brazos y Pies</option>
+                    <option value="option7">Cabeza y Pies</option>
+                    <option value="option8">Cabeza y Brazos</option>
+                    <option value="option9">Cabeza y Tronco</option>
+                    <option value="option10">Tronco y Brazos</option>
+                    <option value="option11">Todas las Extremidades</option>
+                  </select>
+                  <div className="images-in-row">  {/* Nueva clase para alinear en fila */}
+                    {selectedOptionProteccionSugerida && optionImages[selectedOptionProteccionSugerida] && (
+                      <div className="body-image-left">
+                        <img
+                          src={optionImages[selectedOptionProteccionSugerida]}
+                          alt={`Equipo de protección sugerido para ${selectedOptionProteccionSugerida}`}
+                          className="protection-image3"
+                        />
+                      </div>
+                    )}
+                    {/* Mostrar las imágenes de protección seleccionadas */}
+                    {selectedImages.length > 0 && (
+                      <div className="hazard-images-right">
+                        {selectedImages.map((image, index) => (
+                          <img key={index} src={image} alt={`Protección ${index}`} className="protection-image" />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </td>
+          </tr>
+          <tr>
+          </tr>
+          <tr>
+            <td colSpan="3" className="right-aligned">
+              <div className="sub-header">Evaluación de riesgo de trabajo</div>
+              <table className="inner-table">
+                <thead>
+                  <tr>
+                    <th>Consecuencia</th>
+                    <th>Exposición</th>
+                    <th>Probabilidad</th>
+                    <th>Magnitud del Riesgo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <select value={consequence} onChange={handleConsequenceChange}>
+                        <option value={10}>Catástrofe</option>
+                        <option value={50}>Varias muertes</option>
+                        <option value={25}>Muerte</option>
+                        <option value={15}>Lesiones graves</option>
+                        <option value={5}>Lesiones con baja</option>
+                        <option value={1}>Lesiones sin baja</option>
+                      </select>
+                      {/* Mostrar el valor seleccionado de Consecuencia */}
+                      <div>Valor: {consequence}</div>
+                    </td>
+                    <td>
+                      <select value={exposure} onChange={handleExposureChange}>
+                        <option value={10}>Continuamente</option>
+                        <option value={6}>Frecuentemente</option>
+                        <option value={3}>Ocasionalmente</option>
+                        <option value={2}>Irregularmente</option>
+                        <option value={1}>Raramente</option>
+                        <option value={0.5}>Remotamente</option>
+                      </select>
+                      {/* Mostrar el valor seleccionado de Exposición */}
+                      <div>Valor: {exposure}</div>
+                    </td>
+                    <td>
+                      <select value={probability} onChange={handleProbabilityChange}>
+                        <option value={10}>Es el resultado más probable y esperado</option>
+                        <option value={6}>Es completamente posible, no será nada extraño</option>
+                        <option value={3}>Sería una secuencia o coincidencia rara pero posible, ha ocurrido</option>
+                        <option value={1}>Coincidencia muy rara, pero se sabe que ha ocurrido</option>
+                        <option value={0.5}>Coincidencia extremadamente remota pero concebible</option>
+                        <option value={0.1}>Coincidencia prácticamente imposible, jamás ha ocurrido</option>
+                      </select>
+                      {/* Mostrar el valor seleccionado de Probabilidad */}
+                      <div>Valor: {probability}</div>
+                    </td>
+                    <td style={{ backgroundColor: getRiskColor(calculateRisk()) }}>
+                      {calculateRisk().toFixed(2)}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+            <td colSpan="3" className="right-aligned">
+              <div className="text2">Clasificación de Magnitud de Riesgo</div>
+              <div className="risk-magnitude">
+                <div className="risk-value">Magnitud del Riesgo: {calculateRisk().toFixed(2)}</div>
+                <div className="risk-classification">
+                  Clasificación: {calculateRisk() > 400 ? 'Muy Alto' : calculateRisk() > 200 ? 'Alto' : calculateRisk() > 70 ? 'Notable' : calculateRisk() > 20 ? 'Moderado' : 'Bajo o Aceptable'}
+                </div>
+                <div className="risk-action">
+                  Acción: {calculateRisk() > 400 ? 'Detención inmediata' : calculateRisk() > 200 ? 'Corrección inmediata' : calculateRisk() > 70 ? 'Corrección urgente' : calculateRisk() > 20 ? 'Debe corregirse' : 'Tolerable'}
                 </div>
               </div>
             </td>
-        </tr>
-        <tr>
-          <td colSpan="7" className="separator-line" />
-        </tr>
-        <tr>
-                <td colSpan="4" className="right-aligned">
-          <div className="sub-header">Evaluación de riesgo de trabajo</div>
-          <table className="inner-table">
-            <thead>
-              <tr>
-                <th>Consecuencia</th>
-                <th>Exposición</th>
-                <th>Probabilidad</th>
-                <th>Magnitud del Riesgo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <select value={consequence} onChange={handleConsequenceChange}>
-                    <option value={10}>Catástrofe</option>
-                    <option value={50}>Varias muertes</option>
-                    <option value={25}>Muerte</option>
-                    <option value={15}>Lesiones graves</option>
-                    <option value={5}>Lesiones con baja</option>
-                    <option value={1}>Lesiones sin baja</option>
-                  </select>
-                  {/* Mostrar el valor seleccionado de Consecuencia */}
-                  <div>Valor: {consequence}</div>
-                </td>
-                <td>
-                  <select value={exposure} onChange={handleExposureChange}>
-                    <option value={10}>Continuamente</option>
-                    <option value={6}>Frecuentemente</option>
-                    <option value={3}>Ocasionalmente</option>
-                    <option value={2}>Irregularmente</option>
-                    <option value={1}>Raramente</option>
-                    <option value={0.5}>Remotamente</option>
-                  </select>
-                  {/* Mostrar el valor seleccionado de Exposición */}
-                  <div>Valor: {exposure}</div>
-                </td>
-                <td>
-                  <select value={probability} onChange={handleProbabilityChange}>
-                    <option value={10}>Es el resultado más probable y esperado</option>
-                    <option value={6}>Es completamente posible, no será nada extraño</option>
-                    <option value={3}>Sería una secuencia o coincidencia rara pero posible, ha ocurrido</option>
-                    <option value={1}>Coincidencia muy rara, pero se sabe que ha ocurrido</option>
-                    <option value={0.5}>Coincidencia extremadamente remota pero concebible</option>
-                    <option value={0.1}>Coincidencia prácticamente imposible, jamás ha ocurrido</option>
-                  </select>
-                  {/* Mostrar el valor seleccionado de Probabilidad */}
-                  <div>Valor: {probability}</div>
-                </td>
-                <td style={{ backgroundColor: getRiskColor(calculateRisk()) }}>
-                  {calculateRisk().toFixed(2)}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </td>
-          <td colSpan="3" className="right-aligned">
-            <div className="text1">Clasificación de Magnitud de Riesgo</div>
-            <div className="risk-magnitude">
-              Magnitud del Riesgo: {calculateRisk().toFixed(2)}
-            </div>
-            <div className="risk-classification">
-              Clasificación: {calculateRisk() > 400 ? 'Muy Alto' : calculateRisk() > 200 ? 'Alto' : calculateRisk() > 70 ? 'Notable' : calculateRisk() > 20 ? 'Moderado' : 'Bajo o Aceptable'}
-            </div>
-            <div className="risk-action">
-              Acción: {calculateRisk() > 400 ? 'Detención inmediata' : calculateRisk() > 200 ? 'Corrección inmediata' : calculateRisk() > 70 ? 'Corrección urgente' : calculateRisk() > 20 ? 'Debe corregirse' : 'Tolerable'}
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          </tr>
+        </tbody>
+      </table>
+      <button onClick={downloadPDF} className="download-button">
+        Descargar PDF
+      </button>
+    </div>
   );
-  
 };
 
 export default RiskAssessmentTable;
