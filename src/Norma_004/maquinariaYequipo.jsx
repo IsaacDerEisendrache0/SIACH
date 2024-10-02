@@ -239,7 +239,7 @@ const RiskTable = () => {
               </th>
             </tr>
             <tr>
-              <th colSpan="2">Localización esquemática de los riesgos en la maquinaria y/o equipo</th>
+              <th colSpan="1">Localización esquemática de los riesgos en la maquinaria y/o equipo</th>
               <th>POE:</th>
               <th>0-4</th>
               <th>Tiempo de exposición:</th>
@@ -255,7 +255,8 @@ const RiskTable = () => {
           <tbody>
             <tr>
               <td rowSpan="6" colSpan="1">
-                <div className="image-observations-container">
+              <table className="compact-table no-border"> 
+              <div className="image-observations-container">
                   <div className="image-section">
                     <input type="file" accept="image/*" onChange={handleImageChange} />
                     {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
@@ -276,8 +277,12 @@ const RiskTable = () => {
                       cols="30"
                     />
                   </div>
-                  {/* Equipo de protección personal sugerido */}
-                    <table className="compact-table no-border">
+                  
+              </div>  
+              </table>
+                
+              {/* Equipo de protección personal sugerido */}
+              <table className="compact-table no-border">
                       <thead>
                         <tr>
                           <th colSpan="5" className="suggested-equipment">Equipo de protección personal sugerido</th>
@@ -299,9 +304,7 @@ const RiskTable = () => {
                     </table>
                   
               
-
-                {/* Riesgo Específico */}
-            
+                {/* Riesgo Específico */}          
                 <table className="compact-table no-border">
                   <thead>
                     <tr>
@@ -338,15 +341,9 @@ const RiskTable = () => {
                     </tr>
                   </tbody>
                 </table>
-              
-           
-                    </div>
+            </td>
 
-                
-              </td>
-
-        
-
+            
               <td colSpan="6">
                 <table className="compact-table no-border">
                   <thead>
