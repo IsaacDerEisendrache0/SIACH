@@ -61,19 +61,19 @@ const RiskTable = () => {
     <table className="risk-table">
       <thead>
         <tr>
-          <th colSpan="4" className="red">Nombre de la maquinaria o equipo:</th>
+          <th colSpan="5" className="red">Nombre de la maquinaria o equipo:</th>
           <th>MONTACARGAS EXTERIOR MINA</th>
           <th className="red">Área:</th>
           <th>EXTERIOR MINA</th>
         </tr>
         <tr>
-          <th colSpan="4" className="red">Descripción de la maquinaria o equipo:</th>
+          <th colSpan="5" className="red">Descripción de la maquinaria o equipo:</th>
           <th>LEVANTAMIENTO Y TRANSPORTE DE MATERIAL</th>
           <th className="red">Energía utilizada:</th>
           <th>DIESEL</th>
         </tr>
         <tr>
-          <th colSpan="4" className="red">Localización esquemática de los riesgos en maquinaria y/o equipo</th>
+          <th colSpan="2" className="red">Localización esquemática de los riesgos en maquinaria y/o equipo</th>
           <th className="red">POE:</th>
           <th>1</th>
           <th className="red">Tiempo de exposición:</th>
@@ -85,7 +85,7 @@ const RiskTable = () => {
       <tbody>
         <tr>
           {/* Primera columna: Imagen */}
-          <td colSpan="5" rowSpan="3" className="image-section">
+          <td colSpan="4" rowSpan="3" className="image-section">
             <input type="file" accept="image/*" onChange={handleImageUpload} />
             {image ? (
               <img src={image} alt="Uploaded Equipment" className="equipment-image" />
@@ -94,7 +94,7 @@ const RiskTable = () => {
             )}
           </td>
           {/* Segunda columna: Identificación de riesgos */}
-          <td colSpan="3" rowSpan="1" className="risk-info">
+          <td colSpan="5" rowSpan="1" className="risk-info">
             <table className="inner-table">
               <thead>
                 <tr>
@@ -121,7 +121,7 @@ const RiskTable = () => {
             </table>
           </td>
           {/* Tercera columna: Sistemas de seguridad */}
-          <td colSpan="3" className="safety-info">
+          <td colSpan="5" className="safety-info">
             <table className="inner-table">
               <thead>
                 <tr>

@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   font-size: 12px; /* Ajusta el tamaño de fuente si es necesario */
+  border-collapse: collapse;
 }
 
 .main-table {
@@ -275,6 +276,7 @@ th[colspan="4"], td[colspan="3"], td[colspan="6"] {
   background-color: red;
   color: white;
   font-weight: bold;
+  height: 60%;
 }
 
 /* Imagen cargada se ajusta al 100% del espacio */
@@ -314,5 +316,25 @@ th[colspan="4"], td[colspan="3"], td[colspan="6"] {
   height: 60px;
   object-fit: contain; /* Esto asegura que las imágenes no se distorsionen */
   margin: 5px; /* Margen pequeño entre los iconos */
+}
+
+/* Clase para hacer la celda más ancha y moverla hacia la derecha */
+/* Clase para hacer la celda más ancha y mover el contenido hacia la derecha */
+.wide-cell {
+  padding-left: 30px !important; /* Ajusta este valor */
+  width: 300px !important; /* Ajusta el ancho según sea necesario */
+  margin-left: 10px !important; /* Opcional: mueve la celda hacia la derecha */
+}
+
+
+.inner-table {
+  width: 100%;
+  margin: auto; /* Centra la tabla */
+}
+
+.safety-info {
+  padding-left: 20px; /* Ajusta el padding según sea necesario */
+  /* O puedes usar margen negativo */
+  /* margin-left: -20px; */
 }
 

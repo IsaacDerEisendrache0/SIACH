@@ -180,7 +180,7 @@ const ToolEvaluationTable = () => {
               )}
             </td>
             
-            <td className="header" colSpan="3">Evaluación de riesgo de trabajo</td>
+            <td className="header" colSpan="1">Evaluación de riesgo de trabajo</td>
             <td className="header" colSpan="4">Equipo de Protección Personal sugerido</td>
           </tr>
 
