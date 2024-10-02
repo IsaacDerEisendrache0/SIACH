@@ -17,6 +17,7 @@
   border: 1px solid #ff0000; /* Borde rojo */
   padding: 8px;
   text-align: left;
+  border: none; /* Elimina bordes de la tabla principal */
 }
 
 .main-table th {
@@ -26,13 +27,13 @@
 
 .compact-table {
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 100px;
 }
 
 .compact-table th, .compact-table td {
   padding: 5px;
   text-align: left;
-  border: 1px solid #ff0000; /* Borde rojo */
+  border: none; /* Elimina el borde */
 }
 
 .no-border th, .no-border td {
@@ -302,10 +303,10 @@ th[colspan="4"], td[colspan="3"], td[colspan="6"] {
 
 /* Iconos de EPP se ajustan automáticamente para caber dentro del espacio */
 .epp-icons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  gap: 10px;
+  width: 100px; /* Aumenta el tamaño de las imágenes */
+  height: 100px;
+  object-fit: cover; /* Asegura que las imágenes mantengan su proporción */
+  margin: 10px; /* Ajusta el margen entre las imágenes */
 }
 
 .epp-icons img {

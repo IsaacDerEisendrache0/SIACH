@@ -359,7 +359,7 @@ const RiskAssessmentTable = () => {
                 )}
               </div>
             </td>
-              <td colSpan="3" className="right-section right-aligned">
+              <td colSpan="2" className="right-section right-aligned">
                 <div className="sub-header">Equipo de protección personal sugerido</div>
                 <div className="body-and-hazards-container">
                   <select value={selectedOptionProteccionSugerida} onChange={handleOptionChangeProteccionSugerida}>
@@ -401,7 +401,7 @@ const RiskAssessmentTable = () => {
           <tr>
           </tr>
           <tr>
-            <td colSpan="3" className="right-aligned">
+            <td colSpan="4" className="right-aligned">
               <div className="sub-header">Evaluación de riesgo de trabajo</div>
               <table className="inner-table">
                 <thead>

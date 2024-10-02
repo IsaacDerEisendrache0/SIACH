@@ -276,8 +276,77 @@ const RiskTable = () => {
                       cols="30"
                     />
                   </div>
-                </div>
+                  {/* Equipo de protección personal sugerido */}
+                    <table className="compact-table no-border">
+                      <thead>
+                        <tr>
+                          <th colSpan="5" className="suggested-equipment">Equipo de protección personal sugerido</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colSpan="5" className="icons">
+                            {selectedImages.length > 0 ? (
+                              selectedImages.map((imageSrc, index) => (
+                                <img key={index} src={imageSrc} alt={`Protección`} style={{ width: '50px', height: '50px', margin: '5px', objectFit: 'cover' }} />
+                              ))
+                            ) : (
+                              <p>No hay riesgos seleccionados</p>
+                            )}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  
+              
+
+                {/* Riesgo Específico */}
+            
+                <table className="compact-table no-border">
+                  <thead>
+                    <tr>
+                      <th colSpan="5" className="specific-risk-header">Riesgo Específico</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colSpan="5">
+                        {specificRiskImages.map((imageName, index) => (
+                          <label key={index} style={{ marginRight: '10px' }}>
+                            <input
+                              type="checkbox"
+                              value={imageName}
+                              checked={selectedSpecificRiskImages.includes(imageName)}
+                              onChange={() => handleSpecificRiskImageChange(imageName)}
+                            />
+                            {imageName.replace(/_/g, ' ').replace('.png', '')}
+                          </label>
+                        ))}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colSpan="5" className="icons">
+                        {selectedSpecificRiskImages.map((imageName, index) => (
+                          <img
+                            key={index}
+                            src={`/images/${imageName}`}
+                            alt="Riesgo Específico"
+                            style={{ width: '50px', height: '50px', margin: '5px', objectFit: 'cover' }}
+                          />
+                        ))}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              
+           
+                    </div>
+
+                
               </td>
+
+        
+
               <td colSpan="6">
                 <table className="compact-table no-border">
                   <thead>
@@ -358,73 +427,9 @@ const RiskTable = () => {
               </td>
             </tr>
 
-            {/* Equipo de protección personal sugerido */}
-            <tr>
-              <td colSpan="5">
-                <table className="compact-table no-border">
-                  <thead>
-                    <tr>
-                      <th colSpan="5" className="suggested-equipment">Equipo de protección personal sugerido</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td colSpan="5" className="icons">
-                        {selectedImages.length > 0 ? (
-                          selectedImages.map((imageSrc, index) => (
-                            <img key={index} src={imageSrc} alt={`Protección`} style={{ width: '50px', height: '50px', margin: '5px', objectFit: 'cover' }} />
-                          ))
-                        ) : (
-                          <p>No hay riesgos seleccionados</p>
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
+            
 
-            {/* Riesgo Específico */}
-            <tr>
-              <td colSpan="5">
-                <table className="compact-table no-border">
-                  <thead>
-                    <tr>
-                      <th colSpan="5" className="specific-risk-header">Riesgo Específico</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td colSpan="5">
-                        {specificRiskImages.map((imageName, index) => (
-                          <label key={index} style={{ marginRight: '10px' }}>
-                            <input
-                              type="checkbox"
-                              value={imageName}
-                              checked={selectedSpecificRiskImages.includes(imageName)}
-                              onChange={() => handleSpecificRiskImageChange(imageName)}
-                            />
-                            {imageName.replace(/_/g, ' ').replace('.png', '')}
-                          </label>
-                        ))}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colSpan="5" className="icons">
-                        {selectedSpecificRiskImages.map((imageName, index) => (
-                          <img
-                            key={index}
-                            src={`/images/${imageName}`}
-                            alt="Riesgo Específico"
-                            style={{ width: '50px', height: '50px', margin: '5px', objectFit: 'cover' }}
-                          />
-                        ))}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
+            
           </tbody>
         </table>
       </div>

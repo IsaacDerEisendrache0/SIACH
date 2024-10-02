@@ -39,7 +39,7 @@
     background-color: yellow; /* Color de fondo amarillo */
     font-weight: bold; /* Texto en negrita */
     text-align: center; /* Centrar el texto */
-    margin-bottom: 10px;
+    margin-bottom: 100px;
     padding-right: 0px; /* Espacio debajo del título */
     
   }
@@ -129,13 +129,13 @@
   .hazard-list {
     list-style-type: none;
     margin-left: auto; /* Alinea la lista de peligros al margen izquierdo */
-    padding-left: 0; /* Elimina cualquier padding a la izquierda */
+    padding-left: 0%; /* Elimina cualquier padding a la izquierda */
     text-align: left; /* Asegura que el texto dentro de la lista esté alineado a la izquierda */
   }
   /* Asegúrate de que la celda ocupe todo el espacio disponible */
   .right-section {
     vertical-align: top; /* Alinea verticalmente al inicio */
-    padding: 10px; /* Ajusta el padding según sea necesario */
+    padding: 0px; /* Ajusta el padding según sea necesario */
   }
 
   /* Asegúrate de que el contenedor de imágenes no se expanda más allá del contenido */
@@ -191,9 +191,9 @@
 
   .left-section {
     padding-left: 10px; /* Ajusta el valor según lo necesario */
-    margin-left: 40px; /* Ajusta según lo necesario */
-    padding-right: 20px;
-
+    margin-left: 80px; /* Ajusta según lo necesario */
+    padding-right: 80px;
+    
   }
 
   .risk-item {
@@ -272,7 +272,7 @@
     text-align: center;
   }
 
-
+  
 
 
   /* tabla evaluacion de riesgo.*/
