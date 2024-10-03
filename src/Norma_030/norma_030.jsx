@@ -4,6 +4,7 @@ import "./Table30.css";
 const TableComponent = () => {
   // Estado para manejar las selecciones de "Aplica" y "No Aplica"
   const [checkedStatus, setCheckedStatus] = useState({
+    gases2: { aplica: false, noAplica: false },
     vapors: { aplica: false, noAplica: false },
     gases: { aplica: false, noAplica: false },
     aerosols: { aplica: false, noAplica: false },
@@ -62,10 +63,15 @@ const TableComponent = () => {
             <th rowSpan="29" className="vertical-header">
               CUARTO DE RESIDUOS
             </th>
-            <th>CONDICIONES FÍSICAS PELIGROSAS O INSEGURAS</th>
+            <th>CONDICIONES FÍSICAS PELIGROSAS O INSEGURAS QUE PUEDAN REPRESENTAR UN RIESGO EN LAS
+INSTALACIONES, PROCESOS, MAQUINARIA, EQUIPO, HERRAMIENTAS, MEDIOS DE TRANSPORTE,
+MATERIALES Y ENERGÍA.</th>
             <th>Aplica</th>
             <th>No Aplica</th>
-            <th>AGENTES</th>
+            <th>AGENTES FÍSICOS, QUÍMICOS Y BIOLÓGICOS CAPACES DE MODIFICAR LAS CONDICIONES DEL MEDIO
+AMBIENTE DEL CENTRO DE TRABAJO QUE, POR SUS PROPIEDADES, CONCENTRACIÓN, NIVEL Y TIEMPO DE
+EXPOSICIÓN O ACCIÓN, PUEDEN ALTERAR LA SALUD DE LOS TRABAJADORES, ASÍ COMO LAS FUENTES QUE
+LOS GENERAN.</th>
             <th>Aplica</th>
             <th>No Aplica</th>
           </tr>
@@ -88,21 +94,8 @@ const TableComponent = () => {
                 onChange={() => handleChange("vapors", "noAplica")}
               />
             </td>
-            <td>Vapores orgánicos</td>
-            <td>
-              <input
-                type="checkbox"
-                checked={checkedStatus.gases.aplica}
-                onChange={() => handleChange("gases", "aplica")}
-              />
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                checked={checkedStatus.gases.noAplica}
-                onChange={() => handleChange("gases", "noAplica")}
-              />
-            </td>
+            <td style={{ color: 'white', backgroundColor: 'red' }}>Quimicos</td>
+
           </tr>
           <tr>
             <td></td>
@@ -121,7 +114,7 @@ const TableComponent = () => {
                 onChange={() => handleChange("aerosols", "noAplica")}
               />
             </td>
-            <td>Aerosoles</td>
+            <td>gases</td>
             <td>
               <input
                 type="checkbox"
@@ -139,7 +132,7 @@ const TableComponent = () => {
           </tr>
           <tr>
             <td></td>
-            <td>Exposición a gases tóxicos.</td>
+            <td>Caida de objetos por desplome o derrumbamiento.</td>
             <td>
               <input
                 type="checkbox"
@@ -154,7 +147,7 @@ const TableComponent = () => {
                 onChange={() => handleChange("viruses", "noAplica")}
               />
             </td>
-            <td>Virus</td>
+            <td>aerosoles</td>
             <td>
               <input
                 type="checkbox"
@@ -173,7 +166,7 @@ const TableComponent = () => {
           {/* Añadiendo más filas con diferentes agentes */}
           <tr>
             <td></td>
-            <td>Exposición a ruidos elevados.</td>
+            <td>Caida de objetos desprendidos.</td>
             <td>
               <input
                 type="checkbox"
@@ -188,7 +181,7 @@ const TableComponent = () => {
                 onChange={() => handleChange("noise", "noAplica")}
               />
             </td>
-            <td>Ruidos</td>
+            <td>metales</td>
             <td>
               <input
                 type="checkbox"
@@ -206,7 +199,7 @@ const TableComponent = () => {
           </tr>
           <tr>
             <td></td>
-            <td>Temperaturas extremas.</td>
+            <td>	Caida de objetos en mano. </td>
             <td>
               <input
                 type="checkbox"
@@ -221,7 +214,7 @@ const TableComponent = () => {
                 onChange={() => handleChange("extremeTemperatures", "noAplica")}
               />
             </td>
-            <td>Temperaturas extremas</td>
+            <td>polvos</td>
             <td>
               <input
                 type="checkbox"
@@ -239,6 +232,206 @@ const TableComponent = () => {
           </tr>
           {/* Agregar las filas faltantes */}
           <tr>
+            <td></td>
+            <td>Pisada sobre objetos.</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td></td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.aplica}
+                onChange={() => handleChange("poorVentilation", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.noAplica}
+                onChange={() => handleChange("poorVentilation", "noAplica")}
+              />
+            </td>
+          </tr>
+
+            {/* Agregar las filas faltantes */}
+            <tr>
+            <td></td>
+            <td>Choque contra objetos inmóviles</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td></td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.aplica}
+                onChange={() => handleChange("poorVentilation", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.noAplica}
+                onChange={() => handleChange("poorVentilation", "noAplica")}
+              />
+            </td>
+          </tr>
+
+
+            {/* Agregar las filas faltantes */}
+            <tr>
+            <td></td>
+            <td>Choque contra objetos móviles.</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td style={{ color: 'white', backgroundColor: 'red' }}>Biologicos</td>
+            
+           
+          </tr>
+
+            {/* Agregar las filas faltantes */}
+            <tr>
+            <td></td>
+            <td>Golpes/cortes por objetos o herramientas.</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td>residuos biologicos e infecciosos
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.aplica}
+                onChange={() => handleChange("poorVentilation", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.noAplica}
+                onChange={() => handleChange("poorVentilation", "noAplica")}
+              />
+            </td>
+          </tr>
+
+            {/* Agregar las filas faltantes */}
+            <tr>
+            <td></td>
+            <td>Proyección de fragmentos o herramientas.</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td>Ruido</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.aplica}
+                onChange={() => handleChange("poorVentilation", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.noAplica}
+                onChange={() => handleChange("poorVentilation", "noAplica")}
+              />
+            </td>
+          </tr>
+
+            {/* Agregar las filas faltantes */}
+            <tr>
+            <td></td>
+            <td>Atrapamiento por o entre objetos.</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td>Vibraciones</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.aplica}
+                onChange={() => handleChange("poorVentilation", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.noAplica}
+                onChange={() => handleChange("poorVentilation", "noAplica")}
+              />
+            </td>
+          </tr>
+
+            {/* Agregar las filas faltantes */}
+            <tr>
             <td></td>
             <td>Iluminación insuficiente o excesiva.</td>
             <td>
@@ -271,6 +464,399 @@ const TableComponent = () => {
               />
             </td>
           </tr>
+
+            {/* Agregar las filas faltantes */}
+            <tr>
+            <td></td>
+            <td>Atrapamiento por vuelco de maquinaría y equipo.</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td></td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.aplica}
+                onChange={() => handleChange("poorVentilation", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.noAplica}
+                onChange={() => handleChange("poorVentilation", "noAplica")}
+              />
+            </td>
+          </tr>
+
+            {/* Agregar las filas faltantes */}
+            <tr>
+            <td></td>
+            <td>Contacto con sustancias corrosivas o tóxicas. </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td>Radiaciones No Ionizantes</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.aplica}
+                onChange={() => handleChange("poorVentilation", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.noAplica}
+                onChange={() => handleChange("poorVentilation", "noAplica")}
+              />
+            </td>
+          </tr>
+
+            {/* Agregar las filas faltantes */}
+            <tr>
+            <td></td>
+            <td>Exposición a temperaturas extremas ambientales.</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td style={{ color: 'white', backgroundColor: 'red' }}>fisicos</td>
+
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.aplica}
+                onChange={() => handleChange("poorVentilation", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.noAplica}
+                onChange={() => handleChange("poorVentilation", "noAplica")}
+              />
+            </td>
+          </tr>
+
+            {/* Agregar las filas faltantes */}
+            <tr>
+            <td></td>
+            <td>Contactos térmicos.</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td>Iluminación</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.aplica}
+                onChange={() => handleChange("poorVentilation", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.noAplica}
+                onChange={() => handleChange("poorVentilation", "noAplica")}
+              />
+            </td>
+          </tr>
+
+
+            {/* Agregar las filas faltantes */}
+            <tr>
+            <td></td>
+            <td>Contactos eléctricos: directos e indirectos.</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td>Iluminación</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.aplica}
+                onChange={() => handleChange("poorVentilation", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.noAplica}
+                onChange={() => handleChange("poorVentilation", "noAplica")}
+              />
+            </td>
+          </tr>
+
+            {/* Agregar las filas faltantes */}
+            <tr>
+            <td></td>
+            <td>Exposición a sustancias nócivas o tóxicas.</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td>Iluminación</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.aplica}
+                onChange={() => handleChange("poorVentilation", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.noAplica}
+                onChange={() => handleChange("poorVentilation", "noAplica")}
+              />
+            </td>
+          </tr>
+
+
+            {/* Agregar las filas faltantes */}
+            <tr>
+            <td></td>
+            <td>Explosiones.</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td>Iluminación</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.aplica}
+                onChange={() => handleChange("poorVentilation", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.noAplica}
+                onChange={() => handleChange("poorVentilation", "noAplica")}
+              />
+            </td>
+          </tr>
+
+            {/* Agregar las filas faltantes */}
+            <tr>
+            <td></td>
+            <td>Incendios.</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td>Iluminación</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.aplica}
+                onChange={() => handleChange("poorVentilation", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.noAplica}
+                onChange={() => handleChange("poorVentilation", "noAplica")}
+              />
+            </td>
+          </tr>
+
+
+            {/* Agregar las filas faltantes */}
+            <tr>
+            <td></td>
+            <td>Accidentes causados por seres vivos.</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td>Iluminación</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.aplica}
+                onChange={() => handleChange("poorVentilation", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.noAplica}
+                onChange={() => handleChange("poorVentilation", "noAplica")}
+              />
+            </td>
+          </tr>
+
+          {/* Agregar las filas faltantes */}
+          <tr>
+            <td></td>
+            <td>Atropellos o golpes de vehículos.</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td>Iluminación</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.aplica}
+                onChange={() => handleChange("poorVentilation", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.noAplica}
+                onChange={() => handleChange("poorVentilation", "noAplica")}
+              />
+            </td>
+          </tr>
+          
+{/* Agregar las filas faltantes */}
+<tr>
+            <td></td>
+            <td>Iluminación insuficiente o excesiva.</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.aplica}
+                onChange={() => handleChange("lighting", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.lighting.noAplica}
+                onChange={() => handleChange("lighting", "noAplica")}
+              />
+            </td>
+            <td>Iluminación</td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.aplica}
+                onChange={() => handleChange("poorVentilation", "aplica")}
+              />
+            </td>
+            <td>
+              <input
+                type="checkbox"
+                checked={checkedStatus.poorVentilation.noAplica}
+                onChange={() => handleChange("poorVentilation", "noAplica")}
+              />
+            </td>
+          </tr>
+          
+
+            
+
         </tbody>
       </table>
     </div>
