@@ -77,24 +77,18 @@ const RiskTable = () => {
   const [maquinariaDescripcion, setMaquinariaDescripcion] = useState('');
   const [energiaUtilizada, setEnergiaUtilizada] = useState('Eléctrica');
 
+  // Manejo de selección de peligros y sus imágenes asociadas
   const handlePeligroChange = (index, valor) => {
     const nuevosPeligros = [...peligros];
     nuevosPeligros[index].siNo = valor;
     setPeligros(nuevosPeligros);
 
-    const newImages = [...selectedImages];
+    const newImages = [];
     nuevosPeligros.forEach(peligro => {
       if (peligro.siNo && protectionImages[peligro.nombre]) {
         protectionImages[peligro.nombre].forEach((imageSrc) => {
           if (!newImages.includes(imageSrc)) {
             newImages.push(imageSrc);
-          }
-        });
-      } else if (!peligro.siNo && protectionImages[peligro.nombre]) {
-        protectionImages[peligro.nombre].forEach((imageSrc) => {
-          const imageIndex = newImages.indexOf(imageSrc);
-          if (imageIndex > -1) {
-            newImages.splice(imageIndex, 1);
           }
         });
       }
@@ -296,10 +290,6 @@ const RiskTable = () => {
             </tr>               
               
             </td>
-            
-
-            
-
             
               <td colSpan="6">
                 <table className="compact-table no-border">
