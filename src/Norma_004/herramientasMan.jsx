@@ -167,21 +167,40 @@ const ToolEvaluationTable = () => {
 
         <tbody>
           <tr>
-            <td className="image-cell" rowSpan="8" colSpan="3">
-              {/* Input para subir imagen */}
-              <input type="file" accept="image/*" onChange={handleImageChange} />
-              {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+          <td className="image-cell" colSpan="2" rowSpan="8">
+  <div className="image-table-container" colSpan="5" rowSpan="4">
+    <table className="image-table">
+      <tbody>
+        <tr>
+          <td>
+            {/* Input para subir imagen */}
+            <input type="file" accept="image/*" onChange={handleImageChange} />
+            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {/* Previsualización de la imagen */}
+            {imagePreview ? (
+              <div className="image-preview-large">
+                <img src={imagePreview} alt="Previsualización" />
+              </div>
+            ) : (
+              <p>No se ha seleccionado ninguna imagen.</p>
+            )}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</td>
 
-              {/* Previsualización de la imagen */}
-              {imagePreview ? (
-                <img src={imagePreview} alt="Previsualización" style={{ width: '100%', height: 'auto', marginTop: '10px' }} />
-              ) : (
-                <p></p>
-              )}
-            </td>
+
+
+
             
-            <td className="header" colSpan="1">Evaluación de riesgo de trabajo</td>
-            <td className="header" colSpan="4">Equipo de Protección Personal sugerido</td>
+            <td className="header" colSpan="4">Evaluación de riesgo de trabajo</td>
+            <td className="header" colSpan="5">Equipo de Protección Personal sugerido</td>
           </tr>
 
           <tr>
@@ -371,8 +390,8 @@ const ToolEvaluationTable = () => {
           </tr>
           <tr></tr>
           <tr>
-            <td className="header" colSpan="6">Identificaciones de Riesgos:</td>
-            <td className="header" colSpan="5">Principales partes del cuerpo expuestas al riesgo:</td>
+            <td className="header" colSpan="5">Identificaciones de Riesgos:</td>
+            <td className="header" colSpan="6">Principales partes del cuerpo expuestas al riesgo:</td>
           </tr>
           <tr>
             <td colSpan="6">
