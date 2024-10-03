@@ -252,11 +252,11 @@ const RiskTable = () => {
             <table className="risk-classification">
               <thead>
                 <tr className="red">
-                  <th colSpan="3">Clasificación de Magnitud de Riesgo</th>
+                  <th colSpan="4">Clasificación de Magnitud de Riesgo</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <tr style={{ backgroundColor: color }}>
                   <td>Magnitud del Riesgo: {magnitudRiesgo}</td>
                   <td>Clasificación: {clasificacion}</td>
                   <td>Acción: {accion}</td>
