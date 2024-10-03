@@ -36,6 +36,28 @@ const RiskTable = () => {
     "Partículas suspendidas en el ambiente",
   ];
 
+  // Opciones de sistemas de seguridad
+  const securityOptions = [
+    "Paro de emergencia",
+    "Sistema Ansul",
+    "Extintores",
+    "Freno de emergencia",
+    "Bandas antiestáticas",
+    "Sistema de anclaje",
+    "Programas de mantenimiento",
+    "Guarda parachoques y protectores de calaveras",
+    "Calza de seguridad",
+    "Bloqueo de sistema hidráulico",
+    "Indicadores (torreta, luces, claxon, banderas, etc)",
+    "Bloqueo de sistema eléctrico",
+    "Cinturón de seguridad",
+    "Barandales y escaleras",
+    "Indicadores (agua, aceite, aire, motor, presión, etc)",
+    "Canopy",
+    "Mata chispas",
+    "Sistema LOTO"
+  ];
+
   // Funciones para calcular los valores
   const calcularValorConsecuencia = (consequence) => {
     const valoresConsecuencia = {
@@ -162,7 +184,7 @@ const RiskTable = () => {
             )}
           </td>
           {/* Segunda columna: Identificación de riesgos */}
-          <td colSpan="5" rowSpan="1" className="risk-info">
+          <td colSpan="6" rowSpan="1" className="risk-info">
             <table className="inner-table">
               <thead>
                 <tr>
@@ -189,7 +211,7 @@ const RiskTable = () => {
             </table>
           </td>
           {/* Tercera columna: Sistemas de seguridad */}
-          <td colSpan="5" className="safety-info">
+          <td colSpan="6" className="safety-info">
             <table className="inner-table">
               <thead>
                 <tr>
@@ -197,13 +219,21 @@ const RiskTable = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr><td>Programa de mantenimiento</td></tr>
-                <tr><td>Extintores</td></tr>
-                <tr><td>Guardas, parachoques y protectores de calaveras</td></tr>
-                <tr><td>Freno de emergencia</td></tr>
-                <tr><td>Barandales y escaleras</td></tr>
-                <tr><td>Indicadores (torreta, luces, claxon, banderas, etc)</td></tr>
-                <tr><td>Sistema ANSUL</td></tr>
+                {/* Mostrar 7 menús desplegables para sistemas de seguridad */}
+                {[...Array(7)].map((_, index) => (
+                  <tr key={index}>
+                    <td>
+                      <select>
+                        <option value="">Seleccione un sistema de seguridad</option>
+                        {securityOptions.map((opt, idx) => (
+                          <option key={idx} value={opt}>
+                            {opt}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </td>
