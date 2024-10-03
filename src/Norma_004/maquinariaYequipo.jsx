@@ -265,23 +265,93 @@ const RiskTable = () => {
                     ) : (
                       <p>No hay imagen seleccionada</p>
                     )}
-                  </div>
-                  <div className="observations-section">
-                    <label htmlFor="observaciones">Observaciones:</label>
-                    <textarea
-                      id="observaciones"
-                      value={observacionesGenerales}
-                      onChange={(e) => setObservacionesGenerales(e.target.value)}
-                      placeholder="Agregar observaciones generales aquí"
-                      rows="4"
-                      cols="30"
-                    />
-                  </div>
-                  
+                  </div>               
               </div>  
               </table>
-                
-              {/* Equipo de protección personal sugerido */}
+              <tr>
+              <td colSpan="3">
+                <table className="danger-table compact-table">
+                  <thead>
+                    <tr>
+                      <th>Identificación de peligros</th>
+                      <th>Si/No</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {peligros.map((peligro, index) => (
+                      <tr key={peligro.id}>
+                        <td style={{ width: '70%' }}>{peligro.nombre}</td>
+                        <td style={{ width: '30%' }}>
+                          <input
+                            type="checkbox"
+                            checked={peligro.siNo}
+                            onChange={(e) => handlePeligroChange(index, e.target.checked)}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </td>
+            </tr>               
+              
+            </td>
+            
+
+            
+
+            
+              <td colSpan="6">
+                <table className="compact-table no-border">
+                  <thead>
+                    <tr>
+                      <th>Consecuencia</th>
+                      <th>Exposición</th>
+                      <th>Probabilidad</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <select value={consequence} onChange={(e) => setConsequence(e.target.value)}>
+                          {opcionesConsecuencia.map(opcion => (
+                            <option key={opcion} value={opcion}>{opcion}</option>
+                          ))}
+                        </select>
+                        <div>Valor: {calcularValorConsecuencia()}</div>
+                      </td>
+                      <td>
+                        <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
+                          {opcionesExposicion.map(opcion => (
+                            <option key={opcion} value={opcion}>{opcion}</option>
+                          ))}
+                        </select>
+                        <div>Valor: {calcularValorExposicion()}</div>
+                      </td>
+                      <td>
+                        <select value={probability} onChange={(e) => setProbability(e.target.value)}>
+                          {opcionesProbabilidad.map(opcion => (
+                            <option key={opcion} value={opcion}>{opcion}</option>
+                          ))}
+                        </select>
+                        <div>Valor: {calcularValorProbabilidad()}</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colSpan="3">
+                        <div className="risk-magnitude-container">
+                          <div className="risk-magnitude-bar" style={{ backgroundColor: color, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <span>{magnitudRiesgo}</span>
+                            <span>{texto}</span>
+                            <span style={{ marginLeft: '20px' }}><strong>Acción:</strong> {accion}</span>
+                            <span style={{ marginLeft: '20px' }}><strong>Clasificación:</strong> {clasificacion}</span>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                {/* Equipo de protección personal sugerido */}
               <table className="compact-table no-border">
                       <thead>
                         <tr>
@@ -341,88 +411,22 @@ const RiskTable = () => {
                     </tr>
                   </tbody>
                 </table>
-            </td>
-
-            
-              <td colSpan="6">
-                <table className="compact-table no-border">
-                  <thead>
-                    <tr>
-                      <th>Consecuencia</th>
-                      <th>Exposición</th>
-                      <th>Probabilidad</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <select value={consequence} onChange={(e) => setConsequence(e.target.value)}>
-                          {opcionesConsecuencia.map(opcion => (
-                            <option key={opcion} value={opcion}>{opcion}</option>
-                          ))}
-                        </select>
-                        <div>Valor: {calcularValorConsecuencia()}</div>
-                      </td>
-                      <td>
-                        <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
-                          {opcionesExposicion.map(opcion => (
-                            <option key={opcion} value={opcion}>{opcion}</option>
-                          ))}
-                        </select>
-                        <div>Valor: {calcularValorExposicion()}</div>
-                      </td>
-                      <td>
-                        <select value={probability} onChange={(e) => setProbability(e.target.value)}>
-                          {opcionesProbabilidad.map(opcion => (
-                            <option key={opcion} value={opcion}>{opcion}</option>
-                          ))}
-                        </select>
-                        <div>Valor: {calcularValorProbabilidad()}</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colSpan="3">
-                        <div className="risk-magnitude-container">
-                          <div className="risk-magnitude-bar" style={{ backgroundColor: color, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <span>{magnitudRiesgo}</span>
-                            <span>{texto}</span>
-                            <span style={{ marginLeft: '20px' }}><strong>Acción:</strong> {accion}</span>
-                            <span style={{ marginLeft: '20px' }}><strong>Clasificación:</strong> {clasificacion}</span>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div className="observations-section">
+                    <label htmlFor="observaciones">Observaciones:</label>
+                    <textarea
+                      id="observaciones"
+                      value={observacionesGenerales}
+                      onChange={(e) => setObservacionesGenerales(e.target.value)}
+                      placeholder="Agregar observaciones generales aquí"
+                      rows="4"
+                      cols="30"
+                    />
+                  </div>   
               </td>
+              
+              
             </tr>
 
-            <tr>
-              <td colSpan="5">
-                <table className="danger-table compact-table">
-                  <thead>
-                    <tr>
-                      <th>Identificación de peligros</th>
-                      <th>Si/No</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {peligros.map((peligro, index) => (
-                      <tr key={peligro.id}>
-                        <td style={{ width: '70%' }}>{peligro.nombre}</td>
-                        <td style={{ width: '30%' }}>
-                          <input
-                            type="checkbox"
-                            checked={peligro.siNo}
-                            onChange={(e) => handlePeligroChange(index, e.target.checked)}
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </td>
-            </tr>
 
             
 
