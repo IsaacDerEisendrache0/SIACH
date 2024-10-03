@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import './Table04.css';
 
 const RiskTable = () => {
-  // Initial states for Consecuencia, Exposición, and Probabilidad
-  const [consequence, setConsequence] = useState(100); // Default: Catástrofe
-  const [exposure, setExposure] = useState(10); // Default: Continuously exposed
-  const [probability, setProbability] = useState(10); // Default: Most likely outcome
+  // Estados iniciales para Consecuencia, Exposición y Probabilidad
+  const [consequence, setConsequence] = useState('Lesiones sin baja');
+  const [exposure, setExposure] = useState('Ocasionalmente');
+  const [probability, setProbability] = useState('Coincidencia extremadamente remota pero concebible');
 
-  // State for handling the uploaded image
+  // Estado para manejar la imagen cargada
   const [image, setImage] = useState(null);
 
-  // Function to handle image upload
+  // Función para manejar la carga de imagen
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -36,26 +36,94 @@ const RiskTable = () => {
     "Partículas suspendidas en el ambiente",
   ];
 
-  // Calcular la magnitud del riesgo
-  const riskMagnitude = consequence * exposure * probability;
+  // Funciones para calcular los valores
+  const calcularValorConsecuencia = (consequence) => {
+    const valoresConsecuencia = {
+      'Catástrofe': 50,
+      'Varias muertes': 25,
+      'Muerte': 15,
+      'Lesiones graves': 10,
+      'Lesiones con baja': 5,
+      'Lesiones sin baja': 1
+    };
+    return valoresConsecuencia[consequence] || 0;
+  };
 
-  // Determinar la clasificación del riesgo y la acción a tomar en función de la magnitud
-  let riskClassification = '';
-  let action = '';
+  const calcularValorExposicion = (exposure) => {
+    const valoresExposicion = {
+      'Continuamente': 10,
+      'Frecuentemente': 6,
+      'Ocasionalmente': 3,
+      'Irregularmente': 2,
+      'Raramente': 1
+    };
+    return valoresExposicion[exposure] || 0;
+  };
 
-  if (riskMagnitude > 400) {
-    riskClassification = 'Muy Alto';
-    action = 'Detención inmediata';
-  } else if (riskMagnitude >= 200 && riskMagnitude <= 400) {
-    riskClassification = 'Alto';
-    action = 'Corrección inmediata';
-  } else if (riskMagnitude >= 70 && riskMagnitude < 200) {
-    riskClassification = 'Notable';
-    action = 'Corrección urgente';
-  } else {
-    riskClassification = 'Moderado o Bajo';
-    action = 'Monitoreo';
-  }
+  const calcularValorProbabilidad = (probability) => {
+    const valoresProbabilidad = {
+      'Es el resultado más probable y esperado': 10,
+      'Es completamente posible, no será nada extraño': 6,
+      'Sería una secuencia o coincidencia rara pero posible, ha ocurrido': 3,
+      'Coincidencia muy rara, pero se sabe que ha ocurrido': 2,
+      'Coincidencia extremadamente remota pero concebible': 1,
+      'Coincidencia prácticamente imposible, jamás ha ocurrido': 0.5
+    };
+    return valoresProbabilidad[probability] || 0;
+  };
+
+  // Cálculo de la magnitud del riesgo
+  const calcularMagnitudRiesgo = () => {
+    const valorConsecuencia = calcularValorConsecuencia(consequence);
+    const valorExposicion = calcularValorExposicion(exposure);
+    const valorProbabilidad = calcularValorProbabilidad(probability);
+    return Math.floor(valorConsecuencia * valorExposicion * valorProbabilidad);
+  };
+
+  // Clasificación de la magnitud del riesgo
+  const obtenerClasificacionRiesgo = (magnitud) => {
+    if (magnitud > 400) {
+      return { color: 'red', texto: 'Muy Alto: Detención inmediata', accion: 'Inmediata', clasificacion: 'Muy Alto' };
+    } else if (magnitud > 200) {
+      return { color: 'orange', texto: 'Alto: Corrección inmediata', accion: 'Urgente', clasificacion: 'Alto' };
+    } else if (magnitud > 70) {
+      return { color: 'yellow', texto: 'Notable: Corrección urgente', accion: 'Programada', clasificacion: 'Notable' };
+    } else if (magnitud > 20) {
+      return { color: 'green', texto: 'Moderado: Debe corregirse', accion: 'Programada', clasificacion: 'Moderado' };
+    } else {
+      return { color: 'blue', texto: 'Bajo o Aceptable: Tolerable', accion: 'Sin acción requerida', clasificacion: 'Bajo' };
+    }
+  };
+
+  const magnitudRiesgo = calcularMagnitudRiesgo();
+  const { color, texto, accion, clasificacion } = obtenerClasificacionRiesgo(magnitudRiesgo);
+
+  // Opciones para los selects de Consecuencia, Exposición y Probabilidad
+  const opcionesConsecuencia = [
+    'Catástrofe',
+    'Varias muertes',
+    'Muerte',
+    'Lesiones graves',
+    'Lesiones con baja',
+    'Lesiones sin baja'
+  ];
+
+  const opcionesExposicion = [
+    'Continuamente',
+    'Frecuentemente',
+    'Ocasionalmente',
+    'Irregularmente',
+    'Raramente'
+  ];
+
+  const opcionesProbabilidad = [
+    'Es el resultado más probable y esperado',
+    'Es completamente posible, no será nada extraño',
+    'Sería una secuencia o coincidencia rara pero posible, ha ocurrido',
+    'Coincidencia muy rara, pero se sabe que ha ocurrido',
+    'Coincidencia extremadamente remota pero concebible',
+    'Coincidencia prácticamente imposible, jamás ha ocurrido'
+  ];
 
   return (
     <table className="risk-table">
@@ -147,7 +215,7 @@ const RiskTable = () => {
             <table>
               <thead>
                 <tr className="red">
-                  <th colSpan="4">Evaluación de riesgo de trabajo</th>
+                  <th colSpan="3">Evaluación de riesgo de trabajo</th>
                 </tr>
               </thead>
               <tbody>
@@ -157,28 +225,41 @@ const RiskTable = () => {
                   <td>Probabilidad</td>
                 </tr>
                 <tr>
-                  <td>Catástrofe</td>
-                  <td>Continuamente</td>
-                  <td>Es el resultado más probable y esperado</td>
-                </tr>
-                <tr>
-                  <td>{consequence}</td>
-                  <td>{exposure}</td>
-                  <td>{probability}</td>
+                  <td>
+                    <select value={consequence} onChange={(e) => setConsequence(e.target.value)}>
+                      {opcionesConsecuencia.map((opcion, idx) => (
+                        <option key={idx} value={opcion}>{opcion}</option>
+                      ))}
+                    </select>
+                  </td>
+                  <td>
+                    <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
+                      {opcionesExposicion.map((opcion, idx) => (
+                        <option key={idx} value={opcion}>{opcion}</option>
+                      ))}
+                    </select>
+                  </td>
+                  <td>
+                    <select value={probability} onChange={(e) => setProbability(e.target.value)}>
+                      {opcionesProbabilidad.map((opcion, idx) => (
+                        <option key={idx} value={opcion}>{opcion}</option>
+                      ))}
+                    </select>
+                  </td>
                 </tr>
               </tbody>
             </table>
             <table className="risk-classification">
               <thead>
                 <tr className="red">
-                  <th colSpan="4">Clasificación de Magnitud de Riesgo</th>
+                  <th colSpan="3">Clasificación de Magnitud de Riesgo</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Magnitud del Riesgo: {riskMagnitude}</td>
-                  <td>Clasificación: {riskClassification}</td>
-                  <td>Acción: {action}</td>
+                  <td>Magnitud del Riesgo: {magnitudRiesgo}</td>
+                  <td>Clasificación: {clasificacion}</td>
+                  <td>Acción: {accion}</td>
                 </tr>
               </tbody>
             </table>
