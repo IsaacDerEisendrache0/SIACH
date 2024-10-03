@@ -61,7 +61,7 @@ const TableComponent = () => {
           </tr>
           <tr>
             <th rowSpan="29" className="vertical-header">
-              CUARTO DE RESIDUOS
+              OFICINAS
             </th>
             <th>CONDICIONES FÍSICAS PELIGROSAS O INSEGURAS QUE PUEDAN REPRESENTAR UN RIESGO EN LAS
 INSTALACIONES, PROCESOS, MAQUINARIA, EQUIPO, HERRAMIENTAS, MEDIOS DE TRANSPORTE,
@@ -555,20 +555,7 @@ LOS GENERAN.</th>
             </td>
             <td style={{ color: 'white', backgroundColor: 'red' }}>fisicos</td>
 
-            <td>
-              <input
-                type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
-              />
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
-              />
-            </td>
+           
           </tr>
 
             {/* Agregar las filas faltantes */}
