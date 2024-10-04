@@ -301,6 +301,7 @@ th[colspan="4"], td[colspan="3"], td[colspan="6"] {
   color: white;
   font-weight: bold;
   height: 60%;
+  width: 20%;
 }
 
 /* Imagen cargada se ajusta al 100% del espacio */
