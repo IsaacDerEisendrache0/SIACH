@@ -121,6 +121,8 @@ const ToolEvaluationTable = () => {
   };
 
   return (
+    <div>
+
     <div className="table-container">
       <h1>Tabla de herramientas manuales</h1>
       <table className="evaluation-table">
@@ -200,7 +202,7 @@ const ToolEvaluationTable = () => {
 
             
             <td className="header" colSpan="4">Evaluación de riesgo de trabajo</td>
-            <td className="header" colSpan="5">Equipo de Protección Personal sugerido</td>
+            <td className="header" colSpan="9">Equipo de Protección Personal sugerido</td>
           </tr>
 
           <tr>
@@ -246,6 +248,7 @@ const ToolEvaluationTable = () => {
                   <option value="equipo-brigadista-incendio">Equipo para brigadista contra incendio</option>
                 </select>
                 <select>
+                  <option value=""></option>
                   <option value="casco-contra-impacto">Casco contra impacto</option>
                   <option value="casco-dielectrico">Casco dieléctrico</option>
                   <option value="capuchas">Capuchas</option>
@@ -394,16 +397,15 @@ const ToolEvaluationTable = () => {
             <td className="header" colSpan="6">Principales partes del cuerpo expuestas al riesgo:</td>
           </tr>
           <tr>
-            <td colSpan="6">
-              <ul className="risk-list">
-                <li>Golpes y cortes en manos ocasionados por las propias herramientas durante el trabajo normal con las mismas</li>
-                <li>Lesiones oculares por partículas provenientes de los objetos que se trabajan y/o de la propia herramienta</li>
-                <li>Golpes en diferentes partes del cuerpo por despido de la propia herramienta o del material trabajado</li>
-                <li>Esguinces por sobreesfuerzos o gestos violentos</li>
-              </ul>
-            </td>
             <td colSpan="5">
-              <tr>
+            <textarea 
+
+                placeholder="Escribe tus observaciones aquí"
+              />
+
+            </td>
+            <td colSpan="6">
+              
                 <select>
                   <option value="cabeza-oidos">Cabeza y oidos</option>
                   <option value="ojos-cara">Ojos y cara</option>
@@ -458,7 +460,7 @@ const ToolEvaluationTable = () => {
                   <option value="tronco">Tronco</option>
                   <option value="extremidades-inferiores">Extremidades inferiores</option>
                 </select>
-              </tr>
+              
             </td>
           </tr>
         </tbody>
@@ -477,12 +479,12 @@ const ToolEvaluationTable = () => {
           </tr>
         </tfoot>
       </table>
-      
-      {/* Botón para descargar el PDF */}
-      <button onClick={downloadPDF} className="download-button">
+    </div>
+    <button onClick={downloadPDF} className="download-button">
         Descargar PDF
       </button>
     </div>
+    
   );
 };
 

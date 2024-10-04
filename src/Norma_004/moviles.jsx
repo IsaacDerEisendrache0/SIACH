@@ -45,7 +45,7 @@ const RiskTable = () => {
     "Bandas antiestáticas",
     "Sistema de anclaje",
     "Programas de mantenimiento",
-    "Guarda parachoques y protectores de calaveras",
+    "Guardaparachoques y protectores de calaveras",
     "Calza de seguridad",
     "Bloqueo de sistema hidráulico",
     "Indicadores (torreta, luces, claxon, banderas, etc)",
@@ -55,7 +55,8 @@ const RiskTable = () => {
     "Indicadores (agua, aceite, aire, motor, presión, etc)",
     "Canopy",
     "Mata chispas",
-    "Sistema LOTO"
+    "Sistema LOTO",
+    "Guardas"
   ];
 
   // Funciones para calcular los valores
