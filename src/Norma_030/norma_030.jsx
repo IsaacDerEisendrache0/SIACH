@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import "./Table30.css";
 
 const TableComponent = () => {
+  const [areaName, setAreaName] = useState("OFICINAS");
   // Estado para manejar las selecciones de "Aplica" y "No Aplica"
   const [checkedStatus, setCheckedStatus] = useState({
+
+    
     polvos2: { aplica: false, noAplica: false },
     virus2: { aplica: false, noAplica: false },
     bacterias2: { aplica: false, noAplica: false },
@@ -74,6 +77,16 @@ const TableComponent = () => {
 
   return (
     <div className="table-container">
+       <div style={{ marginBottom: '20px' }}>
+        <label htmlFor="areaInput">Nombre del área:</label>
+        <input
+          type="text"
+          id="areaInput"
+          value={areaName}
+          onChange={(e) => setAreaName(e.target.value)}
+          style={{ marginLeft: '10px', padding: '5px' }}
+        />
+      </div>
       <table className="styled-table">
         <thead>
           <tr>
@@ -88,8 +101,8 @@ const TableComponent = () => {
             </th>
           </tr>
           <tr>
-            <th rowSpan="29" className="vertical-header">
-              OFICINAS
+          <th rowSpan="29" className="vertical-header">
+              {areaName} {/* El área ahora es dinámica */}
             </th>
             <th>CONDICIONES FÍSICAS PELIGROSAS O INSEGURAS QUE PUEDAN REPRESENTAR UN RIESGO EN LAS
 INSTALACIONES, PROCESOS, MAQUINARIA, EQUIPO, HERRAMIENTAS, MEDIOS DE TRANSPORTE,
