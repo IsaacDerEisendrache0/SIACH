@@ -4,7 +4,35 @@ import "./Table30.css";
 const TableComponent = () => {
   // Estado para manejar las selecciones de "Aplica" y "No Aplica"
   const [checkedStatus, setCheckedStatus] = useState({
-    gases2: { aplica: false, noAplica: false },
+    polvos2: { aplica: false, noAplica: false },
+    virus2: { aplica: false, noAplica: false },
+    bacterias2: { aplica: false, noAplica: false },
+    hongos2: { aplica: false, noAplica: false },
+    residuosbi2: { aplica: false, noAplica: false },
+    ruido2: { aplica: false, noAplica: false },
+    vibraciones2: { aplica: false, noAplica: false },
+    iluminacion3: { aplica: false, noAplica: false },
+    radiacionesi2: { aplica: false, noAplica: false },
+    radiacionesnoi: { aplica: false, noAplica: false },
+    temperaturas2: { aplica: false, noAplica: false },
+    p1: { aplica: false, noAplica: false },
+    p2: { aplica: false, noAplica: false },
+    p3: { aplica: false, noAplica: false },
+    p4: { aplica: false, noAplica: false },
+    p5: { aplica: false, noAplica: false },
+    p6: { aplica: false, noAplica: false },
+    p7: { aplica: false, noAplica: false },
+    p8: { aplica: false, noAplica: false },
+    p9: { aplica: false, noAplica: false },
+    p10: { aplica: false, noAplica: false },
+    p11: { aplica: false, noAplica: false },
+    p12: { aplica: false, noAplica: false },
+    p13: { aplica: false, noAplica: false },
+    p14: { aplica: false, noAplica: false },
+    p15: { aplica: false, noAplica: false },
+    p16: { aplica: false, noAplica: false },
+    p17: { aplica: false, noAplica: false },
+ 
     vapors: { aplica: false, noAplica: false },
     gases: { aplica: false, noAplica: false },
     aerosols: { aplica: false, noAplica: false },
@@ -114,7 +142,7 @@ LOS GENERAN.</th>
                 onChange={() => handleChange("aerosols", "noAplica")}
               />
             </td>
-            <td>gases</td>
+            <td>vapores origanicos</td>
             <td>
               <input
                 type="checkbox"
@@ -147,7 +175,7 @@ LOS GENERAN.</th>
                 onChange={() => handleChange("viruses", "noAplica")}
               />
             </td>
-            <td>aerosoles</td>
+            <td>gases</td>
             <td>
               <input
                 type="checkbox"
@@ -181,7 +209,7 @@ LOS GENERAN.</th>
                 onChange={() => handleChange("noise", "noAplica")}
               />
             </td>
-            <td>metales</td>
+            <td>aerosoles</td>
             <td>
               <input
                 type="checkbox"
@@ -214,7 +242,7 @@ LOS GENERAN.</th>
                 onChange={() => handleChange("extremeTemperatures", "noAplica")}
               />
             </td>
-            <td>polvos</td>
+            <td>metales</td>
             <td>
               <input
                 type="checkbox"
@@ -237,30 +265,30 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p1.aplica}
+                onChange={() => handleChange("p1", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p1.noAplica}
+                onChange={() => handleChange("p1", "noAplica")}
               />
             </td>
-            <td></td>
+            <td>polvos</td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
+                checked={checkedStatus.polvos2.aplica}
+                onChange={() => handleChange("polvos2", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
+                checked={checkedStatus.polvos2.noAplica}
+                onChange={() => handleChange("polvos2", "noAplica")}
               />
             </td>
           </tr>
@@ -272,32 +300,19 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p2.aplica}
+                onChange={() => handleChange("p2", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p2.noAplica}
+                onChange={() => handleChange("p2", "noAplica")}
               />
             </td>
             <td></td>
-            <td>
-              <input
-                type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
-              />
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
-              />
-            </td>
+            
           </tr>
 
 
@@ -308,15 +323,15 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p3.aplica}
+                onChange={() => handleChange("p3", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p3.noAplica}
+                onChange={() => handleChange("p3", "noAplica")}
               />
             </td>
             <td style={{ color: 'white', backgroundColor: 'red' }}>Biologicos</td>
@@ -331,31 +346,31 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p4.aplica}
+                onChange={() => handleChange("p4", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p4.noAplica}
+                onChange={() => handleChange("p4", "noAplica")}
               />
             </td>
-            <td>residuos biologicos e infecciosos
+            <td>Virus
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
+                checked={checkedStatus.virus2.aplica}
+                onChange={() => handleChange("virus2", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
+                checked={checkedStatus.virus2.noAplica}
+                onChange={() => handleChange("virus2", "noAplica")}
               />
             </td>
           </tr>
@@ -367,30 +382,30 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p5.aplica}
+                onChange={() => handleChange("p5", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p5.noAplica}
+                onChange={() => handleChange("p5", "noAplica")}
               />
             </td>
-            <td>Ruido</td>
+            <td>Bacterias</td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
+                checked={checkedStatus.bacterias2.aplica}
+                onChange={() => handleChange("bacterias2", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
+                checked={checkedStatus.bacterias2.noAplica}
+                onChange={() => handleChange("bacterias2", "noAplica")}
               />
             </td>
           </tr>
@@ -402,30 +417,30 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p6.aplica}
+                onChange={() => handleChange("p6", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p6.noAplica}
+                onChange={() => handleChange("p6", "noAplica")}
               />
             </td>
-            <td>Vibraciones</td>
+            <td>Hongos</td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
+                checked={checkedStatus.hongos2.aplica}
+                onChange={() => handleChange("hongos2", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
+                checked={checkedStatus.hongos2.noAplica}
+                onChange={() => handleChange("hongos2", "noAplica")}
               />
             </td>
           </tr>
@@ -437,30 +452,30 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p7.aplica}
+                onChange={() => handleChange("p7", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p7.noAplica}
+                onChange={() => handleChange("p7", "noAplica")}
               />
             </td>
-            <td>Iluminación</td>
+            <td>residuos Biologicos e infecciosos</td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
+                checked={checkedStatus.residuosbi2.aplica}
+                onChange={() => handleChange("residuosbi2", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
+                checked={checkedStatus.residuosbi2.noAplica}
+                onChange={() => handleChange("residuosbi2", "noAplica")}
               />
             </td>
           </tr>
@@ -472,32 +487,19 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p8.aplica}
+                onChange={() => handleChange("p8", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p8.noAplica}
+                onChange={() => handleChange("p8", "noAplica")}
               />
             </td>
             <td></td>
-            <td>
-              <input
-                type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
-              />
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
-              />
-            </td>
+            
           </tr>
 
             {/* Agregar las filas faltantes */}
@@ -507,32 +509,19 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p9.aplica}
+                onChange={() => handleChange("p9", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p9.noAplica}
+                onChange={() => handleChange("p9", "noAplica")}
               />
             </td>
-            <td>Radiaciones No Ionizantes</td>
-            <td>
-              <input
-                type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
-              />
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
-              />
-            </td>
+            <td></td>
+           
           </tr>
 
             {/* Agregar las filas faltantes */}
@@ -542,15 +531,15 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p10.aplica}
+                onChange={() => handleChange("p10", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p10.noAplica}
+                onChange={() => handleChange("p10", "noAplica")}
               />
             </td>
             <td style={{ color: 'white', backgroundColor: 'red' }}>fisicos</td>
@@ -565,30 +554,30 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p11.aplica}
+                onChange={() => handleChange("p11", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p11.noAplica}
+                onChange={() => handleChange("p11", "noAplica")}
               />
             </td>
-            <td>Iluminación</td>
+            <td>Ruido</td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
+                checked={checkedStatus.ruido2.aplica}
+                onChange={() => handleChange("ruido2", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
+                checked={checkedStatus.ruido2.noAplica}
+                onChange={() => handleChange("ruido2", "noAplica")}
               />
             </td>
           </tr>
@@ -601,30 +590,30 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p12.aplica}
+                onChange={() => handleChange("p12", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p12.noAplica}
+                onChange={() => handleChange("p12", "noAplica")}
               />
             </td>
-            <td>Iluminación</td>
+            <td>Vibraciones</td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
+                checked={checkedStatus.vibraciones2.aplica}
+                onChange={() => handleChange("vibraciones2", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
+                checked={checkedStatus.vibraciones2.noAplica}
+                onChange={() => handleChange("vibraciones2", "noAplica")}
               />
             </td>
           </tr>
@@ -636,30 +625,30 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p13.aplica}
+                onChange={() => handleChange("p13", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p13.noAplica}
+                onChange={() => handleChange("p13", "noAplica")}
               />
             </td>
             <td>Iluminación</td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
+                checked={checkedStatus.iluminacion3.aplica}
+                onChange={() => handleChange("iluminacion3", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
+                checked={checkedStatus.iluminacion3.noAplica}
+                onChange={() => handleChange("iluminacion3", "noAplica")}
               />
             </td>
           </tr>
@@ -672,30 +661,30 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p14.aplica}
+                onChange={() => handleChange("p14", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p14.noAplica}
+                onChange={() => handleChange("p14", "noAplica")}
               />
             </td>
-            <td>Iluminación</td>
+            <td>radioaciones ionizantes</td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
+                checked={checkedStatus.radiacionesi2.aplica}
+                onChange={() => handleChange("radiacionesi2", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
+                checked={checkedStatus.radiacionesi2.noAplica}
+                onChange={() => handleChange("radiacionesi2", "noAplica")}
               />
             </td>
           </tr>
@@ -707,30 +696,30 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p15.aplica}
+                onChange={() => handleChange("p15", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p15.noAplica}
+                onChange={() => handleChange("p15", "noAplica")}
               />
             </td>
-            <td>Iluminación</td>
+            <td>Radiaciones no ionizantes</td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
+                checked={checkedStatus.radiacionesnoi.aplica}
+                onChange={() => handleChange("radiacionesnoi", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
+                checked={checkedStatus.radiacionesnoi.noAplica}
+                onChange={() => handleChange("radiacionesnoi", "noAplica")}
               />
             </td>
           </tr>
@@ -743,30 +732,30 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p16.aplica}
+                onChange={() => handleChange("p16", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p16.noAplica}
+                onChange={() => handleChange("p16", "noAplica")}
               />
             </td>
-            <td>Iluminación</td>
+            <td>Temperaturas</td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
+                checked={checkedStatus.temperaturas2.aplica}
+                onChange={() => handleChange("temperaturas2", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
+                checked={checkedStatus.temperaturas2.noAplica}
+                onChange={() => handleChange("temperaturas2", "noAplica")}
               />
             </td>
           </tr>
@@ -778,69 +767,21 @@ LOS GENERAN.</th>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
+                checked={checkedStatus.p17.aplica}
+                onChange={() => handleChange("p17", "aplica")}
               />
             </td>
             <td>
               <input
                 type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
+                checked={checkedStatus.p17.noAplica}
+                onChange={() => handleChange("p17", "noAplica")}
               />
             </td>
-            <td>Iluminación</td>
-            <td>
-              <input
-                type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
-              />
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
-              />
-            </td>
+           
+           
           </tr>
-          
-{/* Agregar las filas faltantes */}
-<tr>
-            <td></td>
-            <td>Iluminación insuficiente o excesiva.</td>
-            <td>
-              <input
-                type="checkbox"
-                checked={checkedStatus.lighting.aplica}
-                onChange={() => handleChange("lighting", "aplica")}
-              />
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                checked={checkedStatus.lighting.noAplica}
-                onChange={() => handleChange("lighting", "noAplica")}
-              />
-            </td>
-            <td>Iluminación</td>
-            <td>
-              <input
-                type="checkbox"
-                checked={checkedStatus.poorVentilation.aplica}
-                onChange={() => handleChange("poorVentilation", "aplica")}
-              />
-            </td>
-            <td>
-              <input
-                type="checkbox"
-                checked={checkedStatus.poorVentilation.noAplica}
-                onChange={() => handleChange("poorVentilation", "noAplica")}
-              />
-            </td>
-          </tr>
-          
+ 
 
             
 
