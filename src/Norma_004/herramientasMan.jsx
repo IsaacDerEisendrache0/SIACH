@@ -128,8 +128,10 @@ const ToolEvaluationTable = () => {
       <table className="evaluation-table">
         <thead>
           <tr>
+
             <td className="header" colSpan="4">Nombre de la herramienta: Llave Stilson</td>
-            <td className="header" colSpan="6">Área: Mina y Planta</td>
+            <td className="header" colSpan="6">Área: </td>
+          
           </tr>
           <tr>
             <td className="header" colSpan="1" rowSpan="1">Energía utilizada:</td>
@@ -170,18 +172,18 @@ const ToolEvaluationTable = () => {
         <tbody>
           <tr>
           <td className="image-cell" colSpan="2" rowSpan="8">
-  <div className="image-table-container" colSpan="5" rowSpan="4">
-    <table className="image-table">
-      <tbody>
-        <tr>
-          <td>
+          <div className="image-table-container" colSpan="5" rowSpan="4">
+            <table className="image-table">
+    
+        
+          
             {/* Input para subir imagen */}
             <input type="file" accept="image/*" onChange={handleImageChange} />
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-          </td>
-        </tr>
-        <tr>
-          <td>
+          
+        
+        
+          
             {/* Previsualización de la imagen */}
             {imagePreview ? (
               <div className="image-preview-large">
@@ -190,18 +192,18 @@ const ToolEvaluationTable = () => {
             ) : (
               <p>No se ha seleccionado ninguna imagen.</p>
             )}
+          
+        
+      
+              </table>
+             </div>
           </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</td>
 
 
 
 
             
-            <td className="header" colSpan="4">Evaluación de riesgo de trabajo</td>
+            <td className="header" colSpan="3">Evaluación de riesgo de trabajo</td>
             <td className="header" colSpan="9">Equipo de Protección Personal sugerido</td>
           </tr>
 
@@ -213,6 +215,7 @@ const ToolEvaluationTable = () => {
               <div>
                 <label>Seleccione Equipo de Protección Personal:</label>
                 <select>
+                  <option value="Seleccione-una-casilla">Seleccione una casilla</option>
                   <option value="casco-contra-impacto">Casco contra impacto</option>
                   <option value="casco-dielectrico">Casco dieléctrico</option>
                   <option value="capuchas">Capuchas</option>
@@ -248,7 +251,7 @@ const ToolEvaluationTable = () => {
                   <option value="equipo-brigadista-incendio">Equipo para brigadista contra incendio</option>
                 </select>
                 <select>
-                  <option value=""></option>
+                  <option value="Seleccione-una-casilla">Seleccione una casilla</option>
                   <option value="casco-contra-impacto">Casco contra impacto</option>
                   <option value="casco-dielectrico">Casco dieléctrico</option>
                   <option value="capuchas">Capuchas</option>
@@ -284,6 +287,7 @@ const ToolEvaluationTable = () => {
                   <option value="equipo-brigadista-incendio">Equipo para brigadista contra incendio</option>
                 </select>
                 <select>
+                <option value="Seleccione-una-casilla">Seleccione una casilla</option>
                   <option value="casco-contra-impacto">Casco contra impacto</option>
                   <option value="casco-dielectrico">Casco dieléctrico</option>
                   <option value="capuchas">Capuchas</option>
@@ -319,6 +323,7 @@ const ToolEvaluationTable = () => {
                   <option value="equipo-brigadista-incendio">Equipo para brigadista contra incendio</option>
                 </select>
                 <select>
+                <option value="Seleccione-una-casilla">Seleccione una casilla</option>
                   <option value="casco-contra-impacto">Casco contra impacto</option>
                   <option value="casco-dielectrico">Casco dieléctrico</option>
                   <option value="capuchas">Capuchas</option>
@@ -407,6 +412,7 @@ const ToolEvaluationTable = () => {
             <td colSpan="6">
               
                 <select>
+                  <option value="Seleccione-una-casilla">Seleccione una casilla</option>
                   <option value="cabeza-oidos">Cabeza y oidos</option>
                   <option value="ojos-cara">Ojos y cara</option>
                   <option value="brazos-manos">Brazos y manos</option>
@@ -416,6 +422,7 @@ const ToolEvaluationTable = () => {
                   <option value="extremidades-inferiores">Extremidades inferiores</option>
                 </select>
                 <select>
+                <option value="Seleccione-una-casilla">Seleccione una casilla</option>
                   <option value="cabeza-oidos">Cabeza y oidos</option>
                   <option value="ojos-cara">Ojos y cara</option>
                   <option value="brazos-manos">Brazos y manos</option>
@@ -425,6 +432,7 @@ const ToolEvaluationTable = () => {
                   <option value="extremidades-inferiores">Extremidades inferiores</option>
                 </select>
                 <select>
+                <option value="Seleccione-una-casilla">Seleccione una casilla</option>
                   <option value="cabeza-oidos">Cabeza y oidos</option>
                   <option value="ojos-cara">Ojos y cara</option>
                   <option value="brazos-manos">Brazos y manos</option>
@@ -434,6 +442,7 @@ const ToolEvaluationTable = () => {
                   <option value="extremidades-inferiores">Extremidades inferiores</option>
                 </select>
                 <select>
+                <option value="Seleccione-una-casilla">Seleccione una casilla</option>
                   <option value="cabeza-oidos">Cabeza y oidos</option>
                   <option value="ojos-cara">Ojos y cara</option>
                   <option value="brazos-manos">Brazos y manos</option>
@@ -443,6 +452,7 @@ const ToolEvaluationTable = () => {
                   <option value="extremidades-inferiores">Extremidades inferiores</option>
                 </select>
                 <select>
+                <option value="Seleccione-una-casilla">Seleccione una casilla</option>
                   <option value="cabeza-oidos">Cabeza y oidos</option>
                   <option value="ojos-cara">Ojos y cara</option>
                   <option value="brazos-manos">Brazos y manos</option>
@@ -452,6 +462,7 @@ const ToolEvaluationTable = () => {
                   <option value="extremidades-inferiores">Extremidades inferiores</option>
                 </select>
                 <select>
+                <option value="Seleccione-una-casilla">Seleccione una casilla</option>
                   <option value="cabeza-oidos">Cabeza y oidos</option>
                   <option value="ojos-cara">Ojos y cara</option>
                   <option value="brazos-manos">Brazos y manos</option>
