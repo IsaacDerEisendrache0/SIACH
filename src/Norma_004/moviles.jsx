@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Table04.css';
+import './Moviles.css';
 
 const RiskTable = () => {
   // Estados iniciales para Consecuencia, Exposición y Probabilidad

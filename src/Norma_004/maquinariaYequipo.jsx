@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Table04.css';
+import './MaquinariaYequipo.css';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -274,7 +274,7 @@ const RiskTable = () => {
                   <tbody>
                     {peligros.map((peligro, index) => (
                       <tr key={peligro.id}>
-                        <td style={{ width: '70%' }}>{peligro.nombre}</td>
+                        <td style={{ width: '80%' }}>{peligro.nombre}</td>
                         <td style={{ width: '30%' }}>
                           <input
                             type="checkbox"

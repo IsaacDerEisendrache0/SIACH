@@ -1,0 +1,133 @@
+/*TABLA DE MAQUINARIA Y EQUIPO*/
+.risk-table {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    font-size: 12px; /* Ajusta el tamaño de fuente si es necesario */
+    border-collapse: collapse;
+  }
+  
+  .main-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .main-table th, .main-table td {
+    border: 1px solid #ff0000; /* Borde rojo */
+    padding: 8px;
+    text-align: left;
+    border: none; /* Elimina bordes de la tabla principal */
+  }
+  
+  .main-table th {
+    background-color: #ff0000; /* Fondo rojo */
+    color: white; /* Texto en blanco */
+  }
+  
+  .compact-table {
+    width: 100%;
+    margin-bottom: 100px;
+  }
+  
+  .compact-table th, .compact-table td {
+    padding: 5px;
+    text-align: left;
+    border: none; /* Elimina el borde */
+  }
+  
+  .no-border th, .no-border td {
+    border: none;
+  }
+  
+  .observaciones-container {
+    margin-top: 20px;
+  }
+  
+  textarea {
+    width: 100%;
+    resize: vertical;
+    border: 1px solid #ff0000; /* Borde rojo */
+  }
+  
+  .image-preview {
+    width: 100%;
+    height: auto;
+    max-width: 300px;
+    margin-top: 10px;
+  }
+  
+  .danger-table {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  /* Contenedor de las secciones divididas horizontalmente */
+  .horizontal-sections {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* Cada sección ocupa el 50% del ancho */
+  .section {
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .image-observations-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .image-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .observations-section {
+    margin-top: 10px;
+    width: 100%;
+  }
+  
+  .observations-section textarea {
+    width: 100%;
+    resize: vertical;
+    border: 1px solid #ff0000; /* Borde rojo */
+  }
+  
+  .risk-magnitude-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .risk-magnitude-bar {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    background-color: #ff0000; /* Barra de riesgo en rojo */
+  }
+  
+  .download-button {
+    background-color: #ff0000; /* Rojo */
+    color: white;
+    padding: 10px 20px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .download-button:hover {
+    background-color: #cc0000; /* Rojo más oscuro */
+  }
