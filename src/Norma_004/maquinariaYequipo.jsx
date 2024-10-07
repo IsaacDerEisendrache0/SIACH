@@ -274,7 +274,7 @@ const RiskTable = () => {
                   <tbody>
                     {peligros.map((peligro, index) => (
                       <tr key={peligro.id}>
-                        <td style={{ width: '70%' }}>{peligro.nombre}</td>
+                        <td style={{ width: '80%' }}>{peligro.nombre}</td>
                         <td style={{ width: '30%' }}>
                           <input
                             type="checkbox"
