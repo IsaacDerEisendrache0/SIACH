@@ -296,7 +296,7 @@ const RiskTable = () => {
             </table>
           </td>
           {/* EPP sugerido */}
-          <td colSpan="3z" className="epp-section">
+          <td colSpan="3" className="epp-section">
             <div className="table-cell red">EPP sugerido</div>
             <div className="epp-icons">
               <img src="path-to-icon1.png" alt="EPP Icon 1" />

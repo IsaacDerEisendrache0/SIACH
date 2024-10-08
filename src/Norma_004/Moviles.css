@@ -36,7 +36,7 @@
   .equipment-image {
     width: 100%;
     height: auto;
-    max-width: 100%; /* Esto asegura que la imagen no sobresalga */
+    max-width: 200%; /* Esto asegura que la imagen no sobresalga */
     max-height: 100%; /* Ajuste para imágenes grandes */
   }
   
