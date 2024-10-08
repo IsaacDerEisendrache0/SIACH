@@ -82,6 +82,7 @@ const AreaTable = () => {
     'NOM-010': ['corrosiveContact', 'lighting', 'nonIonizingRadiation'],
     'NOM-011': ['temperature', 'sharpObjects', 'projectionOfFragments'],
     'NOM-012': ['viruses', 'bacteria'],
+    
     // Agregar más NOMs y sus checkboxes correspondientes según sea necesario
   };
 
@@ -97,6 +98,27 @@ const AreaTable = () => {
       return newCheckedStatus;
     });
   };
+
+
+
+
+  const resetCheckboxes = () => {
+    const resetStatus = Object.keys(checkedStatus).reduce((acc, key) => {
+      acc[key] = { aplica: false, noAplica: false };
+      return acc;
+    }, {});
+    setCheckedStatus(resetStatus);
+  };
+
+  const selectAllNoAplica = () => {
+    const updatedStatus = Object.keys(checkedStatus).reduce((acc, key) => {
+      acc[key] = { aplica: false, noAplica: true }; // Marcar "No Aplica" en todas las opciones
+      return acc;
+    }, {});
+    setCheckedStatus(updatedStatus);
+  };
+
+
 
   const getRelatedNoms = () => {
     const appliedNoms = [];
@@ -115,17 +137,33 @@ const AreaTable = () => {
 
   const downloadPDF = () => {
     const input = document.getElementById('pdf-content');
-
-    html2canvas(input).then((canvas) => {
+  
+    html2canvas(document.querySelector("#pdf-content"), {
+      scale: 2,
+    }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageHeight = pdf.internal.pageSize.height;
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save('tabla_maquinaria.pdf');
+      let heightLeft = pdfHeight;
+      let position = 0;
+    
+      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+      heightLeft -= pageHeight;
+    
+      while (heightLeft >= 0) {
+        position = heightLeft - pdfHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+        heightLeft -= pageHeight;
+      }
+    
+      pdf.save('tabla_completa.pdf');
     });
+    
   };
+  
 
   return (
     <div className="table-container">
@@ -139,7 +177,57 @@ const AreaTable = () => {
           onChange={(e) => setAreaName(e.target.value)}
           style={{ marginLeft: '10px', padding: '5px' }}
         />
+
+<button
+          onClick={resetCheckboxes}
+          style={{
+            marginLeft: '10px', // Espacio a la izquierda del botón
+            padding: '5px 10px', // Tamaño del botón
+            fontSize: '14px', // Tamaño de la fuente
+            backgroundColor: '#007BFF', // Color de fondo
+            color: '#FFFFFF', // Color del texto
+            border: 'none', // Sin borde
+            borderRadius: '5px', // Bordes redondeados
+            cursor: 'pointer', // Cursor de puntero
+            transition: 'background-color 0.3s ease', // Transición suave
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#0056b3')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#007BFF')}
+        >
+          Borrar todas las selecciones
+        </button>
+        <button
+            onClick={selectAllNoAplica}
+            style={{
+              marginLeft: '10px',
+              padding: '5px 10px',
+              fontSize: '14px',
+              backgroundColor: '#28a745',
+              color: '#FFFFFF',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              transition: 'background-color 0.3s ease',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#218838')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#28a745')}
+          >
+            Seleccionar "No Aplica"
+          </button>
+
+        
       </div>
+
+
+
+      
+
+
+
+
+      
+
+     
 
       <table className="styled-table">
         <thead>
@@ -868,9 +956,13 @@ const AreaTable = () => {
         </ul>
       </div>
 
+     
+
       
 
     </div>
+ 
+
     <button onClick={downloadPDF} className="download-button">
         Descargar
       </button>
