@@ -1,47 +1,95 @@
-/*TABLA DE HERRAMIENTA MANUALES*/
-/* Estilos generales para hacer la tabla más compacta */
-.evaluation-table {
-    font-size: 12px; /* Reduce el tamaño de la fuente */
-    border-collapse: collapse; /* Minimiza el espacio entre las celdas */
-    width: 100%; /* Ajusta el ancho de la tabla */
-  }
-  
-  .evaluation-table th, .evaluation-table td {
-    padding: 5px; /* Reduce el padding */
-    text-align: center;
-    border: 1px solid #ddd; /* Define bordes más finos */
-  }
-  
-  /* Inputs más compactos */
-  .compact-input {
-    font-size: 12px; /* Reduce el tamaño de la fuente */
-    padding: 4px; /* Reduce el padding */
-    width: 100%; /* Asegura que el input ocupe el ancho completo de la celda */
-  }
-  
-  /* Ajusta el tamaño de los selectores de equipo de protección */
-  select {
-    font-size: 12px; /* Reduce el tamaño de la fuente */
-    padding: 4px; /* Reduce el padding */
-    width: 100%; /* Asegura que el select ocupe el ancho completo de la celda */
-  }
-  
-  /* Imagen de previsualización más pequeña */
-  .image-preview-large img {
-    max-width: 100%; /* Asegura que la imagen se ajuste al ancho de la celda */
-    max-height: 100px; /* Ajusta la altura máxima de la imagen */
-  }
-  
-  /* Ajusta la sección de observaciones */
-  textarea {
-    font-size: 12px; /* Reduce el tamaño de la fuente */
-    width: 100%; /* Asegura que el textarea ocupe el ancho completo de la celda */
-    padding: 4px; /* Reduce el padding */
-  }
-  
-  /* Botón de descarga más pequeño */
-  .download-button {
-    font-size: 12px;
-    padding: 5px 10px;
-  }
-  
+/* HerramientasMan.css */
+
+/* Estilo para la tabla principal */
+.main-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.main-table th,
+.main-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+/* Estilo para la tabla compacta sin bordes */
+.compact-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.compact-table th,
+.compact-table td {
+  border: none;
+  padding: 4px;
+  text-align: left;
+}
+
+/* Estilo para la barra de magnitud de riesgo */
+.risk-magnitude-container {
+  margin-top: 10px;
+}
+
+.risk-magnitude-bar {
+  padding: 10px;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+}
+
+/* Estilo para la sección de equipo de protección personal sugerido */
+.suggested-equipment {
+  font-weight: bold;
+  background-color: #f2f2f2; /* Color de fondo para destacar la sección */
+  text-align: center;
+  padding: 10px;
+}
+
+/* Estilo para la sección de observaciones generales */
+.observations-section {
+  margin-top: 20px;
+}
+
+/* Estilo para el botón de descarga */
+.download-button {
+  margin-top: 20px;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.download-button:hover {
+  background-color: #0056b3;
+}
+
+/* Estilo para la imagen de vista previa */
+.image-preview {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Estilo para el contenedor de imagen y observaciones */
+.image-observations-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilo para la sección de imágenes */
+.image-section {
+  margin-bottom: 10px;
+}
+
+/* Asegúrate de que el padding y margen sean consistentes */
+.suggested-equipment + table {
+  margin-top: 20px; /* Espacio entre la sección de equipo y la tabla siguiente */
+}
+
+/* Mejora la visualización */
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
