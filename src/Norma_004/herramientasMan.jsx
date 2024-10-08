@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import './HerramientasMan.css';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import './HerramientasMan.css'; // Archivo CSS para estilos
 
-const ToolEvaluationTable = () => {
-  // Opciones del menú desplegable para cada campo
+
+
+
+
+const RiskTable = () => {
   const opcionesConsecuencia = ['Catástrofe', 'Varias muertes', 'Muerte', 'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'];
-  const opcionesExposicion = ['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente', 'Remotamente'];
-  const [observaciones, setObservaciones] = useState('');
-
-  // Nuevas opciones de "Probabilidad"
+  const opcionesExposicion = ['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente'];
   const opcionesProbabilidad = [
     'Es el resultado más probable y esperado',
     'Es completamente posible, no será nada extraño',
@@ -18,326 +18,260 @@ const ToolEvaluationTable = () => {
     'Coincidencia extremadamente remota pero concebible',
     'Coincidencia prácticamente imposible, jamás ha ocurrido'
   ];
+  const opcionesTiempoExposicion = ['0-2 hrs', '2-4 hrs', '4-8 hrs', '8+ hrs'];
+  const opcionesEnergia = ['Eléctrica', 'Manual', 'Mecánica', 'Hidráulica', 'Eólica'];
 
-  // Estado para cada campo
-  const [consecuencia, setConsecuencia] = useState('Lesiones con baja');
-  const [exposicion, setExposicion] = useState('Irregularmente');
-  const [probabilidad, setProbabilidad] = useState('Coincidencia muy rara, pero se sabe que ha ocurrido');
-  const [magnitudRiesgo, setMagnitudRiesgo] = useState(0);
-  const [clasificacion, setClasificacion] = useState('Bajo o Aceptable');
-  const [accion, setAccion] = useState('Tolerable');
-  const [color, setColor] = useState('blue'); // Estado para el color, por defecto azul para lo más bajo
-  const [imagePreview, setImagePreview] = useState(null); // Estado para la previsualización de la imagen
-  const [errorMessage, setErrorMessage] = useState(''); // Estado para los errores al subir la imagen
+  const [consequence, setConsequence] = useState('Lesiones sin baja');
+  const [exposure, setExposure] = useState('Ocasionalmente');
+  const [probability, setProbability] = useState('Coincidencia extremadamente remota pero concebible');
+  const [tiempoExposicion, setTiempoExposicion] = useState('4-8 hrs');
 
-  // Función para manejar el archivo de imagen seleccionado
+  const [imagePreview, setImagePreview] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const [observacionesGenerales, setObservacionesGenerales] = useState('');
+
+  const [maquinariaNombre, setMaquinariaNombre] = useState('');
+  const [maquinariaDescripcion, setMaquinariaDescripcion] = useState('');
+  const [energiaUtilizada, setEnergiaUtilizada] = useState('Eléctrica');
+
+
+
+  
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
-    // Validar que el archivo sea una imagen
     if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
 
       reader.onloadend = () => {
-        setImagePreview(reader.result); // Guardar la URL de la imagen para previsualización
-        setErrorMessage(''); // Limpiar cualquier mensaje de error
+        setImagePreview(reader.result);
+        setErrorMessage('');
       };
 
       reader.readAsDataURL(file);
-    } else {
-      setErrorMessage('Por favor selecciona un archivo de imagen válido.');
     }
   };
 
-  // Función para calcular la Magnitud del Riesgo, Clasificación y Acción
-  const calcularRiesgo = () => {
-    const valoresRiesgo = {
-      'Catástrofe': 100,
-      'Varias muertes': 50,
-      'Muerte': 25,
-      'Lesiones graves': 15,
+
+
+  const calcularValorConsecuencia = () => {
+    const valoresConsecuencia = {
+      'Catástrofe': 50,
+      'Varias muertes': 25,
+      'Muerte': 15,
+      'Lesiones graves': 10,
       'Lesiones con baja': 5,
       'Lesiones sin baja': 1
     };
+    return valoresConsecuencia[consequence];
+  };
+
+  const calcularValorExposicion = () => {
     const valoresExposicion = {
       'Continuamente': 10,
       'Frecuentemente': 6,
       'Ocasionalmente': 3,
       'Irregularmente': 2,
-      'Raramente': 1,
-      'Remotamente': 0.5
+      'Raramente': 1
     };
+    return valoresExposicion[exposure];
+  };
 
+  const calcularValorProbabilidad = () => {
     const valoresProbabilidad = {
       'Es el resultado más probable y esperado': 10,
       'Es completamente posible, no será nada extraño': 6,
       'Sería una secuencia o coincidencia rara pero posible, ha ocurrido': 3,
-      'Coincidencia muy rara, pero se sabe que ha ocurrido': 1,
-      'Coincidencia extremadamente remota pero concebible': 0.5,
-      'Coincidencia prácticamente imposible, jamás ha ocurrido': 0.1
+      'Coincidencia muy rara, pero se sabe que ha ocurrido': 2,
+      'Coincidencia extremadamente remota pero concebible': 1,
+      'Coincidencia prácticamente imposible, jamás ha ocurrido': 0.5
     };
-
-    const magnitud = valoresRiesgo[consecuencia] * valoresExposicion[exposicion] * valoresProbabilidad[probabilidad];
-
-    let clasificacionRiesgo;
-    let accionRecomendada;
-    let colorRiesgo;
-    if (magnitud >= 50) {
-      clasificacionRiesgo = 'Crítico o Alto';
-      accionRecomendada = 'Corrección inmediata o urgente';
-      colorRiesgo = 'red'; // Rojo para lo más alto
-    } else if (magnitud >= 25) {
-      clasificacionRiesgo = 'Moderado';
-      accionRecomendada = 'Debe corregirse';
-      colorRiesgo = 'yellow'; // Amarillo para riesgos moderados
-    } else {
-      clasificacionRiesgo = 'Bajo o Aceptable';
-      accionRecomendada = 'Tolerable';
-      colorRiesgo = 'blue'; // Azul para riesgos bajos
-    }
-
-    setMagnitudRiesgo(magnitud);
-    setClasificacion(clasificacionRiesgo);
-    setAccion(accionRecomendada);
-    setColor(colorRiesgo);
+    return valoresProbabilidad[probability];
   };
 
-  // Calcular el riesgo cada vez que cambien las opciones
-  useEffect(() => {
-    calcularRiesgo();
-  }, [consecuencia, exposicion, probabilidad]);
+  const calcularMagnitudRiesgo = () => {
+    return Math.floor(calcularValorConsecuencia() * calcularValorExposicion() * calcularValorProbabilidad());
+  };
 
-  // Función para descargar la tabla como PDF
+  const obtenerColorPorRiesgo = (magnitud) => {
+    if (magnitud > 400) {
+      return { color: 'red', texto: 'Muy Alto: Detención inmediata', accion: 'Inmediata', clasificacion: 'Muy Alto' };
+    } else if (magnitud > 200) {
+      return { color: 'orange', texto: 'Alto: Corrección inmediata', accion: 'Urgente', clasificacion: 'Alto' };
+    } else if (magnitud > 70) {
+      return { color: 'yellow', texto: 'Notable: Corrección necesaria', accion: 'Pronto', clasificacion: 'Moderado' };
+    } else if (magnitud > 10) {
+      return { color: 'green', texto: 'Aceptable: Monitoreo recomendado', accion: 'Regular', clasificacion: 'Bajo' };
+    } else {
+      return { color: 'lightgreen', texto: 'Insignificante: Sin acción requerida', accion: 'Sin acción', clasificacion: 'Insignificante' };
+    }
+  };
+
+  const { color, texto, accion, clasificacion } = obtenerColorPorRiesgo(calcularMagnitudRiesgo());
+  const magnitudRiesgo = calcularMagnitudRiesgo();
+
   const downloadPDF = () => {
-    const input = document.querySelector('.table-container');
-    html2canvas(input).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save('tabla_herramientas_manual.pdf');
-    });
+    const input = document.getElementById('pdf-content');
+    html2canvas(input)
+      .then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, 'PNG', 0, 0);
+        pdf.save('reporte.pdf');
+      });
   };
 
   return (
     <div>
-
-    <div className="table-container">
-      <h1>Tabla de herramientas manuales</h1>
-      <table className="evaluation-table">
-        <thead>
-          <tr>
-
-            <td className="header" colSpan="4">Nombre de la herramienta: Llave Stilson</td>
-            <td className="header" colSpan="1">Área: </td>
-          
-          </tr>
-          <tr>
-            <td className="header" colSpan="3" rowSpan="1">Energía utilizada:</td>
-            <td>
-              <input 
-                type="text" 
-                defaultValue="Manual" 
-                className="compact-input" 
-              />
-            </td>
-            <td className="header">POE:</td>
-            <td>
-              <input 
-                type="number" 
-                defaultValue="1" 
-                className="compact-input"
-              />
-            </td>
-            <td className="header" colSpan="2">Tiempo de exposición:</td>
-            <td>
-              <input 
-                type="text" 
-                defaultValue="5 min" 
-                className="compact-input"
-              />
-            </td>
-            <td className="header">Fecha de inspección:</td>
-            <td>
-              <input 
-                type="date" 
-                defaultValue="2023-04-04" 
-                className="compact-input"
-              />
-            </td>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr>
-          <td className="image-cell" colSpan="2" rowSpan="8">
-          <div className="image-table-container" colSpan="1" rowSpan="4">
-            <table className="image-table">
-    
-        
-          
-            {/* Input para subir imagen */}
-            <input type="file" accept="image/*" onChange={handleImageChange} />
-            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-          
-        
-        
+      <div id="pdf-content" className="risk-table">
+        <table className="main-table">
+          <thead>
+            <tr>
+              <th colSpan="4">Nombre de la maquinaria o equipo:</th>
+              <th colSpan="2">
+                <input
+                  type="text"
+                  value={maquinariaNombre}
+                  onChange={(e) => setMaquinariaNombre(e.target.value)}
+                  placeholder="Ingrese el nombre de la maquinaria"
+                />
+              </th>
+            </tr>
+            <tr>
+              <th colSpan="4">Descripción de la maquinaria o equipo:</th>
+              <th colSpan="2">
+                <textarea
+                  value={maquinariaDescripcion}
+                  onChange={(e) => setMaquinariaDescripcion(e.target.value)}
+                  placeholder="Describa la maquinaria o equipo"
+                  rows="2"
+                  cols="30"
+                />
+              </th>
+            </tr>
+            <tr>
+              <th colSpan="4">Energía utilizada:</th>
+              <th colSpan="2">
+                <select
+                  value={energiaUtilizada}
+                  onChange={(e) => setEnergiaUtilizada(e.target.value)}
+                >
+                  {opcionesEnergia.map(opcion => (
+                    <option key={opcion} value={opcion}>{opcion}</option>
+                  ))}
+                </select>
+              </th>
+            </tr>
+            <tr>
+              <th colSpan="1">Localización esquemática de los riesgos en la maquinaria y/o equipo</th>
+              <th>POE:</th>
+              <th>0-4</th>
+              <th>Tiempo de exposición:</th>
+              <th>
+                <select value={tiempoExposicion} onChange={(e) => setTiempoExposicion(e.target.value)}>
+                  {opcionesTiempoExposicion.map(opcion => (
+                    <option key={opcion} value={opcion}>{opcion}</option>
+                  ))}
+                </select>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
             
-          
-            {/* Previsualización de la imagen */}
-            {imagePreview ? (
-              <div className="image-preview-large">
-                <img src={imagePreview} alt="Previsualización" />
-              </div>
-            ) : (
-              <p>No se ha seleccionado ninguna imagen.</p>
-            )}
-          
-        
-      
-              </table>
-             </div>
-          </td>
-
-            <td className="header" colSpan="3">Evaluación de riesgo de trabajo</td>
-            <td className="header" colSpan="7">Equipo de Protección Personal sugerido</td>
-          </tr>
-
-          <tr>
-            <td className="sub-header">Consecuencia</td>
-            <td className="sub-header" colSpan="0">Exposición</td>
-            <td className="sub-header">Probabilidad</td>
-            <td rowSpan="6" className="protection-cell" colSpan="6">
-              <div>
-                <label>Seleccione Equipo de Protección Personal:</label>
-                <select>
-                  <option value="Seleccione-una-casilla">Seleccione una casilla</option>
-                  <option value="casco-contra-impacto">Casco contra impacto</option>
-                  <option value="casco-dielectrico">Casco dieléctrico</option>
-                  <option value="capuchas">Capuchas</option>
-                  <option value="anteojos-de-proteccion">Anteojos de protección</option>
-                  <option value="goggles">Goggles</option>
-                  <option value="pantalla-facial">Pantalla facial</option>
-                  <option value="careta-para-soldador">Careta para soldador</option>
-                  <option value="gafas-para-soldador">Gafas para soldador</option>
-                  <option value="tapones-auditivos">Tapones auditivos</option>
-                  <option value="conchas-acusticas">Conchas acústicas</option>
-                  <option value="respirador-contra-particulas">Respirador contra partículas</option>
-                  <option value="respirador-contra-gases-vapores">Respirador contra gases y vapores</option>
-                  <option value="mascarilla-desechable">Mascarilla desechable</option>
-                  <option value="equipo-respiracion-autonomo">Equipo de respiración autónomo</option>
-                  <option value="guantes-contra-sustancias-quimicas">Guantes contra sustancias químicas</option>
-                  <option value="guantes-dielectricos">Guantes dieléctricos</option>
-                  <option value="guantes-contra-temperaturas-extremas">Guantes contra temperaturas extremas</option>
-                  <option value="guantes">Guantes</option>
-                  <option value="mangas">Mangas</option>
-                  <option value="mandil-altas-temperaturas">Mandil contra altas temperaturas</option>
-                  <option value="mandil-sustancias-quimicas">Mandil contra sustancias químicas</option>
-                  <option value="overol">Overol</option>
-                  <option value="bata">Bata</option>
-                  <option value="ropa-sustancias-peligrosas">Ropa contra sustancias peligrosas</option>
-                  <option value="calzado-ocupacional">Calzado ocupacional</option>
-                  <option value="calzado-contra-impacto">Calzado contra impacto</option>
-                  <option value="calzado-conductivo">Calzado conductivo</option>
-                  <option value="calzado-dielectrico">Calzado dieléctrico</option>
-                  <option value="calzado-sustancias-quimicas">Calzado contra sustancias químicas</option>
-                  <option value="polainas">Polainas</option>
-                  <option value="botas-impermeables">Botas impermeables</option>
-                  <option value="proteccion-caidas-altura">Equipo de protección contra caídas de altura</option>
-                  <option value="equipo-brigadista-incendio">Equipo para brigadista contra incendio</option>
-                </select>
+            <tr>
+              <td rowSpan="6" colSpan="1">
+                <table className="compact-table no-border">
+                  <div className="image-observations-container">
+                    <div className="image-section">
+                      <input type="file" accept="image/*" onChange={handleImageChange} />
+                      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+                      {imagePreview ? (
+                        <img src={imagePreview} alt="Maquinaria" className="image-preview" />
+                      ) : (
+                        <p>No hay imagen seleccionada</p>
+                      )}
+                    </div>
+                  </div>
+                </table>
+              </td>
+              <td colSpan="2">
+                <table className="compact-table no-border">
+                  <thead>
+                    <tr>
+                      <th style={{ fontSize: '0.8em' }}>Consecuencia</th>
+                      <th style={{ fontSize: '0.8em' }}>Exposición</th>
+                      <th style={{ fontSize: '0.8em' }}>Probabilidad</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <select value={consequence} onChange={(e) => setConsequence(e.target.value)}>
+                          {opcionesConsecuencia.map(opcion => (
+                            <option key={opcion} value={opcion}>{opcion}</option>
+                          ))}
+                        </select>
+                        <div>Valor: {calcularValorConsecuencia()}</div>
+                      </td>
+                      <td>
+                        <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
+                          {opcionesExposicion.map(opcion => (
+                            <option key={opcion} value={opcion}>{opcion}</option>
+                          ))}
+                        </select>
+                        <div>Valor: {calcularValorExposicion()}</div>
+                      </td>
+                      <td>
+                        <select value={probability} onChange={(e) => setProbability(e.target.value)}>
+                          {opcionesProbabilidad.map(opcion => (
+                            <option key={opcion} value={opcion}>{opcion}</option>
+                          ))}
+                        </select>
+                        <div>Valor: {calcularValorProbabilidad()}</div>
+                        
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colSpan="3">
+                        <div className="risk-magnitude-container">
+                          <div className="risk-magnitude-bar" style={{ backgroundColor: color, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <span>{magnitudRiesgo}</span>
+                            <span>{texto}</span>
+                            <span style={{ marginLeft: '20px' }}><strong>Acción:</strong> {accion}</span>
+                            <span style={{ marginLeft: '20px' }}><strong>Clasificación:</strong> {clasificacion}</span>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                {/* Observaciones generales */}
+                <div className="observations-section" style={{ marginTop: '20px' }}>
+                  <label htmlFor="observaciones">Observaciones:</label>
+                  <textarea
+                    id="observaciones"
+                    value={observacionesGenerales}
+                    onChange={(e) => setObservacionesGenerales(e.target.value)}
+                    placeholder="Agregar observaciones generales aquí"
+                    rows="4"
+                    cols="30"
+                  />
+                </div>
+                <div><table><th>hola <th>hola</th></th></table></div>
                 
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <select value={consecuencia} onChange={(e) => setConsecuencia(e.target.value)}>
-                {opcionesConsecuencia.map(opcion => (
-                  <option key={opcion} value={opcion}>{opcion}</option>
-                ))}
-              </select>
-            </td>
-            <td>
-              <select value={exposicion} onChange={(e) => setExposicion(e.target.value)}>
-                {opcionesExposicion.map(opcion => (
-                  <option key={opcion} value={opcion}>{opcion}</option>
-                ))}
-              </select>
-            </td>
-            <td>
-              <select value={probabilidad} onChange={(e) => setProbabilidad(e.target.value)}>
-                {opcionesProbabilidad.map(opcion => (
-                  <option key={opcion} value={opcion}>{opcion}</option>
-                ))}
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td colSpan="3" className="header">Clasificación de Magnitud de Riesgo</td>
-          </tr>
-          <tr style={{ backgroundColor: color }}>
-            <td colSpan="3">Magnitud del Riesgo: {magnitudRiesgo}</td>
-          </tr>
-          <tr style={{ backgroundColor: color }}>
-            <td colSpan="3">Clasificación: {clasificacion}</td>
-          </tr>
-          <tr style={{ backgroundColor: color }}>
-            <td colSpan="3">Acción: {accion}</td>
-          </tr>
-          <tr></tr>
-          <tr>
-            <td className="header" colSpan="5">Identificaciones de Riesgos:</td>
-            <td className="header" colSpan="6">Principales partes del cuerpo expuestas al riesgo:</td>
-          </tr>
-          <tr>
-            <td colSpan="5">
-            <textarea 
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-                placeholder="Escribe tus observaciones aquí"
-              />
-
-            </td>
-            <td colSpan="6">
-              
-                <select>
-                  <option value="Seleccione-una-casilla">Seleccione una casilla</option>
-                  <option value="cabeza-oidos">Cabeza y oidos</option>
-                  <option value="ojos-cara">Ojos y cara</option>
-                  <option value="brazos-manos">Brazos y manos</option>
-                  <option value="dedos">Dedos</option>
-                  <option value="sistema-respiratorio">Sistema respiratorio</option>
-                  <option value="tronco">Tronco</option>
-                  <option value="extremidades-inferiores">Extremidades inferiores</option>
-                </select>
-                
-              
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td className="footer-header" colSpan="4">Observaciones:</td>
-            <td colSpan="4">
-              <textarea 
-                value={observaciones} 
-                onChange={(e) => setObservaciones(e.target.value)} 
-                rows="4" 
-                cols="50" 
-                placeholder="Escribe tus observaciones aquí"
-              />
-            </td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-    <button onClick={downloadPDF} className="download-button">
-        Descargar PDF
+      <button onClick={downloadPDF} className="download-button">
+        Descargar
       </button>
     </div>
-    
   );
 };
 
-export default ToolEvaluationTable;
+export default RiskTable;
