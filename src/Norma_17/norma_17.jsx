@@ -282,7 +282,7 @@ const RiskAssessmentTable = () => {
             </td>
           </tr>
           <tr>
-            <td className="header right-aligned" colSpan="4">
+            <td className="header right-aligned" colSpan="4z">
               <div className="left-column">
                 <div className="text1">Principales partes del cuerpo expuestas al riesgo:</div>
                 <div className="risk-item">Cabeza y Oídos: <span className="risk-mark">{affectedBodyParts.includes('Cabeza y Oídos') ? 'X' : ''}</span></div>
