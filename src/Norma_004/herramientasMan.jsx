@@ -31,7 +31,7 @@ const RiskTable = () => {
 
   const [observacionesGenerales, setObservacionesGenerales] = useState('');
 
-  const [maquinariaNombre, setMaquinariaNombre] = useState('');
+
   const [maquinariaDescripcion, setMaquinariaDescripcion] = useState('');
   const [energiaUtilizada, setEnergiaUtilizada] = useState('Eléctrica');
 
@@ -129,13 +129,13 @@ const RiskTable = () => {
         <table className="main-table">
           <thead>
             <tr>
-              <th colSpan="3">Nombre de la maquinaria o equipo:</th>
-              <th colSpan="3">
+              <th colSpan="4">Nombre de la maquinaria o equipo:</th>
+              <th colSpan="2">
               <textarea name="" id="" placeholder='Nombre de la maquinaria'></textarea>
               </th>
             </tr>
             <tr>
-              <th colSpan="3">Descripción de la maquinaria o equipo:</th>
+              <th colSpan="4">Descripción de la maquinaria o equipo:</th>
               <th colSpan="2">
                 <textarea
                   value={maquinariaDescripcion}
@@ -149,8 +149,8 @@ const RiskTable = () => {
             <tr>
               
               
-              <th colSpan="4">Energía utilizada:</th>
-              <th colSpan="2">
+              <th colSpan="1">Energía utilizada:</th>
+              <th colSpan="1">
                 <select
                   value={energiaUtilizada}
                   onChange={(e) => setEnergiaUtilizada(e.target.value)}
@@ -160,13 +160,15 @@ const RiskTable = () => {
                   ))}
                 </select>
               </th>
+              <th colSpan="3">Area:</th>
+              <th><input type="text" /></th>
             </tr>
             <tr>
-              <th colSpan="1">Localización esquemática de los riesgos en la maquinaria y/o equipo</th>
+              <th colSpan="2">Localización esquemática de los riesgos en la maquinaria y/o equipo</th>
               <th>POE:</th>
-              <th>0-4</th>
-              <th>Tiempo de exposición:</th>
-              <th>
+              <th colSpan="2"><input type="text" /></th>
+              <th colSpan="2">Tiempo de exposición:</th>
+              <th colSpan="">
                 <select value={tiempoExposicion} onChange={(e) => setTiempoExposicion(e.target.value)}>
                   {opcionesTiempoExposicion.map(opcion => (
                     <option key={opcion} value={opcion}>{opcion}</option>
@@ -178,7 +180,7 @@ const RiskTable = () => {
           <tbody>
             
             <tr>
-              <td rowSpan="3" colSpan="4">
+              <td rowSpan="4" colSpan="3">
                 <table className="compact-table no-border">
                   <div className="image-observations-container">
                     <div className="image-section">
@@ -193,7 +195,7 @@ const RiskTable = () => {
                   </div>
                 </table>
               </td>
-              <td colSpan="2">
+              <td colSpan="3">
                 <table className="compact-table no-border">
                   <thead>
                     <tr>
@@ -212,7 +214,7 @@ const RiskTable = () => {
                         </select>
                         <div>Valor: {calcularValorConsecuencia()}</div>
                       </td>
-                      <td colSpan="2">
+                      <td colSpan="1">
                         <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
                           {opcionesExposicion.map(opcion => (
                             <option key={opcion} value={opcion}>{opcion}</option>
@@ -256,6 +258,8 @@ const RiskTable = () => {
                     cols="30"
                   />
                 </div>
+                <tbody>
+                </tbody>
                 
                
                 
