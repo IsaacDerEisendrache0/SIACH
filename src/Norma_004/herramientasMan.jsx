@@ -129,18 +129,13 @@ const RiskTable = () => {
         <table className="main-table">
           <thead>
             <tr>
-              <th colSpan="4">Nombre de la maquinaria o equipo:</th>
-              <th colSpan="2">
-                <input
-                  type="text"
-                  value={maquinariaNombre}
-                  onChange={(e) => setMaquinariaNombre(e.target.value)}
-                  placeholder="Ingrese el nombre de la maquinaria"
-                />
+              <th colSpan="3">Nombre de la maquinaria o equipo:</th>
+              <th colSpan="3">
+              <textarea name="" id="" placeholder='Nombre de la maquinaria'></textarea>
               </th>
             </tr>
             <tr>
-              <th colSpan="4">Descripción de la maquinaria o equipo:</th>
+              <th colSpan="3">Descripción de la maquinaria o equipo:</th>
               <th colSpan="2">
                 <textarea
                   value={maquinariaDescripcion}
@@ -152,6 +147,8 @@ const RiskTable = () => {
               </th>
             </tr>
             <tr>
+              
+              
               <th colSpan="4">Energía utilizada:</th>
               <th colSpan="2">
                 <select
@@ -181,7 +178,7 @@ const RiskTable = () => {
           <tbody>
             
             <tr>
-              <td rowSpan="6" colSpan="1">
+              <td rowSpan="3" colSpan="4">
                 <table className="compact-table no-border">
                   <div className="image-observations-container">
                     <div className="image-section">
@@ -200,14 +197,14 @@ const RiskTable = () => {
                 <table className="compact-table no-border">
                   <thead>
                     <tr>
-                      <th style={{ fontSize: '0.8em' }}>Consecuencia</th>
-                      <th style={{ fontSize: '0.8em' }}>Exposición</th>
-                      <th style={{ fontSize: '0.8em' }}>Probabilidad</th>
+                      <th>Consecuencia</th>
+                      <th>Exposición</th>
+                      <th>Probabilidad</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>
+                      <td colSpan="1">
                         <select value={consequence} onChange={(e) => setConsequence(e.target.value)}>
                           {opcionesConsecuencia.map(opcion => (
                             <option key={opcion} value={opcion}>{opcion}</option>
@@ -215,7 +212,7 @@ const RiskTable = () => {
                         </select>
                         <div>Valor: {calcularValorConsecuencia()}</div>
                       </td>
-                      <td>
+                      <td colSpan="2">
                         <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
                           {opcionesExposicion.map(opcion => (
                             <option key={opcion} value={opcion}>{opcion}</option>
@@ -223,15 +220,15 @@ const RiskTable = () => {
                         </select>
                         <div>Valor: {calcularValorExposicion()}</div>
                       </td>
-                      <td>
-                        <select value={probability} onChange={(e) => setProbability(e.target.value)}>
-                          {opcionesProbabilidad.map(opcion => (
-                            <option key={opcion} value={opcion}>{opcion}</option>
-                          ))}
-                        </select>
-                        <div>Valor: {calcularValorProbabilidad()}</div>
-                        
-                      </td>
+                      <td colSpan="3" rowSpan="1">
+                    <select value={probability} onChange={(e) => setProbability(e.target.value)}>
+                      {opcionesProbabilidad.map(opcion => (
+                      <option key={opcion} value={opcion}>{opcion}</option>
+                         ))}
+                      </select>
+                    <div>Valor: {calcularValorProbabilidad()}</div>
+                    </td>
+
                     </tr>
                     <tr>
                       <td colSpan="3">
@@ -239,8 +236,8 @@ const RiskTable = () => {
                           <div className="risk-magnitude-bar" style={{ backgroundColor: color, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                             <span>{magnitudRiesgo}</span>
                             <span>{texto}</span>
-                            <span style={{ marginLeft: '20px' }}><strong>Acción:</strong> {accion}</span>
-                            <span style={{ marginLeft: '20px' }}><strong>Clasificación:</strong> {clasificacion}</span>
+                            <span ><strong>Acción:</strong> {accion}</span>
+                            <span ><strong>Clasificación:</strong> {clasificacion}</span>
                           </div>
                         </div>
                       </td>
@@ -259,7 +256,9 @@ const RiskTable = () => {
                     cols="30"
                   />
                 </div>
-                <div><table><th>hola <th>hola</th></th></table></div>
+                
+               
+                
                 
               </td>
             </tr>
