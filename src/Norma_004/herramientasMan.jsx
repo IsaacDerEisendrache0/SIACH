@@ -122,7 +122,6 @@ const RiskTable = () => {
         pdf.save('reporte.pdf');
       });
   };
-
   return (
     <div>
       <div id="pdf-content" className="risk-table">
@@ -147,8 +146,6 @@ const RiskTable = () => {
               </th>
             </tr>
             <tr>
-              
-              
               <th colSpan="1">Energía utilizada:</th>
               <th colSpan="1">
                 <select
@@ -161,12 +158,12 @@ const RiskTable = () => {
                 </select>
               </th>
               <th colSpan="3">Area:</th>
-              <th><input type="text" /></th>
+              <th><input type="text" placeholder='Escriba el area'/></th>
             </tr>
             <tr>
               <th colSpan="2">Localización esquemática de los riesgos en la maquinaria y/o equipo</th>
               <th>POE:</th>
-              <th colSpan="2"><input type="text" /></th>
+              <th colSpan="2"><input type="text" placeholder='Escriba el POE' /></th>
               <th colSpan="2">Tiempo de exposición:</th>
               <th colSpan="">
                 <select value={tiempoExposicion} onChange={(e) => setTiempoExposicion(e.target.value)}>
@@ -178,7 +175,6 @@ const RiskTable = () => {
             </tr>
           </thead>
           <tbody>
-            
             <tr>
               <td rowSpan="4" colSpan="3">
                 <table className="compact-table no-border">
@@ -260,16 +256,11 @@ const RiskTable = () => {
                 </div>
                 <tbody>
                 </tbody>
-                
-               
-                
-                
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-
       <button onClick={downloadPDF} className="download-button">
         Descargar
       </button>
