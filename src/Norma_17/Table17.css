@@ -236,9 +236,9 @@
   }
 
   .table-container {
-    margin: 0;
-    padding: 0;
-    display: inline-block; /* Asegura que la tabla no ocupe más espacio del necesario */
+    width: 100%;
+    margin-left: auto; /* Empuja la tabla hacia la derecha */
+    margin-right: 0;
   } 
 
 

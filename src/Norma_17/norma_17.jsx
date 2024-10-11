@@ -264,7 +264,7 @@ const RiskAssessmentTable = () => {
         <table class="custom-table" className="table-container">
         <thead>
           <tr>
-            <td className="no-border-cell" colSpan="7">
+            <td className="no-border-cell" colSpan="5   ">
             <div className="full-width-cell">
               <label htmlFor="puesto">Puesto:</label>
               <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange}>
@@ -277,12 +277,15 @@ const RiskAssessmentTable = () => {
                   </option>
                 ))}
               </select>
-          <div>Descripción de la actividad: Preparación de microfórmulas, pesaje y mezclado de vitaminas, minerales y aditivos.</div>
+              <div>
+                <label for="descripcion-actividad">Descripción de la actividad:</label>
+                <textarea id="descripcion-actividad" name="descripcion-actividad" rows="2" cols="50" placeholder="Escribe aquí la descripción de la actividad..."></textarea>
+              </div>
         </div>
             </td>
           </tr>
           <tr>
-            <td className="header right-aligned" colSpan="4z">
+            <td className="header right-aligned" colSpan="3">
               <div className="left-column">
                 <div className="text1">Principales partes del cuerpo expuestas al riesgo:</div>
                 <div className="risk-item">Cabeza y Oídos: <span className="risk-mark">{affectedBodyParts.includes('Cabeza y Oídos') ? 'X' : ''}</span></div>
@@ -304,7 +307,7 @@ const RiskAssessmentTable = () => {
                       </option>
                     ))}
                   </select>
-            </div>              
+            </div>               
                 <div className='Date1'>Fecha de inspección: <input type="date" defaultValue="2023-09-13" /></div>
                 <div className='Date1'>Tiempo de exposición: <input type="text" defaultValue="8hrs" /></div>
               </div>
@@ -399,6 +402,14 @@ const RiskAssessmentTable = () => {
               </td>
           </tr>
           <tr>
+          <td colSpan="5" className="right-aligned">
+          <div className="sub-header">Descripción del equipo de protección personal</div>
+          <div>
+                <textarea id="descripcion-actividad" name="descripcion-actividad" rows="2" cols="50" placeholder="Escribe aquí la descripción de la actividad..."></textarea>
+              </div>
+
+            </td>
+
           </tr>
           <tr>
             <td colSpan="4" className="right-aligned">
