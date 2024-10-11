@@ -2,11 +2,6 @@ import React, { useState } from 'react';
 import './HerramientasMan.css';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-
-
-
-
-
 const RiskTable = () => {
   const opcionesConsecuencia = ['Catástrofe', 'Varias muertes', 'Muerte', 'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'];
   const opcionesExposicion = ['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente'];
@@ -20,25 +15,15 @@ const RiskTable = () => {
   ];
   const opcionesTiempoExposicion = ['0-2 hrs', '2-4 hrs', '4-8 hrs', '8+ hrs'];
   const opcionesEnergia = ['Eléctrica', 'Manual', 'Mecánica', 'Hidráulica', 'Eólica'];
-
   const [consequence, setConsequence] = useState('Lesiones sin baja');
   const [exposure, setExposure] = useState('Ocasionalmente');
   const [probability, setProbability] = useState('Coincidencia extremadamente remota pero concebible');
   const [tiempoExposicion, setTiempoExposicion] = useState('4-8 hrs');
-
   const [imagePreview, setImagePreview] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-
   const [observacionesGenerales, setObservacionesGenerales] = useState('');
-
-
   const [maquinariaDescripcion, setMaquinariaDescripcion] = useState('');
   const [energiaUtilizada, setEnergiaUtilizada] = useState('Eléctrica');
-
-
-
-  
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
@@ -53,9 +38,6 @@ const RiskTable = () => {
       reader.readAsDataURL(file);
     }
   };
-
-
-
   const calcularValorConsecuencia = () => {
     const valoresConsecuencia = {
       'Catástrofe': 50,
@@ -267,5 +249,4 @@ const RiskTable = () => {
     </div>
   );
 };
-
 export default RiskTable;
