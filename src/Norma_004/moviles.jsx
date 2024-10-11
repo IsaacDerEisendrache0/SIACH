@@ -176,7 +176,7 @@ const RiskTable = () => {
       <tbody>
         <tr>
           {/* Primera columna: Imagen */}
-          <td colSpan="4" rowSpan="3" className="image-section">
+          <td colSpan="3" rowSpan="3" className="image-section">
             <input type="file" accept="image/*" onChange={handleImageUpload} />
             {image ? (
               <img src={image} alt="Uploaded Equipment" className="equipment-image" />
@@ -185,7 +185,7 @@ const RiskTable = () => {
             )}
           </td>
           {/* Segunda columna: Identificación de riesgos */}
-          <td colSpan="6" rowSpan="1" className="risk-info">
+          <td colSpan="5" rowSpan="1" className="risk-info">
             <table className="inner-table">
               <thead>
                 <tr>
@@ -212,7 +212,7 @@ const RiskTable = () => {
             </table>
           </td>
           {/* Tercera columna: Sistemas de seguridad */}
-          <td colSpan="6" className="safety-info">
+          <td colSpan="4" className="safety-info">
             <table className="inner-table">
               <thead>
                 <tr>

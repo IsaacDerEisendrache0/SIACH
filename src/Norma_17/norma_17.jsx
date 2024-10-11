@@ -285,17 +285,26 @@ const RiskAssessmentTable = () => {
             </td>
           </tr>
           <tr>
-            <td className="header right-aligned" colSpan="3">
+          <td className="header right-aligned" colSpan="3">
+          <div className="text1">Principales partes del cuerpo expuestas al riesgo:</div>
+
+            <div className="body-parts-container">
+              
               <div className="left-column">
-                <div className="text1">Principales partes del cuerpo expuestas al riesgo:</div>
+                
                 <div className="risk-item">Cabeza y Oídos: <span className="risk-mark">{affectedBodyParts.includes('Cabeza y Oídos') ? 'X' : ''}</span></div>
                 <div className="risk-item">Ojos y Cara: <span className="risk-mark">{affectedBodyParts.includes('Ojos y Cara') ? 'X' : ''}</span></div>
                 <div className="risk-item">Brazos y Manos: <span className="risk-mark">{affectedBodyParts.includes('Brazos y Manos') ? 'X' : ''}</span></div>
+              </div>
+              <div className="right-column">
                 <div className="risk-item">Tronco: <span className="risk-mark">{affectedBodyParts.includes('Tronco') ? 'X' : ''}</span></div>
                 <div className="risk-item">Sistema respiratorio: <span className="risk-mark">{affectedBodyParts.includes('Sistema respiratorio') ? 'X' : ''}</span></div>
                 <div className="risk-item">Extremidades inferiores: <span className="risk-mark">{affectedBodyParts.includes('Extremidades inferiores') ? 'X' : ''}</span></div>
               </div>
-            </td>
+            </div>
+          </td>
+
+            
             <td className="header right-aligned" colSpan="3">
               <div className="right-column">
                 <div className="Date1">
@@ -335,7 +344,7 @@ const RiskAssessmentTable = () => {
               </ul>
             </td>
             <td className="right-section right-aligned">
-              <div className="sub-header">Equipo utilizado<br></br></div>
+              <div className="text1">Equipo utilizado<br></br></div>
               <div className="section-content">
                 <select value={selectedOptionEquipoUtilizado} onChange={handleOptionChangeEquipoUtilizado}>
                   <option value="">Selecciona la extremidad afectada</option>
@@ -363,7 +372,7 @@ const RiskAssessmentTable = () => {
               </div>
             </td>
               <td colSpan="2" className="right-section right-aligned">
-                <div className="sub-header">Equipo de protección personal sugerido</div>
+                <div className="text1">Equipo de protección personal sugerido</div>
                 <div className="body-and-hazards-container">
                   <select value={selectedOptionProteccionSugerida} onChange={handleOptionChangeProteccionSugerida}>
                     <option value="">Selecciona la extremidad afectada</option>
@@ -403,17 +412,15 @@ const RiskAssessmentTable = () => {
           </tr>
           <tr>
           <td colSpan="5" className="right-aligned">
-          <div className="sub-header">Descripción del equipo de protección personal</div>
+          <div className="text1">Descripción del equipo de protección personal</div>
           <div>
                 <textarea id="descripcion-actividad" name="descripcion-actividad" rows="2" cols="50" placeholder="Escribe aquí la descripción de la actividad..."></textarea>
               </div>
-
             </td>
-
           </tr>
           <tr>
             <td colSpan="4" className="right-aligned">
-              <div className="sub-header">Evaluación de riesgo de trabajo</div>
+              <div className="text1">Evaluación de riesgo de trabajo</div>
               <table className="inner-table">
                 <thead>
                   <tr>
@@ -469,7 +476,7 @@ const RiskAssessmentTable = () => {
               </table>
             </td>
             <td colSpan="3" className="right-aligned">
-              <div className="text2">Clasificación de Magnitud de Riesgo</div>
+              <div className="text1">Clasificación de Magnitud de Riesgo</div>
               <div className="risk-magnitude">
                 <div className="risk-value">Magnitud del Riesgo: {calculateRisk().toFixed(2)}</div>
                 <div className="risk-classification">
