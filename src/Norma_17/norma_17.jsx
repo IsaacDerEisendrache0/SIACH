@@ -220,43 +220,26 @@ const RiskAssessmentTable = () => {
 
   };
 
-  const downloadPDF = () => {
+  const downloadImage = () => {
     const input = document.querySelector('.table-container');
-    
+
     // Aumentamos la escala para una mejor calidad de imagen
-    html2canvas(input, { scale: 2 }).then((canvas) => {
-      // Recortar el canvas a la altura del contenido (sin espacio en blanco)
-      const imgData = canvas.toDataURL('image/png');
-      const imgWidth = 210; // Ancho A4 en mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width; // Escalamos proporcionalmente
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      
-      // Si la imagen es más alta que una página A4, la ajustamos
-      if (imgHeight > 297) {
-        const pageHeight = 297; // Altura de una página A4
-        let heightLeft = imgHeight;
-        let position = 0;
-        
-        // Añadir la primera parte de la tabla
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-  
-        // Si la tabla es más alta que la página, se divide en múltiples páginas
-        while (heightLeft >= 0) {
-          position = heightLeft - imgHeight;
-          pdf.addPage();
-          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
-        }
-      } else {
-        // Si la imagen cabe en una sola página, solo la agregamos
-        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-      }
-  
-      // Guardamos el PDF
-      pdf.save('tabla_herramientas_manual.pdf');
+    html2canvas(input, { scale: 2, useCORS: true, backgroundColor: null }).then((canvas) => {
+        // Convertimos el canvas a imagen (formato PNG)
+        const imgData = canvas.toDataURL('image/png');
+
+        // Creamos un enlace para la descarga
+        const link = document.createElement('a');
+        link.href = imgData;
+        link.download = 'tabla_herramientas_manual.png'; // Nombre del archivo
+
+        // Simulamos un clic en el enlace para descargar la imagen
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     });
-  };
+};
+
   
   
   return (
@@ -307,7 +290,7 @@ const RiskAssessmentTable = () => {
             
             <td className="header right-aligned" colSpan="3">
               <div className="right-column">
-                <div className="Date1">
+                <div className="label-action">
                   <label htmlFor="area">Área:</label>
                   <select id="area" value={areaSeleccionada} onChange={handleAreaChange}>
                     {areas.map((area, index) => (
@@ -317,8 +300,8 @@ const RiskAssessmentTable = () => {
                     ))}
                   </select>
             </div>               
-                <div className='Date1'>Fecha de inspección: <input type="date" defaultValue="2023-09-13" /></div>
-                <div className='Date1'>Tiempo de exposición: <input type="text" defaultValue="8hrs" /></div>
+                <div className="label-action">Fecha de inspección: <input type="date" defaultValue="2023-09-13" /></div>
+                <div className="label-action">Tiempo de exposición: <input type="text" defaultValue="8hrs" className="small-input" /></div>
               </div>
             </td>
           </tr>
@@ -490,7 +473,7 @@ const RiskAssessmentTable = () => {
           </tr>
         </tbody>
       </table>
-      <button onClick={downloadPDF} className="download-button">
+      <button onClick={downloadImage} className="download-button">
         Descargar PDF
       </button>
     </div>

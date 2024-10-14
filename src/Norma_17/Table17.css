@@ -27,7 +27,6 @@
   width: 100%; /* Ancho completo */
 }
 
-
 /* Alineaciones y márgenes */
 .move-right {
   margin-left: 20px; /* Ajusta el valor según lo necesario */
@@ -57,7 +56,7 @@
 .full-width-cell, .no-border-cell {
   width: 100%;
   text-align: left;
-  padding: 10px;
+  padding: 0px;
   box-sizing: border-box; /* Incluye padding en el ancho total */
 }
 
@@ -69,19 +68,21 @@
 
 /* Estilos de lista y elementos de riesgo */
 .hazard-item {
-  position: relative;
-  padding-right: 10px; /* Espacio para el checkbox */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 0; /* Reduce el padding para juntar más las opciones */
+  margin: 0; /* Elimina el margen para que no haya espacio adicional */
 }
 
 .hazard-checkbox {
-  position: absolute;
-  right: 0;
+  position: relative; /* Cambia de absolute a relative */
 }
 
 .hazard-list {
   list-style-type: none;
-  margin-left: auto; /* Alinea la lista a la izquierda */
-  padding-left: 0;
+  padding: 0;
+  margin: 0;
 }
 
 /* Asegúrate de que la celda ocupe todo el espacio disponible */
@@ -146,6 +147,9 @@
   border: 1px solid black; /* Asegura que esta regla tenga prioridad */
   padding: 8px;
   text-align: center;
+  max-width: 200px; /* Ajusta el ancho máximo según sea necesario */
+  overflow: hidden;
+  width: 200px;
 }
 
 /* Estilo para la evaluación de riesgos */
@@ -153,4 +157,105 @@
   display: flex;
   justify-content: space-between; /* Crea separación entre las dos columnas */
   margin-top: 0;
+}
+
+.protection-cell {
+  width: 200px; /* Ajusta el ancho según sea necesario */
+}
+
+/* Clase para alinear etiquetas y acciones en una fila */
+.label-action {
+  display: flex;
+  justify-content: space-between; /* Espacio entre la etiqueta y el elemento */
+  align-items: center; /* Alinea verticalmente en el centro */
+  margin-bottom: 10px; /* Espacio entre cada fila, ajusta según sea necesario */
+}
+
+/* Ajustes específicos para las etiquetas y acciones */
+.label-action label {
+  margin-right: 10px; /* Espacio entre la etiqueta y el elemento */
+}
+
+.label-action select,
+.label-action input {
+  flex-grow: 1; /* Permite que el elemento ocupe el espacio restante */
+  max-width: 1000px; /* Ancho máximo para evitar que se estiren demasiado */
+}
+
+/* Clase para hacer el input más pequeño */
+.small-input {
+  width: 80px; /* Ajusta el ancho según sea necesario */
+}
+
+/* ===== Responsividad ===== */
+
+/* Pantallas pequeñas (móviles) */
+@media (max-width: 768px) {
+  .inner-table, .risk-table, .container-full-width, .main-table {
+    width: 100%; /* Mantén el ancho completo para tablas */
+  }
+
+  .main-table th, .main-table td, .custom-table th, .custom-table td {
+    padding: 6px;
+    font-size: 0.8rem; /* Reduce el tamaño de fuente */
+  }
+
+  .label-action {
+    flex-direction: column; /* Coloca las etiquetas e inputs en columnas */
+    align-items: flex-start;
+  }
+
+  .small-input {
+    width: 100%; /* El input ocupa todo el ancho en pantallas pequeñas */
+  }
+
+  .protection-image-container {
+    max-width: 100%; /* Ajusta el ancho del contenedor de imágenes */
+  }
+
+  .protection-image {
+    max-width: 50px; /* Ajusta el tamaño de las imágenes */
+  }
+
+  .table-cell {
+    flex-direction: column; /* Apila el contenido */
+  }
+
+  .hazard-checkbox {
+    margin-bottom: 5px; /* Espacio entre el checkbox y el texto */
+  }
+
+  /* Scroll horizontal en tablas */
+  .table-container {
+    padding: 0; /* Sin padding */
+    margin: 0; /* Sin margen */
+    width: 100%; /* Ocupar el ancho completo */
+}
+
+
+}
+
+/* Pantallas medianas (tabletas) */
+@media (max-width: 1024px) {
+  .inner-table, .risk-table, .container-full-width, .main-table {
+    width: 100%; /* Ancho completo */
+  }
+
+  .main-table th, .main-table td, .custom-table th, .custom-table td {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .label-action {
+    flex-direction: row; /* Mantén la etiqueta y el input en la misma línea */
+    justify-content: space-between;
+  }
+
+  .small-input {
+    width: 100px; /* Ajusta el ancho de los inputs */
+  }
+
+  .protection-image {
+    max-width: 60px; /* Ajusta el tamaño de imágenes */
+  }
 }

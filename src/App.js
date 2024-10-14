@@ -41,7 +41,7 @@ function HomePage() {
   };
 
   return (
-    <div className="container mt-5">
+    <div class="container-fluid mt-5">
       <h1 className="text">Bienvenido a la Página de Inicio</h1>
 
       <div className="dropdown mt-3">
