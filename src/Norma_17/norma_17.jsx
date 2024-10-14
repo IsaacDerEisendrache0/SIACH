@@ -247,7 +247,7 @@ const RiskAssessmentTable = () => {
         <table class="custom-table" className="table-container">
         <thead>
           <tr>
-            <td className="no-border-cell" colSpan="5   ">
+            <td className="no-border-cell" colSpan="5">
             <div className="full-width-cell">
               <label htmlFor="puesto">Puesto:</label>
               <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange}>
