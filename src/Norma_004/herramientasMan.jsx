@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import './HerramientasMan.css';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+
+
+
 const RiskTable = () => {
   const opcionesConsecuencia = ['Catástrofe', 'Varias muertes', 'Muerte', 'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'];
   const opcionesExposicion = ['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente'];
@@ -91,6 +94,13 @@ const RiskTable = () => {
     }
   };
 
+  const peligros = [
+    "Golpes y cortes en manos ocasionados por las propias herramientas durante el trabajo normal con las mismas",
+    "Lesiones oculares por partículas provenientes de los objetos que se trabajan y/o de la propia herramienta",
+    "Golpes en diferentes partes del cuerpo por despido de la propia herramienta o del material trabajado",
+    "Esguince por sobreesfuerzos o gestos violentos"
+  ];
+
   const { color, texto, accion, clasificacion } = obtenerColorPorRiesgo(calcularMagnitudRiesgo());
   const magnitudRiesgo = calcularMagnitudRiesgo();
 
@@ -104,6 +114,8 @@ const RiskTable = () => {
         pdf.save('reporte.pdf');
       });
   };
+
+  
   return (
     <div>
       <div id="pdf-content" className="risk-table">
@@ -114,22 +126,8 @@ const RiskTable = () => {
               <th colSpan="2">
               <textarea name="" id="" placeholder='Nombre de la maquinaria'></textarea>
               </th>
-            </tr>
-            <tr>
-              <th colSpan="4">Descripción de la maquinaria o equipo:</th>
+              <th colSpan="2">Energía utilizada:</th>
               <th colSpan="2">
-                <textarea
-                  value={maquinariaDescripcion}
-                  onChange={(e) => setMaquinariaDescripcion(e.target.value)}
-                  placeholder="Describa la maquinaria o equipo"
-                  rows="2"
-                  cols="30"
-                />
-              </th>
-            </tr>
-            <tr>
-              <th colSpan="1">Energía utilizada:</th>
-              <th colSpan="1">
                 <select
                   value={energiaUtilizada}
                   onChange={(e) => setEnergiaUtilizada(e.target.value)}
@@ -139,22 +137,42 @@ const RiskTable = () => {
                   ))}
                 </select>
               </th>
-              <th colSpan="3">Area:</th>
-              <th><input type="text" placeholder='Escriba el area'/></th>
             </tr>
             <tr>
-              <th colSpan="2">Localización esquemática de los riesgos en la maquinaria y/o equipo</th>
-              <th>POE:</th>
-              <th colSpan="2"><input type="text" placeholder='Escriba el POE' /></th>
+              <th colSpan="4">Descripción de la maquinaria o equipo:</th>
+              <th colSpan="2">
+                <textarea
+                  value={maquinariaDescripcion}
+                  onChange={(e) => setMaquinariaDescripcion(e.target.value)}
+                  placeholder="Describa la maquinaria o equipo"
+                  rows="1"
+                  cols="30"
+                />
+              </th>
+              <th colSpan="2">Area:</th>
+              <th><input type="text" placeholder='Escriba el area'/></th>
+            </tr>
+
+          
+            
+            <tr>
+              <th colSpan="3">Localización esquemática de los riesgos en la maquinaria y/o equipo</th>
+              
+              <th colSpan="3"><input type="text" placeholder='Escriba el POE' />
+              
+              
+              </th>
               <th colSpan="2">Tiempo de exposición:</th>
-              <th colSpan="">
+              <th colSpan="1">
                 <select value={tiempoExposicion} onChange={(e) => setTiempoExposicion(e.target.value)}>
                   {opcionesTiempoExposicion.map(opcion => (
                     <option key={opcion} value={opcion}>{opcion}</option>
                   ))}
                 </select>
               </th>
+              
             </tr>
+            
           </thead>
           <tbody>
             <tr>
@@ -204,14 +222,14 @@ const RiskTable = () => {
                     <select value={probability} onChange={(e) => setProbability(e.target.value)}>
                       {opcionesProbabilidad.map(opcion => (
                       <option key={opcion} value={opcion}>{opcion}</option>
-                         ))}
+                        ))}
                       </select>
                     <div>Valor: {calcularValorProbabilidad()}</div>
                     </td>
 
                     </tr>
                     <tr>
-                      <td colSpan="3">
+                      <td colSpan="3" >
                         <div className="risk-magnitude-container">
                           <div className="risk-magnitude-bar" style={{ backgroundColor: color, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                             <span>{magnitudRiesgo}</span>
@@ -225,22 +243,61 @@ const RiskTable = () => {
                   </tbody>
                 </table>
                 {/* Observaciones generales */}
-                <div className="observations-section" style={{ marginTop: '20px' }}>
+                
+                <tbody>
+                </tbody>
+              </td>
+
+              <td colspan="2" rowSpan="3">
+                <tr rowSpan="3">dasds</tr>
+                
+              </td>
+
+              <td colSpan="2">hola
+                
+              </td>
+              
+
+            </tr>
+            
+            
+          </tbody>
+            <td colspan="9">
+              <table className="main-table">
+                <thead>
+                  <tr>
+                    <th colspan="2">Identificaciones de Riesgos:</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {peligros.map((peligro, index) => (
+                    <tr key={index}>
+                      <td>{peligro}</td>
+                      <td>
+                        <input type="checkbox" id={`check${index + 1}`} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </td>
+
+
+          <tr>
+          <td colSpan="9">
+          <div className="observations-section" style={{ marginTop: '30px' }}>
                   <label htmlFor="observaciones">Observaciones:</label>
                   <textarea
                     id="observaciones"
                     value={observacionesGenerales}
                     onChange={(e) => setObservacionesGenerales(e.target.value)}
                     placeholder="Agregar observaciones generales aquí"
-                    rows="4"
+                    rows="2"
                     cols="30"
                   />
                 </div>
-                <tbody>
-                </tbody>
-              </td>
-            </tr>
-          </tbody>
+          </td>
+          </tr>
         </table>
       </div>
       <button onClick={downloadPDF} className="download-button">

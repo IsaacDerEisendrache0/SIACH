@@ -1,118 +1,143 @@
-/* HerramientasMan.css */
-
-/* Estilo para la tabla principal */
 .main-table {
   width: 100%;
   border-collapse: collapse;
+  text-align: center;
+  font-size: 14px;
 }
 
-.main-table th,
-.main-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
+.main-table th, .main-table td {
+  border: 1px solid #000;
+  padding: 5px;
 }
 
-/* Estilo para la tabla compacta sin bordes */
-.compact-table {
+.main-table th {
+  background-color: #ff0303;
+  color: white;
+  font-weight: bold;
+}
+
+.main-table td input[type="text"],
+.main-table td textarea,
+.main-table td select {
   width: 100%;
-  border-collapse: collapse;
+  box-sizing: border-box;
+  padding: 5px;
+  font-size: 13px;
 }
 
-.compact-table th,
-.compact-table td {
-  border: none;
-  padding: 4px;
-  text-align: left;
+.header-cell {
+  background-color: #ff0000;
+  color: white;
+  font-weight: bold;
 }
 
-/* Estilo para la tabla de Consecuencia, Exposición y Probabilidad */
-.risk-factors-table {
-  width: 60%; /* Ajusta el tamaño de la tabla */
-  margin: 0 auto; /* Centra la tabla */
+.image-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
 }
 
-/* Estilo para la barra de magnitud de riesgo */
+.image-preview {
+  max-width: 100px;
+  max-height: 100px;
+  margin-top: 10px;
+  border: 1px solid #000;
+}
+
 .risk-magnitude-container {
   margin-top: 10px;
 }
 
 .risk-magnitude-bar {
-  padding: 10px;
-  border-radius: 4px;
-  color: white;
-  font-weight: bold;
-}
-
-/* Estilo para la sección de equipo de protección personal sugerido */
-.suggested-equipment {
-  font-weight: bold;
-  background-color: #f2f2f2; /* Color de fondo para destacar la sección */
-  text-align: center;
-  padding: 10px;
-}
-
-/* Estilo para la sección de observaciones generales */
-.observations-section {
-  margin-top: 20px;
-}
-
-/* Estilo para el nuevo apartado al lado de Consecuencia */
-.new-section {
-  margin-left: 10px; /* Espacio entre la sección y la tabla */
-  font-weight: bold;
   padding: 5px;
-  border: 1px solid #ddd; /* Bordes para destacar */
+  color: white;
+  text-align: center;
+  font-weight: bold;
 }
 
-/* Estilo para el botón de descarga */
 .download-button {
   margin-top: 20px;
-  padding: 10px 15px;
-  background-color: #007bff;
+  padding: 10px 20px;
+  background-color: #4CAF50;
   color: white;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
 }
 
 .download-button:hover {
-  background-color: #0056b3;
+  background-color: #45a049;
 }
 
-/* Estilo para la imagen de vista previa */
-.image-preview {
-  max-width: 100%;
-  height: auto;
+.observations-section {
+  margin-top: 20px;
 }
 
-/* Estilo para el contenedor de imagen y observaciones */
-.image-observations-container {
-  display: flex;
-  flex-direction: column;
+.no-border {
+  border: none;
 }
 
-/* Estilo para la sección de imágenes */
-.image-section {
-  margin-bottom: 10px;
-}
-
-/* Asegúrate de que el padding y margen sean consistentes */
-.suggested-equipment + table {
-  margin-top: 20px; /* Espacio entre la sección de equipo y la tabla siguiente */
-}
-
-/* Mejora la visualización */
-h1 {
+.compact-table th, .compact-table td {
+  padding: 5px;
   text-align: center;
-  margin-bottom: 20px;
-}
-/* Add this to HerramientasMan.css */
-td {
-  /* Other styles */
-  max-width: 150px; /* Adjust this value as needed */
 }
 
-td select {
-  width: 100%; /* Ensure the select element takes the full width of the cell */
+.risk-table th, .risk-table td {
+  vertical-align: middle;
+}
+
+textarea {
+  resize: none;
+}
+
+textarea,
+select,
+input[type="text"] {
+  font-size: 15px;
+}
+
+.header-top {
+  background-color: #d9d9d9;
+}
+
+.value-cell {
+  background-color: #add8e6;
+}
+
+.main-table td:nth-child(2),
+.main-table th:nth-child(2) {
+  background-color: #f0f0f0;
+}
+
+.image-cell {
+  text-align: center;
+  vertical-align: top;
+  padding: 0;
+}
+
+.main-table .header-secondary {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  text-align: left;
+}
+
+.identification-section {
+  font-weight: bold;
+  background-color: #d9d9d9;
+}
+
+.header-table th {
+  background-color: #ffcccb;
+  font-weight: bold;
+}
+
+.risk-level {
+  background-color: #add8e6;
+  font-weight: bold;
+}
+
+.risk-cell {
+  background-color: #f0f0f0;
+  color: black;
 }
