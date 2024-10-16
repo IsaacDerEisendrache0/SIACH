@@ -9,8 +9,8 @@
 }
 
 .risk-table {
-  width: 50%;
-  table-layout: fixed; /* Establece el diseño de la tabla para que las celdas tengan un ancho fijo */
+  width: 100%; /* Aumenta el ancho de la tabla para ocupar todo el contenedor */
+  table-layout: auto; /* Permite a la tabla ajustar el tamaño de las celdas según el contenido */
   border-collapse: collapse; /* Elimina los espacios entre las celdas */
 }
 
@@ -40,7 +40,7 @@
 
 .risk-info,
 .safety-info {
-  width: 10%; /* Ancho de cada sección de riesgo y seguridad */
+  width: 33%; /* Aumenta el ancho de cada sección de riesgo y seguridad para ocupar más espacio horizontal */
   vertical-align: top; /* Alineación vertical en la parte superior */
 }
 
@@ -52,4 +52,12 @@
 
 .risk-classification {
   margin-top: 20px; /* Espaciado superior para la clasificación de riesgo */
+}
+
+.risk-evaluation-section {
+  width: 50%; /* Ajusta el ancho de la sección de evaluación de riesgo */
+}
+
+.epp-suggested {
+  width: 50%; /* Ajusta el ancho de la sección EPP sugerido */
 }

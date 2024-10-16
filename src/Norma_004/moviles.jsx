@@ -21,14 +21,36 @@ const RiskTable = () => {
     "Vibración",
     "Partículas suspendidas en el ambiente",
     "Riesgo de atrapamiento o volcadura",
+    "Riesgo caída de piedra o golpe por objeto",
+    "Riesgo de descarga eléctrica",
+    "Exposición a temperaturas elevadas y abatidas",
+    "Riesgo de inundación",
+    "Ventilación deficiente",
+    "Daños ergonómicos",
+    "Sustancias químicas",
+    "Poca iluminación"
   ];
 
   const securityOptions = [
     "Extintores",
+    "Paro de emergencia",
+    "Sistema ANSUL",
+    "Bandas antiestatica",
+    "Sistema de anclaje",
+    "Programa de mantenimiento",
+    "Calza de seguridad",
+    "Bloqueo de sistema hidraulico",
+    "Bloqueo de sistema electrico",
+    "Cinturon de seguridad",
+    "Indicadores agua, aceite, aire, motor, presion etc",
+    "Canopy",
+    "Mata chispas",
+    "Sistema LOTO",
     "Guardas, parachoques y protectores de calaveras",
     "Freno de emergencia",
     "Barandales y escaleras",
     "Indicadores (torreta, luces, claxon, banderas, etc)",
+
   ];
 
   const opcionesConsecuencia = [
@@ -122,39 +144,29 @@ const RiskTable = () => {
         <thead>
           <tr>
             <th className="red">Nombre de la maquinaria o equipo:</th>
-            <td><input type="text" /></td>
+            <td colSpan="20"><input type="text" /></td>
             <th className="red">Área:</th>
-            <td><input type="text" /></td>
+            <td colSpan="10"><input type="text" /></td>
+            <th className="red">POE:</th>
+            <td colSpan="10"><input type="text" /></td>
+            <th className="red">Tiempo de exposición:</th>
+            <td colSpan="10"><input type="text" /></td>
           </tr>
           <tr>
             <th className="red">Descripción de la maquinaria o equipo:</th>
-            <td><input type="text" /></td>
-            <th className="red">Energía utilizada:</th>
-            <td>
-              <select>
-                <option value="">Seleccione tipo de energía</option>
-                <option value="eléctrica">Eléctrica</option>
-                <option value="manual">Manual</option>
-                <option value="mecánica">Mecánica</option>
-                <option value="hidráulica">Hidráulica</option>
-                <option value="eólica">Eólica</option>
-                <option value="térmica por combustión">Térmica por combustión</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
+            <td colSpan="30"><input type="text" /></td>
             <th className="red">Fecha de inspección:</th>
-            <td><input type="date" /></td>
-            <th className="red">Localización de riesgos:</th>
-            <td>
-              <input type="file" accept="image/*" onChange={handleImageUpload} />
-              {image && <img src={image} alt="Uploaded Equipment" className="equipment-image" />}
-            </td>
+            <td colSpan="12"><input type="date" /></td>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td className="risk-info" colSpan="7">
+            <td className="image-section">
+
+              <input type="file" accept="image/*" onChange={handleImageUpload} />
+              {image && <img src={image} alt="Uploaded Equipment" className="equipment-image" />}
+            </td>
+            <td className="risk-info" colSpan="3">
               <h4 className="red">Identificación de riesgos</h4>
               <div className="risk-selects">
                 {[...Array(7)].map((_, index) => (
@@ -167,7 +179,7 @@ const RiskTable = () => {
                 ))}
               </div>
             </td>
-            <td className="safety-info" colSpan="4">
+            <td className="safety-info" colSpan="3">
               <h4 className="red">Sistemas de seguridad</h4>
               <div className="safety-selects">
                 {[...Array(7)].map((_, index) => (
@@ -182,7 +194,7 @@ const RiskTable = () => {
             </td>
           </tr>
           <tr>
-            <td colSpan="8" className="risk-evaluation-section">
+            <td colSpan="4" className="risk-evaluation-section">
               <table>
                 <thead>
                   <tr className="red">
@@ -234,6 +246,15 @@ const RiskTable = () => {
                   </tr>
                 </tbody>
               </table>
+            </td>
+            <td colSpan="4" className="epp-suggested">
+              <h4 className="red">EPP Sugerido</h4>
+              <div className="epp-images">
+                <img src="path/to/epp1.png" alt="EPP 1" />
+                <img src="path/to/epp2.png" alt="EPP 2" />
+                <img src="path/to/epp3.png" alt="EPP 3" />
+                <img src="path/to/epp4.png" alt="EPP 4" />
+              </div>
             </td>
           </tr>
         </tbody>
