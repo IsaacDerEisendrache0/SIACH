@@ -268,7 +268,7 @@ const RiskAssessmentTable = () => {
             </td>
           </tr>
           <tr>
-          <td className="header right-aligned" colSpan="3">
+          <td className="header right-aligned" colSpan="4">
           <div className="text1">Principales partes del cuerpo expuestas al riesgo:</div>
 
             <div className="body-parts-container">
@@ -326,7 +326,7 @@ const RiskAssessmentTable = () => {
                 ))}
               </ul>
             </td>
-            <td className="right-section right-aligned">
+            <td colSpan="2" className="right-section right-aligned">
               <div className="text1">Equipo utilizado<br></br></div>
               <div className="section-content">
                 <select value={selectedOptionEquipoUtilizado} onChange={handleOptionChangeEquipoUtilizado}>
