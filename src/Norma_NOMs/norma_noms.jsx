@@ -14,6 +14,7 @@ const NormaNoms = () => {
     areaTrabajo: '',
     elementos: [],
     maquinaria: '',
+    maquinariaMateriales: '',
     tiposMaquinaria: [],
     trabajosAltura: '',
     equiposAltura: [],
@@ -70,9 +71,9 @@ const NormaNoms = () => {
       case 3:
         return formValues.areaTrabajo !== '';
       case 4:
-        return formValues.elementos.length > 0;
-      case 5:
         return formValues.maquinaria !== '';
+      case 5:
+        return formValues.maquinariaMateriales !== '';
       case 6:
         return formValues.tiposMaquinaria.length > 0;
       case 7:
@@ -198,18 +199,104 @@ const NormaNoms = () => {
           </div>
         )}
 
-        {/* Repite la misma estructura para los demás pasos */}
         {/* Paso 3 */}
         {step === 3 && (
           <div className="step3">
             <h3>Área de trabajo</h3>
-            <label>¿Desarrolla sus actividades en áreas exteriores, como estacionamientos?</label>
+            <label>¿Desarrolla sus actividades de producción, comercialización, transporte y almacenamiento o prestación de servicios en: edificios, locales, instalaciones y/o áreas exteriores, tales como pasillos, patios, techos, estacionamientos, áreas de circulación de vehículos, áreas de carga y descarga de materiales?</label>
             <label>
               <input type="radio" name="areaTrabajo" value="sí" onChange={handleInputChange} />
               Sí
             </label>
             <label>
               <input type="radio" name="areaTrabajo" value="no" onChange={handleInputChange} />
+              No
+            </label>
+
+            {/* Nueva sección de elementos del centro de trabajo */}
+            <h4>Seleccione los elementos con que cuenta su centro de trabajo:</h4>
+            <label>
+              <input
+                type="checkbox"
+                value="escaleras"
+                onChange={(e) => handleCheckboxChange(e, 'elementos')}
+                checked={formValues.elementos.includes('escaleras')}
+              />
+              Escaleras
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="rampas"
+                onChange={(e) => handleCheckboxChange(e, 'elementos')}
+                checked={formValues.elementos.includes('rampas')}
+              />
+              Rampas
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="escalas"
+                onChange={(e) => handleCheckboxChange(e, 'elementos')}
+                checked={formValues.elementos.includes('escalas')}
+              />
+              Escalas
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="puentesPlataformasElevadas"
+                onChange={(e) => handleCheckboxChange(e, 'elementos')}
+                checked={formValues.elementos.includes('puentesPlataformasElevadas')}
+              />
+              Puentes y plataformas elevadas
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="transitoVehiculos"
+                onChange={(e) => handleCheckboxChange(e, 'elementos')}
+                checked={formValues.elementos.includes('transitoVehiculos')}
+              />
+              Áreas de tránsito de vehículos
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="espuelasFerrocarril"
+                onChange={(e) => handleCheckboxChange(e, 'elementos')}
+                checked={formValues.elementos.includes('espuelasFerrocarril')}
+              />
+              Espuelas de ferrocarril activas
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="ventilacionArtificial"
+                onChange={(e) => handleCheckboxChange(e, 'elementos')}
+                checked={formValues.elementos.includes('ventilacionArtificial')}
+              />
+              Sistemas de ventilación artificial
+            </label>
+
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+            </div>
+          </div>
+        )}
+
+        {/* Paso 4 */}
+        {step === 4 && (
+          <div className="step4">
+            <h3>Uso de maquinaria o equipo</h3>
+            <label>¿En su centro de trabajo se utiliza maquinaria o equipo?</label>
+            <label>
+              <input type="radio" name="maquinaria" value="sí" onChange={handleInputChange} />
+              Sí
+            </label>
+            <label>
+              <input type="radio" name="maquinaria" value="no" onChange={handleInputChange} />
               No
             </label>
             <div className="buttons">
@@ -219,26 +306,198 @@ const NormaNoms = () => {
           </div>
         )}
 
-        {/* ... otros pasos se estructuran de forma similar ... */}
-
-        {/* Paso 11 */}
-        {step === 11 && (
-          <div className="step11">
-            <h3>¿En su centro de trabajo están instalados generadores de vapor o calderas?</h3>
+        {/* Paso 5 */}
+        {step === 5 && (
+          <div className="step5">
+            <h3>Uso de maquinaria para manejo de materiales</h3>
+            <label>¿En su centro de trabajo se utiliza maquinaria para el manejo de materiales, como materias primas, subproductos, productos, residuos entre otros?</label>
             <label>
-              <input type="radio" name="generadoresVapor" value="sí" onChange={handleInputChange} />
+              <input type="radio" name="maquinariaMateriales" value="sí" onChange={handleInputChange} />
               Sí
             </label>
             <label>
-              <input type="radio" name="generadoresVapor" value="no" onChange={handleInputChange} />
+              <input type="radio" name="maquinariaMateriales" value="no" onChange={handleInputChange} />
               No
             </label>
             <div className="buttons">
               <button onClick={handleBack}>Regresar</button>
-              <button onClick={() => navigate('/final')} disabled={!isStepCompleted()}>Finalizar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
             </div>
           </div>
         )}
+
+        {/* Paso 6 */}
+        {step === 6 && (
+          <div className="step6">
+            <h3>Tipos de maquinaria para manejo de materiales</h3>
+            <label>Seleccione la maquinaria que se utiliza en el centro de trabajo para el manejo de materiales:</label>
+            <label>
+              <input
+                type="checkbox"
+                value="polipastosMalacates"
+                onChange={(e) => handleCheckboxChange(e, 'tiposMaquinaria')}
+                checked={formValues.tiposMaquinaria.includes('polipastosMalacates')}
+              />
+              Polipastos y malacates
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="eslingas"
+                onChange={(e) => handleCheckboxChange(e, 'tiposMaquinaria')}
+                checked={formValues.tiposMaquinaria.includes('eslingas')}
+              />
+              Eslingas
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="gruas"
+                onChange={(e) => handleCheckboxChange(e, 'tiposMaquinaria')}
+                checked={formValues.tiposMaquinaria.includes('gruas')}
+              />
+              Grúas
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="montacargas"
+                onChange={(e) => handleCheckboxChange(e, 'tiposMaquinaria')}
+                checked={formValues.tiposMaquinaria.includes('montacargas')}
+              />
+              Montacargas
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="electroimanes"
+                onChange={(e) => handleCheckboxChange(e, 'tiposMaquinaria')}
+                checked={formValues.tiposMaquinaria.includes('electroimanes')}
+              />
+              Electroimanes
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="cargadoresFrontales"
+                onChange={(e) => handleCheckboxChange(e, 'tiposMaquinaria')}
+                checked={formValues.tiposMaquinaria.includes('cargadoresFrontales')}
+              />
+              Cargadores frontales
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="transportadores"
+                onChange={(e) => handleCheckboxChange(e, 'tiposMaquinaria')}
+                checked={formValues.tiposMaquinaria.includes('transportadores')}
+              />
+              Transportadores
+            </label>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+            </div>
+          </div>
+        )}
+
+        {/* Paso 7 */}
+        {step === 7 && (
+          <div className="step7">
+            <h3>Actividades en alturas</h3>
+            <label>¿En su centro de trabajo se realizan actividades de mantenimiento, instalación, demolición, operación, reparación, limpieza, entre otras, a alturas mayores a 1.80 metros sobre el nivel de referencia, o existe el riesgo de caída en aberturas en las superficies de trabajo, tales como perforaciones, pozos, cubos y túneles verticales?</label>
+            <label>
+              <input type="radio" name="trabajosAltura" value="sí" onChange={handleInputChange} />
+              Sí
+            </label>
+            <label>
+              <input type="radio" name="trabajosAltura" value="no" onChange={handleInputChange} />
+              No
+            </label>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+            </div>
+          </div>
+        )}
+
+        {/* Paso 8 */}
+        {step === 8 && (
+          <div className="step8">
+            <h3>Sistemas o equipos para trabajos en altura</h3>
+            <label>Seleccione los sistemas o equipos con que se realizan los trabajos en altura:</label>
+            <label>
+              <input
+                type="checkbox"
+                value="sistemasRestriccion"
+                onChange={(e) => handleCheckboxChange(e, 'equiposAltura')}
+                checked={formValues.equiposAltura.includes('sistemasRestriccion')}
+              />
+              Sistemas personales de restricción
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="sistemasPosicionamiento"
+                onChange={(e) => handleCheckboxChange(e, 'equiposAltura')}
+                checked={formValues.equiposAltura.includes('sistemasPosicionamiento')}
+              />
+              Sistemas personales de posicionamiento y ascenso/descenso controlado
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="sistemasProteccionCaidas"
+                onChange={(e) => handleCheckboxChange(e, 'equiposAltura')}
+                checked={formValues.equiposAltura.includes('sistemasProteccionCaidas')}
+              />
+              Sistemas de protección personal para interrumpir caídas de altura
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="andamiosTorre"
+                onChange={(e) => handleCheckboxChange(e, 'equiposAltura')}
+                checked={formValues.equiposAltura.includes('andamiosTorre')}
+              />
+              Andamios tipo torre o estructura
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="andamiosSuspendidos"
+                onChange={(e) => handleCheckboxChange(e, 'equiposAltura')}
+                checked={formValues.equiposAltura.includes('andamiosSuspendidos')}
+              />
+              Andamios suspendidos
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="plataformasElevacion"
+                onChange={(e) => handleCheckboxChange(e, 'equiposAltura')}
+                checked={formValues.equiposAltura.includes('plataformasElevacion')}
+              />
+              Plataformas de elevación
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="escalerasMano"
+                onChange={(e) => handleCheckboxChange(e, 'equiposAltura')}
+                checked={formValues.equiposAltura.includes('escalerasMano')}
+              />
+              Escaleras de mano
+            </label>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+            </div>
+          </div>
+        )}
+
+        {/* Agrega más pasos aquí si es necesario */}
+
       </div>
     </div>
   );
