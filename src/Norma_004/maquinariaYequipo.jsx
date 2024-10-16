@@ -192,7 +192,7 @@ const RiskTable = () => {
   };
 
   return (
-    <div>
+    <div className="risk-table-container" style={{ fontSize: '0.8em' }}>
       <div id="pdf-content" className="risk-table">
         <table className="main-table">
           <thead>
@@ -353,7 +353,7 @@ const RiskTable = () => {
                           <td colSpan="5" className="icons">
                             {selectedImages.length > 0 ? (
                               selectedImages.map((imageSrc, index) => (
-                                <img key={index} src={imageSrc} alt={`Protección`} style={{ width: '50px', height: '50px', margin: '5px', objectFit: 'cover' }} />
+                                <img key={index} src={imageSrc} alt={`Protección`} style={{ width: '40px', height: '40px', margin: '3px', objectFit: 'cover' }} />
                               ))
                             ) : (
                               <p>No hay riesgos seleccionados</p>
@@ -373,9 +373,9 @@ const RiskTable = () => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td colSpan="5">
+                      <td colSpan="5" style={{ display: 'flex', flexWrap: 'wrap' }}>
                         {specificRiskImages.map((imageName, index) => (
-                          <label key={index} style={{ marginRight: '10px' }}>
+                          <label key={index} style={{ marginRight: '10px', marginBottom: '5px' }}>
                             <input
                               type="checkbox"
                               value={imageName}
@@ -394,7 +394,7 @@ const RiskTable = () => {
                             key={index}
                             src={`/images/${imageName}`}
                             alt="Riesgo Específico"
-                            style={{ width: '50px', height: '50px', margin: '5px', objectFit: 'cover' }}
+                            style={{ width: '40px', height: '40px', margin: '3px', objectFit: 'cover' }}
                           />
                         ))}
                       </td>
