@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import './Table17.css';
+import React, { useState, useEffect } from 'react';
+
 
 const areas = [
   {
@@ -116,6 +117,7 @@ const RiskAssessmentTable = () => {
   const [areaSeleccionada, setAreaSeleccionada] = useState(areas[0].nombre);
   const [puestoSeleccionado, setPuestoSeleccionado] = useState('');
   const [puestos, setPuestos] = useState(areas[0].puestos);
+  
 
   const handleAreaChange = (e) => {
     const selectedArea = areas.find((area) => area.nombre === e.target.value);
@@ -238,7 +240,31 @@ const RiskAssessmentTable = () => {
         link.click();
         document.body.removeChild(link);
     });
+    
 };
+
+useEffect(() => {
+  const savedPuestos = JSON.parse(localStorage.getItem('puestos')) || ['Puesto 1', 'Puesto 2'];
+  setPuestos(savedPuestos);
+}, []);
+
+// Renombrada la función para evitar conflictos
+const handlePuestoSelectChange = (e) => {
+  setPuestoSeleccionado(e.target.value);
+};
+
+const handleAddPuestoClick = () => {
+  const nuevoPuesto = prompt("Ingrese el nuevo puesto:");
+  if (nuevoPuesto && nuevoPuesto.trim() !== "") {
+    const updatedPuestos = [...puestos, nuevoPuesto.trim()]; // Agregar el nuevo puesto a la lista
+    setPuestos(updatedPuestos); // Actualizar el estado
+    setPuestoSeleccionado(nuevoPuesto.trim()); // Seleccionar el nuevo puesto
+    localStorage.setItem('puestos', JSON.stringify(updatedPuestos)); // Guardar en localStorage
+  }
+};
+
+
+
 
   
   
@@ -248,25 +274,38 @@ const RiskAssessmentTable = () => {
         <thead>
           <tr>
             <td className="no-border-cell" colSpan="3">
-              <div className="full-width-cell">
-                <label htmlFor="puesto">Puesto:</label>
-                <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange}>
-                  <option value="" disabled>
-                    Seleccione un puesto
-                  </option>
+            <label htmlFor="puesto">Puesto:</label>
+
+              <div className="full-width-cell" style={{ display: 'flex', alignItems: 'center' }}>
+                <select 
+                  id="puesto" 
+                  value={puestoSeleccionado} 
+                  onChange={handlePuestoChange} 
+                  style={{ marginRight: '10px', width: '200px', padding: '5px' }} // Ajusta el ancho y padding del menú desplegable
+                >
+                  <option value="" disabled>Seleccione un puesto</option>
                   {puestos.map((puesto, index) => (
                     <option key={index} value={puesto}>
                       {puesto}
                     </option>
                   ))}
                 </select>
-          </div>
-                <div>
-                  <label for="descripcion-actividad">Descripción de la actividad:</label>
-                  <textarea id="descripcion-actividad" name="descripcion-actividad" rows="2" cols="50" placeholder="Escribe aquí la descripción de la actividad..."></textarea>
-                </div>
-                  
-            </td>
+                
+                {/* Botón para agregar puesto con ancho ajustado */}
+                <button 
+                  onClick={handleAddPuestoClick} 
+                  style={{ padding: '5px 11px', fontSize: '14px', cursor: 'pointer', minWidth: '120px' }} // Ajusta el padding y ancho mínimo del botón
+                >
+                  Agregar 
+                </button>
+              </div>
+
+            {/* Área de descripción de actividad */}
+            <div>
+              <label htmlFor="descripcion-actividad">Descripción de la actividad:</label>
+              <textarea id="descripcion-actividad" name="descripcion-actividad" rows="2" cols="50" placeholder="Escribe aquí la descripción de la actividad..."></textarea>
+            </div>
+          </td>
 
               
           <td className="header right-aligned" colSpan="2" style={{ backgroundColor: 'red' }}>
@@ -421,7 +460,7 @@ const RiskAssessmentTable = () => {
                     <th>Magnitud del Riesgo</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody> 
                   <tr>
                     <td>
                       <select value={consequence} onChange={handleConsequenceChange}>
