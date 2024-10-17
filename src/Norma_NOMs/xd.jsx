@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './NormaNoms.css';
-import iconImage from './images/icon.png'; // Ruta del icono
-import categoriasImage from './images/categorias_presion.png'; // Asegúrate de que esta ruta sea correcta
+import iconImage from './images/icon.png'; // Asegúrate de que esta ruta sea correcta
+import exceptImage from './images/excepted_recipients.png'; // Asegúrate de que esta ruta sea correcta
 
 const NormaNoms = () => {
   const [step, setStep] = useState(1);
@@ -98,8 +98,8 @@ const NormaNoms = () => {
     <div className="norma-noms-container">
       <div className="container">
         {/* Aquí van los pasos de 1 a 9 */}
-         {/* Paso 1 */}
-         {step === 1 && (
+        {/* Paso 1 */}
+        {step === 1 && (
           <div className="step1">
             <h3>Estructura del centro de trabajo</h3>
             <em>Indique la forma en la cual requiere identificar las NOMs aplicables</em>
@@ -532,6 +532,7 @@ const NormaNoms = () => {
         )}
 
 
+        {/* Paso 10 - Categorías de recipientes sujetos a presión */}
         {step === 10 && (
           <div className="step10">
             <h3>Categorías de Recipientes Sujetos a Presión</h3>
@@ -588,7 +589,7 @@ const NormaNoms = () => {
           <div className="modal">
             <div className="modal-content">
               <span className="close" onClick={() => setShowModal(false)}>&times;</span>
-              <img src={categoriasImage} alt="Tabla de clasificación de recipientes" style={{ width: '100%' }} />
+              <img src={exceptImage} alt="Tabla de clasificación de recipientes" style={{ width: '100%' }} />
             </div>
           </div>
         )}
