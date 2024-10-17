@@ -41,19 +41,21 @@ function HomePage() {
   };
 
   return (
-    <div class="container-fluid mt-5">
-      <h1 className="text">Bienvenido a la Página de Inicio</h1>
+    <div className="container-fluid mt-5">
+      <h1 className="text-center">Normas Oficiales Mexicanas</h1>
 
-      <div className="dropdown mt-3">
-        <button className="btn btn-primary dropdown-toggle" type="button" id="normasDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-          Seleccionar Norma
-        </button>
-        <ul className="dropdown-menu" aria-labelledby="normasDropdown">
-          <li><button className="dropdown-item" type="button" onClick={() => handleSelectNorma('N-017')}>N-017</button></li>
-          <li><button className="dropdown-item" type="button" onClick={() => handleSelectNorma('Evaluación de Riesgos')}>N-004</button></li>
-          <li><button className="dropdown-item" type="button" onClick={() => handleSelectNorma('N-030')}>N-030</button></li>
-          <li><button className="dropdown-item" type="button" onClick={() => handleSelectNorma('Asistente NOMs')}>Asistente NOMs</button></li>
-        </ul>
+      <div className="d-flex justify-content-center mt-3">
+        <div className="dropdown">
+          <button className="btn btn-primary dropdown-toggle" type="button" id="normasDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            Seleccionar Norma
+          </button>
+          <ul className="dropdown-menu" aria-labelledby="normasDropdown">
+            <li><button className="dropdown-item" type="button" onClick={() => handleSelectNorma('N-017')}>N-017</button></li>
+            <li><button className="dropdown-item" type="button" onClick={() => handleSelectNorma('Evaluación de Riesgos')}>N-004</button></li>
+            <li><button className="dropdown-item" type="button" onClick={() => handleSelectNorma('N-030')}>N-030</button></li>
+            <li><button className="dropdown-item" type="button" onClick={() => handleSelectNorma('Asistente NOMs')}>Asistente NOMs</button></li>
+          </ul>
+        </div>
       </div>
 
       {selectedNorma === 'N-017' && <div className="mt-3"><h3>N-017 Seleccionada:</h3><Norma17 /></div>}
