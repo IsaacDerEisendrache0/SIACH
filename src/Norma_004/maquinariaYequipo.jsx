@@ -192,7 +192,7 @@ const RiskTable = () => {
   };
 
   return (
-    <div className="risk-table-container" style={{ fontSize: '0.8em' }}>
+    <div className="risk-table-container" style={{ fontSize: '1.2em' }}>
       <div id="pdf-content" className="risk-table">
         <table className="main-table">
           <thead>
@@ -204,6 +204,7 @@ const RiskTable = () => {
                   value={maquinariaNombre} 
                   onChange={(e) => setMaquinariaNombre(e.target.value)} 
                   placeholder="Ingrese el nombre de la maquinaria"
+                  style={{ fontSize: '1.2em', width: '100%' }}
                 />
               </th>
             </tr>
@@ -215,7 +216,7 @@ const RiskTable = () => {
                   onChange={(e) => setMaquinariaDescripcion(e.target.value)}
                   placeholder="Describa la maquinaria o equipo"
                   rows="2"
-                  cols="30"
+                  style={{ fontSize: '1.2em', width: '100%' }}
                 />
               </th>
             </tr>
@@ -225,6 +226,7 @@ const RiskTable = () => {
                 <select 
                   value={energiaUtilizada} 
                   onChange={(e) => setEnergiaUtilizada(e.target.value)}
+                  style={{ fontSize: '1.2em', width: '100%' }}
                 >
                   {opcionesEnergia.map(opcion => (
                     <option key={opcion} value={opcion}>{opcion}</option>
@@ -237,8 +239,8 @@ const RiskTable = () => {
               <th>POE:</th>
               <th>0-4</th>
               <th>Tiempo de exposición:</th>
-              <th>
-                <select value={tiempoExposicion} onChange={(e) => setTiempoExposicion(e.target.value)}>
+              <th colSpan="2">
+                <select value={tiempoExposicion} onChange={(e) => setTiempoExposicion(e.target.value)} style={{ fontSize: '1.2em', width: '100%' }}>
                   {opcionesTiempoExposicion.map(opcion => (
                     <option key={opcion} value={opcion}>{opcion}</option>
                   ))}
@@ -248,51 +250,56 @@ const RiskTable = () => {
           </thead>
           <tbody>
             <tr>
-              <td rowSpan="6" colSpan="1">
-              <table className="compact-table no-border"> 
-              <div className="image-observations-container">
-                  <div className="image-section">
-                    <input type="file" accept="image/*" onChange={handleImageChange} />
-                    {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-                    {imagePreview ? (
-                      <img src={imagePreview} alt="Maquinaria" className="image-preview" />
-                    ) : (
-                      <p>No hay imagen seleccionada</p>
-                    )}
-                  </div>               
-              </div>  
-              </table>
-              <tr>
               <td colSpan="3">
-                <table className="danger-table compact-table">
-                  <thead>
-                    <tr>
-                      <th>Identificación de peligros</th>
-                      <th>Si/No</th>
-                    </tr>
-                  </thead>
+                <table className="compact-table no-border" style={{ width: '100%' }}> 
                   <tbody>
-                    {peligros.map((peligro, index) => (
-                      <tr key={peligro.id}>
-                        <td style={{ width: '80%' }}>{peligro.nombre}</td>
-                        <td style={{ width: '30%' }}>
-                          <input
-                            type="checkbox"
-                            checked={peligro.siNo}
-                            onChange={(e) => handlePeligroChange(index, e.target.checked)}
-                          />
-                        </td>
-                      </tr>
-                    ))}
+                    <tr>
+                      <td>
+                        <div className="image-observations-container">
+                          <div className="image-section">
+                            <input type="file" accept="image/*" onChange={handleImageChange} style={{ fontSize: '1.2em', width: '100%' }} />
+                            {errorMessage && <p style={{ color: 'red', fontSize: '1.2em' }}>{errorMessage}</p>}
+                            {imagePreview ? (
+                              <img src={imagePreview} alt="Maquinaria" className="image-preview" />
+                            ) : (
+                              <p style={{ fontSize: '1.2em' }}>No hay imagen seleccionada</p>
+                            )}
+                          </div>               
+                        </div>  
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <table className="danger-table compact-table" style={{ width: '100%' }}>
+                          <thead>
+                            <tr>
+                              <th>Identificación de peligros</th>
+                              <th>Si/No</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {peligros.map((peligro, index) => (
+                              <tr key={peligro.id}>
+                                <td style={{ width: '80%', fontSize: '1.2em' }}>{peligro.nombre}</td>
+                                <td style={{ width: '20%' }}>
+                                  <input
+                                    type="checkbox"
+                                    checked={peligro.siNo}
+                                    onChange={(e) => handlePeligroChange(index, e.target.checked)}
+                                    style={{ transform: 'scale(1.5)' }}
+                                  />
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </td>
-            </tr>               
-              
-            </td>
-            
-              <td colSpan="6">
-                <table className="compact-table no-border">
+              <td colSpan="3">
+                <table className="compact-table no-border" style={{ width: '100%' }}>
                   <thead>
                     <tr>
                       <th>Consecuencia</th>
@@ -303,34 +310,34 @@ const RiskTable = () => {
                   <tbody>
                     <tr>
                       <td>
-                        <select value={consequence} onChange={(e) => setConsequence(e.target.value)}>
+                        <select value={consequence} onChange={(e) => setConsequence(e.target.value)} style={{ fontSize: '1.2em', width: '100%' }}>
                           {opcionesConsecuencia.map(opcion => (
                             <option key={opcion} value={opcion}>{opcion}</option>
                           ))}
                         </select>
-                        <div>Valor: {calcularValorConsecuencia()}</div>
+                        <div style={{ fontSize: '1.2em' }}>Valor: {calcularValorConsecuencia()}</div>
                       </td>
                       <td>
-                        <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
+                        <select value={exposure} onChange={(e) => setExposure(e.target.value)} style={{ fontSize: '1.2em', width: '100%' }}>
                           {opcionesExposicion.map(opcion => (
                             <option key={opcion} value={opcion}>{opcion}</option>
                           ))}
                         </select>
-                        <div>Valor: {calcularValorExposicion()}</div>
+                        <div style={{ fontSize: '1.2em' }}>Valor: {calcularValorExposicion()}</div>
                       </td>
                       <td>
-                        <select value={probability} onChange={(e) => setProbability(e.target.value)}>
+                        <select value={probability} onChange={(e) => setProbability(e.target.value)} style={{ fontSize: '1.2em', width: '100%' }}>
                           {opcionesProbabilidad.map(opcion => (
                             <option key={opcion} value={opcion}>{opcion}</option>
                           ))}
                         </select>
-                        <div>Valor: {calcularValorProbabilidad()}</div>
+                        <div style={{ fontSize: '1.2em' }}>Valor: {calcularValorProbabilidad()}</div>
                       </td>
                     </tr>
                     <tr>
                       <td colSpan="3">
                         <div className="risk-magnitude-container">
-                          <div className="risk-magnitude-bar" style={{ backgroundColor: color, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <div className="risk-magnitude-bar" style={{ backgroundColor: color, display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '1.2em' }}>
                             <span>{magnitudRiesgo}</span>
                             <span>{texto}</span>
                             <span style={{ marginLeft: '20px' }}><strong>Acción:</strong> {accion}</span>
@@ -342,90 +349,67 @@ const RiskTable = () => {
                   </tbody>
                 </table>
                 {/* Equipo de protección personal sugerido */}
-              <table className="compact-table no-border">
-                      <thead>
-                        <tr>
-                          <th colSpan="5" className="suggested-equipment">Equipo de protección personal sugerido</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td colSpan="5" className="icons">
-                            {selectedImages.length > 0 ? (
-                              selectedImages.map((imageSrc, index) => (
-                                <img key={index} src={imageSrc} alt={`Protección`} style={{ width: '40px', height: '40px', margin: '3px', objectFit: 'cover' }} />
-                              ))
-                            ) : (
-                              <p>No hay riesgos seleccionados</p>
-                            )}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  
-              
-                {/* Riesgo Específico */}          
-                <table className="compact-table no-border">
-                  <thead>
-                    <tr>
-                      <th colSpan="5" className="specific-risk-header">Riesgo Específico</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td colSpan="5" style={{ display: 'flex', flexWrap: 'wrap' }}>
-                        {specificRiskImages.map((imageName, index) => (
-                          <label key={index} style={{ marginRight: '10px', marginBottom: '5px' }}>
-                            <input
-                              type="checkbox"
-                              value={imageName}
-                              checked={selectedSpecificRiskImages.includes(imageName)}
-                              onChange={() => handleSpecificRiskImageChange(imageName)}
-                            />
-                            {imageName.replace(/_/g, ' ').replace('.png', '')}
-                          </label>
-                        ))}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colSpan="5" className="icons">
-                        {selectedSpecificRiskImages.map((imageName, index) => (
-                          <img
-                            key={index}
-                            src={`/images/${imageName}`}
-                            alt="Riesgo Específico"
-                            style={{ width: '40px', height: '40px', margin: '3px', objectFit: 'cover' }}
-                          />
-                        ))}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div className="observations-section">
-                    <label htmlFor="observaciones">Observaciones:</label>
-                    <textarea
-                      id="observaciones"
-                      value={observacionesGenerales}
-                      onChange={(e) => setObservacionesGenerales(e.target.value)}
-                      placeholder="Agregar observaciones generales aquí"
-                      rows="4"
-                      cols="30"
-                    />
-                  </div>   
+                <div className="icons" style={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'flex-start' }}>
+                  {selectedImages.length > 0 ? (
+                    selectedImages.map((imageSrc, index) => (
+                      <img key={index} src={imageSrc} alt={`Protección`} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+                    ))
+                  ) : (
+                    <p style={{ fontSize: '1.2em' }}>No hay riesgos seleccionados</p>
+                  )}
+                </div>
               </td>
-              
-              
             </tr>
-
-
-            
-
-            
+            {/* Riesgo Específico */}          
+            <tr>
+              <td colSpan="6">
+                <div style={{ width: '100%', display: 'flex', flexDirection: 'row', gap: '20px' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'flex-start', padding: '10px' }}>
+                      {specificRiskImages.map((imageName, index) => (
+                        <label key={index} style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '1.2em' }}>
+                          <input
+                            type="checkbox"
+                            value={imageName}
+                            checked={selectedSpecificRiskImages.includes(imageName)}
+                            onChange={() => handleSpecificRiskImageChange(imageName)}
+                            style={{ transform: 'scale(1.5)' }}
+                          />
+                          {imageName.replace(/_/g, ' ').replace('.png', '')}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div className="icons" style={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'flex-start', marginTop: '10px' }}>
+                      {selectedSpecificRiskImages.map((imageName, index) => (
+                        <img
+                          key={index}
+                          src={`/images/${imageName}`}
+                          alt="Riesgo Específico"
+                          style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="observations-section">
+                  <label htmlFor="observaciones" style={{ fontSize: '1.2em' }}>Observaciones:</label>
+                  <textarea
+                    id="observaciones"
+                    value={observacionesGenerales}
+                    onChange={(e) => setObservacionesGenerales(e.target.value)}
+                    placeholder="Agregar observaciones generales aquí"
+                    rows="4"
+                    style={{ fontSize: '1.2em', width: '100%' }}
+                  />
+                </div>   
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
-
-      <button onClick={downloadPDF} className="download-button">
+      <button onClick={downloadPDF} className="download-button" style={{ fontSize: '1.2em' }}>
         Descargar
       </button>
     </div>
