@@ -247,28 +247,29 @@ const RiskAssessmentTable = () => {
         <table class="custom-table" className="table-container">
         <thead>
           <tr>
-            <td className="no-border-cell" colSpan="5">
-            <div className="full-width-cell">
-              <label htmlFor="puesto">Puesto:</label>
-              <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange}>
-                <option value="" disabled>
-                  Seleccione un puesto
-                </option>
-                {puestos.map((puesto, index) => (
-                  <option key={index} value={puesto}>
-                    {puesto}
+            <td className="no-border-cell" colSpan="3">
+              <div className="full-width-cell">
+                <label htmlFor="puesto">Puesto:</label>
+                <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange}>
+                  <option value="" disabled>
+                    Seleccione un puesto
                   </option>
-                ))}
-              </select>
-              <div>
-                <label for="descripcion-actividad">Descripción de la actividad:</label>
-                <textarea id="descripcion-actividad" name="descripcion-actividad" rows="2" cols="50" placeholder="Escribe aquí la descripción de la actividad..."></textarea>
-              </div>
-        </div>
+                  {puestos.map((puesto, index) => (
+                    <option key={index} value={puesto}>
+                      {puesto}
+                    </option>
+                  ))}
+                </select>
+          </div>
+                <div>
+                  <label for="descripcion-actividad">Descripción de la actividad:</label>
+                  <textarea id="descripcion-actividad" name="descripcion-actividad" rows="2" cols="50" placeholder="Escribe aquí la descripción de la actividad..."></textarea>
+                </div>
+                  
             </td>
-          </tr>
-          <tr>
-          <td className="header right-aligned" colSpan="4">
+
+              
+          <td className="header right-aligned" colSpan="2" style={{ backgroundColor: 'red' }}>
           <div className="text1">Principales partes del cuerpo expuestas al riesgo:</div>
 
             <div className="body-parts-container">
@@ -285,27 +286,34 @@ const RiskAssessmentTable = () => {
                 <div className="risk-item">Extremidades inferiores: <span className="risk-mark">{affectedBodyParts.includes('Extremidades inferiores') ? 'X' : ''}</span></div>
               </div>
             </div>
+            
           </td>
 
             
-            <td className="header right-aligned" colSpan="3">
-              <div className="right-column">
-                <div className="label-action">
-                  <label htmlFor="area">Área:</label>
-                  <select id="area" value={areaSeleccionada} onChange={handleAreaChange}>
-                    {areas.map((area, index) => (
-                      <option key={index} value={area.nombre}>
-                        {area.nombre}
-                      </option>
-                    ))}
-                  </select>
-            </div>               
-                <div className="label-action">Fecha de inspección: <input type="date" defaultValue="2023-09-13" /></div>
-                <div className="label-action">Tiempo de exposición: <input type="text" defaultValue="8hrs" className="small-input" /></div>
+  
+          <td className="header-td" style={{ backgroundColor: 'red' }} colSpan="2">
+            <div className="header-td">
+              <div className="label-action">
+                <label htmlFor="area">Área:</label>
+                <select id="area" value={areaSeleccionada} onChange={handleAreaChange}>
+                  {areas.map((area, index) => (
+                    <option key={index} value={area.nombre}>
+                      {area.nombre}
+                    </option>
+                  ))}
+                </select>
               </div>
-            </td>
+              <div className="label-action">Fecha de inspección: <input type="date" defaultValue="2023-09-13" /></div>
+              <div >Tiempo de exposición: <input type="text" defaultValue="8hrs" className="small-input" /></div>
+            </div>
+          </td>
+          
           </tr>
+          
+          
+          
         </thead>
+        
         <tbody>
           <tr>
             <td colSpan="2" className="left-section"> 
@@ -394,7 +402,7 @@ const RiskAssessmentTable = () => {
               </td>
           </tr>
           <tr>
-          <td colSpan="5" className="right-aligned">
+          <td colSpan="6" className="right-aligned">
           <div className="text1">Descripción del equipo de protección personal</div>
           <div>
                 <textarea id="descripcion-actividad" name="descripcion-actividad" rows="2" cols="50" placeholder="Escribe aquí la descripción de la actividad..."></textarea>
@@ -402,7 +410,7 @@ const RiskAssessmentTable = () => {
             </td>
           </tr>
           <tr>
-            <td colSpan="4" className="right-aligned">
+            <td colSpan="5" className="right-aligned">
               <div className="text1">Evaluación de riesgo de trabajo</div>
               <table className="inner-table">
                 <thead>
