@@ -135,10 +135,19 @@ const RiskAssessmentTable = () => {
 
   const handleCheckboxChange = (event) => {
     const hazard = event.target.name;
-    setHazards({
-      ...hazards,
-      [hazard]: event.target.checked
-    });
+  
+    // Si el peligro tiene más de una imagen, mostramos el modal
+    if (protectionImages[hazard] && protectionImages[hazard].length > 1) {
+      setSelectedImagesForHazard(protectionImages[hazard]); // Guardamos las imágenes de ese peligro
+      setHazardWithImages(hazard); // Guardamos el nombre del peligro que tiene varias imágenes
+      setIsImageModalOpen(true); // Abrimos el modal
+    } else {
+      // Si solo tiene una imagen o no tiene, simplemente actualizamos los riesgos
+      setHazards({
+        ...hazards,
+        [hazard]: event.target.checked,
+      });
+    }
   };
 
   const getAffectedBodyParts = () => {
@@ -195,7 +204,9 @@ const RiskAssessmentTable = () => {
   const handleProbabilityChange = (event) => setProbability(Number(event.target.value));
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar si el modal está abierto o cerrado
   const [puestosSeleccionadosParaBorrar, setPuestosSeleccionadosParaBorrar] = useState([]); // Estado para almacenar los puestos seleccionados para borrar
-
+  const [selectedImagesForHazard, setSelectedImagesForHazard] = useState([]); // Estado para las imágenes del peligro seleccionado
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false); // Estado para abrir o cerrar el modal de selección de imagen
+  const [hazardWithImages, setHazardWithImages] = useState('');
 
   const [selectedOptionEquipoUtilizado, setSelectedOptionEquipoUtilizado] = useState('');
   const [selectedOptionProteccionSugerida, setSelectedOptionProteccionSugerida] = useState('');
@@ -292,6 +303,8 @@ useEffect(() => {
   }
 }, [areaSeleccionada]);
 
+
+
 // Función para agregar un nuevo puesto
 const handleAddPuestoClick = () => {
   const nuevoPuesto = prompt("Ingrese el nuevo puesto:");
@@ -332,6 +345,15 @@ const handleDeleteSelectedPuestos = () => {
 
   setPuestosSeleccionadosParaBorrar([]); // Limpiar la selección
   setIsModalOpen(false); // Cerrar el modal
+};
+
+
+const handleImageSelect = (image) => {
+  // Aquí puedes manejar qué hacer con la imagen seleccionada
+  console.log('Imagen seleccionada:', image);
+
+  // Cerrar el modal después de seleccionar la imagen
+  setIsImageModalOpen(false);
 };
 
 
@@ -480,6 +502,19 @@ const handleDeleteSelectedPuestos = () => {
                 ))}
               </ul>
             </td>
+
+            <Modal isOpen={isImageModalOpen} onRequestClose={() => setIsImageModalOpen(false)}>
+              <h2>Selecciona una imagen para {hazardWithImages}</h2>
+              <div className="image-selection-container">
+                {selectedImagesForHazard.map((image, index) => (
+                  <div key={index} className="image-option">
+                    <img src={image} alt={`Opción ${index}`} onClick={() => handleImageSelect(image)} className="selectable-image" />
+                  </div>
+                ))}
+              </div>
+              <button onClick={() => setIsImageModalOpen(false)}>Cerrar</button>
+            </Modal>
+
             <td colSpan="2" className="right-section right-aligned">
               <div className="text1">Equipo utilizado<br></br></div>
               <div className="section-content">

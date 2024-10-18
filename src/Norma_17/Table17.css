@@ -375,3 +375,25 @@
 
 
 
+
+
+.image-selection-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.image-option {
+  cursor: pointer;
+  padding: 10px;
+}
+
+.selectable-image {
+  width: 100px; /* Ajusta el tamaño de la imagen */
+  height: auto;
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.selectable-image:hover {
+  border-color: blue;
+}
