@@ -4,7 +4,7 @@
   margin: auto;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ddd;
+  border: 1px solid #ff0000; /* Borde rojo */
   background-color: #f9f9f9;
 }
 
@@ -16,7 +16,7 @@
 
 .risk-table th, 
 .risk-table td {
-  border: 1px solid #ddd; /* Bordes de las celdas */
+  border: 1px solid #ff0000; /* Bordes de las celdas en rojo */
   padding: 10px; /* Espaciado interno */
   text-align: center; /* Alineación del texto */
 }
@@ -24,11 +24,12 @@
 .inner-table th,
 .inner-table td {
   padding: 4px; /* Espaciado interno para la tabla interna */
+  border: none; /* Sin bordes en la tabla interna */
 }
 
 .red {
-  background-color: #ffcccc; /* Color de fondo rojo */
-  color: #900; /* Color de texto */
+  background-color: #ff0000; /* Color de fondo rojo */
+  color: white; /* Color del texto en blanco */
 }
 
 .equipment-image {
@@ -36,12 +37,15 @@
   height: auto; /* Mantiene la proporción de la imagen */
   display: block; /* Para que la imagen sea un bloque y no inline */
   margin: 0 auto; /* Centrar la imagen horizontalmente */
+  border: 1px solid #ff0000; /* Borde rojo alrededor de la imagen */
 }
 
 .risk-info,
 .safety-info {
   width: 33%; /* Aumenta el ancho de cada sección de riesgo y seguridad para ocupar más espacio horizontal */
   vertical-align: top; /* Alineación vertical en la parte superior */
+  padding: 10px;
+  border: none; /* Sin bordes */
 }
 
 .risk-selects,
@@ -56,8 +60,20 @@
 
 .risk-evaluation-section {
   width: 50%; /* Ajusta el ancho de la sección de evaluación de riesgo */
+  border: 1px solid #ff0000; /* Borde rojo */
+  padding: 10px;
+  background-color: #ffffff; /* Fondo rojo claro para destacar */
 }
 
 .epp-suggested {
   width: 50%; /* Ajusta el ancho de la sección EPP sugerido */
+  border: 1px solid #ff0000; /* Borde rojo */
+  padding: 10px;
+  background-color: #ffffff; /* Fondo rojo claro */
+}
+
+.epp-images img {
+  width: 50px; /* Tamaño reducido para las imágenes de EPP */
+  height: 50px; /* Tamaño reducido para mantener la proporción */
+  margin-bottom: 10px; /* Espacio inferior entre las imágenes */
 }

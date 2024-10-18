@@ -69,16 +69,17 @@
 
 /* Estilos de lista y elementos de riesgo */
 .hazard-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0px 0; /* Reduce el padding para juntar más las opciones */
-  margin: 0; /* Elimina el margen para que no haya espacio adicional */
+  position: relative; /* Contenedor relativo para los checkboxes */
+  padding: 10px 0; /* Espacio alrededor del texto */
 }
 
 .hazard-checkbox {
-  position: relative; /* Cambia de absolute a relative */
+  position: absolute; /* Posiciona el checkbox de forma absoluta */
+  right: 0; /* Mueve el checkbox al borde derecho de la celda */
+  top: 50%; /* Centra el checkbox verticalmente */
+  transform: translateY(-50%); /* Ajusta el centrado vertical */
 }
+
 
 .hazard-list {
   list-style-type: none;
