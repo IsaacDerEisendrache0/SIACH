@@ -6,6 +6,21 @@ const RiskTable = () => {
   const [exposure, setExposure] = useState('Ocasionalmente');
   const [probability, setProbability] = useState('Coincidencia extremadamente remota pero concebible');
   const [image, setImage] = useState(null);
+  const [selectedEPPImage, setSelectedEPPImage] = useState(null);
+
+  const optionImages = {
+    option1: '/body/lvl1_head.png',
+    option2: '/body/lvl1_mid.png',
+    option3: '/body/lvl1_foot.png',
+    option4: '/body/lvl1_hand.png',
+    option5: '/body/lvl2_headmid.png',
+    option6: '/body/lvl2_handfoot.png',
+    option7: '/body/lvl2_headfoot.png',
+    option8: '/body/lvl2_headhand.png',
+    option9: '/body/lvl2_midfoot.png',
+    option10: '/body/lvl2_midhand.png',
+    option11: '/body/lvl3_all.png',
+  };
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -50,7 +65,6 @@ const RiskTable = () => {
     "Freno de emergencia",
     "Barandales y escaleras",
     "Indicadores (torreta, luces, claxon, banderas, etc)",
-
   ];
 
   const opcionesConsecuencia = [
@@ -162,9 +176,7 @@ const RiskTable = () => {
         <tbody>
           <tr>
             <td className="image-section">
-
               <input type="file" accept="image/*" onChange={handleImageUpload} />
-              {image && <img src={image} alt="Uploaded Equipment" className="equipment-image" />}
             </td>
             <td className="risk-info" colSpan="3">
               <h4 className="red">Identificación de riesgos</h4>
@@ -230,6 +242,11 @@ const RiskTable = () => {
                       </select>
                     </td>
                   </tr>
+                  <tr>
+                    <td>Valor Consecuencia: {calcularValorConsecuencia(consequence)}</td>
+                    <td>Valor Exposición: {calcularValorExposicion(exposure)}</td>
+                    <td>Valor Probabilidad: {calcularValorProbabilidad(probability)}</td>
+                  </tr>
                 </tbody>
               </table>
               <table className="risk-classification">
@@ -247,13 +264,31 @@ const RiskTable = () => {
                 </tbody>
               </table>
             </td>
-            <td colSpan="4" className="epp-suggested">
-              <h4 className="red">EPP Sugerido</h4>
-              <div className="epp-images">
-                <img src="path/to/epp1.png" alt="EPP 1" />
-                <img src="path/to/epp2.png" alt="EPP 2" />
-                <img src="path/to/epp3.png" alt="EPP 3" />
-                <img src="path/to/epp4.png" alt="EPP 4" />
+            <td colSpan="8" className="epp-suggested" style={{ verticalAlign: 'top' }}>
+              <div style={{ marginTop: '20px' }}>
+                <h4 className="red">EPP Sugerido</h4>
+                <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center' }}>
+                  <select onChange={(e) => setSelectedEPPImage(optionImages[e.target.value])} style={{ width: '150px', height: '30px' }}>
+                    <option value="">Seleccione una imagen adicional</option>
+                    <option value="option1">Cabeza</option>
+                    <option value="option2">Medio</option>
+                    <option value="option3">Pie</option>
+                    <option value="option4">Mano</option>
+                    <option value="option5">Cabeza y Medio</option>
+                    <option value="option6">Mano y Pie</option>
+                    <option value="option7">Cabeza y Pie</option>
+                    <option value="option8">Cabeza y Mano</option>
+                    <option value="option9">Medio y Pie</option>
+                    <option value="option10">Medio y Mano</option>
+                    <option value="option11">Todo</option>
+                  </select>
+                  <div className="epp-images-grid" style={{ marginLeft: '20px', display: 'grid', gridTemplateColumns: 'repeat(3, auto)', gap: '10px' }}>
+                    <img src="/images/3.png" alt="EPP 1" className="epp-image" style={{ width: '50px', height: '50px' }} />
+                    <img src="/images/6.png" alt="EPP 2" className="epp-image" style={{ width: '50px', height: '50px' }} />
+                    <img src="/images/4.png" alt="EPP 3" className="epp-image" style={{ width: '50px', height: '50px' }} />
+                  </div>
+                </div>
+                {selectedEPPImage && <img src={selectedEPPImage} alt="Selected" style={{ width: '40%', height: 'auto', marginTop: '10px', display: 'block', marginLeft: '0' }} />}
               </div>
             </td>
           </tr>
