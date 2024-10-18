@@ -101,13 +101,12 @@ const NormaNoms = () => {
         return false;
     }
   };
-
   return (
     <div className="norma-noms-container">
       <div className="container">
-        {/* Otros pasos de 1 a 10 */}
-         {/* Paso 1 */}
-         {step === 1 && (
+        {/* Aquí van los pasos de 1 a 8 */}
+        {/* Paso 1 */}
+        {step === 1 && (
           <div className="step1">
             <h3>Estructura del centro de trabajo</h3>
             <em>Indique la forma en la cual requiere identificar las NOMs aplicables</em>
@@ -591,7 +590,6 @@ const NormaNoms = () => {
           </div>
         )}
 
-        
         {/* Paso 11 - Recipientes Criogénicos */}
         {step === 11 && (
           <div className="step11">
@@ -676,6 +674,7 @@ const NormaNoms = () => {
             </div>
           </div>
         )}
+         
 
         <style jsx>{`
           .modal {
