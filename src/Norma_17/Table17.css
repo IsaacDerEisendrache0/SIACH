@@ -268,3 +268,110 @@
   background-color: red !important;
   
 }
+
+
+/* Estilos para el contenedor del modal */
+.modal-container {
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: auto;
+}
+
+/* Estilo para el título */
+.modal-container h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-align: center;
+  color: #333;
+}
+
+/* Lista de puestos en el modal */
+.puestos-lista {
+  display: flex;
+  flex-direction: column;
+  max-height: 300px; /* Altura máxima del contenedor */
+  overflow-y: auto; /* Si hay demasiados puestos, permite un scroll global */
+  margin-bottom: 20px;
+}
+
+/* Estilo para cada puesto con checkbox */
+.puesto-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* Espacio entre cada puesto */
+}
+
+/* Espacio entre el checkbox y el label */
+.puesto-item label {
+  margin-left: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Estilos para los botones */
+.modal-container button {
+  padding: 8px 15px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+  min-width: 100px;
+}
+
+.modal-container button:first-of-type {
+  background-color: #dc3545;
+  color: white;
+}
+
+.modal-container button:last-of-type {
+  background-color: #6c757d;
+  color: white;
+}
+
+
+
+/* Contenedor para el menú y los botones */
+.puesto-con-botones {
+  display: flex;
+  align-items: center; /* Alinea verticalmente en el centro */
+  justify-content: flex-start; /* Mantiene el contenido alineado a la izquierda */
+  width: 100%; /* Ocupa todo el ancho disponible */
+  gap: 10px; /* Espacio entre el menú desplegable y los botones */
+}
+
+/* Estilo del menú desplegable */
+.puesto-con-botones select {
+  flex-grow: 1; /* Hace que el menú ocupe todo el espacio restante */
+  max-width: 300px; /* Asegura que no crezca demasiado */
+  padding: 5px;
+}
+
+/* Botones al lado del menú desplegable */
+.puesto-con-botones .btn-agregar,
+.puesto-con-botones .btn-borrar {
+  padding: 5px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  min-width: 80px; /* Ancho mínimo para los botones */
+}
+
+/* Estilo del botón agregar */
+.btn-agregar {
+  background-color: #007bff; /* Color azul */
+  color: white;
+}
+
+/* Estilo del botón borrar */
+.btn-borrar {
+  background-color: #007bff; /* Color rojo */
+  color: white;
+}
+
+
+

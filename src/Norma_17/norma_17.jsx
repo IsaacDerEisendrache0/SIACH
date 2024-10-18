@@ -2,6 +2,8 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import './Table17.css';
 import React, { useState, useEffect } from 'react';
+import Modal from 'react-modal';
+
 
 
 const areas = [
@@ -191,6 +193,9 @@ const RiskAssessmentTable = () => {
   const handleConsequenceChange = (event) => setConsequence(Number(event.target.value));
   const handleExposureChange = (event) => setExposure(Number(event.target.value));
   const handleProbabilityChange = (event) => setProbability(Number(event.target.value));
+  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar si el modal está abierto o cerrado
+  const [puestosSeleccionadosParaBorrar, setPuestosSeleccionadosParaBorrar] = useState([]); // Estado para almacenar los puestos seleccionados para borrar
+
 
   const [selectedOptionEquipoUtilizado, setSelectedOptionEquipoUtilizado] = useState('');
   const [selectedOptionProteccionSugerida, setSelectedOptionProteccionSugerida] = useState('');
@@ -243,69 +248,171 @@ const RiskAssessmentTable = () => {
     
 };
 
-useEffect(() => {
-  const savedPuestos = JSON.parse(localStorage.getItem('puestos')) || ['Puesto 1', 'Puesto 2'];
-  setPuestos(savedPuestos);
-}, []);
 
-// Renombrada la función para evitar conflictos
-const handlePuestoSelectChange = (e) => {
-  setPuestoSeleccionado(e.target.value);
+
+
+
+const handleDeletePuestoClick = () => {
+  setIsModalOpen(true); // Abrir el modal cuando se presiona "Borrar"
 };
 
+const handleModalClose = () => {
+  setIsModalOpen(false); // Cerrar el modal
+};
+
+const handlePuestoSelectionChange = (event) => {
+  const value = event.target.value;
+  const alreadySelected = puestosSeleccionadosParaBorrar.includes(value);
+
+  if (alreadySelected) {
+    setPuestosSeleccionadosParaBorrar(
+      puestosSeleccionadosParaBorrar.filter((puesto) => puesto !== value)
+    );
+  } else {
+    setPuestosSeleccionadosParaBorrar([...puestosSeleccionadosParaBorrar, value]);
+  }
+};
+
+useEffect(() => {
+  // Creamos una clave específica para el área seleccionada
+  const areaSeleccionadaKey = `puestos_${areaSeleccionada}`;
+
+  const savedPuestos = JSON.parse(localStorage.getItem(areaSeleccionadaKey));
+
+  // Verificamos si los datos en localStorage son válidos
+  if (savedPuestos && savedPuestos.length > 0 && savedPuestos.includes("Puesto 1") && savedPuestos.includes("Puesto 2")) {
+    // Si los valores guardados son incorrectos, los eliminamos
+    localStorage.removeItem(areaSeleccionadaKey);
+    setPuestos(areas.find(area => area.nombre === areaSeleccionada).puestos); // Inicializa con los puestos del área seleccionada
+  } else if (savedPuestos && savedPuestos.length > 0) {
+    setPuestos(savedPuestos); // Si los datos son válidos, los cargamos
+  } else {
+    setPuestos(areas.find(area => area.nombre === areaSeleccionada).puestos); // Inicializa con los puestos del área seleccionada
+    localStorage.setItem(areaSeleccionadaKey, JSON.stringify(areas.find(area => area.nombre === areaSeleccionada).puestos)); // Guardamos los valores iniciales en localStorage
+  }
+}, [areaSeleccionada]);
+
+// Función para agregar un nuevo puesto
 const handleAddPuestoClick = () => {
   const nuevoPuesto = prompt("Ingrese el nuevo puesto:");
   if (nuevoPuesto && nuevoPuesto.trim() !== "") {
-    const updatedPuestos = [...puestos, nuevoPuesto.trim()]; // Agregar el nuevo puesto a la lista
-    setPuestos(updatedPuestos); // Actualizar el estado
-    setPuestoSeleccionado(nuevoPuesto.trim()); // Seleccionar el nuevo puesto
-    localStorage.setItem('puestos', JSON.stringify(updatedPuestos)); // Guardar en localStorage
+    const updatedPuestos = [...puestos, nuevoPuesto.trim()];
+    setPuestos(updatedPuestos); // Actualizamos el estado con el nuevo puesto
+
+    // Guardamos los puestos actualizados en localStorage para el área seleccionada
+    const areaSeleccionadaKey = `puestos_${areaSeleccionada}`;
+    localStorage.setItem(areaSeleccionadaKey, JSON.stringify(updatedPuestos));
+
+    setPuestoSeleccionado(''); // Limpiar la selección del dropdown después de agregar
+  }
+
+  if (puestoSeleccionado && !puestos.includes(puestoSeleccionado)) {
+    const updatedPuestos = [...puestos, puestoSeleccionado];
+    setPuestos(updatedPuestos); // Agregar el puesto seleccionado al array
+
+    // Guardamos los puestos actualizados en localStorage para el área seleccionada
+    const areaSeleccionadaKey = `puestos_${areaSeleccionada}`;
+    localStorage.setItem(areaSeleccionadaKey, JSON.stringify(updatedPuestos));
+
+    setPuestoSeleccionado(''); // Limpiar la selección del dropdown después de agregar
   }
 };
 
 
+// Función para borrar los puestos seleccionados
+const handleDeleteSelectedPuestos = () => {
+  const nuevosPuestos = puestos.filter(
+    (puesto) => !puestosSeleccionadosParaBorrar.includes(puesto)
+  );
+  setPuestos(nuevosPuestos); // Actualiza los puestos eliminando los seleccionados
+
+  // Guardamos los puestos actualizados en localStorage para el área seleccionada
+  const areaSeleccionadaKey = `puestos_${areaSeleccionada}`;
+  localStorage.setItem(areaSeleccionadaKey, JSON.stringify(nuevosPuestos));
+
+  setPuestosSeleccionadosParaBorrar([]); // Limpiar la selección
+  setIsModalOpen(false); // Cerrar el modal
+};
 
 
-  
-  
+
+
+
+
   return (
       <div class="main-table">
         <table class="custom-table" className="table-container">
         <thead>
           <tr>
-            <td className="no-border-cell" colSpan="3">
-            <label htmlFor="puesto">Puesto:</label>
+          <td className="no-border-cell" colSpan="3">
+  <label htmlFor="puesto">Puesto:</label>
 
-              <div className="full-width-cell" style={{ display: 'flex', alignItems: 'center' }}>
-                <select 
-                  id="puesto" 
-                  value={puestoSeleccionado} 
-                  onChange={handlePuestoChange} 
-                  style={{ marginRight: '10px', width: '200px', padding: '5px' }} // Ajusta el ancho y padding del menú desplegable
-                >
-                  <option value="" disabled>Seleccione un puesto</option>
-                  {puestos.map((puesto, index) => (
-                    <option key={index} value={puesto}>
-                      {puesto}
-                    </option>
-                  ))}
-                </select>
-                
-                {/* Botón para agregar puesto con ancho ajustado */}
-                <button 
-                  onClick={handleAddPuestoClick} 
-                  style={{ padding: '5px 11px', fontSize: '14px', cursor: 'pointer', minWidth: '120px' }} // Ajusta el padding y ancho mínimo del botón
-                >
-                  Agregar 
-                </button>
-              </div>
+  <div className="full-width-cell">
+    <div className="puesto-con-botones">
+      <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange}>
+        <option value="" disabled>Seleccione un puesto</option>
+        {puestos.map((puesto, index) => (
+          <option key={index} value={puesto}>
+            {puesto}
+          </option>
+        ))}
+      </select>
 
-            {/* Área de descripción de actividad */}
-            <div>
-              <label htmlFor="descripcion-actividad">Descripción de la actividad:</label>
-              <textarea id="descripcion-actividad" name="descripcion-actividad" rows="2" cols="50" placeholder="Escribe aquí la descripción de la actividad..."></textarea>
-            </div>
-          </td>
+      {/* Botón para agregar puesto */}
+      <button className="btn-agregar" onClick={handleAddPuestoClick}>
+        Agregar
+      </button>
+
+      {/* Botón para borrar puestos */}
+      <button className="btn-borrar" onClick={handleDeletePuestoClick}>
+        Borrar
+      </button>
+    </div>
+  </div>
+
+  {/* Área de descripción de actividad */}
+  <div>
+    <label htmlFor="descripcion-actividad">Descripción de la actividad:</label>
+    <textarea
+      id="descripcion-actividad"
+      name="descripcion-actividad"
+      rows="2"
+      cols="50"
+      placeholder="Escribe aquí la descripción de la actividad..."
+    ></textarea>
+  </div>
+</td>
+
+
+
+<Modal isOpen={isModalOpen} onRequestClose={handleModalClose}>
+  <div className="modal-container">
+    <h2>Selecciona los puestos a borrar</h2>
+
+    {/* Muestra los puestos en el modal */}
+    <div className="puestos-lista">
+      {puestos.length > 0 ? (
+        puestos.map((puesto, index) => (
+          <div className="puesto-item" key={index}>
+            <input
+              type="checkbox"
+              value={puesto}
+              onChange={handlePuestoSelectionChange}
+              checked={puestosSeleccionadosParaBorrar.includes(puesto)}
+            />
+            <label>{puesto}</label>
+          </div>
+        ))
+      ) : (
+        <p>No hay puestos disponibles para borrar</p>
+      )}
+    </div>
+
+    <button onClick={handleDeleteSelectedPuestos}>Borrar seleccionados</button>
+    <button onClick={handleModalClose}>Cerrar</button>
+  </div>
+</Modal>
+
 
               
           <td className="header right-aligned" colSpan="2" style={{ backgroundColor: 'red' }}>
@@ -455,7 +562,7 @@ const handleAddPuestoClick = () => {
                 <thead>
                   <tr>
                     <th>Consecuencia</th>
-                    <th>Exposición</th>
+                    <th style={{ backgroundColor: 'red' }}>Exposición</th>
                     <th>Probabilidad</th>
                     <th>Magnitud del Riesgo</th>
                   </tr>
