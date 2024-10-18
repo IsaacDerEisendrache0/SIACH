@@ -248,13 +248,44 @@ const RiskTable = () => {
                 </tbody>
               </td>
 
-              <td colspan="2" rowSpan="3">
-                <tr rowSpan="3">dasds</tr>
-                
+              <td colspan="1" >
+                <table class="epp-table">
+                  <tr>
+                    <th  class="header">Equipo de Protección Personal sugerido:</th>
+                  </tr>
+                  <tr>
+                    <td>Anteojos de protección</td>
+                  </tr>
+                  <tr>
+                    <td>Calzado conductivo</td>
+                  </tr>
+                  <tr>
+                    <td>Overol</td>
+                  </tr>
+                  <tr>
+                    <td>Calzado contra impacto</td>
+                  </tr>
+                </table>
+
               </td>
 
-              <td colSpan="2">hola
-                
+              <td colSpan="2">
+                <table class="risk-body-table">
+                  <tr>
+                    <th colspan="2" class="header">Principales partes del cuerpo expuestas al riesgo:</th>
+                  </tr>
+                  <tr>
+                    <td>Ojos y cara</td>
+                  </tr>
+                  <tr>
+                    <td>Dedos</td>
+                  </tr>
+                  <tr>
+                    <td>Brazos y manos</td>
+                  </tr>
+                </table>
+
+
               </td>
               
 

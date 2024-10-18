@@ -135,20 +135,48 @@ const RiskAssessmentTable = () => {
 
   const handleCheckboxChange = (event) => {
     const hazard = event.target.name;
+    const isChecked = event.target.checked;
   
-    // Si el peligro tiene más de una imagen, mostramos el modal
+    // Si se deselecciona, simplemente eliminamos las imágenes y desmarcamos el checkbox
+    if (!isChecked) {
+      setHazards({
+        ...hazards,
+        [hazard]: false, // Actualizamos el estado para desmarcar el checkbox
+      });
+  
+      // Eliminamos cualquier imagen relacionada con este peligro
+      if (protectionImages[hazard]) {
+        setSelectedImages((prevSelectedImages) =>
+          prevSelectedImages.filter((image) => !protectionImages[hazard].includes(image))
+        );
+      }
+  
+      return; // Salimos de la función para no abrir el modal
+    }
+  
+    // Si el peligro tiene más de una imagen y se está seleccionando
     if (protectionImages[hazard] && protectionImages[hazard].length > 1) {
       setSelectedImagesForHazard(protectionImages[hazard]); // Guardamos las imágenes de ese peligro
       setHazardWithImages(hazard); // Guardamos el nombre del peligro que tiene varias imágenes
-      setIsImageModalOpen(true); // Abrimos el modal
+      setIsImageModalOpen(true); // Abrimos el modal para seleccionar la imagen
     } else {
-      // Si solo tiene una imagen o no tiene, simplemente actualizamos los riesgos
+      // Si solo tiene una imagen, seleccionamos/deseleccionamos directamente
       setHazards({
         ...hazards,
-        [hazard]: event.target.checked,
+        [hazard]: isChecked, // Actualizamos el estado del checkbox
       });
+  
+      // Si está seleccionado y solo tiene una imagen, la agregamos
+      if (protectionImages[hazard] && protectionImages[hazard].length === 1) {
+        const image = protectionImages[hazard][0]; // La única imagen disponible
+        if (!selectedImages.includes(image)) {
+          setSelectedImages((prevSelectedImages) => [...prevSelectedImages, image]); // Agregar la imagen seleccionada
+        }
+      }
     }
   };
+  
+  
 
   const getAffectedBodyParts = () => {
     const affectedParts = new Set();
@@ -183,7 +211,6 @@ const RiskAssessmentTable = () => {
     return Array.from(uniqueImages);
   };
   
-  const selectedImages = getSelectedHazardImages();
   
   
   
@@ -207,6 +234,9 @@ const RiskAssessmentTable = () => {
   const [selectedImagesForHazard, setSelectedImagesForHazard] = useState([]); // Estado para las imágenes del peligro seleccionado
   const [isImageModalOpen, setIsImageModalOpen] = useState(false); // Estado para abrir o cerrar el modal de selección de imagen
   const [hazardWithImages, setHazardWithImages] = useState('');
+  const [selectedHazardImages, setSelectedHazardImages] = useState({}); // Para almacenar las imágenes seleccionadas por peligro
+  const [selectedImages, setSelectedImages] = useState([]); // Para almacenar las imágenes seleccionadas para "Equipo de protección personal sugerido"
+
 
   const [selectedOptionEquipoUtilizado, setSelectedOptionEquipoUtilizado] = useState('');
   const [selectedOptionProteccionSugerida, setSelectedOptionProteccionSugerida] = useState('');
@@ -349,10 +379,24 @@ const handleDeleteSelectedPuestos = () => {
 
 
 const handleImageSelect = (image) => {
-  // Aquí puedes manejar qué hacer con la imagen seleccionada
-  console.log('Imagen seleccionada:', image);
+  // Asociar la imagen seleccionada con el peligro actual
+  setSelectedHazardImages({
+    ...selectedHazardImages,
+    [hazardWithImages]: image, // Asociamos la imagen seleccionada con el peligro
+  });
 
-  // Cerrar el modal después de seleccionar la imagen
+  // Actualizar el estado de las imágenes sugeridas
+  setSelectedImages((prevSelectedImages) => {
+    return [...prevSelectedImages, image]; // Agregar la imagen seleccionada a la lista de imágenes sugeridas
+  });
+
+  // Marcar el checkbox del peligro seleccionado
+  setHazards({
+    ...hazards,
+    [hazardWithImages]: true, // Marcamos el checkbox
+  });
+
+  // Cerrar el modal
   setIsImageModalOpen(false);
 };
 
@@ -484,24 +528,27 @@ const handleImageSelect = (image) => {
         
         <tbody>
           <tr>
-            <td colSpan="2" className="left-section"> 
-              <tb className="text1">Identificación de peligros</tb>
-              <ul className="hazard-list">
-                {Object.keys(hazards).map(hazard => (
-                  <li key={hazard} className="hazard-item">
-                    {hazard}
-                    <label className="hazard-checkbox">
-                      <input
-                        type="checkbox"
-                        name={hazard}
-                        checked={hazards[hazard]}
-                        onChange={handleCheckboxChange}
-                      />
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </td>
+          <td colSpan="2" className="left-section"> 
+  <tb className="text1">Identificación de peligros</tb>
+  <ul className="hazard-list">
+    {Object.keys(hazards).map(hazard => (
+      <li key={hazard} className="hazard-item">
+        {hazard}
+        <label className="hazard-checkbox">
+          <input
+            type="checkbox"
+            name={hazard}
+            checked={hazards[hazard]}
+            onChange={handleCheckboxChange}
+          />
+        </label>
+      </li>
+    ))}
+  </ul>
+</td>
+
+
+
 
             <Modal isOpen={isImageModalOpen} onRequestClose={() => setIsImageModalOpen(false)}>
               <h2>Selecciona una imagen para {hazardWithImages}</h2>
