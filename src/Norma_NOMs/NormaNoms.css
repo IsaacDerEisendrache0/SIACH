@@ -1,103 +1,152 @@
 .norma-noms-container {
-    font-family: Arial, sans-serif; /* Fuente más legible */
-    padding: 20px;
-    background-color: #f9f9f9; /* Color de fondo suave */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    max-width: 600px; /* Ancho máximo del contenedor */
-    margin: 20px auto; /* Centrado en la página */
-  }
-  
-  .container {
-    background: white; /* Fondo blanco para el contenedor principal */
-    padding: 20px;
-    border-radius: 8px;
-  }
-  
-  h3 {
-    color: #333; /* Color del encabezado */
-    margin-bottom: 10px; /* Espaciado inferior */
-  }
-  
-  em {
-    color: #666; /* Color del texto en cursiva */
-  }
-  
-  .options {
-    margin-bottom: 20px; /* Espaciado inferior */
-  }
-  
-  label {
-    display: block; /* Cada etiqueta en su propia línea */
-    margin: 10px 0; /* Espaciado vertical */
-  }
-  
-  input[type="radio"] {
-    margin-right: 10px; /* Espaciado a la derecha del radio */
-  }
-  
-  .buttons {
-    display: flex; /* Usar Flexbox para los botones */
-    justify-content: space-between; /* Espaciado entre botones */
-  }
-  
-  button {
-    background-color: #007bff; /* Color de fondo del botón */
-    color: white; /* Color del texto del botón */
-    border: none; /* Sin borde */
-    border-radius: 5px; /* Bordes redondeados */
-    padding: 10px 15px; /* Espaciado interno */
-    cursor: pointer; /* Cambia el cursor a mano */
-    transition: background-color 0.3s; /* Transición suave para el color de fondo */
-  }
-  
-  button:hover {
-    background-color: #0056b3; /* Color al pasar el mouse */
-  }
-  
-  .fire-risk-assessment {
-    margin-top: 20px; /* Espaciado superior */
-    padding: 20px; /* Espaciado interno */
-    border: 1px solid #ccc; /* Borde del formulario */
-    border-radius: 8px; /* Bordes redondeados del formulario */
-    background-color: #fafafa; /* Fondo suave para el formulario */
-  }
-  
-  table {
-    width: 100%; /* Tabla ocupa todo el ancho */
-    border-collapse: collapse; /* Colapsa bordes de la tabla */
-    margin-bottom: 20px; /* Espaciado inferior */
-  }
-  
-  th, td {
-    padding: 10px; /* Espaciado interno de las celdas */
-    border: 1px solid #ddd; /* Borde de las celdas */
-    text-align: left; /* Alineación del texto a la izquierda */
-  }
-  
-  th {
-    background-color: #f2f2f2; /* Color de fondo de encabezados */
-    color: #555; /* Color del texto de encabezados */
-  }
-  
-  input[type="text"] {
-    width: calc(100% - 20px); /* Ancho de campo de texto */
-    padding: 10px; /* Espaciado interno */
-    border: 1px solid #ccc; /* Borde del campo de texto */
-    border-radius: 5px; /* Bordes redondeados */
-  }
-  
-  input[type="submit"] {
-    background-color: #28a745; /* Color de fondo del botón de enviar */
-    color: white; /* Color del texto del botón */
-    border: none; /* Sin borde */
-    border-radius: 5px; /* Bordes redondeados */
-    padding: 10px 15px; /* Espaciado interno */
-    cursor: pointer; /* Cambia el cursor a mano */
-    transition: background-color 0.3s; /* Transición suave para el color de fondo */
-  }
-  
-  input[type="submit"]:hover {
-    background-color: #218838; /* Color al pasar el mouse */
-  }
-  
+  width: 100%;
+  display: flex;
+  justify-content: center; /* Centra el contenido */
+  padding: 20px 0; /* Espacio vertical */
+}
+
+.container {
+  max-width: 80%; /* Ajusta el ancho máximo del contenido */
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #f9f9f9; /* Fondo suave */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+.step1, 
+.step2, 
+.step3,
+.step4,
+.step5,
+.step6,
+.step7,
+.step8,
+.step9,
+.step10 {
+  text-align: left; /* Alinea el texto a la izquierda */
+  margin-bottom: 20px; /* Espacio entre secciones */
+  padding: 15px; /* Espacio interno */
+}
+
+.norma-noms-container label,
+.norma-noms-container p {
+  white-space: normal; /* Permite que el texto se ajuste al ancho */
+  word-wrap: break-word; /* Ajusta el texto dentro del ancho */
+  line-height: 1.6; /* Espacio entre líneas más amplio */
+  width: 100%; /* Ocupar todo el ancho disponible */
+  max-width: 100%; /* Evita que se corte el texto */
+  margin-bottom: 15px; /* Añade un margen inferior entre párrafos */
+  font-size: 1rem; /* Ajusta el tamaño de la fuente */
+  color: #333; /* Texto en gris oscuro */
+}
+
+h3 {
+  text-align: center; /* Centra los títulos */
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #007bff; /* Color azul */
+}
+
+/* Asegura que las preguntas largas ocupen menos líneas */
+.norma-noms-container .long-question {
+  max-width: 85%; /* Controla el ancho para preguntas largas */
+  margin: 0 auto; /* Centra el bloque */
+  text-align: justify; /* Justificar el texto */
+  font-size: 1rem;
+  color: #495057; /* Gris suave */
+  line-height: 1.5;
+}
+
+/* Textos más cortos en una sola línea */
+.norma-noms-container .short-question {
+  text-align: center; /* Centra el texto corto */
+  margin: 0 auto;
+  font-size: 1rem;
+  color: #333;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.buttons button {
+  width: 150px; /* Ajusta el ancho de los botones */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.buttons button:hover {
+  background-color: #0056b3; /* Efecto hover */
+}
+
+button:disabled {
+  background-color: #adb5bd;
+  cursor: not-allowed;
+}
+
+/* Mejora en el aspecto de los contenedores de pasos */
+.step1, 
+.step2, 
+.step3,
+.step4,
+.step5,
+.step6,
+.step7,
+.step8,
+.step9,
+.step10 {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.step10 {
+  margin-bottom: 0;
+}
+
+/* Modal */
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  padding: 30px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover, .close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}

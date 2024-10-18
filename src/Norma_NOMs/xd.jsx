@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './NormaNoms.css';
-import iconImage from './images/icon.png'; // Asegúrate de que esta ruta sea correcta
-import exceptImage from './images/excepted_recipients.png'; // Asegúrate de que esta ruta sea correcta
+import iconImage from './images/icon.png';
+import exceptImage from './images/excepted_recipients.png'; // Imagen para el paso 9
+import categoriasImage from './images/categorias_presion.png'; // Imagen para el paso 10
 
 const NormaNoms = () => {
   const [step, setStep] = useState(1);
-  const [showModal, setShowModal] = useState(false); // Estado para mostrar/ocultar el modal
+  const [showModal9, setShowModal9] = useState(false); // Estado del modal para el paso 9
+  const [showModal10, setShowModal10] = useState(false); // Estado del modal para el paso 10
   const [formValues, setFormValues] = useState({
     superficie: '',
     invGases: '',
@@ -22,8 +24,9 @@ const NormaNoms = () => {
     trabajosAltura: '',
     equiposAltura: [],
     recipientesPresion: '',
-    categoriasRecipientes: [], // Añadido para el paso 10
-    generadoresVapor: ''
+    categoriasRecipientes: [],
+    generadoresVapor: '',
+    recipientesCriogenicos: '' // Nuevo campo para el paso 11
   });
 
   const navigate = useNavigate();
@@ -86,9 +89,9 @@ const NormaNoms = () => {
       case 9:
         return formValues.recipientesPresion !== '';
       case 10:
-        return formValues.categoriasRecipientes.length > 0; // Verificación para el nuevo paso
-      case 11:
-        return formValues.generadoresVapor !== '';
+        return formValues.categoriasRecipientes.length > 0;
+      case 11: // Nuevo caso para el paso 11
+        return formValues.recipientesCriogenicos !== ''; // Verificar si se seleccionó una opción
       default:
         return false;
     }
@@ -97,7 +100,7 @@ const NormaNoms = () => {
   return (
     <div className="norma-noms-container">
       <div className="container">
-        {/* Aquí van los pasos de 1 a 9 */}
+        {/* Aquí van los pasos de 1 a 8 */}
         {/* Paso 1 */}
         {step === 1 && (
           <div className="step1">
@@ -120,8 +123,9 @@ const NormaNoms = () => {
           </div>
         )}
 
-        {/* Paso 2 */}
-        {step === 2 && (
+        {/* Otros pasos de 2 a 10... */}
+         {/* Paso 2 */}
+         {step === 2 && (
           <div className="step2">
             <h3>Determinación del grado de riesgo de incendio</h3>
             <div className="inventory-fields">
@@ -501,19 +505,19 @@ const NormaNoms = () => {
         )}
 
 
+
         {/* Paso 9 - Recipientes sujetos a presión */}
         {step === 9 && (
           <div className="step9">
             <h3>Recipientes Sujetos a Presión</h3>
             <label>¿En su centro de trabajo se cuenta con recipientes sujetos a presión -interna o externa- como compresores, intercambiadores de calor, torres de enfriamiento, marmitas, tanques suavizadores, filtros, reactores, autoclaves, colchones de aire, entre otros?</label>
             <p>Para consultar los recipientes que quedan exceptuados del cumplimiento de la NOM-020-STPS-2011, dé clic en el ícono.</p>
-            
-            {/* Icono que al hacer clic abre el modal */}
+
             <img
               src={iconImage}
               alt="Consultar recipientes exceptuados"
               style={{ cursor: 'pointer', width: '50px' }}
-              onClick={() => setShowModal(true)}
+              onClick={() => setShowModal9(true)}
             />
 
             <label>
@@ -531,20 +535,18 @@ const NormaNoms = () => {
           </div>
         )}
 
-
         {/* Paso 10 - Categorías de recipientes sujetos a presión */}
         {step === 10 && (
           <div className="step10">
             <h3>Categorías de Recipientes Sujetos a Presión</h3>
             <label>Indique la(s) categoría(s) en la(s) se clasifica(n) el (los) recipiente(s) sujeto(s) a presión instalado(s) en su centro de trabajo.</label>
             <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
-            
-            {/* Icono que al hacer clic abre el modal */}
+
             <img
               src={iconImage}
               alt="Consultar tabla de clasificación"
               style={{ cursor: 'pointer', width: '50px' }}
-              onClick={() => setShowModal(true)}
+              onClick={() => setShowModal10(true)}
             />
 
             <div className="checkbox-group">
@@ -584,16 +586,46 @@ const NormaNoms = () => {
           </div>
         )}
 
-        {/* Modal para mostrar la imagen de la tabla de clasificación */}
-        {showModal && (
-          <div className="modal">
-            <div className="modal-content">
-              <span className="close" onClick={() => setShowModal(false)}>&times;</span>
-              <img src={exceptImage} alt="Tabla de clasificación de recipientes" style={{ width: '100%' }} />
+        {/* Paso 11 - Recipientes Criogénicos */}
+        {step === 11 && (
+          <div className="step11">
+            <h3>Recipientes Criogénicos</h3>
+            <label>¿En su centro de trabajo se utilizan recipientes criogénicos?</label>
+            <label>
+              <input type="radio" name="recipientesCriogenicos" value="sí" onChange={handleInputChange} />
+              Sí
+            </label>
+            <label>
+              <input type="radio" name="recipientesCriogenicos" value="no" onChange={handleInputChange} />
+              No
+            </label>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>Finalizar</button>
             </div>
           </div>
         )}
-        
+
+        {/* Modal para el paso 9 */}
+        {showModal9 && (
+          <div className="modal">
+            <div className="modal-content">
+              <span className="close" onClick={() => setShowModal9(false)}>&times;</span>
+              <img src={exceptImage} alt="Recipientes exceptuados" style={{ width: '100%' }} />
+            </div>
+          </div>
+        )}
+
+        {/* Modal para el paso 10 */}
+        {showModal10 && (
+          <div className="modal">
+            <div className="modal-content">
+              <span className="close" onClick={() => setShowModal10(false)}>&times;</span>
+              <img src={categoriasImage} alt="Tabla de clasificación de recipientes" style={{ width: '100%' }} />
+            </div>
+          </div>
+        )}
+
         <style jsx>{`
           .modal {
             display: flex;
@@ -629,9 +661,6 @@ const NormaNoms = () => {
             cursor: pointer;
           }
         `}</style>
-
-        {/* Agrega más pasos aquí si es necesario */}
-        
       </div>
     </div>
   );
