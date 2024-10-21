@@ -35,13 +35,13 @@ const RiskTable = () => {
 
   const handleAddEPPImage = (e) => {
     const selectedImage = optionImages[e.target.value];
-    if (selectedImage && !additionalEPPImages.includes(selectedImage)) {
-      setAdditionalEPPImages([...additionalEPPImages, selectedImage]);
+    if (selectedImage) {
+      setAdditionalEPPImages([selectedImage]);
     }
   };
 
-  const handleRemoveEPPImage = (imageToRemove) => {
-    setAdditionalEPPImages(additionalEPPImages.filter(image => image !== imageToRemove));
+  const handleRemoveEPPImage = () => {
+    setAdditionalEPPImages([]);
   };
 
   const riskOptions = [
@@ -171,18 +171,18 @@ const RiskTable = () => {
       <table className="risk-table">
         <thead>
           <tr>
-            <th className="red">Nombre de la maquinaria o equipo:</th>
-            <td colSpan="20"><input type="text" /></td>
+            <th className="red">Nombre de la maquinaria</th>
+            <td colSpan="20"><input placeholder='Introduzca un nombre' type="text" /></td>
             <th className="red">Área:</th>
-            <td colSpan="10"><input type="text" /></td>
+            <td colSpan="10"><input placeholder='Introduzca un area' type="text" /></td>
             <th className="red">POE:</th>
-            <td colSpan="10"><input type="text" /></td>
+            <td colSpan="10"><input  placeholder="Introduzca el POE"type="text" /></td>
             <th className="red">Tiempo de exposición:</th>
-            <td colSpan="10"><input type="text" /></td>
+            <td colSpan="10"><input placeholder='Introduzca el tiempo' type="text" /></td>
           </tr>
           <tr>
             <th className="red">Descripción de la maquinaria o equipo:</th>
-            <td colSpan="30"><input type="text" /></td>
+            <td colSpan="30"><input placeholder='Introduzca una descripción' type="text" /></td>
             <th className="red">Fecha de inspección:</th>
             <td colSpan="12"><input type="date" /></td>
           </tr>
@@ -191,6 +191,7 @@ const RiskTable = () => {
           <tr>
             <td className="image-section">
               <input type="file" accept="image/*" onChange={handleImageUpload} />
+              {image && <img src={image} alt="Uploaded" className="uploaded-image" style={{ width: '100%', height: 'auto', marginTop: '10px' }} />}
             </td>
             <td className="risk-info" colSpan="3">
               <h4 className="red">Identificación de riesgos</h4>
@@ -279,47 +280,41 @@ const RiskTable = () => {
               </table>
             </td>
             <td colSpan="8" className="epp-suggested" style={{ verticalAlign: 'top' }}>
-              <div style={{ marginTop: '20px' }}>
-                <h4 className="red">EPP Sugerido</h4>
-                <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center' }}>
-                  <select onChange={handleAddEPPImage} style={{ width: '150px', height: '30px', marginRight: '10px' }}>
-                    <option value="">Seleccione una imagen adicional</option>
-                    <option value="option1">Cabeza</option>
-                    <option value="option2">Medio</option>
-                    <option value="option3">Pie</option>
-                    <option value="option4">Mano</option>
-                    <option value="option5">Cabeza y Medio</option>
-                    <option value="option6">Mano y Pie</option>
-                    <option value="option7">Cabeza y Pie</option>
-                    <option value="option8">Cabeza y Mano</option>
-                    <option value="option9">Medio y Pie</option>
-                    <option value="option10">Medio y Mano</option>
-                    <option value="option11">Todo</option>
-                  </select>
-                  <select onChange={(e) => setSelectedEPPImage(e.target.value)} style={{ width: '150px', height: '30px', marginRight: '10px' }}>
-                    <option value="">Seleccione EPP</option>
-                    {eppImages.map((eppImage, idx) => (
-                      <option key={idx} value={eppImage}>{`EPP ${idx + 1}`}</option>
-                    ))}
-                  </select>
+              <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '10px', borderRight: '1px solid #000', paddingRight: '20px' }}>
+                  <div>
+                    <h4 className="red">Seleccione una imagen adicional</h4>
+                    <select onChange={handleAddEPPImage} style={{ width: '150px', height: '30px' }}>
+                      <option value="">Seleccione una imagen adicional</option>
+                      {Object.keys(optionImages).map((key) => (
+                        <option key={key} value={key}>{key}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div style={{ paddingLeft: '20px' }}>
+                    <h4 className="red">Seleccione EPP</h4>
+                    <select onChange={(e) => setSelectedEPPImage(e.target.value)} style={{ width: '150px', height: '30px' }}>
+                      <option value="">Seleccione EPP</option>
+                      {eppImages.map((eppImage, idx) => (
+                        <option key={idx} value={eppImage}>{`EPP ${idx}`}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="body-part-image">
+                  {additionalEPPImages.length > 0 && (
+                    <img
+                      src={additionalEPPImages[0]}
+                      alt={`EPP seleccionado`}
+                      style={{ width: '150px', height: 'auto', marginTop: '10px', display: 'block' }}
+                    />
+                  )}
                 </div>
                 <div className="epp-images-grid" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(3, auto)', gap: '10px' }}>
                   <img src="/images/3.png" alt="EPP 1" className="epp-image" style={{ width: '50px', height: '50px' }} />
                   <img src="/images/6.png" alt="EPP 2" className="epp-image" style={{ width: '50px', height: '50px' }} />
                   <img src="/images/4.png" alt="EPP 3" className="epp-image" style={{ width: '50px', height: '50px' }} />
-                  {additionalEPPImages.map((eppImage, idx) => (
-                    <img
-                      key={idx}
-                      src={eppImage}
-                      alt={`EPP ${idx + 4}`}
-                      className="epp-image"
-                      style={{ width: '50px', height: '50px', cursor: 'pointer' }}
-                      onClick={() => handleRemoveEPPImage(eppImage)}
-                    />
-                  ))}
                 </div>
-                {selectedEPPImage && <img src={selectedEPPImage} alt="Selected" style={{ width: '40%', height: 'auto', marginTop: '10px', display: 'block', marginLeft: '0' }} />}
-              </div>
+              
             </td>
           </tr>
         </tbody>
