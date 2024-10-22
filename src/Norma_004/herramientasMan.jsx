@@ -19,13 +19,38 @@ const RiskTable = () => {
     energia: ['Eléctrica', 'Manual', 'Mecánica', 'Hidráulica', 'Eólica']
   };
 
-  const peligros = [
-    "Golpes y cortes en manos ocasionados por las propias herramientas durante el trabajo normal con las mismas",
-    "Lesiones oculares por partículas provenientes de los objetos que se trabajan y/o de la propia herramienta",
-    "Golpes en diferentes partes del cuerpo por despido de la propia herramienta o del material trabajado",
-    "Esguince por sobreesfuerzos o gestos violentos"
-  ];
+  const partesPorPeligro = {
+    "Golpes y cortes en manos ocasionados por las propias herramientas durante el trabajo normal con las mismas": ["Brazos y manos", "Dedos"],
+    "Lesiones oculares por partículas provenientes de los objetos que se trabajan y/o de la propia herramienta": ["Ojos y cara"],
+    "Golpes en diferentes partes del cuerpo por despido de la propia herramienta o del material trabajado": ["Cabeza y oídos", "Tronco", "Brazos y manos", "Extremidades inferiores"],
+    "Esguince por sobreesfuerzos o gestos violentos": ["Tronco", "Extremidades inferiores"]
+  };
+  
 
+  const [selectedPeligros, setSelectedPeligros] = useState([]);
+const [affectedBodyParts, setAffectedBodyParts] = useState([]);
+
+const handlePeligroChange = (peligro) => {
+  const isSelected = selectedPeligros.includes(peligro);
+
+  let newSelectedPeligros = [];
+  let newAffectedParts = [];
+
+  if (isSelected) {
+    // Deseleccionar peligro y eliminar partes del cuerpo asociadas
+    newSelectedPeligros = selectedPeligros.filter(item => item !== peligro);
+    newAffectedParts = affectedBodyParts.filter(part => !partesPorPeligro[peligro].includes(part));
+  } else {
+    // Seleccionar peligro y agregar partes del cuerpo asociadas
+    newSelectedPeligros = [...selectedPeligros, peligro];
+    newAffectedParts = [...new Set([...affectedBodyParts, ...partesPorPeligro[peligro]])];
+  }
+
+  setSelectedPeligros(newSelectedPeligros);
+  setAffectedBodyParts(newAffectedParts);
+};
+
+  
   const [state, setState] = useState({
     consequence: 'Lesiones sin baja',
     exposure: 'Ocasionalmente',
@@ -71,15 +96,27 @@ const RiskTable = () => {
     return Math.floor(magnitud);
   }, [state, valores]);
 
-  const obtenerColorPorRiesgo = (magnitud) => {
-    if (magnitud > 400) return { color: 'red', texto: 'Muy Alto: Detención inmediata', accion: 'Inmediata', clasificacion: 'Muy Alto' };
-    if (magnitud > 200) return { color: 'orange', texto: 'Alto: Corrección inmediata', accion: 'Urgente', clasificacion: 'Alto' };
-    if (magnitud > 70) return { color: 'yellow', texto: 'Notable: Corrección necesaria', accion: 'Pronto', clasificacion: 'Moderado' };
-    if (magnitud > 10) return { color: 'green', texto: 'Aceptable: Monitoreo recomendado', accion: 'Regular', clasificacion: 'Bajo' };
-    return { color: 'lightgreen', texto: 'Insignificante: Sin acción requerida', accion: 'Sin acción', clasificacion: 'Insignificante' };
+  const obtenerColorPorRiesgo = (magnitude) => {
+    if (magnitude >= 500) return 'red';
+    if (magnitude >= 100) return 'orange';
+    if (magnitude >= 50) return 'yellow';
+    if (magnitude >= 10) return 'green';
+    return 'lightgreen';
+  };
+
+  const calculateRisk = () => {
+    return consequence * exposure * probability;
   };
 
   const { color, texto, accion, clasificacion } = obtenerColorPorRiesgo(calcularMagnitudRiesgo);
+  const [consequence, setConsequence] = useState(10);
+  const [exposure, setExposure] = useState(10);
+  const [probability, setProbability] = useState(10);
+
+  const handleConsequenceChange = (e) => setConsequence(parseFloat(e.target.value));
+  const handleExposureChange = (e) => setExposure(parseFloat(e.target.value));
+  const handleProbabilityChange = (e) => setProbability(parseFloat(e.target.value));
+
 
   const downloadPDF = () => {
     const input = document.getElementById('pdf-content');
@@ -96,6 +133,9 @@ const RiskTable = () => {
       <option key={option} value={option}>{option}</option>
     ))
   );
+
+
+  
 
   return (
     <div>
@@ -151,23 +191,59 @@ const RiskTable = () => {
                 </div>
               </td>
               
-              <td colSpan="5">
-                <select value={state.consequence} onChange={(e) => handleChange('consequence', e.target.value)}>
-                  {renderOptions(opciones.consecuencia)}
-                </select>
-                <select value=  {state.exposure} onChange={(e) => handleChange('exposure', e.target.value)}>
-                  {renderOptions(opciones.exposicion)}
-                </select>
-                <select value={state.probability} onChange={(e) => handleChange('probability', e.target.value)}>
-                  {renderOptions(opciones.probabilidad)}
-                </select>
-                <div className="risk-magnitude-container" style={{ backgroundColor: color }}>
-                  <span>{calcularMagnitudRiesgo}</span>
-                  <span>{texto}</span>
-                  <span><strong>Acción:</strong> {accion}</span>
-                  <span><strong>Clasificación:</strong> {clasificacion}</span>
-                </div>
-              </td>
+              <td colSpan="5" className="right-aligned">
+                <div className="text1">Evaluación de riesgo de trabajo</div>
+                  <table className="inner-table">
+                    <thead>
+                      <tr>
+                        <th>Consecuencia</th>
+                        <th style={{ backgroundColor: 'red' }}>Exposición</th>
+                        <th>Probabilidad</th>
+                        <th>Magnitud del Riesgo</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <select value={consequence} onChange={handleConsequenceChange}>
+                            <option value={50}>Catástrofe</option>
+                            <option value={25}>Varias muertes</option>
+                            <option value={15}>Muerte</option>
+                            <option value={10}>Lesiones graves</option>
+                            <option value={5}>Lesiones con baja</option>
+                            <option value={1}>Lesiones sin baja</option>
+                          </select>
+                          <div>Valor: {consequence}</div>
+                        </td>
+                        <td>
+                          <select value={exposure} onChange={handleExposureChange}>
+                            <option value={10}>Continuamente</option>
+                            <option value={6}>Frecuentemente</option>
+                            <option value={3}>Ocasionalmente</option>
+                            <option value={2}>Irregularmente</option>
+                            <option value={1}>Raramente</option>
+                            <option value={0.5}>Remotamente</option>
+                          </select>
+                          <div>Valor: {exposure}</div>
+                        </td>
+                        <td>
+                          <select value={probability} onChange={handleProbabilityChange}>
+                            <option value={10}>Es el resultado más probable y esperado</option>
+                            <option value={6}>Es completamente posible, no será nada extraño</option>
+                            <option value={3}>Sería una secuencia o coincidencia rara pero posible, ha ocurrido</option>
+                            <option value={1}>Coincidencia muy rara, pero se sabe que ha ocurrido</option>
+                            <option value={0.5}>Coincidencia extremadamente remota pero concebible</option>
+                            <option value={0.1}>Coincidencia prácticamente imposible, jamás ha ocurrido</option>
+                          </select>
+                          <div>Valor: {probability}</div>
+                        </td>
+                        <td style={{ backgroundColor: obtenerColorPorRiesgo(calculateRisk()) }}>
+                          {calculateRisk().toFixed(2)}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
               <td colSpan="3">
                 <table className="epp-table">
                   <thead><tr><th>Equipo de Protección Personal sugerido:</th></tr></thead>
@@ -179,8 +255,7 @@ const RiskTable = () => {
                   </tbody>
                 </table>
               </td>
-              
-            </tr>
+            </tr>          
             <tr>
               <td colSpan="5  ">
                 <table className="main-table">
@@ -190,29 +265,44 @@ const RiskTable = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {peligros.map((peligro, index) => (
-                      <tr key={index}>
-                        <td colSpan="2">
-                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                            <span>{peligro}</span>
-                            <input type="checkbox" style={{ marginLeft: "10px" }} />
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                  {Object.keys(partesPorPeligro).map((peligro, index) => (
+  <div key={index} style={{ display: "flex", alignItems: "center" }}>
+    <input 
+      type="checkbox" 
+      checked={selectedPeligros.includes(peligro)} 
+      onChange={() => handlePeligroChange(peligro)}
+    />
+    <span style={{ marginLeft: "8px" }}>{peligro}</span>
+  </div>
+))}
+
+
                   </tbody>
                 </table>
               </td>
-                <td colSpan="1">
-                  <table className="risk-body-table">
-                    <thead><tr><th>Principales partes del cuerpo expuestas al riesgo:</th></tr></thead>
-                    <tbody>
-                      <tr><td>Ojos y cara</td></tr>
-                      <tr><td>Dedos</td></tr>
-                      <tr><td>Brazos y manos</td></tr>
-                    </tbody>
-                  </table>
-                </td>
+              <td colSpan="1">
+  <table className="risk-body-table">
+    <thead>
+      <tr>
+        <th>Principales partes del cuerpo expuestas al riesgo:</th>
+      </tr>
+    </thead>
+    <tbody>
+      {affectedBodyParts.length > 0 ? (
+        affectedBodyParts.map((part, index) => (
+          <tr key={index}>
+            <td>{part}</td>
+          </tr>
+        ))
+      ) : (
+        <tr>
+          <td>No hay partes del cuerpo seleccionadas</td>
+        </tr>
+      )}
+    </tbody>
+  </table>
+</td>
+
 </tr>
 
             <tr>
