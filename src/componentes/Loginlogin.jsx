@@ -25,7 +25,7 @@ function Login() {
   return (
     <div className="login-container">
       <video autoPlay muted loop className="video-background">
-        <source src="/videos/Bokeh_Background.mp4" type="video/mp4" />
+        <source src="/videos/72544-543388333_small.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       <main className="form-signin text-center" style={{ width: '300px', position: 'relative', zIndex: 1 }}>

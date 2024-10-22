@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './NormaNoms.css';
 import iconImage from './images/icon.png';
-import exceptImage from './images/excepted_recipients.png'; // Imagen para el paso 9
-import categoriasImage from './images/categorias_presion.png'; // Imagen para el paso 10
-import criogenicosImage from './images/criogenicos.png'; // Imagen para el paso 12
+import exceptImage from './images/excepted_recipients.png';
+import categoriasImage from './images/categorias_presion.png';
+import criogenicosImage from './images/criogenicos.png';
 
 const NormaNoms = () => {
   const [step, setStep] = useState(1);
-  const [showModal9, setShowModal9] = useState(false); // Estado del modal para el paso 9
-  const [showModal10, setShowModal10] = useState(false); // Estado del modal para el paso 10
-  const [showModal12, setShowModal12] = useState(false); // Estado del modal para el paso 12
+  const [showModal9, setShowModal9] = useState(false);
+  const [showModal10, setShowModal10] = useState(false);
+  const [showModal12, setShowModal12] = useState(false);
   const [formValues, setFormValues] = useState({
     superficie: '',
     invGases: '',
@@ -27,7 +27,7 @@ const NormaNoms = () => {
     equiposAltura: [],
     recipientesPresion: '',
     categoriasRecipientes: [],
-    generadoresVapor: '',
+    generadoresVapor: '', // Campo para el paso 13
     recipientesCriogenicos: '',
     categoriasCriogenicos: [],
   });
@@ -97,6 +97,8 @@ const NormaNoms = () => {
         return formValues.recipientesCriogenicos !== '';
       case 12:
         return formValues.categoriasCriogenicos.length > 0;
+      case 13:
+        return formValues.generadoresVapor !== ''; // Verifica si el paso 13 está completado
       default:
         return false;
     }
@@ -105,6 +107,7 @@ const NormaNoms = () => {
   return (
     <div className="norma-noms-container">
       <div className="container">
+        {/* Otros pasos anteriores... */}
         {/* Paso 1 */}
 {step === 1 && (
   <div className="step1">
@@ -560,58 +563,71 @@ const NormaNoms = () => {
         )}
 
         {/* Paso 10 - Categorías de recipientes sujetos a presión */}
-        {step === 10 && (
-          <div className="step10">
-            <h3>Categorías de Recipientes Sujetos a Presión</h3>
-            <label>
-              Indique la(s) categoría(s) en la(s) se clasifica(n) el (los) recipiente(s) sujeto(s) a presión instalado(s) en su
-              centro de trabajo.
-            </label>
-            <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
+       {/* Paso 10 - Categorías de recipientes sujetos a presión */}
+{step === 10 && (
+  <div className="step10">
+    <h3>Categorías de Recipientes Sujetos a Presión</h3>
+    <label>
+      Indique la(s) categoría(s) en la(s) se clasifica(n) el (los) recipiente(s) sujeto(s) a presión instalado(s) en su
+      centro de trabajo.
+    </label>
+    <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
 
-            <img
-              src={iconImage}
-              alt="Consultar tabla de clasificación"
-              style={{ cursor: 'pointer', width: '50px' }}
-              onClick={() => setShowModal10(true)}
-            />
+    <img
+      src={iconImage}
+      alt="Consultar tabla de clasificación"
+      style={{ cursor: 'pointer', width: '50px' }}
+      onClick={() => setShowModal10(true)} // Abre el modal
+    />
 
-            <div className="checkbox-group">
-              <label>
-                <input
-                  type="checkbox"
-                  value="categoriaI"
-                  onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
-                  checked={formValues.categoriasRecipientes.includes('categoriaI')}
-                />
-                Categoría I
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  value="categoriaII"
-                  onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
-                  checked={formValues.categoriasRecipientes.includes('categoriaII')}
-                />
-                Categoría II
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  value="categoriaIII"
-                  onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
-                  checked={formValues.categoriasRecipientes.includes('categoriaIII')}
-                />
-                Categoría III
-              </label>
-            </div>
+    <div className="checkbox-group">
+      <label>
+        <input
+          type="checkbox"
+          value="categoriaI"
+          onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
+          checked={formValues.categoriasRecipientes.includes('categoriaI')}
+        />
+        Categoría I
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          value="categoriaII"
+          onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
+          checked={formValues.categoriasRecipientes.includes('categoriaII')}
+        />
+        Categoría II
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          value="categoriaIII"
+          onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
+          checked={formValues.categoriasRecipientes.includes('categoriaIII')}
+        />
+        Categoría III
+      </label>
+    </div>
 
-            <div className="buttons">
-              <button onClick={handleBack}>Regresar</button>
-              <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
-            </div>
-          </div>
-        )}
+    <div className="buttons">
+      <button onClick={handleBack}>Regresar</button>
+      <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+    </div>
+  </div>
+)}
+
+{/* Modal para el paso 10 */}
+{showModal10 && (
+  <div className="modal">
+    <div className="modal-content">
+      <span className="close" onClick={() => setShowModal10(false)}>
+        &times;
+      </span>
+      <img src={categoriasImage} alt="Tabla de clasificación de recipientes sujetos a presión" style={{ width: '100%' }} />
+    </div>
+  </div>
+)}
 
 
     {/* Paso 11 - Recipientes Criogénicos */}
@@ -684,7 +700,7 @@ const NormaNoms = () => {
 
         <div className="buttons">
           <button onClick={handleBack}>Regresar</button>
-          <button onClick={handleNext} disabled={!isStepCompleted()}>Finalizar</button>
+          <button onClick={handleNext} disabled={!isStepCompleted()}>siguiente</button>
         </div>
       </div>
     )}
@@ -700,44 +716,43 @@ const NormaNoms = () => {
     )}
      
 
-    <style jsx>{`
-      .modal {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-      }
-      .modal-content {
-        background-color: #fefefe;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        max-width: 500px;
-        text-align: center;
-      }
-      .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-      }
-      .close:hover,
-      .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-      }
-    `}</style>
-  </div>
-</div>
-);
+
+        {/* Paso 13 - Generadores de vapor o calderas */}
+        {step === 13 && (
+          <div className="step13">
+            <h3>¿En su centro de trabajo están instalados generadores de vapor o calderas?</h3>
+            <label>
+              <input
+                type="radio"
+                name="generadoresVapor"
+                value="sí"
+                onChange={handleInputChange}
+                checked={formValues.generadoresVapor === 'sí'}
+              />
+              Sí
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="generadoresVapor"
+                value="no"
+                onChange={handleInputChange}
+                checked={formValues.generadoresVapor === 'no'}
+              />
+              No
+            </label>
+
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+            </div>
+          </div>
+        )}
+
+        {/* Aquí termina el componente */}
+      </div>
+    </div>
+  );
 };
 
 export default NormaNoms;

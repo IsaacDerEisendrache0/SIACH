@@ -150,3 +150,18 @@ button:disabled {
   text-decoration: none;
   cursor: pointer;
 }
+
+.step13 {
+  margin: 20px;
+}
+
+.step13 h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.step13 label {
+  display: block;
+  margin: 5px 0;
+}
+
