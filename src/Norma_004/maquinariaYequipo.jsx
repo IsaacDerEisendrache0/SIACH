@@ -192,7 +192,7 @@ const RiskTable = () => {
   };
 
   return (
-    <div className="risk-table-container" style={{ fontSize: '1.2em' }}>
+    <div>
       <div id="pdf-content" className="risk-table">
         <table className="main-table">
           <thead>
@@ -235,9 +235,9 @@ const RiskTable = () => {
               </th>
             </tr>
             <tr>
-              <th colSpan="1">Localización esquemática de los riesgos en la maquinaria y/o equipo</th>
-              <th>POE:</th>
-              <th>0-4</th>
+              <th colSpan="3">Localización esquemática de los riesgos en la maquinaria y/o equipo</th>
+              <th style={{ backgroundColor: 'red' }}>POE:</th>
+              
               <th>Tiempo de exposición:</th>
               <th colSpan="2">
                 <select value={tiempoExposicion} onChange={(e) => setTiempoExposicion(e.target.value)} style={{ fontSize: '1.2em', width: '100%' }}>
@@ -251,13 +251,13 @@ const RiskTable = () => {
           <tbody>
             <tr>
               <td colSpan="3">
-                <table className="compact-table no-border" style={{ width: '100%' }}> 
+                <table className="compact-table no-border" > 
                   <tbody>
                     <tr>
                       <td>
                         <div className="image-observations-container">
                           <div className="image-section">
-                            <input type="file" accept="image/*" onChange={handleImageChange} style={{ fontSize: '1.2em', width: '100%' }} />
+                            <input type="file" accept="image/*" onChange={handleImageChange}  />
                             {errorMessage && <p style={{ color: 'red', fontSize: '1.2em' }}>{errorMessage}</p>}
                             {imagePreview ? (
                               <img src={imagePreview} alt="Maquinaria" className="image-preview" />
@@ -270,11 +270,11 @@ const RiskTable = () => {
                     </tr>
                     <tr>
                       <td>
-                        <table className="danger-table compact-table" style={{ width: '100%' }}>
+                        <table className="danger-table compact-table" >
                           <thead>
                             <tr>
                               <th>Identificación de peligros</th>
-                              <th>Si/No</th>
+                              <th style={{ backgroundColor: 'red' }}>Si/No</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -299,18 +299,18 @@ const RiskTable = () => {
                 </table>
               </td>
               <td colSpan="3">
-                <table className="compact-table no-border" style={{ width: '100%' }}>
+                <table className="compact-table no-border" >
                   <thead>
                     <tr>
                       <th>Consecuencia</th>
-                      <th>Exposición</th>
+                      <th style={{ backgroundColor: 'red' }}>Exposición</th>
                       <th>Probabilidad</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>
-                        <select value={consequence} onChange={(e) => setConsequence(e.target.value)} style={{ fontSize: '1.2em', width: '100%' }}>
+                        <select value={consequence} onChange={(e) => setConsequence(e.target.value)} >
                           {opcionesConsecuencia.map(opcion => (
                             <option key={opcion} value={opcion}>{opcion}</option>
                           ))}
@@ -318,20 +318,20 @@ const RiskTable = () => {
                         <div style={{ fontSize: '1.2em' }}>Valor: {calcularValorConsecuencia()}</div>
                       </td>
                       <td>
-                        <select value={exposure} onChange={(e) => setExposure(e.target.value)} style={{ fontSize: '1.2em', width: '100%' }}>
+                        <select value={exposure} onChange={(e) => setExposure(e.target.value)} >
                           {opcionesExposicion.map(opcion => (
                             <option key={opcion} value={opcion}>{opcion}</option>
                           ))}
                         </select>
-                        <div style={{ fontSize: '1.2em' }}>Valor: {calcularValorExposicion()}</div>
+                        <div >Valor: {calcularValorExposicion()}</div>
                       </td>
                       <td>
-                        <select value={probability} onChange={(e) => setProbability(e.target.value)} style={{ fontSize: '1.2em', width: '100%' }}>
+                        <select value={probability} onChange={(e) => setProbability(e.target.value)} >
                           {opcionesProbabilidad.map(opcion => (
                             <option key={opcion} value={opcion}>{opcion}</option>
                           ))}
                         </select>
-                        <div style={{ fontSize: '1.2em' }}>Valor: {calcularValorProbabilidad()}</div>
+                        <div >Valor: {calcularValorProbabilidad()}</div>
                       </td>
                     </tr>
                     <tr>
@@ -340,16 +340,18 @@ const RiskTable = () => {
                           <div className="risk-magnitude-bar" style={{ backgroundColor: color, display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '1.2em' }}>
                             <span>{magnitudRiesgo}</span>
                             <span>{texto}</span>
-                            <span style={{ marginLeft: '20px' }}><strong>Acción:</strong> {accion}</span>
-                            <span style={{ marginLeft: '20px' }}><strong>Clasificación:</strong> {clasificacion}</span>
+                            <span ><strong>Acción:</strong> {accion}</span>
+                            <span ><strong>Clasificación:</strong> {clasificacion}</span>
                           </div>
                         </div>
                       </td>
                     </tr>
                   </tbody>
-                </table>
+                </table>  
+
+
                 {/* Equipo de protección personal sugerido */}
-                <div className="icons" style={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'flex-start' }}>
+                <div className="icons" style={{ width: '50%', display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'flex-start' }}>
                   {selectedImages.length > 0 ? (
                     selectedImages.map((imageSrc, index) => (
                       <img key={index} src={imageSrc} alt={`Protección`} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
@@ -360,6 +362,7 @@ const RiskTable = () => {
                 </div>
               </td>
             </tr>
+            
             {/* Riesgo Específico */}          
             <tr>
               <td colSpan="6">
