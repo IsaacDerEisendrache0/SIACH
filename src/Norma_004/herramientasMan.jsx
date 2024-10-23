@@ -1,5 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState, useCallback } from 'react';
 import './HerramientasMan.css';
 import html2canvas from 'html2canvas';
 
@@ -114,24 +113,9 @@ const handlePeligroChange = (peligro) => {
     }
   };
 
-  const valores = useMemo(() => ({
-    consecuencia: { 'Catástrofe': 50, 'Varias muertes': 25, 'Muerte': 15, 'Lesiones graves': 10, 'Lesiones con baja': 5, 'Lesiones sin baja': 1 },
-    exposicion: { 'Continuamente': 10, 'Frecuentemente': 6, 'Ocasionalmente': 3, 'Irregularmente': 2, 'Raramente': 1 },
-    probabilidad: {
-      'Es el resultado más probable y esperado': 10,
-      'Es completamente posible, no será nada extraño': 6,
-      'Sería una secuencia o coincidencia rara pero posible, ha ocurrido': 3,
-      'Coincidencia muy rara, pero se sabe que ha ocurrido': 2,
-      'Coincidencia extremadamente remota pero concebible': 1,
-      'Coincidencia prácticamente imposible, jamás ha ocurrido': 0.5
-    }
-  }), []);
+  
 
-  const calcularMagnitudRiesgo = useMemo(() => {
-    const magnitud = valores.consecuencia[state.consequence] * valores.exposicion[state.exposure] * valores.probabilidad[state.probability];
-    return Math.floor(magnitud);
-  }, [state, valores]);
-
+  
   const obtenerColorPorRiesgo = (magnitude) => {
     if (magnitude >= 500) return 'red';
     if (magnitude >= 100) return 'orange';
@@ -144,7 +128,6 @@ const handlePeligroChange = (peligro) => {
     return consequence * exposure * probability;
   };
 
-  const { color, texto, accion, clasificacion } = obtenerColorPorRiesgo(calcularMagnitudRiesgo);
   const [consequence, setConsequence] = useState(10);
   const [exposure, setExposure] = useState(10);
   const [probability, setProbability] = useState(10);
@@ -186,11 +169,6 @@ const handlePeligroChange = (peligro) => {
       <option key={option} value={option}>{option}</option>
     ));
   };
-
-
-
-  
-  
 
   return (
     <div >

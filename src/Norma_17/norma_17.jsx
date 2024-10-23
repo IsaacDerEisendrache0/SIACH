@@ -1,4 +1,3 @@
-import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import './Table17.css';
 import React, { useState, useEffect } from 'react';
@@ -202,14 +201,6 @@ const RiskAssessmentTable = () => {
     return risk;
   };
 
-  const getSelectedHazardImages = () => {
-    const selectedHazards = Object.keys(hazards).filter(hazard => hazards[hazard]);
-    const uniqueImages = new Set();
-    selectedHazards.forEach(hazard => {
-      protectionImages[hazard].forEach(image => uniqueImages.add(image));
-    });
-    return Array.from(uniqueImages);
-  };
   
   
   
@@ -251,7 +242,6 @@ const RiskAssessmentTable = () => {
   };
   
 
-  const [selectedOption, setSelectedOption] = useState('');
 
   const optionImages = {
     option1: '/body/lvl1_head.png',
