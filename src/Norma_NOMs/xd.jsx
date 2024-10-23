@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './NormaNoms.css';
 import iconImage from './images/icon.png';
-import exceptImage from './images/excepted_recipients.png';
-import categoriasImage from './images/categorias_presion.png';
-import criogenicosImage from './images/criogenicos.png';
+import exceptImage from './images/excepted_recipients.png'; // Imagen para el paso 9
+import categoriasImage from './images/categorias_presion.png'; // Imagen para el paso 10
+import criogenicosImage from './images/criogenicos.png'; // Imagen para el paso 12
+import generadoresImage from './images/generadores_vapor.png'; // Nueva imagen para el paso 14
 
 const NormaNoms = () => {
   const [step, setStep] = useState(1);
-  const [showModal9, setShowModal9] = useState(false);
-  const [showModal10, setShowModal10] = useState(false);
-  const [showModal12, setShowModal12] = useState(false);
+  const [showModal9, setShowModal9] = useState(false); // Modal para el paso 9
+  const [showModal10, setShowModal10] = useState(false); // Modal para el paso 10
+  const [showModal12, setShowModal12] = useState(false); // Modal para el paso 12
+  const [showModal14, setShowModal14] = useState(false); // Modal para el paso 14
   const [formValues, setFormValues] = useState({
     superficie: '',
     invGases: '',
@@ -27,9 +29,10 @@ const NormaNoms = () => {
     equiposAltura: [],
     recipientesPresion: '',
     categoriasRecipientes: [],
-    generadoresVapor: '', // Campo para el paso 13
+    generadoresVapor: '',
     recipientesCriogenicos: '',
     categoriasCriogenicos: [],
+    categoriasGeneradores: [], // Nueva propiedad para el paso 14
   });
 
   const navigate = useNavigate();
@@ -66,6 +69,7 @@ const NormaNoms = () => {
 
   const isStepCompleted = () => {
     switch (step) {
+      // Casos de validación para cada paso
       case 1:
         return formValues.area !== '';
       case 2:
@@ -98,7 +102,9 @@ const NormaNoms = () => {
       case 12:
         return formValues.categoriasCriogenicos.length > 0;
       case 13:
-        return formValues.generadoresVapor !== ''; // Verifica si el paso 13 está completado
+        return formValues.generadoresVapor !== ''; // Nueva validación para el paso 13
+      case 14:
+        return formValues.categoriasGeneradores.length > 0; // Validación para el paso 14
       default:
         return false;
     }
@@ -107,7 +113,6 @@ const NormaNoms = () => {
   return (
     <div className="norma-noms-container">
       <div className="container">
-        {/* Otros pasos anteriores... */}
         {/* Paso 1 */}
 {step === 1 && (
   <div className="step1">
@@ -511,10 +516,6 @@ const NormaNoms = () => {
   </div>
 )}
 
-
-
-
-
         {/* Paso 9 - Recipientes sujetos a presión */}
         {step === 9 && (
           <div className="step9">
@@ -554,82 +555,78 @@ const NormaNoms = () => {
         {showModal9 && (
           <div className="modal">
             <div className="modal-content">
-              <span className="close" onClick={() => setShowModal9(false)}>
-                &times;
-              </span>
+              <span className="close" onClick={() => setShowModal9(false)}>&times;</span>
               <img src={exceptImage} alt="Recipientes exceptuados" style={{ width: '100%' }} />
             </div>
           </div>
         )}
 
         {/* Paso 10 - Categorías de recipientes sujetos a presión */}
-       {/* Paso 10 - Categorías de recipientes sujetos a presión */}
-{step === 10 && (
-  <div className="step10">
-    <h3>Categorías de Recipientes Sujetos a Presión</h3>
-    <label>
-      Indique la(s) categoría(s) en la(s) se clasifica(n) el (los) recipiente(s) sujeto(s) a presión instalado(s) en su
-      centro de trabajo.
-    </label>
-    <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
+        {step === 10 && (
+          <div className="step10">
+            <h3>Categorías de Recipientes Sujetos a Presión</h3>
+            <label>
+              Indique la(s) categoría(s) en la(s) se clasifica(n) el (los) recipiente(s) sujeto(s) a presión instalado(s) en su
+              centro de trabajo.
+            </label>
+            <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
 
-    <img
-      src={iconImage}
-      alt="Consultar tabla de clasificación"
-      style={{ cursor: 'pointer', width: '50px' }}
-      onClick={() => setShowModal10(true)} // Abre el modal
-    />
+            <img
+              src={iconImage}
+              alt="Consultar tabla de clasificación"
+              style={{ cursor: 'pointer', width: '50px' }}
+              onClick={() => setShowModal10(true)}
+            />
 
-    <div className="checkbox-group">
-      <label>
-        <input
-          type="checkbox"
-          value="categoriaI"
-          onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
-          checked={formValues.categoriasRecipientes.includes('categoriaI')}
-        />
-        Categoría I
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          value="categoriaII"
-          onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
-          checked={formValues.categoriasRecipientes.includes('categoriaII')}
-        />
-        Categoría II
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          value="categoriaIII"
-          onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
-          checked={formValues.categoriasRecipientes.includes('categoriaIII')}
-        />
-        Categoría III
-      </label>
-    </div>
+            <div className="checkbox-group">
+              <label>
+                <input
+                  type="checkbox"
+                  value="categoriaI"
+                  onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
+                  checked={formValues.categoriasRecipientes.includes('categoriaI')}
+                />
+                Categoría I
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  value="categoriaII"
+                  onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
+                  checked={formValues.categoriasRecipientes.includes('categoriaII')}
+                />
+                Categoría II
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  value="categoriaIII"
+                  onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
+                  checked={formValues.categoriasRecipientes.includes('categoriaIII')}
+                />
+                Categoría III
+              </label>
+            </div>
 
-    <div className="buttons">
-      <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
-    </div>
-  </div>
-)}
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+            </div>
+          </div>
+        )}
 
-{/* Modal para el paso 10 */}
-{showModal10 && (
-  <div className="modal">
-    <div className="modal-content">
-      <span className="close" onClick={() => setShowModal10(false)}>
-        &times;
-      </span>
-      <img src={categoriasImage} alt="Tabla de clasificación de recipientes sujetos a presión" style={{ width: '100%' }} />
-    </div>
-  </div>
-)}
+        {/* Modal para el paso 10 */}
+        {showModal10 && (
+          <div className="modal">
+            <div className="modal-content">
+              <span className="close" onClick={() => setShowModal10(false)}>&times;</span>
+              <img src={categoriasImage} alt="Categorías de recipientes sujetos a presión" style={{ width: '100%' }} />
+            </div>
+          </div>
+        )}
 
 
+        
     {/* Paso 11 - Recipientes Criogénicos */}
     {step === 11 && (
       <div className="step11">
@@ -749,10 +746,68 @@ const NormaNoms = () => {
           </div>
         )}
 
-        {/* Aquí termina el componente */}
+
+
+        {/* Paso 14 - Categorías de generadores de vapor */}
+        {step === 14 && (
+          <div className="step14">
+            <h3>Categorías de Generadores de Vapor o Calderas</h3>
+            <label>
+              Indique la(s) categoría(s) en la(s) se clasifica(n) el (los) generador(es) de vapor o caldera(s) instalado(s) en su centro de trabajo.
+            </label>
+            <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
+
+            <img
+              src={iconImage}
+              alt="Consultar tabla de clasificación"
+              style={{ cursor: 'pointer', width: '50px' }}
+              onClick={() => setShowModal14(true)}
+            />
+
+            <div className="checkbox-group">
+              <label>
+                <input
+                  type="checkbox"
+                  value="categoriaII"
+                  onChange={(e) => handleCheckboxChange(e, 'categoriasGeneradores')}
+                  checked={formValues.categoriasGeneradores.includes('categoriaII')}
+                />
+                Categoría II
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  value="categoriaIII"
+                  onChange={(e) => handleCheckboxChange(e, 'categoriasGeneradores')}
+                  checked={formValues.categoriasGeneradores.includes('categoriaIII')}
+                />
+                Categoría III
+              </label>
+            </div>
+
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>Finalizar</button>
+            </div>
+          </div>
+        )}
+
+        
+
+        {/* Modal para el paso 14 */}
+        {showModal14 && (
+          <div className="modal">
+            <div className="modal-content">
+              <span className="close" onClick={() => setShowModal14(false)}>&times;</span>
+              <img src={generadoresImage} alt="Categorías de generadores de vapor" style={{ width: '100%' }} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 export default NormaNoms;
+
+
