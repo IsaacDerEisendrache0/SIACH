@@ -1,79 +1,107 @@
+/* Moviles.css */
+
 .risk-table-container {
-  width: 100%;
-  max-width: 1200px;
-  margin: auto;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ff0000; /* Borde rojo */
-  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
 }
 
 .risk-table {
-  width: 100%; /* Aumenta el ancho de la tabla para ocupar todo el contenedor */
-  table-layout: auto; /* Permite a la tabla ajustar el tamaño de las celdas según el contenido */
-  border-collapse: collapse; /* Elimina los espacios entre las celdas */
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
-.risk-table th, 
-.risk-table td {
-  border: 1px solid #ff0000; /* Bordes de las celdas en rojo */
-  padding: 10px; /* Espaciado interno */
-  text-align: center; /* Alineación del texto */
-}
-
-.inner-table th,
-.inner-table td {
-  padding: 4px; /* Espaciado interno para la tabla interna */
-  border: none; /* Sin bordes en la tabla interna */
-}
-
-.red {
-  background-color: #ff0000; /* Color de fondo rojo */
-  color: white; /* Color del texto en blanco */
-}
-
-.equipment-image {
-  max-width: 100%; /* Asegura que la imagen no exceda el ancho de su celda */
-  height: auto; /* Mantiene la proporción de la imagen */
-  display: block; /* Para que la imagen sea un bloque y no inline */
-  margin: 0 auto; /* Centrar la imagen horizontalmente */
-  border: 1px solid #ff0000; /* Borde rojo alrededor de la imagen */
-}
-
-.risk-info,
-.safety-info {
-  width: 33%; /* Aumenta el ancho de cada sección de riesgo y seguridad para ocupar más espacio horizontal */
-  vertical-align: top; /* Alineación vertical en la parte superior */
+.risk-table th, .risk-table td {
+  border: 1px solid #ccc;
   padding: 10px;
-  border: none; /* Sin bordes */
+  text-align: left;
 }
 
-.risk-selects,
-.safety-selects {
-  display: flex;
-  flex-direction: column; /* Disposición en columna para los selects */
+.risk-table th.red {
+  background-color: #ff4d4d;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.risk-selects select, .safety-selects select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.epp-suggested .red {
+  color: #ff4d4d;
+  font-weight: bold;
+}
+
+.epp-images-grid img {
+  width: 50px;
+  height: 50px;
+  border: 2px solid #ff4d4d;
+  border-radius: 8px;
+  padding: 0px;
+}
+
+.epp-images-grid {
+  margin-top: 10px;
+}
+
+.body-part-image img {
+  border: 2px solid #ff4d4d;
+  border-radius: 8px;
+}
+
+h4.red {
+  color: #ff4d4d;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 10px;
 }
 
 .risk-classification {
-  margin-top: 20px; /* Espaciado superior para la clasificación de riesgo */
+  margin-top: 20px;
 }
 
-.risk-evaluation-section {
-  width: 50%; /* Ajusta el ancho de la sección de evaluación de riesgo */
-  border: 1px solid #ff0000; /* Borde rojo */
+.risk-classification th {
+  background-color: #ff4d4d;
+  color: white;
   padding: 10px;
-  background-color: #ffffff; /* Fondo rojo claro para destacar */
+  text-transform: uppercase;
 }
 
-.epp-suggested {
-  width: 50%; /* Ajusta el ancho de la sección EPP sugerido */
-  border: 1px solid #ff0000; /* Borde rojo */
-  padding: 10px;
-  background-color: #ffffff; /* Fondo rojo claro */
+.uploaded-image {
+  border: 2px solid #ff4d4d;
+  border-radius: 8px;
+  margin-top: 10px;
 }
 
-.epp-images img {
-  width: 50px; /* Tamaño reducido para las imágenes de EPP */
-  height: 50px; /* Tamaño reducido para mantener la proporción */
-  margin-bottom: 10px; /* Espacio inferior entre las imágenes */
+.risk-info h4, .safety-info h4 {
+  color: #ff4d4d;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.epp-suggested select {
+  width: 150px;
+  height: 30px;
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.epp-images-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-top: 10px;
+}
+
+.epp-images-grid img {
+  width: 50px;
+  height: 50px;
+  padding: 2px;
 }
