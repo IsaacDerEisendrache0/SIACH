@@ -1,9 +1,11 @@
 import React, { useState, useMemo, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import './HerramientasMan.css';
-import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 const RiskTable = () => {
+
+  
   const opciones = {
     consecuencia: ['Catástrofe', 'Varias muertes', 'Muerte', 'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'],
     exposicion: ['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente'],
@@ -25,6 +27,40 @@ const RiskTable = () => {
     "Golpes en diferentes partes del cuerpo por despido de la propia herramienta o del material trabajado": ["Cabeza y oídos", "Tronco", "Brazos y manos", "Extremidades inferiores"],
     "Esguince por sobreesfuerzos o gestos violentos": ["Tronco", "Extremidades inferiores"]
   };
+
+  const listaEPP = [
+    "Anteojos de protección",
+    "Bata",
+    "Botas impermeables",
+    "Calzado conductivo",
+    "Calzado contra impacto",
+    "Calzado contra sustancias químicas",
+    "Calzado dieléctrico",
+    "Calzado ocupacional",
+    "Careta para soldador",
+    "Capuchas",
+    "Casco contra impacto",
+    "Casco dieléctrico",
+    "Conchas acústicas",
+    "Equipo de protección contra caídas de altura",
+    "Equipo de respiración autónomo",
+    "Equipo para brigadista contra incendio",
+    "Goggles",
+    "Guantes",
+    "Guantes contra sustancias químicas",
+    "Guantes contra temperaturas extremas",
+    "Guantes dieléctricos",
+    "Mandil contra altas temperaturas",
+    "Mandil contra sustancias químicas",
+    "Mangas",
+    "Mascarilla desechable",
+    "Overol",
+    "Pantalla facial",
+    "Polainas",
+    "Ropa contra sustancias peligrosas",
+    "Respirador contra gases y vapores",
+    "Respirador contra partículas"
+  ];
   
 
   const [selectedPeligros, setSelectedPeligros] = useState([]);
@@ -118,27 +154,46 @@ const handlePeligroChange = (peligro) => {
   const handleProbabilityChange = (e) => setProbability(parseFloat(e.target.value));
 
 
-  const downloadPDF = () => {
+  const downloadImage = () => {
+    // Seleccionar el contenedor con el ID 'pdf-content'
     const input = document.getElementById('pdf-content');
-    html2canvas(input).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF();
-      pdf.addImage(imgData, 'PNG', 0, 0);
-      pdf.save('reporte.pdf');
-    });
+
+    if (input) {
+      // Configurar html2canvas para capturar el contenido como imagen
+      html2canvas(input, { scale: 2, useCORS: true, backgroundColor: '#fff' })
+        .then((canvas) => {
+          const imgData = canvas.toDataURL('image/png');
+          const link = document.createElement('a');
+          link.href = imgData;
+          link.download = 'tabla_herramientas_manual.png'; // Nombre de la imagen
+          
+          // Crear el enlace para descargar la imagen
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        })
+        .catch((error) => {
+          console.error('Error al generar la imagen:', error);
+        });
+    } else {
+      console.error('No se encontró el elemento para capturar la imagen.');
+    }
   };
 
-  const renderOptions = (options, field) => (
-    options.map(option => (
+
+   const renderOptions = (options) => {
+    return options.map((option) => (
       <option key={option} value={option}>{option}</option>
-    ))
-  );
+    ));
+  };
+
 
 
   
+  
 
   return (
-    <div>
+    <div >
       <div id="pdf-content" className="risk-table">
         <table className="main-table">
           <thead>
@@ -244,17 +299,32 @@ const handlePeligroChange = (peligro) => {
                     </tbody>
                   </table>
                 </td>
-              <td colSpan="3">
-                <table className="epp-table">
-                  <thead><tr><th>Equipo de Protección Personal sugerido:</th></tr></thead>
-                  <tbody>
-                    <tr><td>Anteojos de protección</td></tr>
-                    <tr><td>Calzado conductivo</td></tr>
-                    <tr><td>Overol</td></tr>
-                    <tr><td>Calzado contra impacto</td></tr>
-                  </tbody>
-                </table>
-              </td>
+                
+                <td colSpan="3">
+                  <table className="epp-table">
+                    <thead>
+                      <tr>
+                        <th>Equipo de Protección Personal sugerido:</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[...Array(4)].map((_, index) => ( // 4 filas con select vacíos inicialmente
+                        <tr key={index}>
+                          <td>
+                            <select defaultValue="">
+                              <option value="" disabled>
+                                Seleccione un EPP
+                              </option>
+                              {listaEPP.map((epp, i) => (
+                                <option key={i} value={epp}>{epp}</option>
+                              ))}
+                            </select>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </td>
             </tr>          
             <tr>
               <td colSpan="5  ">
@@ -266,48 +336,48 @@ const handlePeligroChange = (peligro) => {
                   </thead>
                   <tbody>
                   {Object.keys(partesPorPeligro).map((peligro, index) => (
-  <div key={index} style={{ display: "flex", alignItems: "center" }}>
-    <input 
-      type="checkbox" 
-      checked={selectedPeligros.includes(peligro)} 
-      onChange={() => handlePeligroChange(peligro)}
-    />
-    <span style={{ marginLeft: "8px" }}>{peligro}</span>
-  </div>
-))}
+                    <div key={index} style={{ display: "flex", alignItems: "center" }}>
+                      <input 
+                        type="checkbox" 
+                        checked={selectedPeligros.includes(peligro)} 
+                        onChange={() => handlePeligroChange(peligro)}
+                      />
+                      <span style={{ marginLeft: "8px" }}>{peligro}</span>
+                    </div>
+                  ))}
 
 
                   </tbody>
                 </table>
               </td>
               <td colSpan="1">
-  <table className="risk-body-table">
-    <thead>
-      <tr>
-        <th>Principales partes del cuerpo expuestas al riesgo:</th>
-      </tr>
-    </thead>
-    <tbody>
-      {affectedBodyParts.length > 0 ? (
-        affectedBodyParts.map((part, index) => (
-          <tr key={index}>
-            <td>{part}</td>
-          </tr>
-        ))
-      ) : (
-        <tr>
-          <td>No hay partes del cuerpo seleccionadas</td>
-        </tr>
-      )}
-    </tbody>
-  </table>
-</td>
+                <table className="risk-body-table">
+                  <thead>
+                    <tr>
+                      <th>Principales partes del cuerpo expuestas al riesgo:</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {affectedBodyParts.length > 0 ? (
+                      affectedBodyParts.map((part, index) => (
+                        <tr key={index}>
+                          <td>{part}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td>No hay partes del cuerpo seleccionadas</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </td>
 
-</tr>
+              </tr>
 
             <tr>
               <td colSpan="9">
-                <div className="observations-section">
+                <div>
                   <label htmlFor="observaciones">Observaciones:</label>
                   <textarea
                     id="observaciones"
@@ -322,7 +392,9 @@ const handlePeligroChange = (peligro) => {
           </tbody>
         </table>
       </div>
-      <button onClick={downloadPDF} className="download-button">Descargar</button>
+      <button onClick={downloadImage} className="download-button">
+        Descargar Imagen
+      </button>
     </div>
   );
 };
