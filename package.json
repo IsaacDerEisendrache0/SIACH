@@ -9,6 +9,7 @@
     "axios": "^1.7.7",
     "boostrap": "^2.0.0",
     "bootstrap": "^5.3.3",
+    "cors": "^2.8.5",
     "express": "^4.21.1",
     "firebase": "^10.14.1",
     "html2canvas": "^1.4.1",
@@ -48,5 +49,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

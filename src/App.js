@@ -1,4 +1,4 @@
-// En App.js
+// App.js
 
 import React, { useState, useEffect } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
@@ -7,8 +7,9 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import Norma17 from './Norma_17/norma_17';
 import Norma04 from './Norma_004/norma_004';
 import Norma030 from './Norma_030/norma_030';
-import NormaNOMs from './Norma_NOMs/norma_noms'; // Importa el componente del asistente NOMs
+import NormaNOMs from './Norma_NOMs/norma_noms';
 import Login from './componentes/Loginlogin';
+import TablasGuardadas from './componentes/TablasGuardadas'; // Nuevo componente
 
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
@@ -19,7 +20,7 @@ function Navigation() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate('/login', { replace: true }); // Redirige a la página de login
+      navigate('/login', { replace: true });
     } catch (err) {
       console.error('Error al cerrar sesión:', err);
     }
@@ -28,6 +29,7 @@ function Navigation() {
   return (
     <div className="navbar">
       <button className="btn btn-primary" onClick={() => navigate('/')}>Inicio</button>
+      <button className="btn btn-primary" onClick={() => navigate('/tablas-guardadas')}>Tablas guardadas</button> {/* Nuevo botón */}
       <button className="btn btn-primary" onClick={handleLogout}>Cerrar sesión</button>
     </div>
   );
@@ -76,10 +78,10 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsAuthenticated(true);
-        navigate('/'); // Redirige a la página principal si el usuario está autenticado
+        navigate('/');
       } else {
         setIsAuthenticated(false);
-        navigate('/login'); // Redirige a la página de login si no está autenticado
+        navigate('/login');
       }
       setLoading(false);
     });
@@ -88,24 +90,17 @@ function App() {
   }, [auth, navigate]);
 
   if (loading) {
-    return <div>Cargando...</div>; // Muestra un indicador de carga mientras se verifica el estado de autenticación
+    return <div>Cargando...</div>;
   }
 
   return (
     <div className="app-container">
       <header className="App-header">
-        {/* Muestra la navegación solo si el usuario está autenticado */}
         {isAuthenticated && <Navigation />}
         <Routes>
-          {/* Ruta de Login */}
           <Route path="/login" element={<Login />} />
-
-          {/* Rutas protegidas */}
-          <Route
-            path="/"
-            element={isAuthenticated ? <HomePage /> : <Login />}
-          />
-
+          <Route path="/" element={isAuthenticated ? <HomePage /> : <Login />} />
+          <Route path="/tablas-guardadas" element={isAuthenticated ? <TablasGuardadas /> : <Login />} /> {/* Nueva ruta */}
         </Routes>
       </header>
     </div>

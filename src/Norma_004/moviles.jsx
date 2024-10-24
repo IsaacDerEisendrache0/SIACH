@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './Moviles.css';
 
 const RiskTable = () => {
+  // Estados para capturar los datos del formulario
+  const [nombreMaquinaria, setNombreMaquinaria] = useState('');
+  const [area, setArea] = useState('');
+  const [poe, setPoe] = useState('');
+  const [tiempoExposicion, setTiempoExposicion] = useState('');
+  const [descripcion, setDescripcion] = useState('');
+  const [fechaInspeccion, setFechaInspeccion] = useState('');
+
+  // Estados adicionales
   const [consequence, setConsequence] = useState('Lesiones sin baja');
   const [exposure, setExposure] = useState('Ocasionalmente');
   const [probability, setProbability] = useState('Coincidencia extremadamente remota pero concebible');
@@ -32,6 +42,7 @@ const RiskTable = () => {
     '/images/21.png', '/images/34.png'
   ];
 
+  // Manejo de subida de imagen
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -40,6 +51,7 @@ const RiskTable = () => {
     }
   };
 
+  // Agregar imágenes de EPP seleccionadas
   const handleAddEPPImage = (e) => {
     const selectedImage = e.target.value;
     if (selectedImage && !selectedEPPImages.includes(selectedImage)) {
@@ -47,30 +59,26 @@ const RiskTable = () => {
     }
   };
 
+  // Seleccionar imagen de parte del cuerpo
   const handleSelectBodyImage = (e) => {
     const selectedImage = e.target.value;
     setSelectedBodyImage(selectedImage);
   };
 
+  // Remover imágenes de EPP seleccionadas
   const handleRemoveEPPImage = (imageToRemove) => {
     setSelectedEPPImages(prevImages => prevImages.filter(image => image !== imageToRemove));
   };
 
+  // Opciones de evaluación de riesgo
   const opcionesConsecuencia = [
-    'Catástrofe',
-    'Varias muertes',
-    'Muerte',
-    'Lesiones graves',
-    'Lesiones con baja',
-    'Lesiones sin baja'
+    'Catástrofe', 'Varias muertes', 'Muerte',
+    'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'
   ];
 
   const opcionesExposicion = [
-    'Continuamente',
-    'Frecuentemente',
-    'Ocasionalmente',
-    'Irregularmente',
-    'Raramente'
+    'Continuamente', 'Frecuentemente', 'Ocasionalmente',
+    'Irregularmente', 'Raramente'
   ];
 
   const opcionesProbabilidad = [
@@ -82,6 +90,7 @@ const RiskTable = () => {
     'Coincidencia prácticamente imposible, jamás ha ocurrido'
   ];
 
+  // Calcular valores de consecuencia, exposición y probabilidad
   const calcularValorConsecuencia = (consequence) => {
     const valoresConsecuencia = {
       'Catástrofe': 50,
@@ -117,6 +126,7 @@ const RiskTable = () => {
     return valoresProbabilidad[probability] || 0;
   };
 
+  // Calcular magnitud del riesgo
   const calcularMagnitudRiesgo = () => {
     const valorConsecuencia = calcularValorConsecuencia(consequence);
     const valorExposicion = calcularValorExposicion(exposure);
@@ -124,6 +134,7 @@ const RiskTable = () => {
     return Math.floor(valorConsecuencia * valorExposicion * valorProbabilidad);
   };
 
+  // Obtener la clasificación del riesgo
   const obtenerClasificacionRiesgo = (magnitud) => {
     if (magnitud > 400) {
       return { color: 'red', texto: 'Muy Alto: Detención inmediata', accion: 'Inmediata', clasificacion: 'Muy Alto' };
@@ -138,42 +149,111 @@ const RiskTable = () => {
     }
   };
 
+  // Guardar la tabla en la base de datos
+  const handleGuardarTabla = async () => {
+    const tablaData = {
+      nombreMaquinaria,
+      area,
+      poe,
+      tiempoExposicion,
+      descripcion,
+      fechaInspeccion,
+      consequence,
+      exposure,
+      probability,
+      magnitudRiesgo: calcularMagnitudRiesgo(),
+      clasificacion: obtenerClasificacionRiesgo(calcularMagnitudRiesgo()).clasificacion,
+      eppSeleccionado: selectedEPPImages,
+      imagenSeleccionada: selectedBodyImage,
+      imagenSubida: image
+    };
+
+    try {
+      await axios.post('http://localhost:5000/guardar-tabla', { 
+        nombre: tablaData.nombreMaquinaria, 
+        contenido: JSON.stringify(tablaData) 
+      });
+      alert('Tabla guardada exitosamente');
+    } catch (err) {
+      console.error('Error al guardar la tabla:', err);
+    }
+  };
+
   const magnitudRiesgo = calcularMagnitudRiesgo();
   const { color, texto, accion, clasificacion } = obtenerClasificacionRiesgo(magnitudRiesgo);
 
   return (
-    <table className="risk-table">
-      <thead>
-        <tr>
-          <th className="red">Nombre de la maquinaria</th>
-          <td colSpan="20"><input placeholder='Introduzca un nombre' type="text" /></td>
-          <th className="red">Área:</th>
-          <td colSpan="10"><input placeholder='Introduzca un área' type="text" /></td>
-          <th className="red">POE:</th>
-          <td colSpan="10"><input placeholder='Introduzca el POE' type="text" /></td>
-          <th className="red">Tiempo de exposición:</th>
-          <td colSpan="10"><input placeholder='Introduzca el tiempo' type="text" /></td>
-        </tr>
-        <tr>
-          <th className="red">Descripción de la maquinaria o equipo:</th>
-          <td colSpan="30"><input placeholder='Introduzca una descripción' type="text" /></td>
-          <th className="red">Fecha de inspección:</th>
-          <td colSpan="12"><input type="date" /></td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td className="image-section" colSpan="4">
-            <div style={{ display: 'flex' }}>
-              <div style={{ flex: 1 }}>
+    <div>
+      <table className="risk-table">
+        <thead>
+          <tr>
+            <th className="red">Nombre de la maquinaria</th>
+            <td colSpan="20">
+              <input 
+                placeholder='Introduzca un nombre' 
+                type="text" 
+                value={nombreMaquinaria}
+                onChange={(e) => setNombreMaquinaria(e.target.value)}
+              />
+            </td>
+            <th className="red">Área:</th>
+            <td colSpan="10">
+              <input 
+                placeholder='Introduzca un área' 
+                type="text"
+                value={area}
+                onChange={(e) => setArea(e.target.value)}
+              />
+            </td>
+            <th className="red">POE:</th>
+            <td colSpan="10">
+              <input 
+                placeholder='Introduzca el POE' 
+                type="text"
+                value={poe}
+                onChange={(e) => setPoe(e.target.value)}
+              />
+            </td>
+            <th className="red">Tiempo de exposición:</th>
+            <td colSpan="10">
+              <input 
+                placeholder='Introduzca el tiempo' 
+                type="text"
+                value={tiempoExposicion}
+                onChange={(e) => setTiempoExposicion(e.target.value)}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th className="red">Descripción de la maquinaria o equipo:</th>
+            <td colSpan="30">
+              <input 
+                placeholder='Introduzca una descripción' 
+                type="text"
+                value={descripcion}
+                onChange={(e) => setDescripcion(e.target.value)}
+              />
+            </td>
+            <th className="red">Fecha de inspección:</th>
+            <td colSpan="12">
+              <input 
+                type="date"
+                value={fechaInspeccion}
+                onChange={(e) => setFechaInspeccion(e.target.value)}
+              />
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="image-section" colSpan="4">
+              <div style={{ display: 'flex' }}>
                 <input type="file" accept="image/*" onChange={handleImageUpload} />
                 {image && <img src={image} alt="Uploaded" className="uploaded-image" style={{ width: '100%', height: 'auto', marginTop: '10px' }} />}
               </div>
-            </div>
-          </td>
-          <td className="risk-info" colSpan="3">
-            <h4 className="red" style={{ fontSize: '14px' }}>Identificación de riesgos</h4>
-            <div className="risk-selects">
+            </td>
+            <td className="risk-info" colSpan="3">
+              <h4 className="red" style={{ fontSize: '14px' }}>Identificación de riesgos</h4>
               {[...Array(7)].map((_, index) => (
                 <select key={index}>
                   <option value="">Seleccione un riesgo</option>
@@ -182,11 +262,9 @@ const RiskTable = () => {
                   ))}
                 </select>
               ))}
-            </div>
-          </td>
-          <td className="safety-info" colSpan="3">
-            <h4 className="red" style={{ fontSize: '14px' }}>Sistemas de seguridad</h4>
-            <div className="safety-selects">
+            </td>
+            <td className="safety-info" colSpan="3">
+              <h4 className="red" style={{ fontSize: '14px' }}>Sistemas de seguridad</h4>
               {[...Array(7)].map((_, index) => (
                 <select key={index}>
                   <option value="">Seleccione un sistema de seguridad</option>
@@ -195,107 +273,104 @@ const RiskTable = () => {
                   ))}
                 </select>
               ))}
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td colSpan="4" className="risk-evaluation-section">
-            <table style={{ width: '100%' }}>
-              <thead>
-                <tr className="red">
-                  <th colSpan="3">Evaluación de riesgo de trabajo</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Consecuencia</td>
-                  <td>Exposición</td>
-                  <td>Probabilidad</td>
-                </tr>
-                <tr>
-                  <td>
-                    <select value={consequence} onChange={(e) => setConsequence(e.target.value)}>
-                      {opcionesConsecuencia.map((opcion, idx) => (
-                        <option key={idx} value={opcion}>{opcion}</option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
-                      {opcionesExposicion.map((opcion, idx) => (
-                        <option key={idx} value={opcion}>{opcion}</option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    <select value={probability} onChange={(e) => setProbability(e.target.value)}>
-                      {opcionesProbabilidad.map((opcion, idx) => (
-                        <option key={idx} value={opcion}>{opcion}</option>
-                      ))}
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Valor Consecuencia: {calcularValorConsecuencia(consequence)}</td>
-                  <td>Valor Exposición: {calcularValorExposicion(exposure)}</td>
-                  <td>Valor Probabilidad: {calcularValorProbabilidad(probability)}</td>
-                </tr>
-              </tbody>
-            </table>
-            <table className="risk-classification" style={{ width: '100%', marginTop: '20px' }}>
-              <thead>
-                <tr className="red">
-                  <th colSpan="3">Clasificación de Magnitud de Riesgo</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr style={{ backgroundColor: color }}>
-                  <td>Magnitud del Riesgo: {magnitudRiesgo}</td>
-                  <td>Clasificación: {clasificacion}</td>
-                  <td>Acción: {accion}</td>
-                </tr>
-              </tbody>
-            </table>
-          </td>
-          <td style={{ verticalAlign: 'top' }}>
-            <div style={{ marginTop: '20px' }}>
-              <h4 className="red" style={{ display: 'inline-block', marginRight: '10px', fontSize: '14px' }}>Equipo de Protección Personal Sugerido</h4>
-              <select onChange={handleSelectBodyImage} style={{ width: '150px', height: '30px', marginLeft: '10px' }}>
-                <option value="">Seleccione Imagen del cuerpo</option>
-                <option value="/body/lvl1_foot.png">lvl1_foot.png</option>
-                <option value="/body/lvl1_hand.png">lvl1_hand.png</option>
-                <option value="/body/lvl1_head.png">lvl1_head.png</option>
-                <option value="/body/lvl1_mid.png">lvl1_mid.png</option>
-                <option value="/body/lvl2_handfoot.png">lvl2_handfoot.png</option>
-                <option value="/body/lvl2_headfoot.png">lvl2_headfoot.png</option>
-                <option value="/body/lvl2_headhand.png">lvl2_headhand.png</option>
-                <option value="/body/lvl2_headmid.png">lvl2_headmid.png</option>
-                <option value="/body/lvl2_midfoot.png">lvl2_midfoot.png</option>
-                <option value="/body/lvl2_midhand.png">lvl2_midhand.png</option>
-                <option value="/body/lvl3_all.png">lvl3_all.png</option>
-              </select>
-              {selectedBodyImage && <img src={selectedBodyImage} alt="Selected Body Part" style={{ width: '100%', height: 'auto', marginTop: '10px' }} />}
-            </div>
-          </td>
-          <td colSpan="8" className="epp-suggested" style={{ verticalAlign: 'top' }}>
-            <div style={{ marginTop: '20px' }}>
-              <h4 className="red" style={{ display: 'inline-block', marginRight: '10px', fontSize: '14px' }}>Seleccione EPP</h4>
-              <select onChange={handleAddEPPImage} style={{ width: '150px', height: '30px', marginRight: '20px' }}>
-                <option value="">Seleccione EPP</option>
-                {eppImages.map((eppImage, idx) => (
-                  <option key={idx} value={eppImage}>{`EPP ${idx + 1}`}</option>
-                ))}
-              </select>
-              <div className="epp-images-grid" style={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap', gap: '5px', justifyContent: 'flex-start' }}>
-                {selectedEPPImages.map((imgSrc, idx) => (
-                  <img key={idx} src={imgSrc} alt={`EPP ${idx + 1}`} className="epp-image" style={{ width: '50px', height: '50px' }} onClick={() => handleRemoveEPPImage(imgSrc)} />
-                ))}
+            </td>
+          </tr>
+          <tr>
+            <td colSpan="4" className="risk-evaluation-section">
+              <table style={{ width: '100%' }}>
+                <thead>
+                  <tr className="red">
+                    <th colSpan="3">Evaluación de riesgo de trabajo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Consecuencia</td>
+                    <td>Exposición</td>
+                    <td>Probabilidad</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <select value={consequence} onChange={(e) => setConsequence(e.target.value)}>
+                        {opcionesConsecuencia.map((opcion, idx) => (
+                          <option key={idx} value={opcion}>{opcion}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td>
+                      <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
+                        {opcionesExposicion.map((opcion, idx) => (
+                          <option key={idx} value={opcion}>{opcion}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td>
+                      <select value={probability} onChange={(e) => setProbability(e.target.value)}>
+                        {opcionesProbabilidad.map((opcion, idx) => (
+                          <option key={idx} value={opcion}>{opcion}</option>
+                        ))}
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Valor Consecuencia: {calcularValorConsecuencia(consequence)}</td>
+                    <td>Valor Exposición: {calcularValorExposicion(exposure)}</td>
+                    <td>Valor Probabilidad: {calcularValorProbabilidad(probability)}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <table className="risk-classification" style={{ width: '100%', marginTop: '20px' }}>
+                <thead>
+                  <tr className="red">
+                    <th colSpan="3">Clasificación de Magnitud de Riesgo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ backgroundColor: color }}>
+                    <td>Magnitud del Riesgo: {magnitudRiesgo}</td>
+                    <td>Clasificación: {clasificacion}</td>
+                    <td>Acción: {accion}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+            <td style={{ verticalAlign: 'top' }}>
+              <div style={{ marginTop: '20px' }}>
+                <h4 className="red" style={{ display: 'inline-block', marginRight: '10px', fontSize: '14px' }}>Equipo de Protección Personal Sugerido</h4>
+                <select onChange={handleSelectBodyImage} style={{ width: '150px', height: '30px', marginLeft: '10px' }}>
+                  <option value="">Seleccione Imagen del cuerpo</option>
+                  {Object.keys(optionImages).map((key) => (
+                    <option key={key} value={optionImages[key]}>{key}</option>
+                  ))}
+                </select>
+                {selectedBodyImage && <img src={selectedBodyImage} alt="Selected Body Part" style={{ width: '100%', height: 'auto', marginTop: '10px' }} />}
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+            <td colSpan="8" className="epp-suggested" style={{ verticalAlign: 'top' }}>
+              <div style={{ marginTop: '20px' }}>
+                <h4 className="red" style={{ display: 'inline-block', marginRight: '10px', fontSize: '14px' }}>Seleccione EPP</h4>
+                <select onChange={handleAddEPPImage} style={{ width: '150px', height: '30px', marginRight: '20px' }}>
+                  <option value="">Seleccione EPP</option>
+                  {eppImages.map((eppImage, idx) => (
+                    <option key={idx} value={eppImage}>{`EPP ${idx + 1}`}</option>
+                  ))}
+                </select>
+                <div className="epp-images-grid" style={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap', gap: '5px', justifyContent: 'flex-start' }}>
+                  {selectedEPPImages.map((imgSrc, idx) => (
+                    <img key={idx} src={imgSrc} alt={`EPP ${idx + 1}`} className="epp-image" style={{ width: '50px', height: '50px' }} onClick={() => handleRemoveEPPImage(imgSrc)} />
+                  ))}
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      {/* Botón para guardar la tabla */}
+      <button className="btn btn-success mt-3" onClick={handleGuardarTabla}>
+        Guardar Tabla
+      </button>
+    </div>
   );
 };
 
