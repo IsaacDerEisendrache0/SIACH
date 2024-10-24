@@ -9,10 +9,12 @@ import generadoresImage from './images/generadores_vapor.png'; // Nueva imagen p
 
 const NormaNoms = () => {
   const [step, setStep] = useState(1);
-  const [showModal9, setShowModal9] = useState(false); // Modal para el paso 9
-  const [showModal10, setShowModal10] = useState(false); // Modal para el paso 10
-  const [showModal12, setShowModal12] = useState(false); // Modal para el paso 12
-  const [showModal14, setShowModal14] = useState(false); // Modal para el paso 14
+  const [showModal9, setShowModal9] = useState(false);
+  const [showModal10, setShowModal10] = useState(false);
+  const [showModal12, setShowModal12] = useState(false);
+  const [showModal14, setShowModal14] = useState(false);
+  const navigate = useNavigate();
+
   const [formValues, setFormValues] = useState({
     superficie: '',
     invGases: '',
@@ -32,10 +34,24 @@ const NormaNoms = () => {
     generadoresVapor: '',
     recipientesCriogenicos: '',
     categoriasCriogenicos: [],
-    categoriasGeneradores: [], // Nueva propiedad para el paso 14
+    categoriasGeneradores: [],
+    cargasEstaticas: '',
+    materialesFriccion: '',
+    soldaduraCorte: '',
+    soldaduraAltura: '',
+    instalacionesElectricas: '',
+    mantenimientoLineasElectricas: '',
+    mantenimientoEnergizadas: '',
+    trabajosEspaciosConfinados: '',
+    tiposEspaciosConfinados: [],
+    trabajadoresDiscapacidad: '',
+    tiposDiscapacidad: [],
+    exposicionRuido: '',
+    exposicionFrio: '', // Nueva propiedad para el paso 27
+    exposicioncalor: '',
+    vibraciones: '',
+    exvibraciones: [] , 
   });
-
-  const navigate = useNavigate();
 
   const handleNext = () => {
     setStep(step + 1);
@@ -69,7 +85,6 @@ const NormaNoms = () => {
 
   const isStepCompleted = () => {
     switch (step) {
-      // Casos de validación para cada paso
       case 1:
         return formValues.area !== '';
       case 2:
@@ -102,14 +117,45 @@ const NormaNoms = () => {
       case 12:
         return formValues.categoriasCriogenicos.length > 0;
       case 13:
-        return formValues.generadoresVapor !== ''; // Nueva validación para el paso 13
+        return formValues.generadoresVapor !== '';
       case 14:
-        return formValues.categoriasGeneradores.length > 0; // Validación para el paso 14
+        return formValues.categoriasGeneradores.length > 0;
+      case 15:
+        return formValues.cargasEstaticas !== '';
+      case 16:
+        return formValues.materialesFriccion !== '';
+      case 17:
+        return formValues.soldaduraCorte !== '';
+      case 18:
+        return formValues.soldaduraAltura !== '';
+      case 19:
+        return formValues.instalacionesElectricas !== '';
+      case 20:
+        return formValues.mantenimientoLineasElectricas !== '';
+      case 21:
+        return formValues.mantenimientoEnergizadas !== '';
+      case 22:
+        return formValues.trabajosEspaciosConfinados !== '';
+      case 23:
+        return formValues.tiposEspaciosConfinados.length > 0;
+      case 24:
+        return formValues.trabajadoresDiscapacidad !== '';
+      case 25:
+        return formValues.tiposDiscapacidad.length > 0;
+      case 26:
+        return formValues.exposicionRuido !== '';
+      case 27:
+        return formValues.exposicionFrio !== ''; // Lógica para el paso 27
+      case 28: 
+       return  formValues.exposicioncalor !== '';
+      case 29:
+        return formValues.vibraciones !== '';
+      case 30:
+        return formValues.exvibraciones.length > 0;
       default:
         return false;
     }
   };
-
   return (
     <div className="norma-noms-container">
       <div className="container">
@@ -134,6 +180,7 @@ const NormaNoms = () => {
     </div>
   </div>
 )}
+
 
 {/* Otros pasos de 2 a 10... */}
  {/* Paso 2 */}
@@ -717,7 +764,10 @@ const NormaNoms = () => {
         {/* Paso 13 - Generadores de vapor o calderas */}
         {step === 13 && (
           <div className="step13">
-            <h3>¿En su centro de trabajo están instalados generadores de vapor o calderas?</h3>
+            <h3></h3>
+            <label>
+            ¿En su centro de trabajo están instalados generadores de vapor o calderas?
+            </label>
             <label>
               <input
                 type="radio"
@@ -787,7 +837,7 @@ const NormaNoms = () => {
 
             <div className="buttons">
               <button onClick={handleBack}>Regresar</button>
-              <button onClick={handleNext} disabled={!isStepCompleted()}>Finalizar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>siguiente</button>
             </div>
           </div>
         )}
@@ -803,11 +853,589 @@ const NormaNoms = () => {
             </div>
           </div>
         )}
+        {step === 15 && (
+          <div className="step15">
+            <h3>Cargas Eléctricas Estáticas</h3>
+            <label>
+              ¿En los procesos que se realizan en el centro de trabajo se emplean materiales, sustancias o equipos capaces de almacenar o generar cargas eléctricas estáticas?
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="cargasEstaticas"
+                value="sí"
+                onChange={handleInputChange}
+                checked={formValues.cargasEstaticas === 'sí'}
+              />
+              Sí
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="cargasEstaticas"
+                value="no"
+                onChange={handleInputChange}
+                checked={formValues.cargasEstaticas === 'no'}
+              />
+              No
+            </label>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>siguiente</button>
+            </div>
+          </div>
+        )}
+
+{step === 16 && (
+          <div className="step16">
+            <h3>Materiales en Fricción</h3>
+            <label>
+              ¿En su centro de trabajo se tiene maquinaria, equipos o procesos en los que existan materiales en fricción?
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="materialesFriccion"
+                value="sí"
+                onChange={handleInputChange}
+                checked={formValues.materialesFriccion === 'sí'}
+              />
+              Sí
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="materialesFriccion"
+                value="no"
+                onChange={handleInputChange}
+                checked={formValues.materialesFriccion === 'no'}
+              />
+              No
+            </label>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>siguiente</button>
+            </div>
+          </div>
+        )}
+
+
+{step === 17 && (
+          <div className="step17">
+            <h3>Actividades de Soldadura y Corte</h3>
+            <label>
+              ¿En el centro de trabajo se realizan actividades de soldadura y corte?
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="soldaduraCorte"
+                value="sí"
+                onChange={handleInputChange}
+                checked={formValues.soldaduraCorte === 'sí'}
+              />
+              Sí
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="soldaduraCorte"
+                value="no"
+                onChange={handleInputChange}
+                checked={formValues.soldaduraCorte === 'no'}
+              />
+              No
+            </label>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>siguiente</button>
+            </div>
+          </div>
+        )}
+
+{step === 18 && (
+          <div className="step18">
+            <h3>Actividades de Soldadura en Alturas y Espacios Confinados</h3>
+            <label>
+              ¿Las actividades de soldadura y corte se realizan en: alturas, sótanos, subterráneos, 
+              espacios confinados o en recipientes donde existan polvos, gases o vapores inflamables o explosivos?
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="soldaduraAltura"
+                value="sí"
+                onChange={handleInputChange}
+                checked={formValues.soldaduraAltura === 'sí'}
+              />
+              Sí
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="soldaduraAltura"
+                value="no"
+                onChange={handleInputChange}
+                checked={formValues.soldaduraAltura === 'no'}
+              />
+              No
+            </label>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>siguiente</button>
+            </div>
+          </div>
+        )}
+
+         {/* Paso 19 - Instalaciones eléctricas */}
+         {step === 19 && (
+          <div className="step19">
+            <h3>Instalaciones Eléctricas</h3>
+            <label>¿En su centro de trabajo existen instalaciones eléctricas permanentes o provisionales?</label>
+            <label>
+              <input
+                type="radio"
+                name="instalacionesElectricas"
+                value="sí"
+                onChange={handleInputChange}
+              />
+              Sí
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="instalacionesElectricas"
+                value="no"
+                onChange={handleInputChange}
+              />
+              No
+            </label>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+            </div>
+          </div>
+        )}
+
+{step === 20 && (
+          <div className="step20">
+            <h3>Actividades de mantenimiento en líneas eléctricas</h3>
+            <label>¿En su centro de trabajo se desarrollan actividades de mantenimiento en las líneas eléctricas aéreas o subterráneas o energizadas?</label>
+            <label>
+              <input
+                type="radio"
+                name="mantenimientoLineasElectricas"
+                value="sí"
+                onChange={handleInputChange}
+                checked={formValues.mantenimientoLineasElectricas === 'sí'}
+              />
+              Sí
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="mantenimientoLineasElectricas"
+                value="no"
+                onChange={handleInputChange}
+                checked={formValues.mantenimientoLineasElectricas === 'no'}
+              />
+              No
+            </label>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+            </div>
+          </div>
+        )}
+
+{step === 21 && (
+          <div className="step21">
+            <h3>Trabajos de Mantenimiento con Líneas Energizadas</h3>
+            <label>
+              ¿Los trabajos de mantenimiento a las instalaciones eléctricas se realizan con las líneas energizadas?
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="mantenimientoEnergizadas"
+                value="sí"
+                onChange={handleInputChange}
+              />
+              Sí
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="mantenimientoEnergizadas"
+                value="no"
+                onChange={handleInputChange}
+              />
+              No
+            </label>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+{step === 22 && (
+          <div className="step22">
+            <h3>Trabajos en Espacios Confinados</h3>
+            <label>
+              ¿En su centro laboral se realizan trabajos en espacios confinados?
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="trabajosEspaciosConfinados"
+                value="sí"
+                onChange={handleInputChange}
+              />
+              Sí
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="trabajosEspaciosConfinados"
+                value="no"
+                onChange={handleInputChange}
+              />
+              No
+            </label>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+{step === 23 && (
+          <div className="step23">
+            <h3>Tipos de Espacios Confinados</h3>
+            <label>
+              Seleccione el tipo de espacio confinado en las cuales se desarrollarán las actividades en el centro de trabajo:
+            </label>
+            <div className="checkbox-group">
+              <label>
+                <input
+                  type="checkbox"
+                  value="tipoI"
+                  onChange={(e) => handleCheckboxChange(e, 'tiposEspaciosConfinados')}
+                  checked={formValues.tiposEspaciosConfinados.includes('tipoI')}
+                />
+                Tipo I
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  value="tipoII"
+                  onChange={(e) => handleCheckboxChange(e, 'tiposEspaciosConfinados')}
+                  checked={formValues.tiposEspaciosConfinados.includes('tipoII')}
+                />
+                Tipo II
+              </label>
+            </div>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+        
+        
+
+{step === 24 && (
+  <div className="step25">
+    <h3></h3>
+    <label>
+    ¿En su centro de trabajo laboran trabajadores con discapacidad?
+    </label>
+    <label>
+      <input
+        type="radio"
+        name="trabajadoresDiscapacidad"
+        value="sí"
+        onChange={handleInputChange}
+        checked={formValues.trabajadoresDiscapacidad === 'sí'}
+      />
+      Sí
+    </label>
+    <label>
+      <input
+        type="radio"
+        name="trabajadoresDiscapacidad"
+        value="no"
+        onChange={handleInputChange}
+        checked={formValues.trabajadoresDiscapacidad === 'no'}
+      />
+      No
+    </label>
+
+    <div className="buttons">
+      <button onClick={handleBack}>Regresar</button>
+      <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+    </div>
+  </div>
+)}
+
+  
+  {step === 25 && (
+        <div>
+          <h3></h3>
+          <label>
+          Seleccione el tipo de discapacidad que presenta el personal que labora en su centro de trabajo:
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              value="Discapacidad física"
+              onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
+            />
+            Discapacidad física
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              value="Discapacidad mental"
+              onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
+            />
+            Discapacidad mental
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              value="Discapacidad intelectual"
+              onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
+            />
+            Discapacidad intelectual
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              value="Discapacidad sensorial"
+              onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
+            />
+            Discapacidad sensorial
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+          </div>
+        </div>
+      )}
+
+{step === 26 && (
+        <div>
+          <h3>
+          </h3>
+          <label >¿En su centro de trabajo, existe algún área donde los trabajadores estén expuestos a niveles de ruido superiores a 80 decibeles?</label>
+          <label>
+            <input
+              type="radio"
+              name="exposicionRuido"
+              value="Sí"
+              onChange={handleInputChange}
+              checked={formValues.exposicionRuido === 'Sí'}
+            />
+            Sí
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="exposicionRuido"
+              value="No"
+              onChange={handleInputChange}
+              checked={formValues.exposicionRuido === 'No'}
+            />
+            No
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="exposicionRuido"
+              value="No sé"
+              onChange={handleInputChange}
+              checked={formValues.exposicionRuido === 'No sé'}
+            />
+            No sé
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+          </div>
+        </div>
+      )}
+
+{step === 27 && (
+        <div>
+          <h3>
+          </h3>
+          <label> ¿En su centro de trabajo, los trabajadores están expuestos a instalaciones, equipos, productos o materiales que ocasionen que su temperatura corporal descienda a menos de 36 grados centígrados?</label>
+          <label>
+            <input
+              type="radio"
+              name="exposicionFrio"
+              value="Sí"
+              onChange={handleInputChange}
+              checked={formValues.exposicionFrio === 'Sí'}
+            />
+            Sí
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="exposicionFrio"
+              value="No"
+              onChange={handleInputChange}
+              checked={formValues.exposicionFrio === 'No'}
+            />
+            No
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+          </div>
+        </div>
+      )}
+
+
+      {step === 28 && (
+        <div>
+          <h3>
+          </h3>
+          <label> ¿Los trabajadores realizan actividades o están expuestos a instalaciones, equipos, productos o materiales que ocasionen que su temperatura corporal sea mayor a 38 grados centígrados?
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="exposicioncalor"
+              value="Sí"
+              onChange={handleInputChange}
+              checked={formValues.exposicioncalor === 'Sí'}
+            />
+            Sí
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="exposicioncalor"
+              value="No"
+              onChange={handleInputChange}
+              checked={formValues.exposicioncalor === 'No'}
+            />
+            No
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+          </div>
+        </div>
+      )}
+
+      
+{step === 29 && (
+        <div>
+          <h3>
+          </h3>
+          <label> ¿Los trabajadores están expuestos a vibraciones producidas por la operación de maquinaria, equipos o herramientas?
+
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="vibraciones"
+              value="Sí"
+              onChange={handleInputChange}
+              checked={formValues.vibraciones === 'Sí'}
+            />
+            Sí
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="vibraciones"
+              value="No"
+              onChange={handleInputChange}
+              checked={formValues.vibraciones === 'No'}
+            />
+            No
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+          </div>
+        </div>
+      )}
+
+{step === 30 && (
+          <div className="step30">
+            <h3>Tipos de Espacios Confinados</h3>
+            <label>
+              Seleccione el tipo de espacio confinado en las cuales se desarrollarán las actividades en el centro de trabajo:
+            </label>
+            <div className="checkbox-group">
+              <label>
+                <input
+                  type="checkbox"
+                  value="Extremidades superiores"
+                  onChange={(e) => handleCheckboxChange(e, 'exvibraciones')}
+                  checked={formValues.exvibraciones.includes('Extremidades superiores')}
+                />
+              Extremidades superiores
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  value="Extremidades inferiores"
+                  onChange={(e) => handleCheckboxChange(e, 'exvibraciones')}
+                  checked={formValues.exvibraciones.includes('Extremidades inferiores')}
+                />
+                Extremidades inferiores
+
+
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  value="tronco"
+                  onChange={(e) => handleCheckboxChange(e, 'exvibraciones')}
+                  checked={formValues.exvibraciones.includes('tronco')}
+                />
+               Tronco
+              </label>
+
+            </div>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+        
+
+
+
+
+
+
+
+
+        
+
+
+
       </div>
     </div>
   );
 };
 
 export default NormaNoms;
-
-

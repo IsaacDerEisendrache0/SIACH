@@ -45,8 +45,22 @@ const NormaNoms = () => {
     trabajosEspaciosConfinados: '',
     tiposEspaciosConfinados: [],
     trabajadoresDiscapacidad: '',
-    tiposDiscapacidad: [], // Nueva propiedad para el paso 26
+    tiposDiscapacidad: [],
+    exposicionRuido: '',
+    exposicionFrio: '',
+    exposicioncalor: '',
+    vibraciones: '',
+    exvibraciones: [],
+    manejocargas: '',
+    actcargas: [],
+    actagricolas: [],
+    infrestructura: [],
+    materialc: '',
+    superficieConstruir: '', // Nueva propiedad para el paso 36
+    alturaConstruccion: '', // Nueva propiedad para el paso 36
+    materialp: '',
   });
+
   const handleNext = () => {
     setStep(step + 1);
   };
@@ -67,7 +81,6 @@ const NormaNoms = () => {
     });
   };
 
-  // Nueva función handleCheckboxChange
   const handleCheckboxChange = (e, field) => {
     const { value } = e.target;
     setFormValues((prev) => ({
@@ -133,11 +146,34 @@ const NormaNoms = () => {
         return formValues.trabajosEspaciosConfinados !== '';
       case 23:
         return formValues.tiposEspaciosConfinados.length > 0;
-      
       case 24:
-        return formValues.trabajadoresConDiscapacidad !== '';
+        return formValues.trabajadoresDiscapacidad !== '';
       case 25:
-        return formValues.tiposDiscapacidad.length > 0; // Lógica para el paso 26
+        return formValues.tiposDiscapacidad.length > 0;
+      case 26:
+        return formValues.exposicionRuido !== '';
+      case 27:
+        return formValues.exposicionFrio !== '';
+      case 28: 
+        return formValues.exposicioncalor !== '';
+      case 29:
+        return formValues.vibraciones !== '';
+      case 30:
+        return formValues.exvibraciones.length > 0;
+      case 31:
+        return formValues.manejocargas !== '';
+      case 32:
+        return formValues.actcargas.length > 0;
+      case 33:
+        return formValues.actagricolas !== '';
+      case 34:
+        return formValues.infrestructura.length > 0;
+      case 35:
+        return formValues.materialc !== '';
+      case 36:
+        return formValues.superficieConstruir !== '' && formValues.alturaConstruccion !== '';
+      case 37:
+        return formValues.materialp !== '';
       default:
         return false;
     }
@@ -1171,7 +1207,7 @@ const NormaNoms = () => {
   </div>
 )}
 
-  {/* Paso 26 - Selección de tipo de discapacidad */}
+  
   {step === 25 && (
         <div>
           <h3></h3>
@@ -1216,6 +1252,532 @@ const NormaNoms = () => {
           </div>
         </div>
       )}
+
+{step === 26 && (
+        <div>
+          <h3>
+          </h3>
+          <label >¿En su centro de trabajo, existe algún área donde los trabajadores estén expuestos a niveles de ruido superiores a 80 decibeles?</label>
+          <label>
+            <input
+              type="radio"
+              name="exposicionRuido"
+              value="Sí"
+              onChange={handleInputChange}
+              checked={formValues.exposicionRuido === 'Sí'}
+            />
+            Sí
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="exposicionRuido"
+              value="No"
+              onChange={handleInputChange}
+              checked={formValues.exposicionRuido === 'No'}
+            />
+            No
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="exposicionRuido"
+              value="No sé"
+              onChange={handleInputChange}
+              checked={formValues.exposicionRuido === 'No sé'}
+            />
+            No sé
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+          </div>
+        </div>
+      )}
+
+{step === 27 && (
+        <div>
+          <h3>
+          </h3>
+          <label> ¿En su centro de trabajo, los trabajadores están expuestos a instalaciones, equipos, productos o materiales que ocasionen que su temperatura corporal descienda a menos de 36 grados centígrados?</label>
+          <label>
+            <input
+              type="radio"
+              name="exposicionFrio"
+              value="Sí"
+              onChange={handleInputChange}
+              checked={formValues.exposicionFrio === 'Sí'}
+            />
+            Sí
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="exposicionFrio"
+              value="No"
+              onChange={handleInputChange}
+              checked={formValues.exposicionFrio === 'No'}
+            />
+            No
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+          </div>
+        </div>
+      )}
+
+
+      {step === 28 && (
+        <div>
+          <h3>
+          </h3>
+          <label> ¿Los trabajadores realizan actividades o están expuestos a instalaciones, equipos, productos o materiales que ocasionen que su temperatura corporal sea mayor a 38 grados centígrados?
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="exposicioncalor"
+              value="Sí"
+              onChange={handleInputChange}
+              checked={formValues.exposicioncalor === 'Sí'}
+            />
+            Sí
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="exposicioncalor"
+              value="No"
+              onChange={handleInputChange}
+              checked={formValues.exposicioncalor === 'No'}
+            />
+            No
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+          </div>
+        </div>
+      )}
+
+      
+{step === 29 && (
+        <div>
+          <h3>
+          </h3>
+          <label> ¿Los trabajadores están expuestos a vibraciones producidas por la operación de maquinaria, equipos o herramientas?
+
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="vibraciones"
+              value="Sí"
+              onChange={handleInputChange}
+              checked={formValues.vibraciones === 'Sí'}
+            />
+            Sí
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="vibraciones"
+              value="No"
+              onChange={handleInputChange}
+              checked={formValues.vibraciones === 'No'}
+            />
+            No
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+          </div>
+        </div>
+      )}
+
+{step === 30 && (
+          <div className="step30">
+            <h3>Tipos de Espacios Confinados</h3>
+            <label>
+              Seleccione el tipo de espacio confinado en las cuales se desarrollarán las actividades en el centro de trabajo:
+            </label>
+            <div className="checkbox-group">
+              <label>
+                <input
+                  type="checkbox"
+                  value="Extremidades superiores"
+                  onChange={(e) => handleCheckboxChange(e, 'exvibraciones')}
+                  checked={formValues.exvibraciones.includes('Extremidades superiores')}
+                />
+              Extremidades superiores
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  value="Extremidades inferiores"
+                  onChange={(e) => handleCheckboxChange(e, 'exvibraciones')}
+                  checked={formValues.exvibraciones.includes('Extremidades inferiores')}
+                />
+                Extremidades inferiores
+
+
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  value="tronco"
+                  onChange={(e) => handleCheckboxChange(e, 'exvibraciones')}
+                  checked={formValues.exvibraciones.includes('tronco')}
+                />
+               Tronco
+              </label>
+
+            </div>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+              
+{step === 31 && (
+        <div>
+          <h3>
+          </h3>
+          <label> ¿En su centro de trabajo se realizan actividades que impliquen el manejo manual de cargas mayores a 3kg de forma cotidiana (más de una vez al día)?
+
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="manejocargas"
+              value="Sí"
+              onChange={handleInputChange}
+              checked={formValues.manejocargas === 'Sí'}
+            />
+            Sí
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="manejocargas"
+              value="No"
+              onChange={handleInputChange}
+              checked={formValues.manejocargas === 'No'}
+            />
+            No
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+          </div>
+        </div>
+      )}
+
+
+{step === 32 && (
+          <div className="step32">
+            <h3>Tipos de Espacios Confinados</h3>
+            <label>
+              Seleccione el tipo de espacio confinado en las cuales se desarrollarán las actividades en el centro de trabajo:
+            </label>
+            <div className="checkbox-group">
+              <label>
+                <input
+                  type="checkbox"
+                  value="Levantamiento y transporte de cargas"
+                  onChange={(e) => handleCheckboxChange(e, 'actcargas')}
+                  checked={formValues.actcargas.includes('Levantamiento y transporte de cargas')}
+                />
+              
+                Levantamiento y transporte de cargas
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  value="Empujar o jalar cargas de peso con o sin ayuda del equipo auxilia"
+                  onChange={(e) => handleCheckboxChange(e, 'actcargas')}
+                  checked={formValues.actcargas.includes('Empujar o jalar cargas de peso con o sin ayuda del equipo auxilia')}
+                />
+                Empujar o jalar cargas de peso con o sin ayuda del equipo auxiliar
+
+
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  value="Ambas"
+                  onChange={(e) => handleCheckboxChange(e, 'actcargas')}
+                  checked={formValues.actcargas.includes('Ambas')}
+                />
+               Ambas
+              </label>
+
+            </div>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+
+
+{step === 33 && (
+          <div className="step33">
+            <h3></h3>
+            <label>
+            Seleccione el tipo de actividades agrícolas que desarrollan los trabajadores con insumos fitosanitarios o plaguicidas e insumos de nutrición vegetal o fertilizantes:
+            </label>
+            <div className="checkbox-group">
+              <label>
+                <input
+                  type="checkbox"
+                  value="Traslado"
+                  onChange={(e) => handleCheckboxChange(e, 'actagricolas')}
+                  checked={formValues.actagricolas.includes('Traslado')}
+                />
+              
+              Traslado
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  value="Almacenamiento"
+                  onChange={(e) => handleCheckboxChange(e, 'actagricolas')}
+                  checked={formValues.actagricolas.includes('Almacenamiento')}
+                />
+                Almacenamiento
+
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  value="Manejo"
+                  onChange={(e) => handleCheckboxChange(e, 'actagricolas')}
+                  checked={formValues.actagricolas.includes('Manejo')}
+                />
+               Manejo
+              </label>
+
+            </div>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+
+
+{step === 34 && (
+          <div className="step34">
+            <h3></h3>
+            <label>
+            Indique el tipo de infraestructura (elementos de producción) que se utiliza en el centro de trabajo para el desarrollo de actividades agrícolas:            </label>
+            <div className="checkbox-group">
+              <label>
+                <input
+                  type="checkbox"
+                  value="Instalaciones"
+                  onChange={(e) => handleCheckboxChange(e, 'infrestructura')}
+                  checked={formValues.infrestructura.includes('Instalaciones')}
+                />
+              
+              Instalaciones
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  value="Maquinaria"
+                  onChange={(e) => handleCheckboxChange(e, 'infrestructura')}
+                  checked={formValues.infrestructura.includes('Maquinaria')}
+                />
+                Maquinaria
+
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  value="Equipo"
+                  onChange={(e) => handleCheckboxChange(e, 'infrestructura')}
+                  checked={formValues.infrestructura.includes('Equipo')}
+                />
+               Equipo
+              </label>
+
+
+              <label>
+                <input
+                  type="checkbox"
+                  value="Herramientas"
+                  onChange={(e) => handleCheckboxChange(e, 'infrestructura')}
+                  checked={formValues.infrestructura.includes('Herramientas')}
+                />
+               Herramientas
+
+              </label>
+
+
+
+
+
+
+
+            </div>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+
+
+{step === 35 && (
+        <div>
+          <h3>
+          </h3>
+          <label> ¿El centro de trabajo realiza trabajos de construcción?
+
+
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="materialc"
+              value="Sí"
+              onChange={handleInputChange}
+              checked={formValues.materialc === 'Sí'}
+            />
+            Sí
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="materialc"
+              value="No"
+              onChange={handleInputChange}
+              checked={formValues.manejocargas === 'No'}
+            />
+            No
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+          </div>
+        </div>
+      )}
+
+       {/* Paso 36 - Clasificación del tamaño de la obra de construcción */}
+       {step === 36 && (
+          <div className="step36">
+            <h3>Clasificación del tamaño de la obra de construcción</h3>
+            <p>Proporcione la siguiente información:</p>
+
+            <label>
+              Superficie por construir o demoler:
+              <input
+                type="number"
+                name="superficieConstruir"
+                value={formValues.superficieConstruir}
+                onChange={handleInputChange}
+                required
+              />
+              metros cuadrados
+            </label>
+
+            <label>
+              Altura de la construcción:
+              <input
+                type="number"
+                name="alturaConstruccion"
+                value={formValues.alturaConstruccion}
+                onChange={handleInputChange}
+                required
+              />
+              metros
+            </label>
+
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+            </div>
+          </div>
+        )}
+
+
+{step === 37 && (
+        <div>
+          <h3>
+          </h3>
+          <label> ¿En el centro de trabajo se manejan, transportan, procesan o almacenan sustancias químicas que por sus propiedades, niveles de concentración y tiempo de exposición sean capaces de contaminar el medio ambiente laboral, alterar la salud de los trabajadores y/o dañar el centro de trabajo?
+
+
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="materialp"
+              value="Sí"
+              onChange={handleInputChange}
+              checked={formValues.materialp === 'Sí'}
+            />
+            Sí
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="materialp"
+              value="No"
+              onChange={handleInputChange}
+              checked={formValues.materialp === 'No'}
+            />
+            No
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+          </div>
+        </div>
+      )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+        
+
+
+
+
 
 
 
