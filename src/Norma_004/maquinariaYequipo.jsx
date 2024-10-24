@@ -76,40 +76,91 @@ const RiskTable = () => {
   const [maquinariaNombre, setMaquinariaNombre] = useState('');
   const [maquinariaDescripcion, setMaquinariaDescripcion] = useState('');
   const [energiaUtilizada, setEnergiaUtilizada] = useState('Eléctrica');
+  const [showEppModal, setShowEppModal] = useState(false);
+  const [selectedEpp, setSelectedEpp] = useState(null); // Permitir solo una selección
+  const eppOptionsForNoise = ['/images/19.png', '/images/5.png'];
 
-  // Manejo de selección de peligros y sus imágenes asociadas
+
+  
+
   const handlePeligroChange = (index, valor) => {
     const nuevosPeligros = [...peligros];
     nuevosPeligros[index].siNo = valor;
     setPeligros(nuevosPeligros);
 
-    const newImages = [];
-    nuevosPeligros.forEach(peligro => {
-      if (peligro.siNo && protectionImages[peligro.nombre]) {
-        protectionImages[peligro.nombre].forEach((imageSrc) => {
-          if (!newImages.includes(imageSrc)) {
-            newImages.push(imageSrc);
-          }
-        });
+    if (nuevosPeligros[index].nombre === 'Exposición a Ruido') {
+      if (valor) {
+        setShowEppModal(true); // Mostrar el modal para seleccionar un EPP
+      } else {
+        // Eliminar la imagen seleccionada de "Exposición a Ruido"
+        setSelectedImages((prevImages) => 
+          prevImages.filter((img) => !eppOptionsForNoise.includes(img))
+        );
+        setSelectedEpp(null);
       }
-    });
-    setSelectedImages(newImages);
+    } else {
+      // Actualizar las imágenes para otros peligros al seleccionar/desmarcar
+      let newImages = [...selectedImages];
+
+      if (valor) {
+        // Agregar imágenes de otros peligros si se seleccionan
+        if (protectionImages[nuevosPeligros[index].nombre]) {
+          protectionImages[nuevosPeligros[index].nombre].forEach((imageSrc) => {
+            if (!newImages.includes(imageSrc)) {
+              newImages.push(imageSrc);
+            }
+          });
+        }
+      } else {
+        // Eliminar imágenes de peligros desmarcados
+        if (protectionImages[nuevosPeligros[index].nombre]) {
+          newImages = newImages.filter(
+            (img) => !protectionImages[nuevosPeligros[index].nombre].includes(img)
+          );
+        }
+      }
+
+      setSelectedImages(newImages);
+    }
   };
+
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-
+  
     if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
-
+  
       reader.onloadend = () => {
         setImagePreview(reader.result);
         setErrorMessage('');
       };
-
+  
       reader.readAsDataURL(file);
+    } else {
+      setErrorMessage('Por favor, selecciona un archivo de imagen válido.');
     }
   };
+  
+
+
+  const handleEppSelection = (epp) => {
+    setSelectedEpp(epp); // Permitir seleccionar solo un EPP para "Exposición a Ruido"
+  };
+
+
+  const handleConfirmEpp = () => {
+    // Filtrar cualquier imagen previa de "Exposición a Ruido"
+    const filteredImages = selectedImages.filter((img) => !eppOptionsForNoise.includes(img));
+
+    // Añadir solo la imagen seleccionada al estado de imágenes seleccionadas
+    if (selectedEpp) {
+      setSelectedImages([...filteredImages, selectedEpp]);
+    }
+
+    setShowEppModal(false); // Cerrar el modal después de confirmar
+  };
+
 
   const handleSpecificRiskImageChange = (imageName) => {
     const updatedSelection = [...selectedSpecificRiskImages];
@@ -269,31 +320,67 @@ const RiskTable = () => {
                       </td>
                     </tr>
                     <tr>
-                      <td>
-                        <table className="danger-table compact-table" >
-                          <thead>
-                            <tr>
-                              <th>Identificación de peligros</th>
-                              <th style={{ backgroundColor: 'red' }}>Si/No</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {peligros.map((peligro, index) => (
-                              <tr key={peligro.id}>
-                                <td style={{ width: '80%', fontSize: '1.2em' }}>{peligro.nombre}</td>
-                                <td style={{ width: '20%' }}>
-                                  <input
-                                    type="checkbox"
-                                    checked={peligro.siNo}
-                                    onChange={(e) => handlePeligroChange(index, e.target.checked)}
-                                    style={{ transform: 'scale(1.5)' }}
-                                  />
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </td>
+                    <td>
+  <>
+    {/* Tabla de identificación de peligros */}
+    <table className="danger-table compact-table">
+        <thead>
+          <tr>
+            <th>Identificación de peligros</th>
+            <th style={{ backgroundColor: 'red' }}>Si/No</th>
+          </tr>
+        </thead>
+        <tbody>
+          {peligros.map((peligro, index) => (
+            <tr key={peligro.id}>
+              <td style={{ width: '80%', fontSize: '1.2em' }}>{peligro.nombre}</td>
+              <td style={{ width: '20%' }}>
+                <input
+                  type="checkbox"
+                  checked={peligro.siNo}
+                  onChange={(e) => handlePeligroChange(index, e.target.checked)}
+                  style={{ transform: 'scale(1.5)' }}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      
+
+      {/* Modal para seleccionar EPP específico */}
+      {showEppModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Seleccionar EPP para Exposición a Ruido</h2>
+            <div className="epp-options">
+              {eppOptionsForNoise.map((epp, index) => (
+                <label key={index} style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '1.2em' }}>
+                  <input
+                    type="radio"
+                    name="epp"
+                    value={epp}
+                    checked={selectedEpp === epp}
+                    onChange={() => handleEppSelection(epp)}
+                    style={{ transform: 'scale(1.5)' }}
+                  />
+                  <img src={epp} alt="EPP" style={{ width: '50px', height: '50px' }} />
+                </label>
+              ))}
+            </div>
+            <button onClick={handleConfirmEpp} style={{ marginTop: '10px', padding: '10px', fontSize: '1.2em' }}>
+              Confirmar
+            </button>
+            <button onClick={() => setShowEppModal(false)} style={{ marginTop: '10px', padding: '10px', fontSize: '1.2em' }}>
+              Cerrar
+            </button>
+          </div>
+        </div>
+    )}
+  </>
+</td>
+
                     </tr>
                   </tbody>
                 </table>
@@ -345,57 +432,74 @@ const RiskTable = () => {
                           </div>
                         </div>
                       </td>
+                      
                     </tr>
+                    <td colSpan="3"> Equipo de protección personal sugerido
+
+                      {/* Equipo de protección personal sugerido */}
+                        <div className="icons" style={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
+                          {selectedImages.length > 0 ? (
+                            selectedImages.map((imageSrc, index) => (
+                              <img key={index} src={imageSrc} alt={`Protección`} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
+                            ))
+                          ) : (
+                            <p style={{ fontSize: '1.2em' }}>No hay riesgos seleccionados</p>
+                          )}
+                        </div>
+
+                    </td>
                   </tbody>
-                </table>  
+
+                  <td colSpan="3">
+                      <div className="risk-options-container">
+                        {/* Contenedor de opciones */}
+                        <div className="risk-options">
+                          {specificRiskImages.map((imageName, index) => (
+                            <label key={index} className="risk-option-label">
+                              <input
+                                type="checkbox"
+                                value={imageName}
+                                checked={selectedSpecificRiskImages.includes(imageName)}
+                                onChange={() => handleSpecificRiskImageChange(imageName)}
+                                className="risk-option-checkbox"
+                              />
+                              <span className="risk-option-text">
+                                {imageName.replace(/_/g, ' ').replace('.png', '')}
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+
+                        {/* Contenedor de imágenes */}
+                        <div className="risk-images">
+                          {selectedSpecificRiskImages.map((imageName, index) => (
+                            <img
+                              key={index}
+                              src={`/images/${imageName}`}
+                              alt="Riesgo Específico"
+                              className="risk-image"
+                            />
+                          ))}
+                        </div>
+                      </div>
+
+                  </td>
+                  
+
+                  
+                </table>
+                
+                  
 
 
-                {/* Equipo de protección personal sugerido */}
-                <div className="icons" style={{ width: '50%', display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'flex-start' }}>
-                  {selectedImages.length > 0 ? (
-                    selectedImages.map((imageSrc, index) => (
-                      <img key={index} src={imageSrc} alt={`Protección`} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
-                    ))
-                  ) : (
-                    <p style={{ fontSize: '1.2em' }}>No hay riesgos seleccionados</p>
-                  )}
-                </div>
+              
               </td>
             </tr>
             
             {/* Riesgo Específico */}          
             <tr>
               <td colSpan="6">
-                <div style={{ width: '100%', display: 'flex', flexDirection: 'row', gap: '20px' }}>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'flex-start', padding: '10px' }}>
-                      {specificRiskImages.map((imageName, index) => (
-                        <label key={index} style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '1.2em' }}>
-                          <input
-                            type="checkbox"
-                            value={imageName}
-                            checked={selectedSpecificRiskImages.includes(imageName)}
-                            onChange={() => handleSpecificRiskImageChange(imageName)}
-                            style={{ transform: 'scale(1.5)' }}
-                          />
-                          {imageName.replace(/_/g, ' ').replace('.png', '')}
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div className="icons" style={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'flex-start', marginTop: '10px' }}>
-                      {selectedSpecificRiskImages.map((imageName, index) => (
-                        <img
-                          key={index}
-                          src={`/images/${imageName}`}
-                          alt="Riesgo Específico"
-                          style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                
                 <div className="observations-section">
                   <label htmlFor="observaciones" style={{ fontSize: '1.2em' }}>Observaciones:</label>
                   <textarea

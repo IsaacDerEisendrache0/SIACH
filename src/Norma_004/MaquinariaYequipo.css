@@ -159,3 +159,59 @@ label {
   margin-bottom: 10px;
   max-width: 150px;
 }
+
+
+
+/* Contenedor general */
+.risk-options-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Contenedor de opciones */
+.risk-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+/* Etiquetas de opciones */
+.risk-option-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1.2em;
+  text-align: center;
+}
+
+/* Checkbox de opciones */
+.risk-option-checkbox {
+  transform: scale(1.5);
+}
+
+/* Texto de opciones */
+.risk-option-text {
+  text-align: center;
+}
+
+/* Contenedor de imágenes */
+.risk-images {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* Imágenes de riesgos específicos */
+.risk-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
