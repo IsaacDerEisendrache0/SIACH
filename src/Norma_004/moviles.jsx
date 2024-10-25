@@ -152,8 +152,8 @@ const RiskTable = () => {
   const { color, texto, accion, clasificacion } = obtenerClasificacionRiesgo(magnitudRiesgo);
 
   return (
-    <div>
-      <table className="risk-table">
+    <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '10px' }}>
+      <table className="risk-table" style={{ width: '100%' }}>
         <thead>
           <tr>
             <th className="red">Nombre de la maquinaria</th>
@@ -163,6 +163,7 @@ const RiskTable = () => {
                 type="text" 
                 value={nombreMaquinaria}
                 onChange={(e) => setNombreMaquinaria(e.target.value)}
+                style={{ width: '100%' }}
               />
             </td>
             <th className="red">Área:</th>
@@ -172,6 +173,7 @@ const RiskTable = () => {
                 type="text"
                 value={area}
                 onChange={(e) => setArea(e.target.value)}
+                style={{ width: '100%' }}
               />
             </td>
             <th className="red">POE:</th>
@@ -181,6 +183,7 @@ const RiskTable = () => {
                 type="text"
                 value={poe}
                 onChange={(e) => setPoe(e.target.value)}
+                style={{ width: '100%' }}
               />
             </td>
             <th className="red">Tiempo de exposición:</th>
@@ -190,6 +193,7 @@ const RiskTable = () => {
                 type="text"
                 value={tiempoExposicion}
                 onChange={(e) => setTiempoExposicion(e.target.value)}
+                style={{ width: '100%' }}
               />
             </td>
           </tr>
@@ -201,6 +205,7 @@ const RiskTable = () => {
                 type="text"
                 value={descripcion}
                 onChange={(e) => setDescripcion(e.target.value)}
+                style={{ width: '100%' }}
               />
             </td>
             <th className="red">Fecha de inspección:</th>
@@ -209,22 +214,23 @@ const RiskTable = () => {
                 type="date"
                 value={fechaInspeccion}
                 onChange={(e) => setFechaInspeccion(e.target.value)}
+                style={{ width: '100%' }}
               />
             </td>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td className="image-section" colSpan="6" rowSpan="">
+            <td className="image-section" colSpan="3">
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-                <input type="file" accept="image/*" onChange={handleImageUpload} style={{ marginBottom: '10px' }} />
-                {image && <img src={image} alt="Uploaded" className="uploaded-image" style={{ width: '300px', height: '300px', objectFit: 'cover', border: '1px solid #ccc', borderRadius: '10px' }} />}
+                <input type="file" accept="image/*" onChange={handleImageUpload} style={{ marginBottom: '10px', width: '100%' }} />
+                {image && <img src={image} alt="Uploaded" className="uploaded-image" style={{ width: '100%', height: '300px', objectFit: 'cover', border: '1px solid #ccc', borderRadius: '10px' }} />}
               </div>
             </td>
-            <td className="risk-info" colSpan="2">
+            <td className="risk-info" colSpan="5">
               <h4 className="red" style={{ fontSize: '14px' }}>Identificación de riesgos</h4>
               {[...Array(7)].map((_, index) => (
-                <select key={index} style={{ padding: '5px', fontSize: '12px', borderRadius: '5px', border: '1px solid #ccc' }}>
+                <select key={index} style={{ padding: '5px', fontSize: '12px', borderRadius: '5px', border: '1px solid #ccc', width: '100%', marginBottom: '5px' }}>
                   <option value="">Seleccione un riesgo</option>
                   {opcionesConsecuencia.map((opt, idx) => (
                     <option key={idx} value={opt}>{opt}</option>
@@ -232,10 +238,10 @@ const RiskTable = () => {
                 </select>
               ))}
             </td>
-            <td className="safety-info" colSpan="4">
+            <td className="safety-info" colSpan="3">
               <h4 className="red" style={{ fontSize: '14px' }}>Sistemas de seguridad</h4>
               {[...Array(7)].map((_, index) => (
-                <select key={index} style={{ padding: '5px', fontSize: '12px', borderRadius: '5px', border: '1px solid #ccc' }}>
+                <select key={index} style={{ padding: '5px', fontSize: '12px', borderRadius: '5px', border: '1px solid #ccc', width: '100%', marginBottom: '5px' }}>
                   <option value="">Seleccione un sistema de seguridad</option>
                   {opcionesExposicion.map((opt, idx) => (
                     <option key={idx} value={opt}>{opt}</option>
@@ -260,21 +266,21 @@ const RiskTable = () => {
                   </tr>
                   <tr>
                     <td>
-                      <select value={consequence} onChange={(e) => setConsequence(e.target.value)}>
+                      <select value={consequence} onChange={(e) => setConsequence(e.target.value)} style={{ width: '100%' }}>
                         {opcionesConsecuencia.map((opcion, idx) => (
                           <option key={idx} value={opcion}>{opcion}</option>
                         ))}
                       </select>
                     </td>
                     <td>
-                      <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
+                      <select value={exposure} onChange={(e) => setExposure(e.target.value)} style={{ width: '100%' }}>
                         {opcionesExposicion.map((opcion, idx) => (
                           <option key={idx} value={opcion}>{opcion}</option>
                         ))}
                       </select>
                     </td>
                     <td>
-                      <select value={probability} onChange={(e) => setProbability(e.target.value)}>
+                      <select value={probability} onChange={(e) => setProbability(e.target.value)} style={{ width: '100%' }}>
                         {opcionesProbabilidad.map((opcion, idx) => (
                           <option key={idx} value={opcion}>{opcion}</option>
                         ))}
@@ -306,19 +312,19 @@ const RiskTable = () => {
             <td style={{ verticalAlign: 'top' }}>
               <div style={{ marginTop: '20px' }}>
                 <h4 className="red" style={{ display: 'inline-block', marginRight: '10px', fontSize: '14px' }}>Equipo de Protección Personal Sugerido</h4>
-                <select onChange={handleSelectBodyImage} style={{ width: '100px', height: '30px', marginLeft: '10px' }}>
+                <select onChange={handleSelectBodyImage} style={{ width: '100%', height: '30px', marginLeft: '10px' }}>
                   <option value="">Seleccione Imagen del cuerpo</option>
                   {Object.keys(optionImages).map((key) => (
                     <option key={key} value={optionImages[key]}>{key}</option>
                   ))}
                 </select>
-                {selectedBodyImage && <img src={selectedBodyImage} alt="Selected Body Part" style={{ width: '70%', height: 'auto', marginTop: '10px' }} />}
+                {selectedBodyImage && <img src={selectedBodyImage} alt="Selected Body Part" style={{ width: '60%', height: 'auto', marginTop: '10px' }} />}
               </div>
             </td>
             <td colSpan="20" className="epp-suggested" style={{ verticalAlign: 'top' }}>
               <div style={{ marginTop: '20px' }}>
                 <h4 className="red" style={{ display: 'inline-block', marginRight: '10px', fontSize: '14px' }}>Seleccione EPP</h4>
-                <select onChange={handleAddEPPImage} style={{ width: '150px', height: '30px', marginRight: '20px' }}>
+                <select onChange={handleAddEPPImage} style={{ width: '100%', height: '30px', marginRight: '20px' }}>
                   <option value="">Seleccione EPP</option>
                   {eppImages.map((eppImage, idx) => (
                     <option key={idx} value={eppImage}>{`EPP ${idx + 1}`}</option>
