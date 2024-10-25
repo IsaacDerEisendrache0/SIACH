@@ -1,8 +1,18 @@
 /* Moviles.css */
 
+:root {
+  --strong-red: #e60000; /* Rojo más fuerte */
+  --border-color: #ccc;
+  --button-bg: #e60000;
+  --button-text: #fff;
+  --button-hover-bg: #cc0000;
+  --border-radius: 8px;
+  --font-family: 'Arial', sans-serif;
+}
+
 .risk-table-container {
   padding: 20px;
-  font-family: Arial, sans-serif;
+  font-family: var(--font-family);
 }
 
 .risk-table {
@@ -11,51 +21,63 @@
   margin-top: 20px;
 }
 
-.risk-table th, .risk-table td {
-  border: 1px solid #ccc;
+.risk-table th,
+.risk-table td {
+  border: 1px solid var(--border-color);
   padding: 10px;
   text-align: left;
 }
 
 .risk-table th.red {
-  background-color: #ff4d4d;
-  color: white;
+  background-color: var(--strong-red);
+  color: var(--button-text);
   font-weight: bold;
   text-transform: uppercase;
 }
 
-.risk-selects select, .safety-selects select {
+.risk-selects select,
+.safety-selects select {
   width: 100%;
-  padding: 8px;
+  padding: 10px;
   margin-top: 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  font-family: var(--font-family);
 }
 
 .epp-suggested .red {
-  color: #ff4d4d;
+  color: var(--strong-red);
   font-weight: bold;
 }
 
-.epp-images-grid img {
-  width: 50px;
-  height: 50px;
-  border: 2px solid #ff4d4d;
-  border-radius: 8px;
-  padding: 0px;
-}
-
 .epp-images-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
   margin-top: 10px;
 }
 
+.epp-images-grid img {
+  width: 60px;
+  height: 60px;
+  border: 2px solid var(--strong-red);
+  border-radius: var(--border-radius);
+  padding: 2px;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.epp-images-grid img:hover {
+  transform: scale(1.1);
+  border-color: var(--button-hover-bg);
+}
+
 .body-part-image img {
-  border: 2px solid #ff4d4d;
-  border-radius: 8px;
+  border: 2px solid var(--strong-red);
+  border-radius: var(--border-radius);
 }
 
 h4.red {
-  color: #ff4d4d;
+  color: var(--strong-red);
   font-weight: bold;
   text-transform: uppercase;
   margin-bottom: 10px;
@@ -66,42 +88,88 @@ h4.red {
 }
 
 .risk-classification th {
-  background-color: #ff4d4d;
-  color: white;
+  background-color: var(--strong-red);
+  color: var(--button-text);
   padding: 10px;
   text-transform: uppercase;
 }
 
 .uploaded-image {
-  border: 2px solid #ff4d4d;
-  border-radius: 8px;
+  border: 2px solid var(--strong-red);
+  border-radius: var(--border-radius);
   margin-top: 10px;
 }
 
-.risk-info h4, .safety-info h4 {
-  color: #ff4d4d;
+.risk-info h4,
+.safety-info h4 {
+  color: var(--strong-red);
   font-weight: bold;
   text-transform: uppercase;
   margin-bottom: 10px;
 }
 
 .epp-suggested select {
-  width: 150px;
-  height: 30px;
+  width: 160px;
+  height: 35px;
   padding: 5px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
 }
 
-.epp-images-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2px;
-  margin-top: 10px;
+.button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  padding: 10px 15px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: 15px;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
-.epp-images-grid img {
-  width: 50px;
-  height: 50px;
-  padding: 2px;
+.button:hover {
+  background-color: var(--button-hover-bg);
+  transform: translateY(-2px);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.risk-selects,
+.safety-selects {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.risk-selects .button,
+.safety-selects .button {
+  align-self: flex-start;
+}
+
+.risk-selects select,
+.safety-selects select {
+  font-family: var(--font-family);
+  font-size: 14px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+}
+
+.button-group .button {
+  flex: 1;
 }

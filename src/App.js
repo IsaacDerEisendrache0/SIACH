@@ -9,7 +9,7 @@ import Norma04 from './Norma_004/norma_004';
 import Norma030 from './Norma_030/norma_030';
 import NormaNOMs from './Norma_NOMs/norma_noms';
 import Login from './componentes/Loginlogin';
-import TablasGuardadas from './componentes/TablasGuardadas'; // Nuevo componente
+
 
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
@@ -29,7 +29,7 @@ function Navigation() {
   return (
     <div className="navbar">
       <button className="btn btn-primary" onClick={() => navigate('/')}>Inicio</button>
-      <button className="btn btn-primary" onClick={() => navigate('/tablas-guardadas')}>Tablas guardadas</button> {/* Nuevo botón */}
+
       <button className="btn btn-primary" onClick={handleLogout}>Cerrar sesión</button>
     </div>
   );
@@ -100,7 +100,6 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={isAuthenticated ? <HomePage /> : <Login />} />
-          <Route path="/tablas-guardadas" element={isAuthenticated ? <TablasGuardadas /> : <Login />} /> {/* Nueva ruta */}
         </Routes>
       </header>
     </div>

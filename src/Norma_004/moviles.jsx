@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import './Moviles.css';
 
 const RiskTable = () => {
@@ -149,36 +148,6 @@ const RiskTable = () => {
     }
   };
 
-  // Guardar la tabla en la base de datos
-  const handleGuardarTabla = async () => {
-    const tablaData = {
-      nombreMaquinaria,
-      area,
-      poe,
-      tiempoExposicion,
-      descripcion,
-      fechaInspeccion,
-      consequence,
-      exposure,
-      probability,
-      magnitudRiesgo: calcularMagnitudRiesgo(),
-      clasificacion: obtenerClasificacionRiesgo(calcularMagnitudRiesgo()).clasificacion,
-      eppSeleccionado: selectedEPPImages,
-      imagenSeleccionada: selectedBodyImage,
-      imagenSubida: image
-    };
-
-    try {
-      await axios.post('http://localhost:5000/guardar-tabla', { 
-        nombre: tablaData.nombreMaquinaria, 
-        contenido: JSON.stringify(tablaData) 
-      });
-      alert('Tabla guardada exitosamente');
-    } catch (err) {
-      console.error('Error al guardar la tabla:', err);
-    }
-  };
-
   const magnitudRiesgo = calcularMagnitudRiesgo();
   const { color, texto, accion, clasificacion } = obtenerClasificacionRiesgo(magnitudRiesgo);
 
@@ -235,7 +204,7 @@ const RiskTable = () => {
               />
             </td>
             <th className="red">Fecha de inspección:</th>
-            <td colSpan="12">
+            <td colSpan="13">
               <input 
                 type="date"
                 value={fechaInspeccion}
@@ -246,16 +215,16 @@ const RiskTable = () => {
         </thead>
         <tbody>
           <tr>
-            <td className="image-section" colSpan="4">
-              <div style={{ display: 'flex' }}>
-                <input type="file" accept="image/*" onChange={handleImageUpload} />
-                {image && <img src={image} alt="Uploaded" className="uploaded-image" style={{ width: '100%', height: 'auto', marginTop: '10px' }} />}
+            <td className="image-section" colSpan="6" rowSpan="">
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                <input type="file" accept="image/*" onChange={handleImageUpload} style={{ marginBottom: '10px' }} />
+                {image && <img src={image} alt="Uploaded" className="uploaded-image" style={{ width: '300px', height: '300px', objectFit: 'cover', border: '1px solid #ccc', borderRadius: '10px' }} />}
               </div>
             </td>
-            <td className="risk-info" colSpan="3">
+            <td className="risk-info" colSpan="2">
               <h4 className="red" style={{ fontSize: '14px' }}>Identificación de riesgos</h4>
               {[...Array(7)].map((_, index) => (
-                <select key={index}>
+                <select key={index} style={{ padding: '5px', fontSize: '12px', borderRadius: '5px', border: '1px solid #ccc' }}>
                   <option value="">Seleccione un riesgo</option>
                   {opcionesConsecuencia.map((opt, idx) => (
                     <option key={idx} value={opt}>{opt}</option>
@@ -263,10 +232,10 @@ const RiskTable = () => {
                 </select>
               ))}
             </td>
-            <td className="safety-info" colSpan="3">
+            <td className="safety-info" colSpan="4">
               <h4 className="red" style={{ fontSize: '14px' }}>Sistemas de seguridad</h4>
               {[...Array(7)].map((_, index) => (
-                <select key={index}>
+                <select key={index} style={{ padding: '5px', fontSize: '12px', borderRadius: '5px', border: '1px solid #ccc' }}>
                   <option value="">Seleccione un sistema de seguridad</option>
                   {opcionesExposicion.map((opt, idx) => (
                     <option key={idx} value={opt}>{opt}</option>
@@ -337,16 +306,16 @@ const RiskTable = () => {
             <td style={{ verticalAlign: 'top' }}>
               <div style={{ marginTop: '20px' }}>
                 <h4 className="red" style={{ display: 'inline-block', marginRight: '10px', fontSize: '14px' }}>Equipo de Protección Personal Sugerido</h4>
-                <select onChange={handleSelectBodyImage} style={{ width: '150px', height: '30px', marginLeft: '10px' }}>
+                <select onChange={handleSelectBodyImage} style={{ width: '100px', height: '30px', marginLeft: '10px' }}>
                   <option value="">Seleccione Imagen del cuerpo</option>
                   {Object.keys(optionImages).map((key) => (
                     <option key={key} value={optionImages[key]}>{key}</option>
                   ))}
                 </select>
-                {selectedBodyImage && <img src={selectedBodyImage} alt="Selected Body Part" style={{ width: '100%', height: 'auto', marginTop: '10px' }} />}
+                {selectedBodyImage && <img src={selectedBodyImage} alt="Selected Body Part" style={{ width: '70%', height: 'auto', marginTop: '10px' }} />}
               </div>
             </td>
-            <td colSpan="8" className="epp-suggested" style={{ verticalAlign: 'top' }}>
+            <td colSpan="20" className="epp-suggested" style={{ verticalAlign: 'top' }}>
               <div style={{ marginTop: '20px' }}>
                 <h4 className="red" style={{ display: 'inline-block', marginRight: '10px', fontSize: '14px' }}>Seleccione EPP</h4>
                 <select onChange={handleAddEPPImage} style={{ width: '150px', height: '30px', marginRight: '20px' }}>
@@ -365,11 +334,6 @@ const RiskTable = () => {
           </tr>
         </tbody>
       </table>
-
-      {/* Botón para guardar la tabla */}
-      <button className="btn btn-success mt-3" onClick={handleGuardarTabla}>
-        Guardar Tabla
-      </button>
     </div>
   );
 };
