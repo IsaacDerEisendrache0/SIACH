@@ -1,11 +1,7 @@
 import React, { useState, useCallback } from 'react';
-import './HerramientasMan.css';
 import html2canvas from 'html2canvas';
-import RiskTables from './RiskTables'; // Ajusta la ruta si tu archivo está en otra ubicación
 
-const RiskTable = () => {
-
-  
+const RiskTable = ({ index }) => {
   const opciones = {
     consecuencia: ['Catástrofe', 'Varias muertes', 'Muerte', 'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'],
     exposicion: ['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente'],
@@ -61,32 +57,28 @@ const RiskTable = () => {
     "Respirador contra gases y vapores",
     "Respirador contra partículas"
   ];
-  
 
   const [selectedPeligros, setSelectedPeligros] = useState([]);
-const [affectedBodyParts, setAffectedBodyParts] = useState([]);
+  const [affectedBodyParts, setAffectedBodyParts] = useState([]);
 
-const handlePeligroChange = (peligro) => {
-  const isSelected = selectedPeligros.includes(peligro);
+  const handlePeligroChange = (peligro) => {
+    const isSelected = selectedPeligros.includes(peligro);
 
-  let newSelectedPeligros = [];
-  let newAffectedParts = [];
+    let newSelectedPeligros = [];
+    let newAffectedParts = [];
 
-  if (isSelected) {
-    // Deseleccionar peligro y eliminar partes del cuerpo asociadas
-    newSelectedPeligros = selectedPeligros.filter(item => item !== peligro);
-    newAffectedParts = affectedBodyParts.filter(part => !partesPorPeligro[peligro].includes(part));
-  } else {
-    // Seleccionar peligro y agregar partes del cuerpo asociadas
-    newSelectedPeligros = [...selectedPeligros, peligro];
-    newAffectedParts = [...new Set([...affectedBodyParts, ...partesPorPeligro[peligro]])];
-  }
+    if (isSelected) {
+      newSelectedPeligros = selectedPeligros.filter(item => item !== peligro);
+      newAffectedParts = affectedBodyParts.filter(part => !partesPorPeligro[peligro].includes(part));
+    } else {
+      newSelectedPeligros = [...selectedPeligros, peligro];
+      newAffectedParts = [...new Set([...affectedBodyParts, ...partesPorPeligro[peligro]])];
+    }
 
-  setSelectedPeligros(newSelectedPeligros);
-  setAffectedBodyParts(newAffectedParts);
-};
+    setSelectedPeligros(newSelectedPeligros);
+    setAffectedBodyParts(newAffectedParts);
+  };
 
-  
   const [state, setState] = useState({
     consequence: 'Lesiones sin baja',
     exposure: 'Ocasionalmente',
@@ -114,9 +106,6 @@ const handlePeligroChange = (peligro) => {
     }
   };
 
-  
-
-  
   const obtenerColorPorRiesgo = (magnitude) => {
     if (magnitude >= 500) return 'red';
     if (magnitude >= 100) return 'orange';
@@ -137,21 +126,16 @@ const handlePeligroChange = (peligro) => {
   const handleExposureChange = (e) => setExposure(parseFloat(e.target.value));
   const handleProbabilityChange = (e) => setProbability(parseFloat(e.target.value));
 
-
   const downloadImage = () => {
-    // Seleccionar el contenedor con el ID 'pdf-content'
-    const input = document.getElementById('pdf-content');
+    const input = document.getElementById(`pdf-content-${index}`);
 
     if (input) {
-      // Configurar html2canvas para capturar el contenido como imagen
       html2canvas(input, { scale: 2, useCORS: true, backgroundColor: '#fff' })
         .then((canvas) => {
           const imgData = canvas.toDataURL('image/png');
           const link = document.createElement('a');
           link.href = imgData;
-          link.download = 'tabla_herramientas_manual.png'; // Nombre de la imagen
-          
-          // Crear el enlace para descargar la imagen
+          link.download = `tabla_herramientas_manual_${index}.png`;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
@@ -164,16 +148,15 @@ const handlePeligroChange = (peligro) => {
     }
   };
 
-
-   const renderOptions = (options) => {
+  const renderOptions = (options) => {
     return options.map((option) => (
       <option key={option} value={option}>{option}</option>
     ));
   };
 
   return (
-    <div >
-      <div id="pdf-content" className="risk-table">
+    <div>
+      <div id={`pdf-content-${index}`} className="risk-table">
       <table className="main-table">
           <thead>
             <tr>
@@ -370,16 +353,8 @@ const handlePeligroChange = (peligro) => {
             </tr>
           </tbody>
         </table>
-        
-        <div>
-          <RiskTables />
-        </div>
       </div>
-
       
-      <button onClick={downloadImage} className="download-button">
-        Descargar Imagen
-      </button>
     </div>
   );
 };

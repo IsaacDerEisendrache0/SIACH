@@ -475,7 +475,7 @@ const handleImageSelect = (image) => {
 
 
               
-          <td className="header right-aligned" colSpan="2" style={{ backgroundColor: 'red' }}>
+          <td className="header right-aligned" colSpan="3" style={{ backgroundColor: 'red' }}>
           <div className="text1">Principales partes del cuerpo expuestas al riesgo:</div>
 
             <div className="body-parts-container">
@@ -617,20 +617,28 @@ const handleImageSelect = (image) => {
                         />
                       </div>
                     )}
-                    {/* Mostrar las imágenes de protección seleccionadas */}
-                    {selectedImages.length > 0 && (
+                    
+                  </div>
+                </div>
+              </td>
+
+              <td colSpan="2" className="right-section right-aligned">
+
+              <div className="text1">EPP Recomendado<br></br></div>
+                {/* Mostrar las imágenes de protección seleccionadas */}
+                {selectedImages.length > 0 && (
                       <div className="hazard-images-right">
                         {selectedImages.map((image, index) => (
                           <img key={index} src={image} alt={`Protección ${index}`} className="protection-image" />
                         ))}
                       </div>
                     )}
-                  </div>
-                </div>
+
+                
               </td>
           </tr>
           <tr>
-          <td colSpan="6" className="right-aligned">
+          <td colSpan="7" className="right-aligned">
           <div className="text1">Descripción del equipo de protección personal</div>
           <div>
                 <textarea id="descripcion-actividad" name="descripcion-actividad" rows="2" cols="50" placeholder="Escribe aquí la descripción de la actividad..."></textarea>

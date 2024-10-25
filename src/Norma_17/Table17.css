@@ -36,7 +36,7 @@
 }
 
 .right-aligned {
-  text-align: left; /* Alinea el texto a la izquierda */
+  text-align: center; /* Alinea el texto a la izquierda */
 }
 
 /* Secciones con flexbox */
@@ -101,9 +101,10 @@
 }
 
 .protection-image-container {
-  width: 100%;
-  max-width: 1200px; /* Ancho máximo */
-  margin: 0 auto; /* Centra el contenedor */
+  display: flex;
+    justify-content: center; /* Centra la imagen horizontalmente */
+    align-items: center; /* Centra la imagen verticalmente */
+    margin: 0 auto;  /* Centra el contenedor */
 }
 
 .protection-image {
@@ -129,8 +130,8 @@
 /* Estilo para imágenes y filas */
 .body-image-left {
   display: flex;
-  justify-content: flex-start; /* Alinea la imagen a la izquierda */
-  margin-right: 20px;
+    justify-content: center; /* Cambiar a centrado horizontal */
+    align-items: center;
 }
 
 .table-container {
@@ -139,9 +140,10 @@
 }
 
 .images-in-row {
-  display: flex; /* Alinea las imágenes en fila */
-  gap: 0; /* Espacio entre imágenes */
-  align-items: center; /* Centra verticalmente las imágenes */
+  display: flex;
+    justify-content: center; /* Centra las imágenes horizontalmente */
+    gap: 10px; /* Espacio entre imágenes */
+    align-items: center; /* Centra verticalmente las imágenes */
 }
 
 /* Estilos generales de tablas */
@@ -394,3 +396,6 @@ button {
 .selectable-image:hover {
   border-color: blue;
 }
+
+
+
