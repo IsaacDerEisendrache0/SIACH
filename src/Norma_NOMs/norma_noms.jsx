@@ -5,7 +5,7 @@ import iconImage from './images/icon.png';
 import exceptImage from './images/excepted_recipients.png'; // Imagen para el paso 9
 import categoriasImage from './images/categorias_presion.png'; // Imagen para el paso 10
 import criogenicosImage from './images/criogenicos.png'; // Imagen para el paso 12
-import generadoresImage from './images/generadores_vapor.png'; // Nueva imagen para el paso 14
+import generadoresImage from './images/generadores_vapor.png'; // Imagen para el paso 14
 
 const NormaNoms = () => {
   const [step, setStep] = useState(1);
@@ -13,6 +13,7 @@ const NormaNoms = () => {
   const [showModal10, setShowModal10] = useState(false);
   const [showModal12, setShowModal12] = useState(false);
   const [showModal14, setShowModal14] = useState(false);
+  const [showTable, setShowTable] = useState(false); // Para mostrar la tabla final
   const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
@@ -90,7 +91,6 @@ const NormaNoms = () => {
         : [...prev[field], value],
     }));
   };
-
   const isStepCompleted = () => {
     switch (step) {
       case 1:
@@ -154,7 +154,7 @@ const NormaNoms = () => {
         return formValues.exposicionRuido !== '';
       case 27:
         return formValues.exposicionFrio !== '';
-      case 28: 
+      case 28:
         return formValues.exposicioncalor !== '';
       case 29:
         return formValues.vibraciones !== '';
@@ -174,10 +174,19 @@ const NormaNoms = () => {
         return formValues.superficieConstruir !== '' && formValues.alturaConstruccion !== '';
       case 37:
         return formValues.materialp !== '';
+      case 38: 
+        // Nueva validación para el paso 38
+        return formValues.nuevoCampo !== ''; // Asegúrate de reemplazar 'nuevoCampo' con el nombre del campo correspondiente
       default:
         return false;
     }
   };
+
+
+  const handleShowTable = () => {
+    setShowTable(!showTable);
+  };
+  
   return (
     <div className="norma-noms-container">
       <div className="container">
@@ -1751,6 +1760,84 @@ const NormaNoms = () => {
           </div>
         </div>
       )}
+
+
+{step === 38 && (
+          <div className="step38">
+            <h3>Menú Final</h3>
+            <button onClick={handleShowTable} className="menu-button">
+              NOMs aplicables por secciones
+            </button>
+
+            {/* Mostrar la tabla de normas cuando se haga clic en el botón */}
+            {showTable && (
+              <div className="normas-table">
+                <table border="1" align="center" cellpadding="0" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Número</th>
+                      <th>Título de la norma</th>
+                      <th>Obligaciones - Patrón</th>
+                      <th>Obligaciones - Trabajadores</th>
+                      <th>Obligaciones - Generales</th>
+                      <th>Disposiciones específicas</th>
+                      <th>Obtener archivo de la NOM</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>NOM-001</td>
+                      <td>Edificios, locales e instalaciones</td>
+                      <td>
+                        <a href="#">5.2</a>, <a href="#">5.3</a>, <a href="#">5.4</a>
+                      </td>
+                      <td>
+                        <a href="#">6.1</a>, <a href="#">6.2</a>, <a href="#">6.3</a>
+                      </td>
+                      <td>
+                        <a href="#">5.1</a>, <a href="#">7.1</a>, <a href="#">7.1.1</a>
+                      </td>
+                      <td>
+                        <a href="#">7.5</a>, <a href="#">7.5.1</a>, <a href="#">7.5.2</a>
+                      </td>
+                      <td>
+                        <a href="/noms/NOM-001.pdf" target="_blank">Descargar</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>NOM-002</td>
+                      <td>Prevención y protección contra incendios</td>
+                      <td>
+                        <a href="#">5</a>, <a href="#">5.1</a>, <a href="#">5.2</a>
+                      </td>
+                      <td>
+                        <a href="#">6.1</a>, <a href="#">6.2</a>
+                      </td>
+                      <td>
+                        <a href="#">7.1</a>, <a href="#">7.2</a>
+                      </td>
+                      <td>
+                        <a href="#">7.6</a>, <a href="#">7.6.1</a>
+                      </td>
+                      <td>
+                        <a href="/noms/NOM-002.pdf" target="_blank">Descargar</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext}>Finalizar</button>
+            </div>
+          </div>
+        )}
+
+
+
+
 
 
 
