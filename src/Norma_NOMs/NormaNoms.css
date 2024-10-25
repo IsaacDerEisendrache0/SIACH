@@ -165,3 +165,52 @@ button:disabled {
   margin: 5px 0;
 }
 
+.norma-noms-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.menu-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #2370c8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.menu-button:hover {
+  background-color: #0d2ee6;
+}
+
+.normas-table {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.normas-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.normas-table th, .normas-table td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.normas-table th {
+  background-color: #0d2ee6;
+  color: white;
+}
+
+.normas-table a {
+  color: #006eff;
+  text-decoration: none;
+}
+
+.normas-table a:hover {
+  text-decoration: underline;
+}
