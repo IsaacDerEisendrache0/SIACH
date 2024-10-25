@@ -136,41 +136,45 @@ const RiskAssessmentTable = () => {
     const hazard = event.target.name;
     const isChecked = event.target.checked;
   
-    // Si se deselecciona, simplemente eliminamos las imágenes y desmarcamos el checkbox
-    if (!isChecked) {
-      setHazards({
-        ...hazards,
-        [hazard]: false, // Actualizamos el estado para desmarcar el checkbox
-      });
+    // Actualizamos el estado del checkbox
+    setHazards({
+      ...hazards,
+      [hazard]: isChecked,
+    });
   
-      // Eliminamos cualquier imagen relacionada con este peligro
-      if (protectionImages[hazard]) {
+    // Lógica específica para "Exposición a Ruido"
+    if (hazard === 'Exposición a Ruido') {
+      if (isChecked && protectionImages[hazard].length > 1) {
+        // Abre el modal solo si hay más de una imagen asociada a "Exposición a Ruido"
+        setSelectedImagesForHazard(protectionImages[hazard]);
+        setHazardWithImages(hazard);
+        setIsImageModalOpen(true);
+      } else if (isChecked && protectionImages[hazard].length === 1) {
+        // Si solo hay una imagen, la selecciona directamente
+        const image = protectionImages[hazard][0];
+        if (!selectedImages.includes(image)) {
+          setSelectedImages((prevSelectedImages) => [...prevSelectedImages, image]);
+        }
+      } else {
+        // Si se deselecciona "Exposición a Ruido", elimina las imágenes asociadas
         setSelectedImages((prevSelectedImages) =>
           prevSelectedImages.filter((image) => !protectionImages[hazard].includes(image))
         );
       }
-  
-      return; // Salimos de la función para no abrir el modal
-    }
-  
-    // Si el peligro tiene más de una imagen y se está seleccionando
-    if (protectionImages[hazard] && protectionImages[hazard].length > 1) {
-      setSelectedImagesForHazard(protectionImages[hazard]); // Guardamos las imágenes de ese peligro
-      setHazardWithImages(hazard); // Guardamos el nombre del peligro que tiene varias imágenes
-      setIsImageModalOpen(true); // Abrimos el modal para seleccionar la imagen
     } else {
-      // Si solo tiene una imagen, seleccionamos/deseleccionamos directamente
-      setHazards({
-        ...hazards,
-        [hazard]: isChecked, // Actualizamos el estado del checkbox
-      });
-  
-      // Si está seleccionado y solo tiene una imagen, la agregamos
-      if (protectionImages[hazard] && protectionImages[hazard].length === 1) {
-        const image = protectionImages[hazard][0]; // La única imagen disponible
-        if (!selectedImages.includes(image)) {
-          setSelectedImages((prevSelectedImages) => [...prevSelectedImages, image]); // Agregar la imagen seleccionada
-        }
+      // Para otros peligros
+      if (isChecked) {
+        // Añade todas las imágenes asociadas directamente al seleccionarlo
+        const newImages = protectionImages[hazard] || [];
+        setSelectedImages((prevSelectedImages) => [
+          ...prevSelectedImages,
+          ...newImages.filter((image) => !prevSelectedImages.includes(image)),
+        ]);
+      } else {
+        // Elimina las imágenes asociadas si se deselecciona
+        setSelectedImages((prevSelectedImages) =>
+          prevSelectedImages.filter((image) => !protectionImages[hazard].includes(image))
+        );
       }
     }
   };
@@ -540,17 +544,23 @@ const handleImageSelect = (image) => {
 
 
 
-            <Modal isOpen={isImageModalOpen} onRequestClose={() => setIsImageModalOpen(false)}>
-              <h2>Selecciona una imagen para {hazardWithImages}</h2>
-              <div className="image-selection-container">
-                {selectedImagesForHazard.map((image, index) => (
-                  <div key={index} className="image-option">
-                    <img src={image} alt={`Opción ${index}`} onClick={() => handleImageSelect(image)} className="selectable-image" />
-                  </div>
-                ))}
-              </div>
-              <button onClick={() => setIsImageModalOpen(false)}>Cerrar</button>
-            </Modal>
+<Modal isOpen={isImageModalOpen} onRequestClose={() => setIsImageModalOpen(false)} className="modal-container">
+  <h3 style={{ fontSize: '16px', marginBottom: '10px' }}>Selecciona una imagen para {hazardWithImages}</h3>
+  <div className="image-selection-container">
+    {selectedImagesForHazard.map((image, index) => (
+      <div key={index} className="image-option">
+        <img
+          src={image}
+          alt={`Opción ${index}`}
+          onClick={() => handleImageSelect(image)}
+        />
+      </div>
+    ))}
+  </div>
+  <div className="button-group">
+    <button onClick={() => setIsImageModalOpen(false)}>Cerrar</button>
+  </div>
+</Modal>
 
             <td colSpan="2" className="right-section right-aligned">
               <div className="text1">Equipo utilizado<br></br></div>

@@ -162,56 +162,60 @@ label {
 
 
 
-/* Contenedor general */
-.risk-options-container {
+/* Contenedor general compactado */
+.compact-risk-options-container {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px; /* Espacio más compacto entre opciones e imágenes */
+  align-items: center; /* Centra el contenido */
 }
 
-/* Contenedor de opciones */
-.risk-options {
+/* Contenedor de opciones compactado */
+.compact-risk-options {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 5px; /* Menor espacio entre opciones */
   justify-content: center;
-  align-items: center;
-  padding: 10px;
+  padding: 5px; /* Reducir padding */
 }
 
-/* Etiquetas de opciones */
-.risk-option-label {
+/* Etiquetas de opciones compactadas */
+.compact-risk-option-label {
   display: flex;
   align-items: center;
-  gap: 5px;
-  font-size: 1.2em;
+  gap: 3px; /* Espacio más pequeño entre checkbox y texto */
+  font-size: 1em; /* Tamaño de fuente más pequeño */
+}
+
+/* Checkbox de opciones compactado */
+.compact-risk-option-checkbox {
+  transform: scale(1.2); /* Tamaño más pequeño */
+  margin: 0; /* Sin margen extra */
+}
+
+/* Texto de opciones compactado */
+.compact-risk-option-text {
   text-align: center;
+  font-size: 0.9em; /* Tamaño de texto más pequeño */
+  margin: 0; /* Sin margen */
 }
 
-/* Checkbox de opciones */
-.risk-option-checkbox {
-  transform: scale(1.5);
-}
-
-/* Texto de opciones */
-.risk-option-text {
-  text-align: center;
-}
-
-/* Contenedor de imágenes */
-.risk-images {
+/* Contenedor de imágenes compactado */
+.compact-risk-images {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 5px; /* Menor espacio entre imágenes */
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 5px; /* Espacio superior más pequeño */
 }
 
-/* Imágenes de riesgos específicos */
-.risk-image {
-  width: 50px;
-  height: 50px;
+/* Imágenes de riesgos específicos compactadas */
+.compact-risk-image {
+  width: 40px; /* Tamaño de imagen más pequeño */
+  height: 40px; /* Tamaño de imagen más pequeño */
   object-fit: cover;
+  border: 1px solid #ccc; /* Borde para mejor visibilidad */
+  border-radius: 4px; /* Bordes redondeados para estética */
 }
