@@ -1,9 +1,9 @@
 .main-table {
   width: 100%;
+  min-width: 1300px; /* Asegúrate de ajustar el valor según tus necesidades */
   border-collapse: collapse;
   text-align: center;
   font-size: 14px;
-  
 }
 
 .main-table th, .main-table td {
