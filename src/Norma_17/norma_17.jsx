@@ -474,8 +474,15 @@ const updateTable = () => {
   }
 };
 
+
+
 const [fecha, setFecha] = useState(new Date().toLocaleDateString()); // Estado para la fecha
 const [tiempoExposicion, setTiempoExposicion] = useState('8hrs');
+
+
+
+
+
 
 
 useEffect(() => {

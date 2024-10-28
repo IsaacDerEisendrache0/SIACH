@@ -152,8 +152,8 @@ const RiskTable = () => {
   const { color, texto, accion, clasificacion } = obtenerClasificacionRiesgo(magnitudRiesgo);
 
   return (
-    <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '10px' }}>
-      <table className="risk-table" style={{ width: '100%' }}>
+    <div  className="risk-table-container">
+      <table className="risk-table">
         <thead>
           <tr>
             <th className="red">Nombre de la maquinaria</th>

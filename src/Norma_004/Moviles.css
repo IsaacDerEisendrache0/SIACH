@@ -12,14 +12,21 @@
 
 .risk-table-container {
   padding: 20px;
-  font-family: var(--font-family);
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  max-width: 1600px; /* Ajusta el ancho máximo según sea necesario */
+  width: 100%;
+  margin: auto;
 }
+
+
 
 .risk-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
 }
+
 
 .risk-table th,
 .risk-table td {
