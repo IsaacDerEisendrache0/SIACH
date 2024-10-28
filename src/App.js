@@ -1,5 +1,3 @@
-// App.js
-
 import React, { useState, useEffect } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -9,8 +7,7 @@ import Norma04 from './Norma_004/norma_004';
 import Norma030 from './Norma_030/norma_030';
 import NormaNOMs from './Norma_NOMs/norma_noms';
 import Login from './componentes/Loginlogin';
-
-
+import SavedTables from './Norma_17/SavedTables';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 function Navigation() {
@@ -29,7 +26,9 @@ function Navigation() {
   return (
     <div className="navbar">
       <button className="btn btn-primary" onClick={() => navigate('/')}>Inicio</button>
-
+      <button className="btn btn-primary" onClick={() => navigate('/saved-tables')}>
+        Ver Tablas Guardadas
+      </button>
       <button className="btn btn-primary" onClick={handleLogout}>Cerrar sesión</button>
     </div>
   );
@@ -60,9 +59,9 @@ function HomePage() {
         </div>
       </div>
 
-      {selectedNorma === 'N-017' && <div className="mt-3"><h3>N-017 Seleccionada:</h3><Norma17 /></div>}
-      {selectedNorma === 'Evaluación de Riesgos' && <div className="mt-3"><h3>N-004 Seleccionada:</h3><Norma04 /></div>}
-      {selectedNorma === 'N-030' && <div className="mt-3"><h3>N-030 Seleccionada:</h3><Norma030 /></div>}
+      {selectedNorma === 'N-017' && <div className="mt-3"><Norma17 /></div>}
+      {selectedNorma === 'Evaluación de Riesgos' && <div className="mt-3"><Norma04 /></div>}
+      {selectedNorma === 'N-030' && <div className="mt-3"><Norma030 /></div>}
       {selectedNorma === 'Asistente NOMs' && <div className="mt-3"><NormaNOMs /></div>}
     </div>
   );
@@ -78,10 +77,14 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsAuthenticated(true);
-        navigate('/');
+        if (window.location.pathname === '/login') {
+          navigate('/');
+        }
       } else {
         setIsAuthenticated(false);
-        navigate('/login');
+        if (window.location.pathname !== '/login') {
+          navigate('/login');
+        }
       }
       setLoading(false);
     });
@@ -99,7 +102,11 @@ function App() {
         {isAuthenticated && <Navigation />}
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={isAuthenticated ? <HomePage /> : <Login />} />
+          <Route path="/norma_17" element={<Norma17 />} />
+          <Route path="/norma_004" element={<Norma04 />} />
+          <Route path="/norma_030" element={<Norma030 />} />
+          <Route path="/saved-tables" element={<SavedTables />} />
+          <Route path="/" element={<HomePage />} /> {/* Mostrar el selector de normas en la página de inicio */}
         </Routes>
       </header>
     </div>

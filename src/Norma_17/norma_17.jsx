@@ -63,6 +63,8 @@ const areas = [
 
 
 const RiskAssessmentTable = () => {
+  const [isEditing, setIsEditing] = useState(false); // Estado para modo de edición
+
   const [hazards, setHazards] = useState({
     'Caídas de Altura': false,
     'Exposición a Temperaturas': false,
@@ -118,7 +120,12 @@ const RiskAssessmentTable = () => {
   const [areaSeleccionada, setAreaSeleccionada] = useState(areas[0].nombre);
   const [puestoSeleccionado, setPuestoSeleccionado] = useState('');
   const [puestos, setPuestos] = useState(areas[0].puestos);
+  const [descripcionActividad, setDescripcionActividad] = useState(''); // Descripción de la actividad
   
+
+  
+  
+
 
   const handleAreaChange = (e) => {
     const selectedArea = areas.find((area) => area.nombre === e.target.value);
@@ -396,6 +403,93 @@ const handleImageSelect = (image) => {
 
 
 
+const saveTable = () => {
+  const tableData = {
+    areaSeleccionada,
+    puestoSeleccionado,
+    hazards,
+    consequence,
+    exposure,
+    probability,
+    risk: calculateRisk(),
+    selectedImages,
+    descripcionActividad,
+    selectedOptionEquipoUtilizado, // Guardar la selección del equipo utilizado
+    selectedOptionProteccionSugerida, // Guardar la selección del equipo de protección
+    norma: 'N-017',
+    fecha: new Date().toLocaleDateString(),
+  };
+
+  const savedTables = JSON.parse(localStorage.getItem('savedTables')) || [];
+  savedTables.push(tableData);
+  localStorage.setItem('savedTables', JSON.stringify(savedTables));
+  alert('Tabla guardada con éxito.');
+};
+
+
+const updateTable = () => {
+  const savedTables = JSON.parse(localStorage.getItem('savedTables')) || [];
+
+  // Buscar el índice de la tabla en edición por la fecha (o cualquier identificador único que tengas)
+  const index = savedTables.findIndex((table) => table.fecha === fecha);
+
+  if (index !== -1) {
+    // Crear el objeto actualizado de la tabla
+    const updatedTable = {
+      areaSeleccionada,
+      puestoSeleccionado,
+      hazards,
+      consequence,
+      exposure,
+      probability,
+      risk: calculateRisk(),
+      selectedImages,
+      descripcionActividad,
+      selectedOptionEquipoUtilizado,
+      selectedOptionProteccionSugerida,
+      norma: 'N-017',
+      fecha, // Mantener la misma fecha como identificador
+    };
+
+    // Reemplazar la tabla en el arreglo
+    savedTables[index] = updatedTable;
+    localStorage.setItem('savedTables', JSON.stringify(savedTables)); // Guardar en localStorage
+
+    alert('Tabla actualizada con éxito.');
+  } else {
+    alert('No se pudo encontrar la tabla para actualizar.');
+  }
+};
+
+
+const [fecha, setFecha] = useState(new Date().toLocaleDateString()); // Estado para la fecha
+
+
+
+
+
+
+useEffect(() => {
+  const tableToEdit = JSON.parse(localStorage.getItem('tableToEdit'));
+  if (tableToEdit) {
+    setAreaSeleccionada(tableToEdit.areaSeleccionada);
+    setPuestoSeleccionado(tableToEdit.puestoSeleccionado);
+    setHazards(tableToEdit.hazards);
+    setConsequence(tableToEdit.consequence);
+    setExposure(tableToEdit.exposure);
+    setProbability(tableToEdit.probability);
+    setSelectedImages(tableToEdit.selectedImages || []);
+    setDescripcionActividad(tableToEdit.descripcionActividad || '');
+    setSelectedOptionEquipoUtilizado(tableToEdit.selectedOptionEquipoUtilizado || '');
+    setSelectedOptionProteccionSugerida(tableToEdit.selectedOptionProteccionSugerida || '');
+    setFecha(tableToEdit.fecha); // Establecer la fecha de la tabla en edición
+
+    setIsEditing(true);
+    localStorage.removeItem('tableToEdit');
+  }
+}, []);
+
+
 
 
 
@@ -431,16 +525,19 @@ const handleImageSelect = (image) => {
   </div>
 
   {/* Área de descripción de actividad */}
-  <div>
-    <label htmlFor="descripcion-actividad">Descripción de la actividad:</label>
-    <textarea
-      id="descripcion-actividad"
-      name="descripcion-actividad"
-      rows="2"
-      cols="50"
-      placeholder="Escribe aquí la descripción de la actividad..."
-    ></textarea>
-  </div>
+      <div>
+        <label htmlFor="descripcion-actividad">Descripción de la actividad:</label>
+        <textarea
+          id="descripcion-actividad"
+          name="descripcion-actividad"
+          rows="2"
+          cols="50"
+          placeholder="Escribe aquí la descripción de la actividad..."
+          value={descripcionActividad} // Vincular al estado
+          onChange={(e) => setDescripcionActividad(e.target.value)} // Actualizar estado al cambiar
+        ></textarea>
+      </div>
+
 </td>
 
 
@@ -720,6 +817,18 @@ const handleImageSelect = (image) => {
       <button onClick={downloadImage} className="download-button">
         Descargar PDF
       </button>
+
+      
+
+
+      <button onClick={isEditing ? updateTable : saveTable} className="save-button">
+        {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
+      </button>
+
+
+
+
+
     </div>
   );
 };
