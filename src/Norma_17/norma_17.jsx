@@ -414,26 +414,37 @@ const saveTable = () => {
     risk: calculateRisk(),
     selectedImages,
     descripcionActividad,
-    selectedOptionEquipoUtilizado, // Guardar la selección del equipo utilizado
-    selectedOptionProteccionSugerida, // Guardar la selección del equipo de protección
+    selectedOptionEquipoUtilizado,
+    selectedOptionProteccionSugerida,
+    tiempoExposicion,
     norma: 'N-017',
     fecha: new Date().toLocaleDateString(),
+    hora: new Date().toLocaleTimeString(), // Agregar hora de creación única
   };
 
-  const savedTables = JSON.parse(localStorage.getItem('savedTables')) || [];
-  savedTables.push(tableData);
+  let savedTables = JSON.parse(localStorage.getItem('savedTables')) || [];
+  
+  // Insertar la nueva tabla al inicio del array
+  savedTables = [tableData, ...savedTables];
+
   localStorage.setItem('savedTables', JSON.stringify(savedTables));
   alert('Tabla guardada con éxito.');
 };
 
 
+
+
+
 const updateTable = () => {
   const savedTables = JSON.parse(localStorage.getItem('savedTables')) || [];
 
-  // Buscar el índice de la tabla en edición por la fecha (o cualquier identificador único que tengas)
+  // Encontrar el índice de la tabla en edición por la fecha
   const index = savedTables.findIndex((table) => table.fecha === fecha);
 
   if (index !== -1) {
+    // Obtener la hora de creación original
+    const originalHora = savedTables[index].hora || new Date().toLocaleTimeString();
+
     // Crear el objeto actualizado de la tabla
     const updatedTable = {
       areaSeleccionada,
@@ -447,8 +458,10 @@ const updateTable = () => {
       descripcionActividad,
       selectedOptionEquipoUtilizado,
       selectedOptionProteccionSugerida,
+      tiempoExposicion,
       norma: 'N-017',
       fecha, // Mantener la misma fecha como identificador
+      hora: originalHora, // Mantener la hora de creación original
     };
 
     // Reemplazar la tabla en el arreglo
@@ -461,12 +474,8 @@ const updateTable = () => {
   }
 };
 
-
 const [fecha, setFecha] = useState(new Date().toLocaleDateString()); // Estado para la fecha
-
-
-
-
+const [tiempoExposicion, setTiempoExposicion] = useState('8hrs');
 
 
 useEffect(() => {
@@ -482,12 +491,14 @@ useEffect(() => {
     setDescripcionActividad(tableToEdit.descripcionActividad || '');
     setSelectedOptionEquipoUtilizado(tableToEdit.selectedOptionEquipoUtilizado || '');
     setSelectedOptionProteccionSugerida(tableToEdit.selectedOptionProteccionSugerida || '');
-    setFecha(tableToEdit.fecha); // Establecer la fecha de la tabla en edición
+    setTiempoExposicion(tableToEdit.tiempoExposicion || '8hrs'); // Cargar tiempo de exposición
+    setFecha(tableToEdit.fecha);
 
     setIsEditing(true);
     localStorage.removeItem('tableToEdit');
   }
 }, []);
+
 
 
 
@@ -607,7 +618,22 @@ useEffect(() => {
                 </select>
               </div>
               <div className="label-action">Fecha de inspección: <input type="date" defaultValue="2023-09-13" /></div>
-              <div >Tiempo de exposición: <input type="text" defaultValue="8hrs" className="small-input" /></div>
+              <div>
+                  <label htmlFor="tiempoExposicion">Tiempo de exposición:</label>
+                  <select
+                    id="tiempoExposicion"
+                    className="small-input"
+                    value={tiempoExposicion}
+                    onChange={(e) => setTiempoExposicion(e.target.value)}
+                  >
+                    <option value="2hrs">2 horas</option>
+                    <option value="4hrs">4 horas</option>
+                    <option value="6hrs">6 horas</option>
+                    <option value="8hrs">8 horas</option>
+                    <option value="10hrs">10 horas</option>
+                    <option value="12hrs">12 horas</option>
+                  </select>
+                </div>
             </div>
           </td>
           
