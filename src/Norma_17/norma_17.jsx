@@ -2,6 +2,9 @@ import html2canvas from 'html2canvas';
 import './Table17.css';
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
+import { collection, addDoc, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { db } from '../firebase'; // Importar la configuración de Firebase
+
 
 
 
@@ -403,7 +406,7 @@ const handleImageSelect = (image) => {
 
 
 
-const saveTable = () => {
+const saveTable = async () => {
   const tableData = {
     areaSeleccionada,
     puestoSeleccionado,
@@ -419,65 +422,56 @@ const saveTable = () => {
     tiempoExposicion,
     norma: 'N-017',
     fecha: new Date().toLocaleDateString(),
-    hora: new Date().toLocaleTimeString(), // Agregar hora de creación única
+    hora: new Date().toLocaleTimeString(),
   };
 
-  let savedTables = JSON.parse(localStorage.getItem('savedTables')) || [];
-  
-  // Insertar la nueva tabla al inicio del array
-  savedTables = [tableData, ...savedTables];
-
-  localStorage.setItem('savedTables', JSON.stringify(savedTables));
-  alert('Tabla guardada con éxito.');
+  try {
+    await addDoc(collection(db, 'tablas'), tableData); // Guardar en Firestore
+    alert('Tabla guardada con éxito en Firestore.');
+  } catch (error) {
+    console.error('Error al guardar en Firestore:', error);
+    alert('Error al guardar la tabla.');
+  }
 };
 
+const updateTable = async () => {
+  const updatedTable = {
+    areaSeleccionada,
+    puestoSeleccionado,
+    hazards,
+    consequence,
+    exposure,
+    probability,
+    risk: calculateRisk(),
+    selectedImages,
+    descripcionActividad,
+    selectedOptionEquipoUtilizado,
+    selectedOptionProteccionSugerida,
+    tiempoExposicion,
+    norma: 'N-017',
+    fecha, // Mantener la misma fecha
+    hora, // Mantener la misma hora de creación
+  };
 
+  try {
+    if (!tableId) {
+      throw new Error('No se encontró el ID de la tabla para actualizar.');
+    }
 
-
-
-const updateTable = () => {
-  const savedTables = JSON.parse(localStorage.getItem('savedTables')) || [];
-
-  // Encontrar el índice de la tabla en edición por la fecha
-  const index = savedTables.findIndex((table) => table.fecha === fecha);
-
-  if (index !== -1) {
-    // Obtener la hora de creación original
-    const originalHora = savedTables[index].hora || new Date().toLocaleTimeString();
-
-    // Crear el objeto actualizado de la tabla
-    const updatedTable = {
-      areaSeleccionada,
-      puestoSeleccionado,
-      hazards,
-      consequence,
-      exposure,
-      probability,
-      risk: calculateRisk(),
-      selectedImages,
-      descripcionActividad,
-      selectedOptionEquipoUtilizado,
-      selectedOptionProteccionSugerida,
-      tiempoExposicion,
-      norma: 'N-017',
-      fecha, // Mantener la misma fecha como identificador
-      hora: originalHora, // Mantener la hora de creación original
-    };
-
-    // Reemplazar la tabla en el arreglo
-    savedTables[index] = updatedTable;
-    localStorage.setItem('savedTables', JSON.stringify(savedTables)); // Guardar en localStorage
-
-    alert('Tabla actualizada con éxito.');
-  } else {
-    alert('No se pudo encontrar la tabla para actualizar.');
+    const docRef = doc(db, 'tablas', tableId);
+    await updateDoc(docRef, updatedTable); // Actualizar en Firestore
+    alert('Tabla actualizada con éxito en Firestore.');
+  } catch (error) {
+    console.error('Error al actualizar en Firestore:', error);
+    alert('Error al actualizar la tabla.');
   }
 };
 
 
-
 const [fecha, setFecha] = useState(new Date().toLocaleDateString()); // Estado para la fecha
 const [tiempoExposicion, setTiempoExposicion] = useState('8hrs');
+const [hora, setHora] = useState(new Date().toLocaleTimeString());
+const [tableId, setTableId] = useState(null);
 
 
 
@@ -498,9 +492,10 @@ useEffect(() => {
     setDescripcionActividad(tableToEdit.descripcionActividad || '');
     setSelectedOptionEquipoUtilizado(tableToEdit.selectedOptionEquipoUtilizado || '');
     setSelectedOptionProteccionSugerida(tableToEdit.selectedOptionProteccionSugerida || '');
-    setTiempoExposicion(tableToEdit.tiempoExposicion || '8hrs'); // Cargar tiempo de exposición
-    setFecha(tableToEdit.fecha);
-
+    setTiempoExposicion(tableToEdit.tiempoExposicion || '');
+    setFecha(tableToEdit.fecha); // Establecer la fecha de la tabla en edición
+    setHora(tableToEdit.hora); // Establecer la hora de creación
+    setTableId(tableToEdit.id); // Guardar el ID del documento para actualizar
     setIsEditing(true);
     localStorage.removeItem('tableToEdit');
   }
