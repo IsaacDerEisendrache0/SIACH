@@ -399,3 +399,78 @@ button {
 
 
 
+/* Estilos para el componente de EPP */
+.epp-component-right-section {
+  height: 300px;
+  position: relative;
+}
+
+/* Título con fondo amarillo */
+.epp-component-title {
+  background-color: yellow;
+  color: black;
+  font-weight: bold;
+  text-align: center;
+  margin: 0; /* Sin margen */
+  padding: 5px;
+  position: absolute;
+  top: 0; /* Asegura que el título esté en la parte superior */
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1; /* Asegura que el título esté sobre las imágenes */
+}
+
+/* Contenedor para las imágenes de EPP */
+.epp-component-hazard-images {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  max-height: 400px;
+  overflow-y: auto;
+  position: absolute;
+  top: 30px; /* Ajustar debajo del título */
+  width: 100%;
+}
+
+/* Estilo para las imágenes de EPP */
+.epp-component-image {
+  max-height: 100px;
+  max-width: 60px;
+  margin: 5px;
+}
+
+/* Mensaje cuando no hay EPP seleccionado */
+.epp-component-no-epp {
+  font-style: italic;
+  color: #666;
+  margin-top: 10px;
+}
+
+/* Título para la descripción */
+.epp-component-description-title {
+  background-color: yellow;
+  color: black;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  padding: 5px;
+  position: absolute;
+  bottom: 200px;
+  width: 97%;
+  box-sizing: border-box;
+}
+
+/* Textarea de la descripción */
+.epp-component-description-textarea {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+}
+
+.epp-component-description-textarea textarea {
+  width: 99%;
+  box-sizing: border-box;
+  resize: none; /* Evitar que el usuario cambie el tamaño del textarea */
+}

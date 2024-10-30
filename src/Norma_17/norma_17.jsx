@@ -501,6 +501,12 @@ useEffect(() => {
   }
 }, []);
 
+const handleImageRemove = (imageToRemove) => {
+  setSelectedImages((prevSelectedImages) =>
+    prevSelectedImages.filter((image) => image !== imageToRemove)
+  );
+};
+
 
 
 
@@ -747,29 +753,49 @@ useEffect(() => {
                 </div>
               </td>
 
-              <td colSpan="2" className="right-section right-aligned">
+              <td colSpan="2" className="epp-component-right-section">
+  {/* Título de EPP Recomendado */}
+  <div className="epp-component-title">EPP Recomendado</div>
 
-              <div className="text1">EPP Recomendado<br></br></div>
-                {/* Mostrar las imágenes de protección seleccionadas */}
-                {selectedImages.length > 0 && (
-                      <div className="hazard-images-right">
-                        {selectedImages.map((image, index) => (
-                          <img key={index} src={image} alt={`Protección ${index}`} className="protection-image" />
-                        ))}
-                      </div>
-                    )}
+  {/* Contenedor para las imágenes de EPP */}
+  <div className="epp-component-hazard-images">
+    {selectedImages.length > 0 ? (
+      selectedImages.map((image, index) => (
+        <img
+          key={index}
+          src={image}
+          alt={`Protección ${index}`}
+          className="epp-component-image"
+          onClick={() => handleImageRemove(image)}
+        />
+      ))
+    ) : (
+      <div className="epp-component-no-epp">No hay EPP seleccionado</div>
+    )}
+  </div>
 
-                
-              </td>
+  {/* Título de la descripción del EPP */}
+  <div className="epp-component-description-title">
+    Descripción del equipo de protección personal
+  </div>
+
+  {/* Textarea para la descripción */}
+  <div className="epp-component-description-textarea">
+    <textarea
+      id="descripcion-actividad"
+      name="descripcion-actividad"
+      rows="8"
+      cols="50"
+      placeholder="Escribe aquí la descripción de la actividad..."
+    ></textarea>
+  </div>
+</td>
+
+
+
+              
           </tr>
-          <tr>
-          <td colSpan="7" className="right-aligned">
-          <div className="text1">Descripción del equipo de protección personal</div>
-          <div>
-                <textarea id="descripcion-actividad" name="descripcion-actividad" rows="2" cols="50" placeholder="Escribe aquí la descripción de la actividad..."></textarea>
-              </div>
-            </td>
-          </tr>
+          
           <tr>
             <td colSpan="5" className="right-aligned">
               <div className="text1">Evaluación de riesgo de trabajo</div>
