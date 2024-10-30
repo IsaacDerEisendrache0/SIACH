@@ -1,23 +1,25 @@
-/*TABLA DE MAQUINARIA Y EQUIPO*/
+/* TABLA DE MAQUINARIA Y EQUIPO */
 .risk-table {
   width: 100%;
   display: flex;
   flex-direction: column;
-  font-size: 12px; /* Ajusta el tamaño de fuente si es necesario */
+  font-size: 10px; /* Ajusta el tamaño de fuente para hacer la tabla más pequeña */
   border-collapse: collapse;
+  box-sizing: border-box; /* Asegura que padding y border no cambien el tamaño */
 }
 
 .main-table {
-  width: 100%;
+  width: 60%; /* Reducir aún más el ancho de la tabla */
   border-collapse: collapse;
-  margin-bottom: 20px;
+  margin: 0 auto;
+  box-sizing: border-box; /* Asegura que padding y border no cambien el tamaño */
 }
 
 .main-table th, .main-table td {
   border: 1px solid #ff0000; /* Borde rojo */
-  padding: 8px;
+  padding: 4px; /* Reducir el padding para hacer la tabla más compacta */
   text-align: left;
-  border: none; /* Elimina bordes de la tabla principal */
+  box-sizing: border-box; /* Asegura que padding y border no cambien el tamaño */
 }
 
 .main-table th {
@@ -26,15 +28,13 @@
 }
 
 .compact-table {
-  width: 100%;
-  margin-bottom: 100px;
-  margin-top: 0%;
+  width: 100%; /* Asegura que la tabla compacta ocupe todo el ancho disponible */
+  margin-bottom: 20px;
+  box-sizing: border-box; /* Asegura que padding y border no cambien el tamaño */
 }
 
-
-
 .compact-table th, .compact-table td {
-  padding: 5px;
+  padding: 4px; /* Reducir el padding para hacer la tabla más compacta */
   text-align: left;
   border: none; /* Elimina el borde */
 }
@@ -54,9 +54,9 @@ textarea {
 }
 
 .image-preview {
-  width: 100%;
-  height: auto;
-  max-width: 300px;
+  width: 80px; /* Tamaño ajustado para que no sobresalga del div */
+  height: 80px;
+  object-fit: cover;
   margin-top: 10px;
 }
 
@@ -69,6 +69,7 @@ textarea {
 .horizontal-sections {
   display: flex;
   justify-content: space-between;
+  width: 100%; /* Asegurar que las secciones ocupen todo el ancho disponible */
 }
 
 /* Cada sección ocupa el 50% del ancho */
@@ -78,6 +79,8 @@ textarea {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%; /* Asegura que la sección ocupe todo el ancho disponible */
+  box-sizing: border-box;
 }
 
 .image-observations-container {
@@ -90,6 +93,9 @@ textarea {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .observations-section {
@@ -113,7 +119,7 @@ textarea {
 .risk-magnitude-bar {
   width: 100%;
   text-align: center;
-  padding: 10px;
+  padding: 6px; /* Reducir el padding para hacer la barra más compacta */
   color: white;
   font-weight: bold;
   border-radius: 5px;
@@ -123,12 +129,12 @@ textarea {
 .download-button {
   background-color: #ff0000; /* Rojo */
   color: white;
-  padding: 10px 20px;
+  padding: 6px 12px; /* Reducir el padding del botón */
   margin-top: 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px; /* Reducir el tamaño de fuente del botón */
 }
 
 .download-button:hover {
@@ -157,17 +163,15 @@ label {
   flex: 1 1 calc(20% - 20px);
   text-align: center;
   margin-bottom: 10px;
-  max-width: 150px;
+  max-width: 100px; /* Reducir el tamaño máximo de la etiqueta */
 }
-
-
 
 /* Contenedor general compactado */
 .compact-risk-options-container {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Espacio más compacto entre opciones e imágenes */
+  gap: 8px; /* Espacio más compacto entre opciones e imágenes */
   align-items: center; /* Centra el contenido */
 }
 
@@ -175,29 +179,29 @@ label {
 .compact-risk-options {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px; /* Menor espacio entre opciones */
+  gap: 4px; /* Menor espacio entre opciones */
   justify-content: center;
-  padding: 5px; /* Reducir padding */
+  padding: 4px; /* Reducir padding */
 }
 
 /* Etiquetas de opciones compactadas */
 .compact-risk-option-label {
   display: flex;
   align-items: center;
-  gap: 3px; /* Espacio más pequeño entre checkbox y texto */
-  font-size: 1em; /* Tamaño de fuente más pequeño */
+  gap: 2px; /* Espacio más pequeño entre checkbox y texto */
+  font-size: 0.8em; /* Tamaño de fuente más pequeño */
 }
 
 /* Checkbox de opciones compactado */
 .compact-risk-option-checkbox {
-  transform: scale(1.2); /* Tamaño más pequeño */
+  transform: scale(1.0); /* Tamaño más pequeño */
   margin: 0; /* Sin margen extra */
 }
 
 /* Texto de opciones compactado */
 .compact-risk-option-text {
   text-align: center;
-  font-size: 0.9em; /* Tamaño de texto más pequeño */
+  font-size: 0.8em; /* Tamaño de texto más pequeño */
   margin: 0; /* Sin margen */
 }
 
@@ -206,15 +210,15 @@ label {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  gap: 5px; /* Menor espacio entre imágenes */
+  gap: 4px; /* Menor espacio entre imágenes */
   justify-content: center;
   margin-top: 5px; /* Espacio superior más pequeño */
 }
 
 /* Imágenes de riesgos específicos compactadas */
 .compact-risk-image {
-  width: 40px; /* Tamaño de imagen más pequeño */
-  height: 40px; /* Tamaño de imagen más pequeño */
+  width: 30px; /* Tamaño de imagen más pequeño */
+  height: 30px; /* Tamaño de imagen más pequeño */
   object-fit: cover;
   border: 1px solid #ccc; /* Borde para mejor visibilidad */
   border-radius: 4px; /* Bordes redondeados para estética */

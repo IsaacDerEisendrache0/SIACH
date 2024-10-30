@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Moviles.css';
+import html2canvas from 'html2canvas';
+import { addDoc, updateDoc, doc, collection } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const RiskTable = () => {
   // Estados para capturar los datos del formulario
@@ -17,6 +20,26 @@ const RiskTable = () => {
   const [image, setImage] = useState(null);
   const [selectedBodyImage, setSelectedBodyImage] = useState(null);
   const [selectedEPPImages, setSelectedEPPImages] = useState(['/images/3.png', '/images/4.png', '/images/6.png']);
+  const [isEditing, setIsEditing] = useState(false);
+  const [tableId, setTableId] = useState(null);
+
+  useEffect(() => {
+    const tableToEdit = JSON.parse(localStorage.getItem('tableToEdit'));
+    if (tableToEdit) {
+      setArea(tableToEdit.areaSeleccionada || '');
+      setConsequence(tableToEdit.consequence || 'Lesiones sin baja');
+      setExposure(tableToEdit.exposure || 'Ocasionalmente');
+      setProbability(tableToEdit.probability || 'Coincidencia extremadamente remota pero concebible');
+      setSelectedEPPImages(tableToEdit.selectedImages || []);
+      setDescripcion(tableToEdit.descripcionActividad || '');
+      setPoe(tableToEdit.selectedOptionEquipoUtilizado || '');
+      setTiempoExposicion(tableToEdit.tiempoExposicion || '');
+      setFechaInspeccion(tableToEdit.fecha || '');
+      setTableId(tableToEdit.id || null);
+      setIsEditing(true);
+      localStorage.removeItem('tableToEdit');
+    }
+  }, []);
 
   const optionImages = {
     option1: '/body/lvl1_head.png',
@@ -48,6 +71,42 @@ const RiskTable = () => {
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
     }
+  };
+
+  const saveTable = async (tableData, tableId = null) => {
+    try {
+      if (tableId) {
+        const docRef = doc(db, 'tablas', tableId);
+        await updateDoc(docRef, tableData); // Actualizar en Firestore
+        alert('Tabla actualizada con éxito en Firestore.');
+      } else {
+        await addDoc(collection(db, 'tablas'), tableData); // Guardar en Firestore
+        alert('Tabla guardada con éxito en Firestore.');
+      }
+    } catch (error) {
+      console.error('Error al guardar en Firestore:', error);
+      alert('Error al guardar la tabla.');
+    }
+  };
+
+  const downloadImage = () => {
+    const input = document.querySelector('.risk-table-container');
+
+    // Aumentamos la escala para una mejor calidad de imagen
+    html2canvas(input, { scale: 2, useCORS: true, backgroundColor: null }).then((canvas) => {
+      // Convertimos el canvas a imagen (formato PNG)
+      const imgData = canvas.toDataURL('image/png');
+
+      // Creamos un enlace para la descarga
+      const link = document.createElement('a');
+      link.href = imgData;
+      link.download = 'tabla_herramientas_manual.png'; // Nombre del archivo
+
+      // Simulamos un clic en el enlace para descargar la imagen
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
   };
 
   // Agregar imágenes de EPP seleccionadas
@@ -149,10 +208,32 @@ const RiskTable = () => {
   };
 
   const magnitudRiesgo = calcularMagnitudRiesgo();
-  const { color, texto, accion, clasificacion } = obtenerClasificacionRiesgo(magnitudRiesgo);
+  const { color, accion, clasificacion } = obtenerClasificacionRiesgo(magnitudRiesgo);
+
+  const saveTableData = () => {
+    const tableData = {
+      nombreTabla: 'Tabla Moviles',
+      areaSeleccionada: area,
+      hazards: [], // Definir adecuadamente los hazards si es necesario
+      consequence,
+      exposure,
+      probability,
+      risk: calcularMagnitudRiesgo(),
+      selectedImages: selectedEPPImages,
+      descripcionActividad: descripcion,
+      selectedOptionEquipoUtilizado: poe,
+      selectedOptionProteccionSugerida: selectedBodyImage,
+      tiempoExposicion,
+      norma: 'N-004',
+      fecha: fechaInspeccion || new Date().toLocaleDateString(),
+      hora: new Date().toLocaleTimeString(),
+    };
+
+    saveTable(tableData, isEditing ? tableId : null);
+  };
 
   return (
-    <div  className="risk-table-container">
+    <div className="risk-table-container">
       <table className="risk-table">
         <thead>
           <tr>
@@ -239,6 +320,10 @@ const RiskTable = () => {
               ))}
             </td>
             <td className="safety-info" colSpan="3">
+              
+
+              
+
               <h4 className="red" style={{ fontSize: '14px' }}>Sistemas de seguridad</h4>
               {[...Array(7)].map((_, index) => (
                 <select key={index} style={{ padding: '5px', fontSize: '12px', borderRadius: '5px', border: '1px solid #ccc', width: '100%', marginBottom: '5px' }}>
@@ -340,6 +425,14 @@ const RiskTable = () => {
           </tr>
         </tbody>
       </table>
+      <div style={{ marginTop: '20px' }}>
+        <button onClick={downloadImage} className="download-button">
+          Descargar PDF
+        </button>
+        <button onClick={saveTableData} className="save-button">
+          {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
+        </button>
+      </div>
     </div>
   );
 };

@@ -2,6 +2,8 @@ import React, { useState, useCallback } from 'react';
 import './HerramientasMan.css';
 import html2canvas from 'html2canvas';
 import RiskTables from './RiskTables'; // Ajusta la ruta si tu archivo está en otra ubicación
+import { collection, addDoc, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { db } from '../firebase'; // Importar la configuración de Firebase
 
 const RiskTable = () => {
 

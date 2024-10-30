@@ -80,9 +80,6 @@ const RiskTable = () => {
   const [selectedEpp, setSelectedEpp] = useState(null); // Permitir solo una selección
   const eppOptionsForNoise = ['/images/19.png', '/images/5.png'];
 
-
-  
-
   const handlePeligroChange = (index, valor) => {
     const nuevosPeligros = [...peligros];
     nuevosPeligros[index].siNo = valor;
@@ -124,7 +121,6 @@ const RiskTable = () => {
     }
   };
 
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
   
@@ -141,13 +137,10 @@ const RiskTable = () => {
       setErrorMessage('Por favor, selecciona un archivo de imagen válido.');
     }
   };
-  
-
 
   const handleEppSelection = (epp) => {
     setSelectedEpp(epp); // Permitir seleccionar solo un EPP para "Exposición a Ruido"
   };
-
 
   const handleConfirmEpp = () => {
     // Filtrar cualquier imagen previa de "Exposición a Ruido"
@@ -160,7 +153,6 @@ const RiskTable = () => {
 
     setShowEppModal(false); // Cerrar el modal después de confirmar
   };
-
 
   const handleSpecificRiskImageChange = (imageName) => {
     const updatedSelection = [...selectedSpecificRiskImages];
@@ -243,280 +235,252 @@ const RiskTable = () => {
   };
 
   return (
-    <div>
-      <div id="pdf-content" className="risk-table">
-        <table className="main-table">
-          <thead>
-            <tr>
-              <th colSpan="4">Nombre de la maquinaria o equipo:</th>
-              <th colSpan="2">
-                <input 
-                  type="text" 
-                  value={maquinariaNombre} 
-                  onChange={(e) => setMaquinariaNombre(e.target.value)} 
-                  placeholder="Ingrese el nombre de la maquinaria"
-                  style={{ fontSize: '1.2em', width: '100%' }}
-                />
-              </th>
-            </tr>
-            <tr>
-              <th colSpan="4">Descripción de la maquinaria o equipo:</th>
-              <th colSpan="2">
-                <textarea
-                  value={maquinariaDescripcion}
-                  onChange={(e) => setMaquinariaDescripcion(e.target.value)}
-                  placeholder="Describa la maquinaria o equipo"
-                  rows="2"
-                  style={{ fontSize: '1.2em', width: '100%' }}
-                />
-              </th>
-            </tr>
-            <tr>
-              <th colSpan="4">Energía utilizada:</th>
-              <th colSpan="2">
-                <select 
-                  value={energiaUtilizada} 
-                  onChange={(e) => setEnergiaUtilizada(e.target.value)}
-                  style={{ fontSize: '1.2em', width: '100%' }}
-                >
-                  {opcionesEnergia.map(opcion => (
-                    <option key={opcion} value={opcion}>{opcion}</option>
-                  ))}
-                </select>
-              </th>
-            </tr>
-            <tr>
-              <th colSpan="3">Localización esquemática de los riesgos en la maquinaria y/o equipo</th>
-              <th style={{ backgroundColor: 'red' }}>POE:</th>
-              
-              <th>Tiempo de exposición:</th>
-              <th colSpan="2">
-                <select value={tiempoExposicion} onChange={(e) => setTiempoExposicion(e.target.value)} style={{ fontSize: '1.2em', width: '100%' }}>
-                  {opcionesTiempoExposicion.map(opcion => (
-                    <option key={opcion} value={opcion}>{opcion}</option>
-                  ))}
-                </select>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colSpan="3">
-                <table className="compact-table no-border" > 
-                  <tbody>
-                    <tr>
-                      <td>
-                        <div className="image-observations-container">
-                          <div className="image-section">
-                            <input type="file" accept="image/*" onChange={handleImageChange}  />
-                            {errorMessage && <p style={{ color: 'red', fontSize: '1.2em' }}>{errorMessage}</p>}
-                            {imagePreview ? (
-                              <img src={imagePreview} alt="Maquinaria" className="image-preview" />
-                            ) : (
-                              <p style={{ fontSize: '1.2em' }}>No hay imagen seleccionada</p>
-                            )}
-                          </div>               
-                        </div>  
-                      </td>
-                    </tr>
-                    <tr>
-                    <td>
-  <>
-    {/* Tabla de identificación de peligros */}
-    <table className="danger-table compact-table">
+    <div id="pdf-content" className="risk-table">
+      
+      <table className="main-table compact-table">
         <thead>
           <tr>
-            <th>Identificación de peligros</th>
-            <th style={{ backgroundColor: 'red' }}>Si/No</th>
+            <th colSpan="4">Nombre de la maquinaria o equipo:</th>
+            <th colSpan="2">
+              <input 
+                type="text" 
+                value={maquinariaNombre} 
+                onChange={(e) => setMaquinariaNombre(e.target.value)} 
+                placeholder="Ingrese el nombre de la maquinaria"
+                style={{ fontSize: '1em', width: '80%' }}
+              />
+            </th>
+          </tr>
+          <tr>
+            <th colSpan="4">Descripción de la maquinaria o equipo:</th>
+            <th colSpan="2">
+              <textarea
+                value={maquinariaDescripcion}
+                onChange={(e) => setMaquinariaDescripcion(e.target.value)}
+                placeholder="Describa la maquinaria o equipo"
+                rows="2"
+                style={{ fontSize: '1em', width: '100%' }}
+              />
+            </th>
+          </tr>
+          <tr>
+            <th colSpan="4">Energía utilizada:</th>
+            <th colSpan="2">
+              <select 
+                value={energiaUtilizada} 
+                onChange={(e) => setEnergiaUtilizada(e.target.value)}
+                style={{ fontSize: '1em', width: '100%' }}
+              >
+                {opcionesEnergia.map(opcion => (
+                  <option key={opcion} value={opcion}>{opcion}</option>
+                ))}
+              </select>
+            </th>
+          </tr>
+          <tr>
+            <th colSpan="3">Localización esquemática de los riesgos en la maquinaria y/o equipo</th>
+            <th style={{ backgroundColor: 'red' }}>POE:</th>
+            <th>Tiempo de exposición:</th>
+            <th colSpan="2">
+              <select value={tiempoExposicion} onChange={(e) => setTiempoExposicion(e.target.value)} style={{ fontSize: '1em', width: '100%' }}>
+                {opcionesTiempoExposicion.map(opcion => (
+                  <option key={opcion} value={opcion}>{opcion}</option>
+                ))}
+              </select>
+            </th>
           </tr>
         </thead>
         <tbody>
-          {peligros.map((peligro, index) => (
-            <tr key={peligro.id}>
-              <td style={{ width: '80%', fontSize: '1.2em' }}>{peligro.nombre}</td>
-              <td style={{ width: '20%' }}>
-                <input
-                  type="checkbox"
-                  checked={peligro.siNo}
-                  onChange={(e) => handlePeligroChange(index, e.target.checked)}
-                  style={{ transform: 'scale(1.5)' }}
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      
-
-      {/* Modal para seleccionar EPP específico */}
-      {showEppModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Seleccionar EPP para Exposición a Ruido</h2>
-            <div className="epp-options">
-              {eppOptionsForNoise.map((epp, index) => (
-                <label key={index} style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '1.2em' }}>
-                  <input
-                    type="radio"
-                    name="epp"
-                    value={epp}
-                    checked={selectedEpp === epp}
-                    onChange={() => handleEppSelection(epp)}
-                    style={{ transform: 'scale(1.5)' }}
-                  />
-                  <img src={epp} alt="EPP" style={{ width: '50px', height: '50px' }} />
-                </label>
-              ))}
-            </div>
-            <button onClick={handleConfirmEpp} style={{ marginTop: '10px', padding: '10px', fontSize: '1.2em' }}>
-              Confirmar
-            </button>
-            <button onClick={() => setShowEppModal(false)} style={{ marginTop: '10px', padding: '10px', fontSize: '1.2em' }}>
-              Cerrar
-            </button>
-          </div>
-        </div>
-    )}
-  </>
-</td>
-
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-              <td colSpan="3">
-                <table className="compact-table no-border" >
-                  <thead>
-                    <tr>
-                      <th>Consecuencia</th>
-                      <th style={{ backgroundColor: 'red' }}>Exposición</th>
-                      <th>Probabilidad</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <select value={consequence} onChange={(e) => setConsequence(e.target.value)} >
-                          {opcionesConsecuencia.map(opcion => (
-                            <option key={opcion} value={opcion}>{opcion}</option>
-                          ))}
-                        </select>
-                        <div style={{ fontSize: '1.2em' }}>Valor: {calcularValorConsecuencia()}</div>
-                      </td>
-                      <td>
-                        <select value={exposure} onChange={(e) => setExposure(e.target.value)} >
-                          {opcionesExposicion.map(opcion => (
-                            <option key={opcion} value={opcion}>{opcion}</option>
-                          ))}
-                        </select>
-                        <div >Valor: {calcularValorExposicion()}</div>
-                      </td>
-                      <td>
-                        <select value={probability} onChange={(e) => setProbability(e.target.value)} >
-                          {opcionesProbabilidad.map(opcion => (
-                            <option key={opcion} value={opcion}>{opcion}</option>
-                          ))}
-                        </select>
-                        <div >Valor: {calcularValorProbabilidad()}</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colSpan="3">
-                        <div className="risk-magnitude-container">
-                          <div className="risk-magnitude-bar" style={{ backgroundColor: color, display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '1.2em' }}>
-                            <span>{magnitudRiesgo}</span>
-                            <span>{texto}</span>
-                            <span ><strong>Acción:</strong> {accion}</span>
-                            <span ><strong>Clasificación:</strong> {clasificacion}</span>
-                          </div>
-                        </div>
-                      </td>
-                      
-                    </tr>
-                    <td colSpan="3"> Equipo de protección personal sugerido
-
-                      {/* Equipo de protección personal sugerido */}
-                        <div className="icons" style={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
-                          {selectedImages.length > 0 ? (
-                            selectedImages.map((imageSrc, index) => (
-                              <img key={index} src={imageSrc} alt={`Protección`} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
-                            ))
+          <tr>
+            <td colSpan="3">
+              <table className="compact-table no-border" style={{ width: '100%' }}>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div className="image-observations-container">
+                        <div className="image-section">
+                          <input type="file" accept="image/*" onChange={handleImageChange}  />
+                          {errorMessage && <p style={{ color: 'red', fontSize: '1em' }}>{errorMessage}</p>}
+                          {imagePreview ? (
+                            <img src={imagePreview} alt="Maquinaria" className="image-preview" style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
                           ) : (
-                            <p style={{ fontSize: '1.2em' }}>No hay riesgos seleccionados</p>
+                            <p style={{ fontSize: '1em' }}>No hay imagen seleccionada</p>
                           )}
-                        </div>
-
+                        </div>        
+                      </div>  
                     </td>
-                  </tbody>
+                  </tr>
+                  <tr>
+                    <td>
+                      <>
+                        {/* Tabla de identificación de peligros */}
+                        <table className="danger-table compact-table" style={{ width: '100%' }}>
+                          <thead>
+                            <tr>
+                              <th>Identificación de peligros</th>
+                              <th style={{ backgroundColor: 'red' }}>Si/No</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {peligros.map((peligro, index) => (
+                              <tr key={peligro.id}>
+                                <td style={{ width: '80%', fontSize: '1em' }}>{peligro.nombre}</td>
+                                <td style={{ width: '20%' }}>
+                                  <input
+                                    type="checkbox"
+                                    checked={peligro.siNo}
+                                    onChange={(e) => handlePeligroChange(index, e.target.checked)}
+                                    style={{ transform: 'scale(1.2)' }}
+                                  />
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
 
-                  <td colSpan="3">
-                      <div className="risk-options-container">
-                        {/* Contenedor de opciones */}
-                        <div className="risk-options">
-                          {specificRiskImages.map((imageName, index) => (
-                            <label key={index} className="risk-option-label">
-                              <input
-                                type="checkbox"
-                                value={imageName}
-                                checked={selectedSpecificRiskImages.includes(imageName)}
-                                onChange={() => handleSpecificRiskImageChange(imageName)}
-                                className="risk-option-checkbox"
-                              />
-                              <span className="risk-option-text">
-                                {imageName.replace(/_/g, ' ').replace('.png', '')}
-                              </span>
-                            </label>
-                          ))}
-                        </div>
-
-                        {/* Contenedor de imágenes */}
-                        <div className="risk-images">
-                          {selectedSpecificRiskImages.map((imageName, index) => (
-                            <img
-                              key={index}
-                              src={`/images/${imageName}`}
-                              alt="Riesgo Específico"
-                              className="risk-image"
-                            />
-                          ))}
+                        {/* Modal para seleccionar EPP específico */}
+                        {showEppModal && (
+                          <div className="modal">
+                            <div className="modal-content">
+                              <h2>Seleccionar EPP para Exposición a Ruido</h2>
+                              <div className="epp-options">
+                                {eppOptionsForNoise.map((epp, index) => (
+                                  <label key={index} style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '1em' }}>
+                                    <input
+                                      type="radio"
+                                      name="epp"
+                                      value={epp}
+                                      checked={selectedEpp === epp}
+                                      onChange={() => handleEppSelection(epp)}
+                                      style={{ transform: 'scale(1.2)' }}
+                                    />
+                                    <img src={epp} alt="EPP" style={{ width: '40px', height: '40px' }} />
+                                  </label>
+                                ))}
+                              </div>
+                              <button onClick={handleConfirmEpp} style={{ marginTop: '10px', padding: '8px', fontSize: '1em' }}>
+                                Confirmar
+                              </button>
+                              <button onClick={() => setShowEppModal(false)} style={{ marginTop: '10px', padding: '8px', fontSize: '1em' }}>
+                                Cerrar
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+            <td colSpan="3">
+              <table className="compact-table no-border" style={{ width: '100%' }}>
+                <thead>
+                  <tr>
+                    <th>Consecuencia</th>
+                    <th style={{ backgroundColor: 'red' }}>Exposición</th>
+                    <th>Probabilidad</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <select value={consequence} onChange={(e) => setConsequence(e.target.value)} >
+                        {opcionesConsecuencia.map(opcion => (
+                          <option key={opcion} value={opcion}>{opcion}</option>
+                        ))}
+                      </select>
+                      <div style={{ fontSize: '1em' }}>Valor: {calcularValorConsecuencia()}</div>
+                    </td>
+                    <td>
+                      <select value={exposure} onChange={(e) => setExposure(e.target.value)} >
+                        {opcionesExposicion.map(opcion => (
+                          <option key={opcion} value={opcion}>{opcion}</option>
+                        ))}
+                      </select>
+                      <div >Valor: {calcularValorExposicion()}</div>
+                    </td>
+                    <td>
+                      <select value={probability} onChange={(e) => setProbability(e.target.value)} >
+                        {opcionesProbabilidad.map(opcion => (
+                          <option key={opcion} value={opcion}>{opcion}</option>
+                        ))}
+                      </select>
+                      <div >Valor: {calcularValorProbabilidad()}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colSpan="3">
+                      <div className="risk-magnitude-container">
+                        <div className="risk-magnitude-bar" style={{ backgroundColor: color, display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '1em' }}>
+                          <span>{magnitudRiesgo}</span>
+                          <span>{texto}</span>
+                          <span ><strong>Acción:</strong> {accion}</span>
+                          <span ><strong>Clasificación:</strong> {clasificacion}</span>
                         </div>
                       </div>
-
+                    </td>
+                  </tr>
+                  <td colSpan="3"> Equipo de protección personal sugerido
+                    <div className="icons" style={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: '5px', justifyContent: 'center' }}>
+                      {selectedImages.length > 0 ? (
+                        selectedImages.map((imageSrc, index) => (
+                          <img key={index} src={imageSrc} alt={`Protección`} style={{ width: '40px', height: '40px', objectFit: 'cover' }} />
+                        ))
+                      ) : (
+                        <p style={{ fontSize: '1em' }}>No hay riesgos seleccionados</p>
+                      )}
+                    </div>
                   </td>
-                  
-
-                  
-                </table>
-                
-                  
-
-
-              
-              </td>
-            </tr>
-            
-            {/* Riesgo Específico */}          
-            <tr>
-              <td colSpan="6">
-                
-                <div className="observations-section">
-                  <label htmlFor="observaciones" style={{ fontSize: '1.2em' }}>Observaciones:</label>
-                  <textarea
-                    id="observaciones"
-                    value={observacionesGenerales}
-                    onChange={(e) => setObservacionesGenerales(e.target.value)}
-                    placeholder="Agregar observaciones generales aquí"
-                    rows="4"
-                    style={{ fontSize: '1.2em', width: '100%' }}
-                  />
-                </div>   
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <button onClick={downloadPDF} className="download-button" style={{ fontSize: '1.2em' }}>
+                </tbody>
+                <td colSpan="3">
+                  <div className="risk-options-container">
+                    <div className="risk-options">
+                      {specificRiskImages.map((imageName, index) => (
+                        <label key={index} className="risk-option-label">
+                          <input
+                            type="checkbox"
+                            value={imageName}
+                            checked={selectedSpecificRiskImages.includes(imageName)}
+                            onChange={() => handleSpecificRiskImageChange(imageName)}
+                            className="risk-option-checkbox"
+                          />
+                          <span className="risk-option-text">
+                            {imageName.replace(/_/g, ' ').replace('.png', '')}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                    <div className="risk-images">
+                      {selectedSpecificRiskImages.map((imageName, index) => (
+                        <img
+                          key={index}
+                          src={`/images/${imageName}`}
+                          alt="Riesgo Específico"
+                          className="risk-image"
+                          style={{ width: '40px', height: '40px', objectFit: 'cover' }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </td>
+              </table>
+              <div className="observations-section">
+                <label htmlFor="observaciones" style={{ fontSize: '1em' }}>Observaciones:</label>
+                <textarea
+                  id="observaciones"
+                  value={observacionesGenerales}
+                  onChange={(e) => setObservacionesGenerales(e.target.value)}
+                  placeholder="Agregar observaciones generales aquí"
+                  rows="3"
+                  style={{ fontSize: '1em', width: '100%' }}
+                />
+              </div>   
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button onClick={downloadPDF} className="download-button" style={{ fontSize: '1em' }}>
         Descargar
       </button>
     </div>
