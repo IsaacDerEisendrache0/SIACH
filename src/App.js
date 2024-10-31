@@ -9,6 +9,7 @@ import NormaNOMs from './Norma_NOMs/norma_noms';
 import Login from './componentes/Loginlogin';
 import SavedTables from './Norma_17/SavedTables';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import logo from './images/logo.png'; // Importa la imagen del logo correctamente
 
 function Navigation() {
   const auth = getAuth();
@@ -43,7 +44,10 @@ function HomePage() {
 
   return (
     <div className="container-fluid mt-5">
-      <h1 className="text-center">Normas Oficiales Mexicanas</h1>
+      <div className="d-flex align-items-center justify-content-center">
+        <img src={logo} alt="SIACH Logo" style={{ width: '100px', marginRight: '10px' }} />
+        <h1 className="text-center">Normas Oficiales Mexicanas</h1>
+      </div>
 
       <div className="d-flex justify-content-center mt-3">
         <div className="dropdown">
