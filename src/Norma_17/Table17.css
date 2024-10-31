@@ -373,9 +373,6 @@ button {
 }
 
 
-
-
-
 .image-selection-container {
   display: flex;
   justify-content: space-around;
@@ -474,3 +471,68 @@ button {
   box-sizing: border-box;
   resize: none; /* Evitar que el usuario cambie el tamaño del textarea */
 }
+
+/* Estilo para el fondo oscuro del modal */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+  z-index: 999; /* Detrás del modal */
+}
+
+/* Estilo del contenedor del modal */
+.modal-container {
+  width: 380px; /* Ancho más pequeño para una tabla pequeña */
+  max-width: 190%;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; /* Asegura que esté al frente */
+}
+
+/* Estilo de los botones del modal */
+.modal-container button {
+  padding: 8px 15px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100%; /* Ocupa todo el ancho */
+}
+
+/* Contenedor para los botones */
+.modal-container .button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-container h2 {
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.puestos-lista {
+  max-height: 150px;
+  overflow-y: auto; /* Permite scroll si hay muchos puestos */
+  margin-bottom: 15px;
+}
+
+.puesto-item {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.puesto-item input {
+  margin-right: 8px;
+}
+
