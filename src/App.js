@@ -9,7 +9,7 @@ import NormaNOMs from './Norma_NOMs/norma_noms';
 import Login from './componentes/Loginlogin';
 import SavedTables from './Norma_17/SavedTables';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
-import logo from './images/logo.png'; // Importa la imagen del logo correctamente
+import logo from './logos/logo.png'; // Importa la imagen del logo correctamente
 
 function Navigation() {
   const auth = getAuth();
