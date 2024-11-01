@@ -1,3 +1,22 @@
+/* === Tamaño de la Tabla Principal === */
+.main-table {
+  max-width: 1600px; /* Aumenta el ancho máximo a 1200px */
+  margin: 0 auto; /* Centra la tabla en la pantalla */
+  padding: 10px;
+}
+
+.main-table th, 
+.main-table td, 
+.custom-table th, 
+.custom-table td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: center;
+  max-width: 250px; /* Ancho de celdas */
+  overflow: hidden;
+  width: 250px;
+}
+
 /* Estilo general de la tabla interna */
 .inner-table {
   width: 100%;
@@ -21,10 +40,7 @@
   text-align: center;
   padding: 10px;
   border-collapse: separate;
-
 }
-
-
 
 /* Alineaciones y márgenes */
 .move-right {
@@ -59,8 +75,6 @@
   box-sizing: border-box; /* Incluye padding en el ancho total */
 }
 
-
-
 .no-border-cell {
   border: none;
   background-color: #e63946;
@@ -79,7 +93,6 @@
   top: 50%; /* Centra el checkbox verticalmente */
   transform: translateY(-50%); /* Ajusta el centrado vertical */
 }
-
 
 .hazard-list {
   list-style-type: none;
@@ -102,9 +115,9 @@
 
 .protection-image-container {
   display: flex;
-    justify-content: center; /* Centra la imagen horizontalmente */
-    align-items: center; /* Centra la imagen verticalmente */
-    margin: 0 auto;  /* Centra el contenedor */
+  justify-content: center; /* Centra la imagen horizontalmente */
+  align-items: center; /* Centra la imagen verticalmente */
+  margin: 0 auto;  /* Centra el contenedor */
 }
 
 .protection-image {
@@ -130,8 +143,8 @@
 /* Estilo para imágenes y filas */
 .body-image-left {
   display: flex;
-    justify-content: center; /* Cambiar a centrado horizontal */
-    align-items: center;
+  justify-content: center; /* Cambiar a centrado horizontal */
+  align-items: center;
 }
 
 .table-container {
@@ -141,19 +154,9 @@
 
 .images-in-row {
   display: flex;
-    justify-content: center; /* Centra las imágenes horizontalmente */
-    gap: 10px; /* Espacio entre imágenes */
-    align-items: center; /* Centra verticalmente las imágenes */
-}
-
-/* Estilos generales de tablas */
-.main-table th, .main-table td, .custom-table, .custom-table th, .custom-table td {
-  border: 1px solid black; /* Asegura que esta regla tenga prioridad */
-  padding: 8px;
-  text-align: center;
-  max-width: 200px; /* Ajusta el ancho máximo según sea necesario */
-  overflow: hidden;
-  width: 200px;
+  justify-content: center; /* Centra las imágenes horizontalmente */
+  gap: 10px; /* Espacio entre imágenes */
+  align-items: center; /* Centra verticalmente las imágenes */
 }
 
 /* Estilo para la evaluación de riesgos */
@@ -234,9 +237,7 @@
     padding: 0; /* Sin padding */
     margin: 0; /* Sin margen */
     width: 100%; /* Ocupar el ancho completo */
-}
-
-
+  }
 }
 
 /* Pantallas medianas (tabletas) */
@@ -244,7 +245,6 @@
   .inner-table, .risk-table, .container-full-width, .main-table {
     width: 100%; /* Ancho completo */
     border-collapse: separate;
-
   }
 
   .main-table th, .main-table td, .custom-table th, .custom-table td {
@@ -266,12 +266,9 @@
   }
 }
 
-
 .header-td {
   background-color: red !important;
-  
 }
-
 
 .modal-container {
   width: 300px; /* Ancho más pequeño */
@@ -331,8 +328,6 @@ button {
   cursor: pointer;
 }
 
-
-
 /* Contenedor para el menú y los botones */
 .puesto-con-botones {
   display: flex;
@@ -372,7 +367,6 @@ button {
   color: white;
 }
 
-
 .image-selection-container {
   display: flex;
   justify-content: space-around;
@@ -393,8 +387,6 @@ button {
 .selectable-image:hover {
   border-color: blue;
 }
-
-
 
 /* Estilos para el componente de EPP */
 .epp-component-right-section {
@@ -472,67 +464,61 @@ button {
   resize: none; /* Evitar que el usuario cambie el tamaño del textarea */
 }
 
-/* Estilo para el fondo oscuro del modal */
+/* Ajuste en el tamaño y márgenes del modal */
+.modal-container {
+  width: 320px; /* Ajusta el ancho del modal */
+  padding: 10px; /* Reduce el padding para que ocupe menos espacio */
+  background-color: #ffffff; /* Color de fondo blanco */
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; /* Asegura que esté en frente */
+  max-height: 75vh; /* Limita la altura */
+  overflow-y: auto; /* Permite desplazamiento vertical si es necesario */
+}
+
+/* Fondo semitransparente detrás del modal */
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
-  z-index: 999; /* Detrás del modal */
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo más oscuro */
+  z-index: 999;
 }
 
-/* Estilo del contenedor del modal */
-.modal-container {
-  width: 380px; /* Ancho más pequeño para una tabla pequeña */
-  max-width: 190%;
-  padding: 15px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000; /* Asegura que esté al frente */
-}
-
-/* Estilo de los botones del modal */
-.modal-container button {
-  padding: 8px 15px;
-  font-size: 14px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-  width: 100%; /* Ocupa todo el ancho */
-}
-
-/* Contenedor para los botones */
-.modal-container .button-group {
-  display: flex;
-  gap: 10px;
-}
-
-.modal-container h2 {
-  font-size: 16px;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
+/* Ajusta la lista de puestos con márgenes adicionales */
 .puestos-lista {
-  max-height: 150px;
-  overflow-y: auto; /* Permite scroll si hay muchos puestos */
-  margin-bottom: 15px;
+  max-height: 200px; /* Limita la altura */
+  overflow-y: auto; /* Habilita el desplazamiento si es necesario */
+  margin: 10px 5px; /* Ajusta los márgenes para reducir el recuadro blanco */
+  padding: 5px;
+  background-color: #f5f5f5; /* Fondo gris claro para diferenciar la lista */
+  border-radius: 4px;
 }
 
+/* Estilo de cada puesto en la lista */
 .puesto-item {
   display: flex;
   align-items: center;
-  padding: 5px 0;
+  margin-bottom: 8px;
 }
 
+/* Espacio y estilo de los checkboxes */
 .puesto-item input {
-  margin-right: 8px;
+  margin-right: 10px;
+  cursor: pointer;
 }
 
+/* Título del modal */
+.modal-container h2 {
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 15px;
+  color: #333;
+}

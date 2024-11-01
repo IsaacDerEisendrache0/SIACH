@@ -8,64 +8,68 @@ import { db } from '../firebase'; // Importar la configuración de Firebase
 
 
 
-const areas = [
-  {
-    nombre: 'Producción',
-    puestos: [
-      'Ayudante de empaque y envase',
-      'Ayudante de limpieza',
-      'Operador de peletizadora',
-      'Dosificador de micros',
-      'Operador de rolado',
-      'Operador de molino',
-      'Dosificador de mezclas',
-      'Coordinador de mantenimiento',
-      'Ayudante de mantenimiento',
-      'Operador de caldera',
-      'Ayudante de mantenimiento soldadura',
-      'Ayudante de mantenimiento eléctrico',
-      'Ayudante de mantenimiento mecánico',
-      'Embolsador',
-      'Auxiliar de calidad',
-      'Ayudante de albañil',
-      'Supervisor de planta',
-      'Recibidor de granos',
-      'Coordinador de empaque',
-      'Coordinador de seguridad e higiene',
-      'MVZ. Responsable',
-      'Superintendente de producción',
-      'Ingeniero en proyectos',
-    ],
-  },
-  {
-    nombre: 'Operación',
-    puestos: [
-      'Ayudante de almacén',
-      'Almacenista',
-      'Montacarguista',
-      'Operador de enmelazadora',
-      'Investigación y desarrollo',
-    ],
-  },
-  {
-    nombre: 'Envase y empaque',
-    puestos: [
-      'Envasador',
-      'Ayudante de empaque, envase (Cosedor)',
-      'Estibadores',
-      'Ayudante de empaque, envase (Circulante)',
-      'Ayudante de empaque, envase (amarrador)',
-    ],
-  },
-  {
-    nombre: 'Ventas',
-    puestos: ['Estibador', 'Repartidor', 'Chofer'],
-  },
-];
+
 
 
 
 const RiskAssessmentTable = () => {
+
+  const [areas, setAreas] = useState([
+    {
+      nombre: 'Producción',
+      puestos: [
+        'Ayudante de empaque y envase',
+        'Ayudante de limpieza',
+        'Operador de peletizadora',
+        'Dosificador de micros',
+        'Operador de rolado',
+        'Operador de molino',
+        'Dosificador de mezclas',
+        'Coordinador de mantenimiento',
+        'Ayudante de mantenimiento',
+        'Operador de caldera',
+        'Ayudante de mantenimiento soldadura',
+        'Ayudante de mantenimiento eléctrico',
+        'Ayudante de mantenimiento mecánico',
+        'Embolsador',
+        'Auxiliar de calidad',
+        'Ayudante de albañil',
+        'Supervisor de planta',
+        'Recibidor de granos',
+        'Coordinador de empaque',
+        'Coordinador de seguridad e higiene',
+        'MVZ. Responsable',
+        'Superintendente de producción',
+        'Ingeniero en proyectos',
+      ],
+    },
+    {
+      nombre: 'Operación',
+      puestos: [
+        'Ayudante de almacén',
+        'Almacenista',
+        'Montacarguista',
+        'Operador de enmelazadora',
+        'Investigación y desarrollo',
+      ],
+    },
+    {
+      nombre: 'Envase y empaque',
+      puestos: [
+        'Envasador',
+        'Ayudante de empaque, envase (Cosedor)',
+        'Estibadores',
+        'Ayudante de empaque, envase (Circulante)',
+        'Ayudante de empaque, envase (amarrador)',
+      ],
+    },
+    {
+      nombre: 'Ventas',
+      puestos: ['Estibador', 'Repartidor', 'Chofer'],
+    },
+  ]);
+
+
   const [isEditing, setIsEditing] = useState(false); // Estado para modo de edición
 
   const [hazards, setHazards] = useState({
@@ -508,6 +512,65 @@ const handleImageRemove = (imageToRemove) => {
 };
 
 
+const [isAreaModalOpen, setIsAreaModalOpen] = useState(false);
+const [areasSeleccionadasParaBorrar, setAreasSeleccionadasParaBorrar] = useState([]);
+
+const handleAddAreaClick = () => {
+  const nuevaArea = prompt("Ingrese el nombre de la nueva área:");
+  if (nuevaArea && nuevaArea.trim() !== "") {
+    const updatedAreas = [...areas, { nombre: nuevaArea.trim(), puestos: [] }];
+    setAreas(updatedAreas);
+
+    // Guardamos el área en localStorage
+    localStorage.setItem("areas", JSON.stringify(updatedAreas));
+    setAreaSeleccionada(nuevaArea.trim()); // Cambia a la nueva área
+  }
+};
+
+const handleDeleteAreaClick = () => {
+  setIsAreaModalOpen(true);
+};
+
+// Cerrar el modal de borrar área
+const handleAreaModalClose = () => {
+  setIsAreaModalOpen(false);
+};
+
+// Función para manejar selección de áreas en el modal
+const handleAreaSelectionChange = (event) => {
+  const value = event.target.value;
+  const alreadySelected = areasSeleccionadasParaBorrar.includes(value);
+
+  if (alreadySelected) {
+    setAreasSeleccionadasParaBorrar(
+      areasSeleccionadasParaBorrar.filter((area) => area !== value)
+    );
+  } else {
+    setAreasSeleccionadasParaBorrar([...areasSeleccionadasParaBorrar, value]);
+  }
+};
+
+// Función para borrar las áreas seleccionadas
+const handleDeleteSelectedAreas = () => {
+  const updatedAreas = areas.filter(
+    (area) => !areasSeleccionadasParaBorrar.includes(area.nombre)
+  );
+  setAreas(updatedAreas);
+  
+  // Guardar las áreas actualizadas en localStorage
+  localStorage.setItem("areas", JSON.stringify(updatedAreas));
+
+  setAreasSeleccionadasParaBorrar([]);
+  setIsAreaModalOpen(false);
+};
+
+useEffect(() => {
+  // Intenta cargar las áreas desde localStorage
+  const savedAreas = JSON.parse(localStorage.getItem("areas"));
+  if (savedAreas && savedAreas.length > 0) {
+    setAreas(savedAreas); // Si existen áreas guardadas, las carga en el estado
+  }
+}, []);
 
 
 
@@ -518,30 +581,30 @@ const handleImageRemove = (imageToRemove) => {
         <thead>
           <tr>
           <td className="no-border-cell" colSpan="3">
-  <label htmlFor="puesto">Puesto:</label>
+            <label htmlFor="puesto">Puesto:</label>
 
-  <div className="full-width-cell">
-    <div className="puesto-con-botones">
-      <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange}>
-        <option value="" disabled>Seleccione un puesto</option>
-        {puestos.map((puesto, index) => (
-          <option key={index} value={puesto}>
-            {puesto}
-          </option>
-        ))}
-      </select>
+            <div className="full-width-cell">
+              <div className="puesto-con-botones">
+                <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange}>
+                  <option value="" disabled>Seleccione un puesto</option>
+                  {puestos.map((puesto, index) => (
+                    <option key={index} value={puesto}>
+                      {puesto}
+                    </option>
+                  ))}
+                </select>
 
-      {/* Botón para agregar puesto */}
-      <button className="btn-agregar" onClick={handleAddPuestoClick}>
-        Agregar
-      </button>
+                {/* Botón para agregar puesto */}
+                <button className="btn-agregar" onClick={handleAddPuestoClick}>
+                  Agregar
+                </button>
 
-      {/* Botón para borrar puestos */}
-      <button className="btn-borrar" onClick={handleDeletePuestoClick}>
-        Borrar
-      </button>
-    </div>
-  </div>
+                {/* Botón para borrar puestos */}
+                <button className="btn-borrar" onClick={handleDeletePuestoClick}>
+                  Borrar
+                </button>
+              </div>
+            </div>
 
   {/* Área de descripción de actividad */}
       <div>
@@ -549,7 +612,7 @@ const handleImageRemove = (imageToRemove) => {
         <textarea
           id="descripcion-actividad"
           name="descripcion-actividad"
-          rows="2"
+          rows="3"
           cols="50"
           placeholder="Escribe aquí la descripción de la actividad..."
           value={descripcionActividad} // Vincular al estado
@@ -615,18 +678,58 @@ const handleImageRemove = (imageToRemove) => {
   
           <td className="header-td" style={{ backgroundColor: 'red' }} colSpan="2">
             <div className="header-td">
-              <div className="label-action">
-                <label htmlFor="area">Área:</label>
-                <select id="area" value={areaSeleccionada} onChange={handleAreaChange}>
-                  {areas.map((area, index) => (
-                    <option key={index} value={area.nombre}>
-                      {area.nombre}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="label-action">Fecha de inspección: <input type="date" defaultValue="2023-09-13" /></div>
-              <div>
+            // Aquí se integra el nuevo código en la sección de Áreas
+<div className="label-action">
+  <label htmlFor="area">Área:</label>
+  <div className="area-con-botones">
+    <select id="area" value={areaSeleccionada} onChange={handleAreaChange}>
+      {areas.map((area, index) => (
+        <option key={index} value={area.nombre}>
+          {area.nombre}
+        </option>
+      ))}
+    </select>
+    
+    {/* Botón para agregar área */}
+    <button className="btn-agregar" onClick={handleAddAreaClick}>
+      Agregar Área
+    </button>
+    
+    {/* Botón para borrar área */}
+    <button className="btn-borrar-area" onClick={handleDeleteAreaClick}>
+      Borrar Área
+    </button>
+  </div>
+</div>
+
+{/* Modal para borrar áreas */}
+<Modal isOpen={isAreaModalOpen} onRequestClose={handleAreaModalClose}>
+  <div className="modal-container">
+    <h2>Selecciona las áreas a borrar</h2>
+    <div className="areas-lista">
+      {areas.length > 0 ? (
+        areas.map((area, index) => (
+          <div className="area-item" key={index}>
+            <input
+              type="checkbox"
+              value={area.nombre}
+              onChange={handleAreaSelectionChange}
+              checked={areasSeleccionadasParaBorrar.includes(area.nombre)}
+            />
+            <label>{area.nombre}</label>
+          </div>
+        ))
+      ) : (
+        <p>No hay áreas disponibles para borrar</p>
+      )}
+    </div>
+    <button onClick={handleDeleteSelectedAreas}>Borrar seleccionadas</button>
+    <button onClick={handleAreaModalClose}>Cerrar</button>
+  </div>
+</Modal>
+
+                <div className="label-action">Fecha de inspección: <input type="date" defaultValue="2023-09-13" /></div>
+                <div>
                   <label htmlFor="tiempoExposicion">Tiempo de exposición:</label>
                   <select
                     id="tiempoExposicion"
