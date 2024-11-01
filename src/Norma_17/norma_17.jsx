@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { collection, addDoc, getDocs, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase'; // Importar la configuración de Firebase
+import logo from '../logos/logo.png'; // Importa la imagen del logo correctamente
 
 
 
@@ -577,13 +578,18 @@ useEffect(() => {
 
   return (
       <div class="main-table">
-        <table class="custom-table" className="table-container">
+
+        <table class="custom-table" className="table-container" style={{ backgroundColor: 'white' }}>
+          
         <thead>
+        <img src={logo} alt="SIACH Logo" style={{ width: '200px', marginLeft: '-200px' }} />
+
           <tr>
           <td className="no-border-cell" colSpan="3">
-            <label htmlFor="puesto">Puesto:</label>
+            
 
             <div className="full-width-cell">
+            <label htmlFor="descripcion-actividad" className="titulo-descripcion">puestos      </label>
               <div className="puesto-con-botones">
                 <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange}>
                   <option value="" disabled>Seleccione un puesto</option>
@@ -607,20 +613,24 @@ useEffect(() => {
             </div>
 
   {/* Área de descripción de actividad */}
-      <div>
-        <label htmlFor="descripcion-actividad">Descripción de la actividad:</label>
-        <textarea
-          id="descripcion-actividad"
-          name="descripcion-actividad"
-          rows="3"
-          cols="50"
-          placeholder="Escribe aquí la descripción de la actividad..."
-          value={descripcionActividad} // Vincular al estado
-          onChange={(e) => setDescripcionActividad(e.target.value)} // Actualizar estado al cambiar
-        ></textarea>
-      </div>
+      <div className="contenedor-descripcion">
+      <label htmlFor="descripcion-actividad" className="titulo-descripcion">
+        Descripción de la actividad:
+      </label>
+      <textarea
+        id="descripcion-actividad"
+        name="descripcion-actividad"
+        rows="3"
+        cols="50"
+        className="textarea-descripcion"
+        placeholder="Escribe aquí la descripción de la actividad..."
+        value={descripcionActividad} // Vincular al estado
+        onChange={(e) => setDescripcionActividad(e.target.value)} // Actualizar estado al cambiar
+      ></textarea>
+    </div>
 
-</td>
+
+  </td>
 
 
 
@@ -696,7 +706,7 @@ useEffect(() => {
     </button>
     
     {/* Botón para borrar área */}
-    <button className="btn-borrar-area" onClick={handleDeleteAreaClick}>
+    <button className="btn-borrar" onClick={handleDeleteAreaClick}>
       Borrar Área
     </button>
   </div>
@@ -796,7 +806,7 @@ useEffect(() => {
   </div>
 </Modal>
 
-            <td colSpan="2" className="right-section right-aligned">
+            <td colSpan="2" className="right-section right-aligned" style={{ backgroundColor: 'white' }}>
               <div className="text1">Equipo utilizado<br></br></div>
               <div className="section-content">
                 <select value={selectedOptionEquipoUtilizado} onChange={handleOptionChangeEquipoUtilizado}>
@@ -900,20 +910,20 @@ useEffect(() => {
           </tr>
           
           <tr>
-            <td colSpan="5" className="right-aligned">
-              <div className="text1">Evaluación de riesgo de trabajo</div>
-              <table className="inner-table">
-                <thead>
-                  <tr>
+            <td colSpan="5" className="right-aligned" >
+              <div className="text1" >Evaluación de riesgo de trabajo</div>
+              <table className="inner-table" >
+                <thead >
+                  <tr >
                     <th>Consecuencia</th>
-                    <th style={{ backgroundColor: 'red' }}>Exposición</th>
+                    <th style={{ backgroundColor: 'red' }} >Exposición</th>
                     <th>Probabilidad</th>
                     <th>Magnitud del Riesgo</th>
                   </tr>
                 </thead>
                 <tbody> 
                   <tr>
-                    <td>
+                    <td >
                       <select value={consequence} onChange={handleConsequenceChange}>
                         <option value={10}>Catástrofe</option>
                         <option value={50}>Varias muertes</option>
@@ -924,9 +934,9 @@ useEffect(() => {
                       </select>
                       {/* Mostrar el valor seleccionado de Consecuencia */}
                       <div>Valor: {consequence}</div>
-                    </td>
-                    <td>
-                      <select value={exposure} onChange={handleExposureChange}>
+                    </td> 
+                    <td >
+                      <select value={exposure} onChange={handleExposureChange} >
                         <option value={10}>Continuamente</option>
                         <option value={6}>Frecuentemente</option>
                         <option value={3}>Ocasionalmente</option>
@@ -935,7 +945,7 @@ useEffect(() => {
                         <option value={0.5}>Remotamente</option>
                       </select>
                       {/* Mostrar el valor seleccionado de Exposición */}
-                      <div>Valor: {exposure}</div>
+                      <div style={{ backgroundColor: 'white' }}>Valor: {exposure} </div>
                     </td>
                     <td>
                       <select value={probability} onChange={handleProbabilityChange}>
@@ -956,9 +966,9 @@ useEffect(() => {
                 </tbody>
               </table>
             </td>
-            <td colSpan="3" className="right-aligned">
-              <div className="text1">Clasificación de Magnitud de Riesgo</div>
-              <div className="risk-magnitude">
+            <td colSpan="3" className="right-aligned" > 
+              <div className="text1" >Clasificación de Magnitud de Riesgo</div>
+              <div className="risk-magnitude" style={{ backgroundColor: 'white' }}>
                 <div className="risk-value">Magnitud del Riesgo: {calculateRisk().toFixed(2)}</div>
                 <div className="risk-classification">
                   Clasificación: {calculateRisk() > 400 ? 'Muy Alto' : calculateRisk() > 200 ? 'Alto' : calculateRisk() > 70 ? 'Notable' : calculateRisk() > 20 ? 'Moderado' : 'Bajo o Aceptable'}

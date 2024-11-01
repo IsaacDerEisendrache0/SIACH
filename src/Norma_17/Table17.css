@@ -237,6 +237,7 @@
     padding: 0; /* Sin padding */
     margin: 0; /* Sin margen */
     width: 100%; /* Ocupar el ancho completo */
+    
   }
 }
 
@@ -333,8 +334,8 @@ button {
   display: flex;
   align-items: center; /* Alinea verticalmente en el centro */
   justify-content: flex-start; /* Mantiene el contenido alineado a la izquierda */
-  width: 100%; /* Ocupa todo el ancho disponible */
-  gap: 10px; /* Espacio entre el menú desplegable y los botones */
+  width: 200%; /* Ocupa todo el ancho disponible */
+  gap: 45px; /* Espacio entre el menú desplegable y los botones */
 }
 
 /* Estilo del menú desplegable */
@@ -347,7 +348,6 @@ button {
 /* Botones al lado del menú desplegable */
 .puesto-con-botones .btn-agregar,
 .puesto-con-botones .btn-borrar {
-  padding: 5px 15px;
   font-size: 14px;
   cursor: pointer;
   border: none;
@@ -522,3 +522,36 @@ button {
   margin-bottom: 15px;
   color: #333;
 }
+
+
+
+
+/* Contenedor para el título y el cuadro de texto */
+.contenedor-descripcion {
+  display: flex;
+  flex-direction: column; /* Coloca los elementos en una columna */
+  width: 100%; /* Ocupa todo el ancho disponible */
+  margin-bottom: 4px; /* Separación del contenedor respecto a otros elementos */
+}
+
+.titulo-descripcion {
+  display: inline-block; /* Asegura que el texto se mantenga en una línea */
+  width: 100%; /* Ocupa todo el ancho disponible */
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  font-weight: bold;
+  font-size: 16px;
+}
+
+
+/* Estilos para el cuadro de texto */
+.textarea-descripcion {
+  width: 100%; /* Aumenta el ancho del cuadro de texto */
+  height: 100px; /* Ajusta la altura del cuadro de texto */
+  padding: 10px;
+  font-size: 14px;
+  resize: vertical; /* Permite cambiar la altura pero no el ancho */
+  box-sizing: border-box;
+}
+
+
+
