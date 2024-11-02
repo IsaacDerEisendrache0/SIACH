@@ -7,7 +7,32 @@ import categoriasImage from './images/categorias_presion.png'; // Imagen para el
 import criogenicosImage from './images/criogenicos.png'; // Imagen para el paso 12
 import generadoresImage from './images/generadores_vapor.png'; // Imagen para el paso 14
 
+
+
+const normas = [
+  { 
+    id: 'NOM-001', 
+    title: 'Edificios, locales e instalaciones', 
+    puntos: ['5.6', '7.3 c)', '8.3'],
+    condition: (values) => values.area === 'centro'
+  },
+  { 
+    id: 'NOM-002', 
+    title: 'Prevención y protección contra incendios', 
+    puntos: ['5.1', '5.2', '5.5'], 
+    condition: (values) => values.recipientesPresion === 'sí'
+  },
+  { 
+    id: 'NOM-004', 
+    title: 'Uso de maquinaria y equipo', 
+    puntos: ['5.2', '5.1', '5.2'], 
+    condition: (values) => values.maquinaria === 'sí'
+  },
+];
+
+
 const NormaNoms = () => {
+  const [selectedNormas, setSelectedNormas] = useState([]);
   const [step, setStep] = useState(1);
   const [showModal9, setShowModal9] = useState(false);
   const [showModal10, setShowModal10] = useState(false);
@@ -190,32 +215,29 @@ const NormaNoms = () => {
   return (
     <div className="norma-noms-container">
       <div className="container">
-        {/* Paso 1 */}
-{step === 1 && (
-  <div className="step1">
-    <h3>Estructura del centro de trabajo</h3>
-    <em>Indique la forma en la cual requiere identificar las NOMs aplicables</em>
-    <div className="options">
-      <label>
-        <input type="radio" name="area" value="centro" onChange={handleInputChange} />
-        Para todo el centro de trabajo
-      </label>
-      <label>
-        <input type="radio" name="area" value="proceso" onChange={handleInputChange} />
-        Por área, departamento o proceso
-      </label>
-    </div>
-    <div className="buttons">
-      <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
-    </div>
-  </div>
-)}
+        {/* Paso 1: Selección del Área */}
+        {step === 1 && (
+          <div className="step1">
+            <h3>Estructura del centro de trabajo</h3>
+            <em>Indique la forma en la cual requiere identificar las NOMs aplicables</em>
+            <div className="options">
+              <label>
+                <input type="radio" name="area" value="centro" onChange={handleInputChange} />
+                Para todo el centro de trabajo
+              </label>
+              <label>
+                <input type="radio" name="area" value="proceso" onChange={handleInputChange} />
+                Por área, departamento o proceso
+              </label>
+            </div>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext}>Continuar</button>
+            </div>
+          </div>
+        )}
 
-
-{/* Otros pasos de 2 a 10... */}
- {/* Paso 2 */}
- {step === 2 && (
+{step === 2 && (
   <div className="step2">
     <h3>Determinación del grado de riesgo de incendio</h3>
     <div className="inventory-fields">
@@ -282,11 +304,21 @@ const NormaNoms = () => {
 
     <label>¿Tiene inventario de materiales pirofóricos o explosivos?</label>
     <label>
-      <input type="radio" name="materialesPiroforicos" value="sí" onChange={handleInputChange} />
+      <input 
+        type="radio" 
+        name="materialesPiroforicos" 
+        value="sí" 
+        onChange={handleInputChange} 
+      />
       Sí
     </label>
     <label>
-      <input type="radio" name="materialesPiroforicos" value="no" onChange={handleInputChange} />
+      <input 
+        type="radio" 
+        name="materialesPiroforicos" 
+        value="no" 
+        onChange={handleInputChange} 
+      />
       No
     </label>
 
@@ -297,7 +329,7 @@ const NormaNoms = () => {
   </div>
 )}
 
-{/* Paso 3 */}
+        {/* Paso 3 */}
 {step === 3 && (
   <div className="step3">
     <h3>Área de trabajo</h3>
@@ -1762,75 +1794,45 @@ const NormaNoms = () => {
       )}
 
 
-{step === 38 && (
+        {/* Paso 38: Muestra de Normas Aplicables */}
+        {step === 38 && (
           <div className="step38">
-            <h3>Menú Final</h3>
-            <button onClick={handleShowTable} className="menu-button">
-              NOMs aplicables por secciones
-            </button>
-
-            {/* Mostrar la tabla de normas cuando se haga clic en el botón */}
-            {showTable && (
-              <div className="normas-table">
-                <table border="1" align="center" cellpadding="0" cellspacing="0">
-                  <thead>
+            <h3>Normas Aplicables</h3>
+            <div>
+              <button onClick={() => setStep(1)}>Reiniciar</button>
+            </div>
+            <div className="normas-table">
+              <table border="1" align="center" cellPadding="5" cellSpacing="0">
+                <thead>
+                  <tr>
+                    <th>Número</th>
+                    <th>Título de la norma</th>
+                    <th>Puntos Específicos</th>
+                    <th>Obtener archivo de la NOM</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedNormas.length > 0 ? (
+                    selectedNormas.map((id) => {
+                      const norma = normas.find((n) => n.id === id);
+                      return (
+                        <tr key={norma.id}>
+                          <td>{norma.id}</td>
+                          <td>{norma.title}</td>
+                          <td>{norma.puntos.join(', ')}</td>
+                          <td>
+                            <a href={`/noms/${norma.id}.pdf`} target="_blank" rel="noopener noreferrer">Descargar</a>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  ) : (
                     <tr>
-                      <th>Número</th>
-                      <th>Título de la norma</th>
-                      <th>Obligaciones - Patrón</th>
-                      <th>Obligaciones - Trabajadores</th>
-                      <th>Obligaciones - Generales</th>
-                      <th>Disposiciones específicas</th>
-                      <th>Obtener archivo de la NOM</th>
+                      <td colSpan="4">No se han encontrado normas aplicables</td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>NOM-001</td>
-                      <td>Edificios, locales e instalaciones</td>
-                      <td>
-                        <a href="#">5.2</a>, <a href="#">5.3</a>, <a href="#">5.4</a>
-                      </td>
-                      <td>
-                        <a href="#">6.1</a>, <a href="#">6.2</a>, <a href="#">6.3</a>
-                      </td>
-                      <td>
-                        <a href="#">5.1</a>, <a href="#">7.1</a>, <a href="#">7.1.1</a>
-                      </td>
-                      <td>
-                        <a href="#">7.5</a>, <a href="#">7.5.1</a>, <a href="#">7.5.2</a>
-                      </td>
-                      <td>
-                        <a href="/noms/NOM-001.pdf" target="_blank">Descargar</a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>NOM-002</td>
-                      <td>Prevención y protección contra incendios</td>
-                      <td>
-                        <a href="#">5</a>, <a href="#">5.1</a>, <a href="#">5.2</a>
-                      </td>
-                      <td>
-                        <a href="#">6.1</a>, <a href="#">6.2</a>
-                      </td>
-                      <td>
-                        <a href="#">7.1</a>, <a href="#">7.2</a>
-                      </td>
-                      <td>
-                        <a href="#">7.6</a>, <a href="#">7.6.1</a>
-                      </td>
-                      <td>
-                        <a href="/noms/NOM-002.pdf" target="_blank">Descargar</a>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            )}
-
-            <div className="buttons">
-              <button onClick={handleBack}>Regresar</button>
-              <button onClick={handleNext}>Finalizar</button>
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         )}
@@ -1840,3 +1842,4 @@ const NormaNoms = () => {
 };
 
 export default NormaNoms;
+    
