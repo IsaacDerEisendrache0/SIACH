@@ -2,34 +2,43 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './NormaNoms.css';
 import iconImage from './images/icon.png';
-import exceptImage from './images/excepted_recipients.png'; // Imagen para el paso 9
-import categoriasImage from './images/categorias_presion.png'; // Imagen para el paso 10
-import criogenicosImage from './images/criogenicos.png'; // Imagen para el paso 12
-import generadoresImage from './images/generadores_vapor.png'; // Imagen para el paso 14
-
-
+import exceptImage from './images/excepted_recipients.png';
+import categoriasImage from './images/categorias_presion.png';
+import criogenicosImage from './images/criogenicos.png';
+import generadoresImage from './images/generadores_vapor.png';
 
 const normas = [
   { 
     id: 'NOM-001', 
     title: 'Edificios, locales e instalaciones', 
-    puntos: ['5.6', '7.3 c)', '8.3'],
+    puntos: [
+      { numero: '5.6', descripcion: 'Constancia documental de que proporcionó información a todos los trabajadores para el uso y conservación de las áreas donde realizan sus actividades en el centro de trabajo, incluidas las destinadas para el servicio de los trabajadores' },
+      { numero: '7.3 c)', descripcion: 'Medidas contra incendios en áreas críticas.' },
+      { numero: '8.3', descripcion: 'Sistema de ventilación y control de gases.' }
+    ],
     condition: (values) => values.area === 'centro'
   },
   { 
     id: 'NOM-002', 
     title: 'Prevención y protección contra incendios', 
-    puntos: ['5.1', '5.2', '5.5'], 
+    puntos: [
+      { numero: '5.1', descripcion: 'Procedimientos de evacuación.' },
+      { numero: '5.2', descripcion: 'Equipo contra incendios obligatorio.' },
+      { numero: '5.5', descripcion: 'Capacitación del personal en manejo de incendios.' }
+    ],
     condition: (values) => values.recipientesPresion === 'sí'
   },
   { 
     id: 'NOM-004', 
     title: 'Uso de maquinaria y equipo', 
-    puntos: ['5.2', '5.1', '5.2'], 
+    puntos: [
+      { numero: '5.2', descripcion: 'Mantenimiento regular de maquinaria.' },
+      { numero: '5.1', descripcion: 'Instalación y operación segura de equipos.' },
+      { numero: '5.2', descripcion: 'Entrenamiento del personal para el uso de maquinaria.' }
+    ],
     condition: (values) => values.maquinaria === 'sí'
   },
 ];
-
 
 const NormaNoms = () => {
   const [selectedNormas, setSelectedNormas] = useState([]);
@@ -38,10 +47,11 @@ const NormaNoms = () => {
   const [showModal10, setShowModal10] = useState(false);
   const [showModal12, setShowModal12] = useState(false);
   const [showModal14, setShowModal14] = useState(false);
-  const [showTable, setShowTable] = useState(false); // Para mostrar la tabla final
+  const [showTable, setShowTable] = useState(false);
   const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
+    area: '',
     superficie: '',
     invGases: '',
     invLiquidosi: '',
@@ -82,11 +92,10 @@ const NormaNoms = () => {
     actagricolas: [],
     infrestructura: [],
     materialc: '',
-    superficieConstruir: '', // Nueva propiedad para el paso 36
-    alturaConstruccion: '', // Nueva propiedad para el paso 36
+    superficieConstruir: '',
+    alturaConstruccion: '',
     materialp: '',
   });
-
   const handleNext = () => {
     setStep(step + 1);
   };
@@ -101,32 +110,43 @@ const NormaNoms = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormValues({
-      ...formValues,
-      [name]: value,
+    setFormValues((prevValues) => {
+      const newValues = { ...prevValues, [name]: value };
+      updateSelectedNormas(newValues);
+      return newValues;
     });
   };
 
   const handleCheckboxChange = (e, field) => {
     const { value } = e.target;
-    setFormValues((prev) => ({
-      ...prev,
-      [field]: prev[field].includes(value)
-        ? prev[field].filter((item) => item !== value)
-        : [...prev[field], value],
-    }));
+    setFormValues((prevValues) => {
+      const updatedField = prevValues[field].includes(value)
+        ? prevValues[field].filter((item) => item !== value)
+        : [...prevValues[field], value];
+      const newValues = { ...prevValues, [field]: updatedField };
+      updateSelectedNormas(newValues);
+      return newValues;
+    });
   };
+
+  const updateSelectedNormas = (values) => {
+    const applicableNormas = normas
+      .filter((norma) => norma.condition(values))
+      .map((norma) => norma.id);
+    setSelectedNormas(applicableNormas);
+  };
+
   const isStepCompleted = () => {
     switch (step) {
       case 1:
         return formValues.area !== '';
       case 2:
         return (
-          formValues.superficie &&
-          formValues.invGases &&
-          formValues.invLiquidosi &&
-          formValues.invLiquidosc &&
-          formValues.invSolidos &&
+          formValues.superficie !== '' &&
+          formValues.invGases !== '' &&
+          formValues.invLiquidosi !== '' &&
+          formValues.invLiquidosc !== '' &&
+          formValues.invSolidos !== '' &&
           formValues.materialesPiroforicos !== ''
         );
       case 3:
@@ -199,23 +219,15 @@ const NormaNoms = () => {
         return formValues.superficieConstruir !== '' && formValues.alturaConstruccion !== '';
       case 37:
         return formValues.materialp !== '';
-      case 38: 
-        // Nueva validación para el paso 38
-        return formValues.nuevoCampo !== ''; // Asegúrate de reemplazar 'nuevoCampo' con el nombre del campo correspondiente
+      case 38:
+        return formValues.nuevoCampo !== ''; // Reemplaza 'nuevoCampo' con el nombre correcto si aplica
       default:
         return false;
     }
   };
-
-
-  const handleShowTable = () => {
-    setShowTable(!showTable);
-  };
-  
   return (
     <div className="norma-noms-container">
       <div className="container">
-        {/* Paso 1: Selección del Área */}
         {step === 1 && (
           <div className="step1">
             <h3>Estructura del centro de trabajo</h3>
@@ -232,191 +244,124 @@ const NormaNoms = () => {
             </div>
             <div className="buttons">
               <button onClick={handleBack}>Regresar</button>
-              <button onClick={handleNext}>Continuar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
             </div>
           </div>
         )}
 
-{step === 2 && (
-  <div className="step2">
-    <h3>Determinación del grado de riesgo de incendio</h3>
-    <div className="inventory-fields">
-      <label>
-        Superficie construida:
-        <input
-          type="number"
-          name="superficie"
-          value={formValues.superficie}
-          onChange={handleInputChange}
-          required
-        />
-        metros cuadrados
-      </label>
+        {step === 2 && (
+          <div className="step2">
+            <h3>Determinación del grado de riesgo de incendio</h3>
+            <div className="inventory-fields">
+              <label>
+                Superficie construida:
+                <input
+                  type="number"
+                  name="superficie"
+                  value={formValues.superficie}
+                  onChange={handleInputChange}
+                  required
+                />
+                metros cuadrados
+              </label>
 
-      <label>
-        Inventario de gases inflamables:
-        <input
-          type="number"
-          name="invGases"
-          value={formValues.invGases}
-          onChange={handleInputChange}
-          required
-        />
-        litros
-      </label>
+              <label>
+                Inventario de gases inflamables:
+                <input
+                  type="number"
+                  name="invGases"
+                  value={formValues.invGases}
+                  onChange={handleInputChange}
+                  required
+                />
+                litros
+              </label>
 
-      <label>
-        Inventario de líquidos inflamables:
-        <input
-          type="number"
-          name="invLiquidosi"
-          value={formValues.invLiquidosi}
-          onChange={handleInputChange}
-          required
-        />
-        litros
-      </label>
+              <label>
+                Inventario de líquidos inflamables:
+                <input
+                  type="number"
+                  name="invLiquidosi"
+                  value={formValues.invLiquidosi}
+                  onChange={handleInputChange}
+                  required
+                />
+                litros
+              </label>
 
-      <label>
-        Inventario de líquidos combustibles:
-        <input
-          type="number"
-          name="invLiquidosc"
-          value={formValues.invLiquidosc}
-          onChange={handleInputChange}
-          required
-        />
-        litros
-      </label>
+              <label>
+                Inventario de líquidos combustibles:
+                <input
+                  type="number"
+                  name="invLiquidosc"
+                  value={formValues.invLiquidosc}
+                  onChange={handleInputChange}
+                  required
+                />
+                litros
+              </label>
 
-      <label>
-        Inventario de sólidos combustibles, incluido el mobiliario del centro de trabajo:
-        <input
-          type="number"
-          name="invSolidos"
-          value={formValues.invSolidos}
-          onChange={handleInputChange}
-          required
-        />
-        kilogramos
-      </label>
-    </div>
+              <label>
+                Inventario de sólidos combustibles:
+                <input
+                  type="number"
+                  name="invSolidos"
+                  value={formValues.invSolidos}
+                  onChange={handleInputChange}
+                  required
+                />
+                kilogramos
+              </label>
+            </div>
 
-    <label>¿Tiene inventario de materiales pirofóricos o explosivos?</label>
-    <label>
-      <input 
-        type="radio" 
-        name="materialesPiroforicos" 
-        value="sí" 
-        onChange={handleInputChange} 
-      />
-      Sí
-    </label>
-    <label>
-      <input 
-        type="radio" 
-        name="materialesPiroforicos" 
-        value="no" 
-        onChange={handleInputChange} 
-      />
-      No
-    </label>
+            <label>¿Tiene inventario de materiales pirofóricos o explosivos?</label>
+            <label>
+              <input 
+                type="radio" 
+                name="materialesPiroforicos" 
+                value="sí" 
+                onChange={handleInputChange} 
+              />
+              Sí
+            </label>
+            <label>
+              <input 
+                type="radio" 
+                name="materialesPiroforicos" 
+                value="no" 
+                onChange={handleInputChange} 
+              />
+              No
+            </label>
 
-    <div className="buttons">
-      <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
-    </div>
-  </div>
-)}
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+            </div>
+          </div>
+        )}
 
-        {/* Paso 3 */}
-{step === 3 && (
-  <div className="step3">
-    <h3>Área de trabajo</h3>
-    <label>¿Desarrolla sus actividades de producción, comercialización, transporte y almacenamiento o prestación de servicios en: edificios, locales, instalaciones y/o áreas exteriores, tales como pasillos, patios, techos, estacionamientos, áreas de circulación de vehículos, áreas de carga y descarga de materiales?</label>
-    <label>
-      <input type="radio" name="areaTrabajo" value="sí" onChange={handleInputChange} />
-      Sí
-    </label>
-    <label>
-      <input type="radio" name="areaTrabajo" value="no" onChange={handleInputChange} />
-      No
-    </label>
+        {step === 3 && (
+          <div className="step3">
+            <h3>Área de trabajo</h3>
+            <label>¿Desarrolla sus actividades en edificios, locales o áreas exteriores?</label>
+            <label>
+              <input type="radio" name="areaTrabajo" value="sí" onChange={handleInputChange} />
+              Sí
+            </label>
+            <label>
+              <input type="radio" name="areaTrabajo" value="no" onChange={handleInputChange} />
+              No
+            </label>
 
-    {/* Nueva sección de elementos del centro de trabajo */}
-    <h4>Seleccione los elementos con que cuenta su centro de trabajo:</h4>
-    <label>
-      <input
-        type="checkbox"
-        value="escaleras"
-        onChange={(e) => handleCheckboxChange(e, 'elementos')}
-        checked={formValues.elementos.includes('escaleras')}
-      />
-      Escaleras
-    </label>
-    <label>
-      <input
-        type="checkbox"
-        value="rampas"
-        onChange={(e) => handleCheckboxChange(e, 'elementos')}
-        checked={formValues.elementos.includes('rampas')}
-      />
-      Rampas
-    </label>
-    <label>
-      <input
-        type="checkbox"
-        value="escalas"
-        onChange={(e) => handleCheckboxChange(e, 'elementos')}
-        checked={formValues.elementos.includes('escalas')}
-      />
-      Escalas
-    </label>
-    <label>
-      <input
-        type="checkbox"
-        value="puentesPlataformasElevadas"
-        onChange={(e) => handleCheckboxChange(e, 'elementos')}
-        checked={formValues.elementos.includes('puentesPlataformasElevadas')}
-      />
-      Puentes y plataformas elevadas
-    </label>
-    <label>
-      <input
-        type="checkbox"
-        value="transitoVehiculos"
-        onChange={(e) => handleCheckboxChange(e, 'elementos')}
-        checked={formValues.elementos.includes('transitoVehiculos')}
-      />
-      Áreas de tránsito de vehículos
-    </label>
-    <label>
-      <input
-        type="checkbox"
-        value="espuelasFerrocarril"
-        onChange={(e) => handleCheckboxChange(e, 'elementos')}
-        checked={formValues.elementos.includes('espuelasFerrocarril')}
-      />
-      Espuelas de ferrocarril activas
-    </label>
-    <label>
-      <input
-        type="checkbox"
-        value="ventilacionArtificial"
-        onChange={(e) => handleCheckboxChange(e, 'elementos')}
-        checked={formValues.elementos.includes('ventilacionArtificial')}
-      />
-      Sistemas de ventilación artificial
-    </label>
+            <div className="buttons">
+              <button onClick={handleBack}>Regresar</button>
+              <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+            </div>
+          </div>
+        )}
 
-    <div className="buttons">
-      <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
-    </div>
-  </div>
-)}
-
-{/* Paso 4 */}
+        {/* Paso 4 */}
 {step === 4 && (
   <div className="step4">
     <h3>Uso de maquinaria o equipo</h3>
@@ -1794,12 +1739,78 @@ const NormaNoms = () => {
       )}
 
 
-        {/* Paso 38: Muestra de Normas Aplicables */}
-        {step === 38 && (
+
+
+
+
+{step === 38 && (
           <div className="step38">
-            <h3>Normas Aplicables</h3>
+            <h3 style={{ color: 'blue' }}>Normas Aplicables</h3>
             <div>
-              <button onClick={() => setStep(1)}>Reiniciar</button>
+              <button 
+                onClick={() => {
+                  setStep(1);
+                  setFormValues({
+                    area: '',
+                    superficie: '',
+                    invGases: '',
+                    invLiquidosi: '',
+                    invLiquidosc: '',
+                    invSolidos: '',
+                    materialesPiroforicos: '',
+                    areaTrabajo: '',
+                    elementos: [],
+                    maquinaria: '',
+                    maquinariaMateriales: '',
+                    tiposMaquinaria: [],
+                    trabajosAltura: '',
+                    equiposAltura: [],
+                    recipientesPresion: '',
+                    categoriasRecipientes: [],
+                    generadoresVapor: '',
+                    recipientesCriogenicos: '',
+                    categoriasCriogenicos: [],
+                    categoriasGeneradores: [],
+                    cargasEstaticas: '',
+                    materialesFriccion: '',
+                    soldaduraCorte: '',
+                    soldaduraAltura: '',
+                    instalacionesElectricas: '',
+                    mantenimientoLineasElectricas: '',
+                    mantenimientoEnergizadas: '',
+                    trabajosEspaciosConfinados: '',
+                    tiposEspaciosConfinados: [],
+                    trabajadoresDiscapacidad: '',
+                    tiposDiscapacidad: [],
+                    exposicionRuido: '',
+                    exposicionFrio: '',
+                    exposicioncalor: '',
+                    vibraciones: '',
+                    exvibraciones: [],
+                    manejocargas: '',
+                    actcargas: [],
+                    actagricolas: [],
+                    infrestructura: [],
+                    materialc: '',
+                    superficieConstruir: '',
+                    alturaConstruccion: '',
+                    materialp: '',
+                  });
+                  setSelectedNormas([]); // Reiniciar las normas seleccionadas
+                }}
+                style={{
+                  backgroundColor: '#2196F3',
+                  color: 'white',
+                  padding: '10px 20px',
+                  border: 'none',
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                  fontSize: '16px',
+                  margin: '10px 0'
+                }}
+              >
+                Reiniciar
+              </button>
             </div>
             <div className="normas-table">
               <table border="1" align="center" cellPadding="5" cellSpacing="0">
@@ -1819,7 +1830,13 @@ const NormaNoms = () => {
                         <tr key={norma.id}>
                           <td>{norma.id}</td>
                           <td>{norma.title}</td>
-                          <td>{norma.puntos.join(', ')}</td>
+                          <td>
+                            {norma.puntos.map((punto, index) => (
+                              <div key={index}>
+                                <strong>{punto.numero}:</strong> {punto.descripcion}
+                              </div>
+                            ))}
+                          </td>
                           <td>
                             <a href={`/noms/${norma.id}.pdf`} target="_blank" rel="noopener noreferrer">Descargar</a>
                           </td>
@@ -1842,4 +1859,3 @@ const NormaNoms = () => {
 };
 
 export default NormaNoms;
-    
