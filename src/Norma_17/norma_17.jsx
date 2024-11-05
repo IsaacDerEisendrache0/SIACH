@@ -574,7 +574,39 @@ useEffect(() => {
 }, []);
 
 
+const [selectedMainOption, setSelectedMainOption] = useState(''); // Estado para la opción principal
+  const [selectedSubOption, setSelectedSubOption] = useState('');   // Estado para la subcategoría seleccionada
+  const [showSubDropdown, setShowSubDropdown] = useState(false);     // Estado para mostrar u ocultar el segundo menú
+  const [selectionList, setSelectionList] = useState([]); // Lista acumulativa de selecciones
 
+  // Opciones principales y sus subcategorías
+  const eppOptions = {
+    'Casco': ['Casco Dielectrico', 'Casco de Seguridad', 'Casco con Visera'],
+    'Guantes': ['Guantes de Látex', 'Guantes de Nitrilo', 'Guantes de Cuero'],
+    'Gafas de Protección': ['Gafas con Filtro UV', 'Gafas Antiempañantes', 'Gafas de Impacto'],
+    'Botas': ['Botas de Seguridad', 'Botas Impermeables', 'Botas Aislantes'],
+  };
+
+  // Maneja la selección de la opción principal
+  const handleMainOptionChange = (e) => {
+    setSelectedMainOption(e.target.value);
+    setSelectedSubOption(''); // Reinicia la subcategoría cuando se selecciona una nueva opción principal
+    setShowSubDropdown(true); // Muestra el segundo menú al seleccionar una opción principal
+  };
+
+  // Maneja la selección de subcategoría, agrega a la lista y oculta el menú
+  const handleSubOptionChange = (e) => {
+    const subOption = e.target.value;
+    setSelectedSubOption(subOption);
+
+    // Agrega la selección actual a la lista acumulativa
+    setSelectionList((prevList) => [
+      ...prevList,
+      `${selectedMainOption} - ${subOption}`
+    ]);
+
+    setShowSubDropdown(false); // Oculta el segundo menú tras seleccionar una subcategoría
+  };
 
   return (
       <div class="main-table">
@@ -887,21 +919,54 @@ useEffect(() => {
     )}
   </div>
 
-  {/* Título de la descripción del EPP */}
-  <div className="epp-component-description-title">
-    Descripción del equipo de protección personal
-  </div>
+  <div>
+      {/* Título fijo en la parte superior */}
+      
+      
+      {/* Contenedor del título y el menú principal */}
+      <div className="epp-dropdown-container">
+        {/* Menú desplegable principal */}
+        <select
+          value={selectedMainOption}
+          onChange={handleMainOptionChange}
+          className="epp-dropdown"
+        >
+          <option value="" disabled>Selecciona el equipo</option>
+          {Object.keys(eppOptions).map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </div>
 
-  {/* Textarea para la descripción */}
-  <div className="epp-component-description-textarea">
-    <textarea
-      id="descripcion-actividad"
-      name="descripcion-actividad"
-      rows="8"
-      cols="50"
-      placeholder="Escribe aquí la descripción de la actividad..."
-    ></textarea>
-  </div>
+      {/* Menú desplegable de subcategorías, que se oculta después de seleccionar */}
+      {showSubDropdown && selectedMainOption && (
+        <select
+          value={selectedSubOption}
+          onChange={handleSubOptionChange}
+          className="epp-sub-dropdown"
+        >
+          <option value="" disabled>Selecciona el tipo de {selectedMainOption.toLowerCase()}</option>
+          {eppOptions[selectedMainOption].map((subOption, index) => (
+            <option key={index} value={subOption}>
+              {subOption}
+            </option>
+          ))}
+        </select>
+      )}
+
+      {/* Mostrar la lista de selecciones acumuladas */}
+      <div className="epp-selection-list">
+        {selectionList.map((selection, index) => (
+          <div key={index} className="epp-selection-item">
+            {selection}
+          </div>
+        ))}
+      </div>
+    </div>
+
+  
 </td>
 
 
