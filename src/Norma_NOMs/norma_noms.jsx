@@ -7,6 +7,7 @@ import categoriasImage from './images/categorias_presion.png';
 import criogenicosImage from './images/criogenicos.png';
 import generadoresImage from './images/generadores_vapor.png';
 
+// Continuación del array normas con más normas y sus condiciones
 const normas = [
   { 
     id: 'NOM-001', 
@@ -22,9 +23,11 @@ const normas = [
     id: 'NOM-002', 
     title: 'Prevención y protección contra incendios', 
     puntos: [
-      { numero: '5.1', descripcion: 'Procedimientos de evacuación.' },
-      { numero: '5.2', descripcion: 'Equipo contra incendios obligatorio.' },
-      { numero: '5.5', descripcion: 'Capacitación del personal en manejo de incendios.' }
+      { numero: '5.1', descripcion: 'Estudio para la clasificación del grado de riesgo de incendio.' },
+      { numero: '5.2', descripcion: 'Contar con un croquis, plano o mapa actualizado del centro de trabajo.' },
+      { numero: '5.5', descripcion: 'Plan de atención a emergencias de incendio.' },
+      { numero: '5.7', descripcion: 'Programa anual y registros de simulacros.' },
+      { numero: '5.8', descripcion: 'Capacitación de brigadas de emergencia.' },
     ],
     condition: (values) => values.recipientesPresion === 'sí'
   },
@@ -32,12 +35,134 @@ const normas = [
     id: 'NOM-004', 
     title: 'Uso de maquinaria y equipo', 
     puntos: [
-      { numero: '5.2', descripcion: 'Mantenimiento regular de maquinaria.' },
-      { numero: '5.1', descripcion: 'Instalación y operación segura de equipos.' },
-      { numero: '5.2', descripcion: 'Entrenamiento del personal para el uso de maquinaria.' }
+      { numero: '5.2', descripcion: 'Estudio para analizar el riesgo en maquinaria.' },
+      { numero: '5.3 a)', descripcion: 'Elaborar el Programa Específico de Seguridad e Higiene para Operación y Mantenimiento.' },
+      { numero: '5.4', descripcion: 'Capacitación para operación segura de la maquinaria y equipo.' }
     ],
     condition: (values) => values.maquinaria === 'sí'
   },
+  { 
+    id: 'NOM-005', 
+    title: 'Manejo de sustancias químicas peligrosas', 
+    puntos: [
+      { numero: '5.2', descripcion: 'Estudio de riesgos de sustancias químicas peligrosas.' },
+      { numero: '5.3', descripcion: 'Manuales y procedimientos para manejo seguro de sustancias.' },
+      { numero: '5.12', descripcion: 'Programa Específico de Seguridad e Higiene para el Manejo de Sustancias Químicas Peligrosas.' },
+      { numero: '5.13', descripcion: 'Constancias de competencias o habilidades laborales sobre el programa de manejo seguro.' }
+    ],
+    condition: (values) => values.sustanciasPeligrosas === 'sí'
+  },
+  { 
+    id: 'NOM-006', 
+    title: 'Manejo y almacenamiento de materiales', 
+    puntos: [
+      { numero: '5.1', descripcion: 'Programa específico de revisión y mantenimiento de equipos de manejo de materiales.' },
+      { numero: '5.3', descripcion: 'Procedimientos de seguridad en el manejo de materiales.' },
+      { numero: '5.7', descripcion: 'Manual de primeros auxilios basado en riesgos de manejo de materiales.' },
+      { numero: '5.9', descripcion: 'Constancias de competencias o habilidades laborales para almacenamiento y manejo de materiales.' }
+    ],
+    condition: (values) => values.manejoMateriales === 'sí'
+  },
+  // Aquí puedes agregar más normas con su estructura similar
+
+
+  { 
+    id: 'NOM-009', 
+    title: 'Trabajos en altura', 
+    puntos: [
+      { numero: '5.1', descripcion: 'Análisis de condiciones de riesgo en áreas de trabajo en altura.' },
+      { numero: '5.2', descripcion: 'Instructivos y procedimientos de seguridad para sistemas de trabajos en altura.' },
+      { numero: '5.3', descripcion: 'Autorización escrita para trabajos en alturas.' },
+      { numero: '5.11', descripcion: 'Plan de atención a emergencias en trabajos en altura.' },
+      { numero: '5.13', descripcion: 'Constancias de capacitación en trabajos en altura y atención a emergencias.' }
+    ],
+    condition: (values) => values.trabajosAltura === 'sí'
+  },
+  { 
+    id: 'NOM-020', 
+    title: 'Recipientes sujetos a presión', 
+    puntos: [
+      { numero: '5.2', descripcion: 'Listado actualizado de los equipos instalados en el centro de trabajo.' },
+      { numero: '5.3', descripcion: 'Expediente de cada equipo instalado en el centro de trabajo.' },
+      { numero: '5.5', descripcion: 'Programas de revisión y calibración de equipos de presión.' },
+      { numero: '5.6', descripcion: 'Procedimientos de operación y mantenimiento en idioma español.' },
+      { numero: '5.14', descripcion: 'Difusión sobre los peligros inherentes a los equipos y fluidos.' }
+    ],
+    condition: (values) => values.recipientesPresion === 'sí'
+  },
+  { 
+    id: 'NOM-022', 
+    title: 'Electricidad estática', 
+    puntos: [
+      { numero: '5.2', descripcion: 'Contar con pararrayos en áreas con sustancias inflamables o explosivas.' },
+      { numero: '5.3', descripcion: 'Medición de resistencia de la red de puesta a tierra y continuidad.' },
+      { numero: '5.4', descripcion: 'Documento que informe a trabajadores sobre los riesgos de electricidad estática.' },
+      { numero: '5.5', descripcion: 'Capacitación en técnicas para evitar generación de electricidad estática.' }
+    ],
+    condition: (values) => values.cargasEstaticas === 'sí'
+  },
+  { 
+    id: 'NOM-027', 
+    title: 'Actividades de soldadura y corte', 
+    puntos: [
+      { numero: '5.2', descripcion: 'Análisis de riesgos potenciales en actividades de soldadura y corte.' },
+      { numero: '5.3', descripcion: 'Registro de trabajadores informados sobre riesgos de soldadura.' },
+      { numero: '5.4', descripcion: 'Programa específico para actividades de soldadura y corte.' },
+      { numero: '5.5', descripcion: 'Procedimientos de seguridad en soldadura y corte.' },
+      { numero: '5.17', descripcion: 'Botiquín de primeros auxilios en áreas de soldadura y corte.' }
+    ],
+    condition: (values) => values.soldaduraCorte === 'sí'
+  },
+
+  { 
+    id: 'NOM-029', 
+    title: 'Mantenimiento de instalaciones eléctricas', 
+    puntos: [
+      { numero: '5.2', descripcion: 'Plan de trabajo y determinación de riesgos para mantenimiento de instalaciones eléctricas.' },
+      { numero: '5.3', descripcion: 'Diagrama unifilar y cuadro de cargas actualizado.' },
+      { numero: '5.4', descripcion: 'Procedimientos de seguridad en actividades de mantenimiento eléctrico.' },
+      { numero: '5.7', descripcion: 'Programa específico de revisión y conservación de equipo eléctrico.' },
+      { numero: '5.15', descripcion: 'Plan de atención a emergencias para mantenimiento eléctrico.' }
+    ],
+    condition: (values) => values.mantenimientoLineasElectricas === 'sí'
+  },
+  { 
+    id: 'NOM-034', 
+    title: 'Accesibilidad para trabajadores con discapacidad', 
+    puntos: [
+      { numero: '5.1', descripcion: 'Análisis de compatibilidad del puesto con la discapacidad de cada trabajador.' },
+      { numero: '5.2', descripcion: 'Instalaciones accesibles y señalización para desplazamiento y emergencia.' },
+      { numero: '5.3', descripcion: 'Acciones preventivas y correctivas para prevenir riesgos a trabajadores con discapacidad.' },
+      { numero: '5.5', descripcion: 'Plan de atención a emergencias que incluya a trabajadores con discapacidad.' },
+      { numero: '5.7', descripcion: 'Capacitación para trabajadores con discapacidad en su desarrollo y actuación en emergencias.' }
+    ],
+    condition: (values) => values.trabajadoresDiscapacidad === 'sí'
+  },
+  { 
+    id: 'NOM-010', 
+    title: 'Agentes químicos contaminantes en el ambiente laboral', 
+    puntos: [
+      { numero: '6.1', descripcion: 'Estudio actualizado de agentes químicos contaminantes del ambiente laboral.' },
+      { numero: '6.2', descripcion: 'Reconocimiento de agentes químicos contaminantes en el ambiente laboral.' },
+      { numero: '6.6', descripcion: 'Programa de control para evitar exposición a agentes químicos contaminantes.' },
+      { numero: '6.9', descripcion: 'Documento informativo sobre riesgos a la salud por exposición a agentes químicos.' }
+    ],
+    condition: (values) => values.materialp === 'sí'
+  },
+  { 
+    id: 'NOM-011', 
+    title: 'Ruido en los centros de trabajo', 
+    puntos: [
+      { numero: '5.2', descripcion: 'Evaluación de ruido en áreas donde trabajadores estén expuestos a niveles superiores a 80 dB(A).' },
+      { numero: '5.5', descripcion: 'Programa de conservación de la audición para trabajadores expuestos a ruido.' },
+      { numero: '5.8', descripcion: 'Orientación sobre alteraciones a la salud por exposición a ruido.' }
+    ],
+    condition: (values) => values.exposicionRuido === 'sí'
+  },
+
+
+
+
 ];
 
 const NormaNoms = () => {
