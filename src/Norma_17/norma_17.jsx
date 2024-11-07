@@ -587,12 +587,6 @@ const [selectedMainOption, setSelectedMainOption] = useState(''); // Estado para
     'Botas': ['Botas de Seguridad', 'Botas Impermeables', 'Botas Aislantes'],
   };
 
-  // Maneja la selección de la opción principal
-  const handleMainOptionChange = (e) => {
-    setSelectedMainOption(e.target.value);
-    setSelectedSubOption(''); // Reinicia la subcategoría cuando se selecciona una nueva opción principal
-    setShowSubDropdown(true); // Muestra el segundo menú al seleccionar una opción principal
-  };
 
   // Maneja la selección de subcategoría, agrega a la lista y oculta el menú
   const handleSubOptionChange = (e) => {
@@ -607,6 +601,41 @@ const [selectedMainOption, setSelectedMainOption] = useState(''); // Estado para
 
     setShowSubDropdown(false); // Oculta el segundo menú tras seleccionar una subcategoría
   };
+
+
+  // Estado para manejar opciones seleccionadas automáticamente
+const [autoSelectedOptions, setAutoSelectedOptions] = useState([]);
+
+// Nuevo useEffect para actualizar el menú basado en la selección de imágenes de EPP
+useEffect(() => {
+  const newAutoSelectedOptions = [];
+
+  // Verificar si la imagen del casco (10) está seleccionada
+  if (selectedImages.includes('/images/10.png') || selectedImages.includes('/images/10.jpg')) {
+    newAutoSelectedOptions.push('Casco');
+  }
+  if (selectedImages.includes('/images/4.png') || selectedImages.includes('/images/4.jpg')) {
+    newAutoSelectedOptions.push('Botas');
+  }
+  if (selectedImages.includes('/images/6.png') || selectedImages.includes('/images/6.jpg')) {
+    newAutoSelectedOptions.push('Guantes');
+  }
+  if (selectedImages.includes('/images/3.png') || selectedImages.includes('/images/3.jpg')) {
+    newAutoSelectedOptions.push('Gafas de Protección');
+  }
+
+  console.log("Opciones automáticas detectadas:", newAutoSelectedOptions); // Verificar opciones detectadas
+  setAutoSelectedOptions(newAutoSelectedOptions); // Actualizar opciones automáticas
+}, [selectedImages]); // Ejecutar cada vez que cambian las imágenes seleccionadas
+
+  
+  const handleMainOptionChange = (e) => {
+    const value = e.target.value;
+    setSelectedMainOption(value);
+    setSelectedSubOption(''); // Reinicia la subcategoría
+    setShowSubDropdown(true); // Muestra el segundo menú al seleccionar una opción principal
+  };
+  
 
   return (
       <div class="main-table">
@@ -920,51 +949,50 @@ const [selectedMainOption, setSelectedMainOption] = useState(''); // Estado para
   </div>
 
   <div>
-      {/* Título fijo en la parte superior */}
-      
-      
-      {/* Contenedor del título y el menú principal */}
-      <div className="epp-dropdown-container">
-        {/* Menú desplegable principal */}
-        <select
-          value={selectedMainOption}
-          onChange={handleMainOptionChange}
-          className="epp-dropdown"
-        >
-          <option value="" disabled>Selecciona el equipo</option>
-          {Object.keys(eppOptions).map((option, index) => (
+    {/* Contenedor del menú principal */}
+    <div className="epp-dropdown-container">
+      {/* Menú desplegable principal */}
+      <select
+        value={selectedMainOption}
+        onChange={handleMainOptionChange}
+        className="epp-dropdown"
+      >
+        <option value="" disabled>Selecciona el equipo</option>
+        {Object.keys(eppOptions)
+          .filter((option) => autoSelectedOptions.includes(option)) // Mostrar solo las opciones detectadas
+          .map((option, index) => (
             <option key={index} value={option}>
               {option}
             </option>
           ))}
-        </select>
-      </div>
-
-      {/* Menú desplegable de subcategorías, que se oculta después de seleccionar */}
-      {showSubDropdown && selectedMainOption && (
-        <select
-          value={selectedSubOption}
-          onChange={handleSubOptionChange}
-          className="epp-sub-dropdown"
-        >
-          <option value="" disabled>Selecciona el tipo de {selectedMainOption.toLowerCase()}</option>
-          {eppOptions[selectedMainOption].map((subOption, index) => (
-            <option key={index} value={subOption}>
-              {subOption}
-            </option>
-          ))}
-        </select>
-      )}
-
-      {/* Mostrar la lista de selecciones acumuladas */}
-      <div className="epp-selection-list">
-        {selectionList.map((selection, index) => (
-          <div key={index} className="epp-selection-item">
-            {selection}
-          </div>
-        ))}
-      </div>
+      </select>
     </div>
+
+    {/* Menú desplegable de subcategorías */}
+    {showSubDropdown && selectedMainOption && (
+      <select
+        value={selectedSubOption}
+        onChange={handleSubOptionChange}
+        className="epp-sub-dropdown"
+      >
+        <option value="" disabled>Selecciona el tipo de {selectedMainOption.toLowerCase()}</option>
+        {eppOptions[selectedMainOption]?.map((subOption, index) => (
+          <option key={index} value={subOption}>
+            {subOption}
+          </option>
+        ))}
+      </select>
+    )}
+
+    {/* Mostrar la lista de selecciones acumuladas */}
+    <div className="epp-selection-list">
+      {selectionList.map((selection, index) => (
+        <div key={index} className="epp-selection-item">
+          {selection}
+        </div>
+      ))}
+    </div>
+  </div>
 
   
 </td>
