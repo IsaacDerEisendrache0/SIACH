@@ -749,7 +749,7 @@ useEffect(() => {
   
           <td className="header-td" style={{ backgroundColor: 'red' }} colSpan="2">
             <div className="header-td">
-            // Aquí se integra el nuevo código en la sección de Áreas
+            Aquí se integra el nuevo código en la sección de Áreas
 <div className="label-action">
   <label htmlFor="area">Área:</label>
   <div className="area-con-botones">
@@ -993,13 +993,7 @@ useEffect(() => {
       ))}
     </div>
   </div>
-
-  
-</td>
-
-
-
-              
+</td>  
           </tr>
           
           <tr>
@@ -1077,18 +1071,9 @@ useEffect(() => {
       <button onClick={downloadImage} className="download-button">
         Descargar PDF
       </button>
-
-      
-
-
       <button onClick={isEditing ? updateTable : saveTable} className="save-button">
         {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
       </button>
-
-
-
-
-
     </div>
   );
 };

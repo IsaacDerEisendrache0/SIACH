@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './MaquinariaYequipo.css';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import logo from '../logos/logo.png';
 
 const protectionImages = {
   'Caídas de Altura': ['/images/10.png', '/images/34.png'],
@@ -236,8 +237,10 @@ const RiskTable = () => {
 
   return (
     <div id="pdf-content" className="risk-table">
+       <img src={logo} alt="SIACH Logo" style={{ width: '200px', marginLeft: '0px' }} />
       
       <table className="main-table compact-table">
+     
         <thead>
           <tr>
             <th colSpan="4">Nombre de la maquinaria o equipo:</th>

@@ -180,3 +180,31 @@ h4.red {
 .button-group .button {
   flex: 1;
 }
+.risk-table-container {
+  background-color: white !important;
+}
+
+.risk-table {
+  background-color: white !important;
+}
+.button-area {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  padding: 0px 1px; /* Tamaño más pequeño */
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px; /* Tamaño de fuente más pequeño */
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.button-area:hover {
+  background-color: var(--button-hover-bg);
+  transform: translateY(-2px);
+}
+
+.button-group {
+  display: flex;
+  gap: 0; /* Sin espacio horizontal entre los botones */
+}

@@ -215,3 +215,10 @@ input[type="text"] {
   background-color: white;
   text-align: center;
 }
+.main-table {
+  background-color: white !important;
+}
+
+.risk-table {
+  background-color: white !important;
+}

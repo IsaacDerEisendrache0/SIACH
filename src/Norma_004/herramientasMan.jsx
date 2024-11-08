@@ -4,6 +4,7 @@ import html2canvas from 'html2canvas';
 import RiskTables from './RiskTables'; // Ajusta la ruta si tu archivo está en otra ubicación
 import { collection, addDoc, getDocs, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase'; // Importar la configuración de Firebase
+import logo from '../logos/logo.png'; // Importar el logo
 
 const RiskTable = () => {
 
@@ -176,6 +177,9 @@ const handlePeligroChange = (peligro) => {
   return (
     <div >
       <div id="pdf-content" className="risk-table">
+        <div className="logo-container" style={{ textAlign: 'center', marginBottom: '20px' }}>
+          <img src={logo} alt="SIACH Logo" style={{ width: '200px', marginLeft: '-1100px' }} />
+        </div>
       <table className="main-table">
           <thead>
             <tr>

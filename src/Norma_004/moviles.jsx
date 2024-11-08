@@ -3,11 +3,14 @@ import './Moviles.css';
 import html2canvas from 'html2canvas';
 import { addDoc, updateDoc, doc, collection } from 'firebase/firestore';
 import { db } from '../firebase';
+import logo from '../logos/logo.png';
+import Modal from 'react-modal';
 
 const RiskTable = () => {
   // Estados para capturar los datos del formulario
   const [nombreMaquinaria, setNombreMaquinaria] = useState('');
   const [area, setArea] = useState('');
+  const [areas, setAreas] = useState([]);
   const [poe, setPoe] = useState('');
   const [tiempoExposicion, setTiempoExposicion] = useState('');
   const [descripcion, setDescripcion] = useState('');
@@ -22,6 +25,10 @@ const RiskTable = () => {
   const [selectedEPPImages, setSelectedEPPImages] = useState(['/images/3.png', '/images/4.png', '/images/6.png']);
   const [isEditing, setIsEditing] = useState(false);
   const [tableId, setTableId] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalAction, setModalAction] = useState('');
+  const [newArea, setNewArea] = useState('');
+  const [selectedAreaToRemove, setSelectedAreaToRemove] = useState('');
 
   useEffect(() => {
     const tableToEdit = JSON.parse(localStorage.getItem('tableToEdit'));
@@ -232,9 +239,39 @@ const RiskTable = () => {
     saveTable(tableData, isEditing ? tableId : null);
   };
 
+  const openModal = (action) => {
+    setModalAction(action);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  const handleAddArea = () => {
+    if (newArea && !areas.includes(newArea)) {
+      setAreas([...areas, newArea]);
+      setNewArea('');
+      alert('Área agregada con éxito.');
+    }
+    closeModal();
+  };
+
+  const handleRemoveArea = () => {
+    if (selectedAreaToRemove && areas.includes(selectedAreaToRemove)) {
+      setAreas(areas.filter(a => a !== selectedAreaToRemove));
+      setArea('');
+      alert('Área eliminada con éxito.');
+    }
+    closeModal();
+  };
+
   return (
     <div className="risk-table-container">
-      <table className="risk-table">
+      <div className="logo-container" style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <img src={logo} alt="SIACH Logo" style={{ width: '200px', marginLeft: '-900px' }} />
+      </div>
+      <table className="risk-table" style={{ backgroundColor: 'white' }}>
         <thead>
           <tr>
             <th className="red">Nombre de la maquinaria</th>
@@ -247,15 +284,25 @@ const RiskTable = () => {
                 style={{ width: '100%' }}
               />
             </td>
+
             <th className="red">Área:</th>
             <td colSpan="10">
-              <input 
-                placeholder='Introduzca un área' 
-                type="text"
+              <select
                 value={area}
                 onChange={(e) => setArea(e.target.value)}
                 style={{ width: '100%' }}
-              />
+              >
+                <option value="">Seleccione un área</option>
+                {areas.map((area, idx) => (
+                  <option key={idx} value={area}>{area}</option>
+                ))}
+              </select>
+              <td>
+  <div className="button-group" style={{ display: 'flex', gap: '0' }}>
+    <button className='button-area' onClick={() => openModal('Agregar')}>Agregar área</button>
+    <button className='button-area' onClick={() => openModal('Eliminar')}>Eliminar área</button>
+  </div>
+</td>
             </td>
             <th className="red">POE:</th>
             <td colSpan="10">
@@ -320,10 +367,6 @@ const RiskTable = () => {
               ))}
             </td>
             <td className="safety-info" colSpan="3">
-              
-
-              
-
               <h4 className="red" style={{ fontSize: '14px' }}>Sistemas de seguridad</h4>
               {[...Array(7)].map((_, index) => (
                 <select key={index} style={{ padding: '5px', fontSize: '12px', borderRadius: '5px', border: '1px solid #ccc', width: '100%', marginBottom: '5px' }}>
@@ -340,14 +383,14 @@ const RiskTable = () => {
               <table style={{ width: '100%' }}>
                 <thead>
                   <tr className="red">
-                    <th colSpan="3">Evaluación de riesgo de trabajo</th>
+                    <th colSpan="3" style={{ fontSize: '20px' }}>Evaluación de riesgo de trabajo</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Consecuencia</td>
-                    <td>Exposición</td>
-                    <td>Probabilidad</td>
+                    <td style={{ fontSize: '16px' }}>Consecuencia</td>
+                    <td style={{ fontSize: '16px' }}>Exposición</td>
+                    <td style={{ fontSize: '16px' }}>Probabilidad</td>
                   </tr>
                   <tr>
                     <td>
@@ -379,17 +422,17 @@ const RiskTable = () => {
                   </tr>
                 </tbody>
               </table>
-              <table className="risk-classification" style={{ width: '100%', marginTop: '20px' }}>
+              <table className="risk-classification" style={{ width: '100%', marginTop: '20px', backgroundColor: 'white' }}>
                 <thead>
                   <tr className="red">
-                    <th colSpan="3">Clasificación de Magnitud de Riesgo</th>
+                    <th colSpan="3" style={{ fontSize: '20px', color: 'black' }}>Clasificación de Magnitud de Riesgo</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr style={{ backgroundColor: color }}>
-                    <td>Magnitud del Riesgo: {magnitudRiesgo}</td>
-                    <td>Clasificación: {clasificacion}</td>
-                    <td>Acción: {accion}</td>
+                    <td style={{ fontSize: '16px' }}>Magnitud del Riesgo: {magnitudRiesgo}</td>
+                    <td style={{ fontSize: '16px' }}>Clasificación: {clasificacion}</td>
+                    <td style={{ fontSize: '16px' }}>Acción: {accion}</td>
                   </tr>
                 </tbody>
               </table>
@@ -433,6 +476,55 @@ const RiskTable = () => {
           {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
         </button>
       </div>
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Área Modal"
+        ariaHideApp={false}
+        style={{
+          content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight:'-50%',
+            transform: 'translate(-50%, -50%)',
+          },
+        }}
+      >
+        <h2>{modalAction} Área</h2>
+        <div>
+          {modalAction === 'Agregar' && (
+            <div>
+              <input
+                type="text"
+                placeholder="Nombre del área"
+                value={newArea}
+                onChange={(e) => setNewArea(e.target.value)}
+                style={{ marginBottom: '10px', width: '100%' }}
+              />
+              <button onClick={handleAddArea}>Confirmar Agregar Área</button>
+            </div>
+          )}
+          {modalAction === 'Eliminar' && (
+            <div>
+              <select
+                value={selectedAreaToRemove}
+                onChange={(e) => setSelectedAreaToRemove(e.target.value)}
+                style={{ marginBottom: '10px', width: '100%' }}
+              >
+                <option value="">Seleccione un área para eliminar</option>
+                {areas.map((area, idx) => (
+                  <option key={idx} value={area}>{area}</option>
+                ))}
+              </select>
+              <button onClick={handleRemoveArea}>Confirmar Eliminar Área</button>
+            </div>
+          )}
+          <button onClick={closeModal}>Cancelar</button>
+        </div>
+      </Modal>
     </div>
   );
 };
