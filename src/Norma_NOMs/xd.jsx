@@ -1793,12 +1793,74 @@ const NormaNoms = () => {
       )}
 
 
-        {/* Paso 38: Muestra de Normas Aplicables */}
-        {step === 38 && (
+{step === 38 && (
           <div className="step38">
-            <h3>Normas Aplicables</h3>
+            <h3 style={{ color: 'blue' }}>Normas Aplicables</h3>
             <div>
-              <button onClick={() => setStep(1)}>Reiniciar</button>
+              <button 
+                onClick={() => {
+                  setStep(1);
+                  setFormValues({
+                    area: '',
+                    superficie: '',
+                    invGases: '',
+                    invLiquidosi: '',
+                    invLiquidosc: '',
+                    invSolidos: '',
+                    materialesPiroforicos: '',
+                    areaTrabajo: '',
+                    elementos: [],
+                    maquinaria: '',
+                    maquinariaMateriales: '',
+                    tiposMaquinaria: [],
+                    trabajosAltura: '',
+                    equiposAltura: [],
+                    recipientesPresion: '',
+                    categoriasRecipientes: [],
+                    generadoresVapor: '',
+                    recipientesCriogenicos: '',
+                    categoriasCriogenicos: [],
+                    categoriasGeneradores: [],
+                    cargasEstaticas: '',
+                    materialesFriccion: '',
+                    soldaduraCorte: '',
+                    soldaduraAltura: '',
+                    instalacionesElectricas: '',
+                    mantenimientoLineasElectricas: '',
+                    mantenimientoEnergizadas: '',
+                    trabajosEspaciosConfinados: '',
+                    tiposEspaciosConfinados: [],
+                    trabajadoresDiscapacidad: '',
+                    tiposDiscapacidad: [],
+                    exposicionRuido: '',
+                    exposicionFrio: '',
+                    exposicioncalor: '',
+                    vibraciones: '',
+                    exvibraciones: [],
+                    manejocargas: '',
+                    actcargas: [],
+                    actagricolas: [],
+                    infrestructura: [],
+                    materialc: '',
+                    superficieConstruir: '',
+                    alturaConstruccion: '',
+                    materialp: '',
+                  });
+                  setSelectedNormas([]); // Reiniciar las normas seleccionadas
+                }}
+                style={{
+                  backgroundColor: '#2196F3',
+                  color: 'white',
+                  padding: '10px 20px',
+                  border: 'none',
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                  fontSize: '16px',
+                  margin: '10px 0'
+                }}
+              >
+                Reiniciar
+              </button>
             </div>
             <div className="normas-table">
               <table border="1" align="center" cellPadding="5" cellSpacing="0">
@@ -1818,9 +1880,16 @@ const NormaNoms = () => {
                         <tr key={norma.id}>
                           <td>{norma.id}</td>
                           <td>{norma.title}</td>
-                          <td>{norma.puntos.join(', ')}</td>
                           <td>
-                            <a href={`/noms/${norma.id}.pdf`} target="_blank" rel="noopener noreferrer">Descargar</a>
+                            {norma.puntos.map((punto, index) => (
+                              <div key={index}>
+                                <strong>{punto.numero}:</strong> {punto.descripcion}
+                              </div>
+                            ))}
+                          </td>
+                          <td>
+                          <a href={`/noms/${norma.id}.pdf`} target="_blank" rel="noopener noreferrer">Descargar</a>
+
                           </td>
                         </tr>
                       );

@@ -467,6 +467,7 @@ const NormaNoms = () => {
   return (
     <div className="norma-noms-container">
       <div className="container">
+        {/* Paso 1: Selección del Área */}
         {step === 1 && (
           <div className="step1">
             <h3>Estructura del centro de trabajo</h3>
@@ -488,119 +489,186 @@ const NormaNoms = () => {
           </div>
         )}
 
-        {step === 2 && (
-          <div className="step2">
-            <h3>Determinación del grado de riesgo de incendio</h3>
-            <div className="inventory-fields">
-              <label>
-                Superficie construida:
-                <input
-                  type="number"
-                  name="superficie"
-                  value={formValues.superficie}
-                  onChange={handleInputChange}
-                  required
-                />
-                metros cuadrados
-              </label>
+{step === 2 && (
+  <div className="step2">
+    <h3>Determinación del grado de riesgo de incendio</h3>
+    <div className="inventory-fields">
+      <label>
+        Superficie construida:
+        <input
+          type="number"
+          name="superficie"
+          value={formValues.superficie}
+          onChange={handleInputChange}
+          required
+        />
+        metros cuadrados
+      </label>
 
-              <label>
-                Inventario de gases inflamables:
-                <input
-                  type="number"
-                  name="invGases"
-                  value={formValues.invGases}
-                  onChange={handleInputChange}
-                  required
-                />
-                litros
-              </label>
+      <label>
+        Inventario de gases inflamables:
+        <input
+          type="number"
+          name="invGases"
+          value={formValues.invGases}
+          onChange={handleInputChange}
+          required
+        />
+        litros
+      </label>
 
-              <label>
-                Inventario de líquidos inflamables:
-                <input
-                  type="number"
-                  name="invLiquidosi"
-                  value={formValues.invLiquidosi}
-                  onChange={handleInputChange}
-                  required
-                />
-                litros
-              </label>
+      <label>
+        Inventario de líquidos inflamables:
+        <input
+          type="number"
+          name="invLiquidosi"
+          value={formValues.invLiquidosi}
+          onChange={handleInputChange}
+          required
+        />
+        litros
+      </label>
 
-              <label>
-                Inventario de líquidos combustibles:
-                <input
-                  type="number"
-                  name="invLiquidosc"
-                  value={formValues.invLiquidosc}
-                  onChange={handleInputChange}
-                  required
-                />
-                litros
-              </label>
+      <label>
+        Inventario de líquidos combustibles:
+        <input
+          type="number"
+          name="invLiquidosc"
+          value={formValues.invLiquidosc}
+          onChange={handleInputChange}
+          required
+        />
+        litros
+      </label>
 
-              <label>
-                Inventario de sólidos combustibles:
-                <input
-                  type="number"
-                  name="invSolidos"
-                  value={formValues.invSolidos}
-                  onChange={handleInputChange}
-                  required
-                />
-                kilogramos
-              </label>
-            </div>
+      <label>
+        Inventario de sólidos combustibles, incluido el mobiliario del centro de trabajo:
+        <input
+          type="number"
+          name="invSolidos"
+          value={formValues.invSolidos}
+          onChange={handleInputChange}
+          required
+        />
+        kilogramos
+      </label>
+    </div>
 
-            <label>¿Tiene inventario de materiales pirofóricos o explosivos?</label>
-            <label>
-              <input 
-                type="radio" 
-                name="materialesPiroforicos" 
-                value="sí" 
-                onChange={handleInputChange} 
-              />
-              Sí
-            </label>
-            <label>
-              <input 
-                type="radio" 
-                name="materialesPiroforicos" 
-                value="no" 
-                onChange={handleInputChange} 
-              />
-              No
-            </label>
+    <label>¿Tiene inventario de materiales pirofóricos o explosivos?</label>
+    <label>
+      <input 
+        type="radio" 
+        name="materialesPiroforicos" 
+        value="sí" 
+        onChange={handleInputChange} 
+      />
+      Sí
+    </label>
+    <label>
+      <input 
+        type="radio" 
+        name="materialesPiroforicos" 
+        value="no" 
+        onChange={handleInputChange} 
+      />
+      No
+    </label>
 
-            <div className="buttons">
-              <button onClick={handleBack}>Regresar</button>
-              <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
-            </div>
-          </div>
-        )}
+    <div className="buttons">
+      <button onClick={handleBack}>Regresar</button>
+      <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+    </div>
+  </div>
+)}
 
-        {step === 3 && (
-          <div className="step3">
-            <h3>Área de trabajo</h3>
-            <label>¿Desarrolla sus actividades en edificios, locales o áreas exteriores?</label>
-            <label>
-              <input type="radio" name="areaTrabajo" value="sí" onChange={handleInputChange} />
-              Sí
-            </label>
-            <label>
-              <input type="radio" name="areaTrabajo" value="no" onChange={handleInputChange} />
-              No
-            </label>
+        {/* Paso 3 */}
+{step === 3 && (
+  <div className="step3">
+    <h3>Área de trabajo</h3>
+    <label>¿Desarrolla sus actividades de producción, comercialización, transporte y almacenamiento o prestación de servicios en: edificios, locales, instalaciones y/o áreas exteriores, tales como pasillos, patios, techos, estacionamientos, áreas de circulación de vehículos, áreas de carga y descarga de materiales?</label>
+    <label>
+      <input type="radio" name="areaTrabajo" value="sí" onChange={handleInputChange} />
+      Sí
+    </label>
+    <label>
+      <input type="radio" name="areaTrabajo" value="no" onChange={handleInputChange} />
+      No
+    </label>
 
-            <div className="buttons">
-              <button onClick={handleBack}>Regresar</button>
-              <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
-            </div>
-          </div>
-        )}
+    {/* Nueva sección de elementos del centro de trabajo */}
+    <h4>Seleccione los elementos con que cuenta su centro de trabajo:</h4>
+    <label>
+      <input
+        type="checkbox"
+        value="escaleras"
+        onChange={(e) => handleCheckboxChange(e, 'elementos')}
+        checked={formValues.elementos.includes('escaleras')}
+      />
+      Escaleras
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="rampas"
+        onChange={(e) => handleCheckboxChange(e, 'elementos')}
+        checked={formValues.elementos.includes('rampas')}
+      />
+      Rampas
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="escalas"
+        onChange={(e) => handleCheckboxChange(e, 'elementos')}
+        checked={formValues.elementos.includes('escalas')}
+      />
+      Escalas
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="puentesPlataformasElevadas"
+        onChange={(e) => handleCheckboxChange(e, 'elementos')}
+        checked={formValues.elementos.includes('puentesPlataformasElevadas')}
+      />
+      Puentes y plataformas elevadas
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="transitoVehiculos"
+        onChange={(e) => handleCheckboxChange(e, 'elementos')}
+        checked={formValues.elementos.includes('transitoVehiculos')}
+      />
+      Áreas de tránsito de vehículos
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="espuelasFerrocarril"
+        onChange={(e) => handleCheckboxChange(e, 'elementos')}
+        checked={formValues.elementos.includes('espuelasFerrocarril')}
+      />
+      Espuelas de ferrocarril activas
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="ventilacionArtificial"
+        onChange={(e) => handleCheckboxChange(e, 'elementos')}
+        checked={formValues.elementos.includes('ventilacionArtificial')}
+      />
+      Sistemas de ventilación artificial
+    </label>
 
-        {/* Paso 4 */}
+    <div className="buttons">
+      <button onClick={handleBack}>Regresar</button>
+      <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+    </div>
+  </div>
+)}
+
+{/* Paso 4 */}
 {step === 4 && (
   <div className="step4">
     <h3>Uso de maquinaria o equipo</h3>
@@ -1893,7 +1961,7 @@ const NormaNoms = () => {
               name="materialc"
               value="No"
               onChange={handleInputChange}
-              checked={formValues.materialc === 'No'}
+              checked={formValues.manejocargas === 'No'}
             />
             No
           </label>
@@ -1976,10 +2044,6 @@ const NormaNoms = () => {
           </div>
         </div>
       )}
-
-
-
-
 
 
 {step === 38 && (
