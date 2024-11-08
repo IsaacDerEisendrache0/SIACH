@@ -160,6 +160,120 @@ const normas = [
     condition: (values) => values.exposicionRuido === 'sí'
   },
 
+  { 
+    id: 'NOM-013', 
+    title: 'Radiaciones no ionizantes', 
+    puntos: [
+      { numero: '3.1.2', descripcion: 'Reconocimiento, evaluación y control de áreas con radiaciones no ionizantes para prevenir riesgos.' },
+      { numero: '3.1.3', descripcion: 'Documento informativo sobre los riesgos de exposición a radiaciones no ionizantes.' },
+      { numero: '3.1.4', descripcion: 'Capacitación en seguridad e higiene para el manejo de fuentes generadoras de radiaciones no ionizantes.' },
+      { numero: '3.1.5', descripcion: 'Medidas de control para prevenir riesgos de exposición a radiaciones electromagnéticas.' }
+    ],
+    condition: (values) => values.exposicionRadiaciones === 'sí'
+  },
+  { 
+    id: 'NOM-024', 
+    title: 'Vibraciones en el ambiente laboral', 
+    puntos: [
+      { numero: '5.2', descripcion: 'Documento informativo sobre los riesgos a la salud por exposición a vibraciones.' },
+      { numero: '5.4', descripcion: 'Programa de prevención de alteraciones a la salud por exposición a vibraciones.' },
+      { numero: '5.5', descripcion: 'Capacitación al personal expuesto a vibraciones en el programa de prevención de alteraciones a la salud.' },
+      { numero: '8.7.2 a)', descripcion: 'Evaluación de niveles de exposición a vibraciones en áreas potencialmente expuestas.' }
+    ],
+    condition: (values) => values.vibraciones === 'sí'
+  },
+  { 
+    id: 'NOM-025', 
+    title: 'Iluminación en los centros de trabajo', 
+    puntos: [
+      { numero: '5.2', descripcion: 'Evaluación de la iluminación en áreas de trabajo comparada con los valores establecidos.' },
+      { numero: '5.8', descripcion: 'Documento informativo sobre riesgos de deslumbramiento o deficiente iluminación.' },
+      { numero: '5.10', descripcion: 'Programa de mantenimiento a luminarias y sistemas de iluminación de emergencia.' },
+      { numero: '5.11', descripcion: 'Sistemas de iluminación eléctrica de emergencia en áreas de riesgo.' }
+    ],
+    condition: (values) => values.iluminacion === 'deficiente'
+  },
+  { 
+    id: 'NOM-035', 
+    title: 'Factores de riesgo psicosocial en el trabajo', 
+    puntos: [
+      { numero: '5.1', descripcion: 'Política de prevención de riesgos psicosociales en el trabajo.' },
+      { numero: '5.5', descripcion: 'Identificación y canalización de trabajadores expuestos a acontecimientos traumáticos.' },
+      { numero: '7.1 b)', descripcion: 'Identificación y análisis de factores de riesgo psicosocial en el centro de trabajo.' },
+      { numero: '8.2 a) 5)', descripcion: 'Capacitación de directivos y supervisores en prevención de riesgos psicosociales.' }
+    ],
+    condition: (values) => values.factoresPsicosociales === 'sí'
+  },
+  { 
+    id: 'NOM-036-1', 
+    title: 'Factores de riesgo ergonómico por manejo manual de cargas', 
+    puntos: [
+      { numero: '5.1', descripcion: 'Análisis de los factores de riesgo ergonómico debido al manejo manual de cargas.' },
+      { numero: '5.3', descripcion: 'Programa de ergonomía para la vigilancia de la salud de los trabajadores expuestos.' },
+      { numero: '5.4', descripcion: 'Documento informativo sobre los riesgos del manejo manual de cargas.' },
+      { numero: '5.5', descripcion: 'Capacitación en procedimientos de seguridad para manejo manual de cargas.' }
+    ],
+    condition: (values) => values.manejocargas === 'sí'
+  },
+  { 
+    id: 'NOM-017', 
+    title: 'Equipo de protección personal', 
+    puntos: [
+      { numero: '5.2', descripcion: 'Análisis de riesgos por puesto de trabajo y determinación del equipo de protección necesario.' },
+      { numero: '5.5', descripcion: 'Documento informativo sobre los riesgos a los que se exponen los trabajadores.' },
+      { numero: '5.6', descripcion: 'Capacitación para el uso adecuado del equipo de protección personal.' },
+      { numero: '5.8', descripcion: 'Identificación y señalización de áreas donde es obligatorio el uso de equipo de protección.' }
+    ],
+    condition: (values) => values.equipoProteccion === 'sí'
+  },
+  { 
+    id: 'NOM-018', 
+    title: 'Identificación y comunicación de peligros por sustancias químicas peligrosas', 
+    puntos: [
+      { numero: '6.1', descripcion: 'Listado actualizado de sustancias químicas peligrosas en el centro de trabajo.' },
+      { numero: '6.3', descripcion: 'Hojas de datos de seguridad para todas las sustancias químicas peligrosas.' },
+      { numero: '6.5', descripcion: 'Identificación y señalización de recipientes y áreas que contienen sustancias químicas peligrosas.' },
+      { numero: '6.7', descripcion: 'Capacitación para el manejo seguro de sustancias químicas peligrosas.' }
+    ],
+    condition: (values) => values.materialp === 'sí'
+  },
+  { 
+    id: 'NOM-019', 
+    title: 'Constitución y funcionamiento de las comisiones de seguridad e higiene', 
+    puntos: [
+      { numero: '5.4', descripcion: 'Acta de constitución de la comisión de seguridad e higiene.' },
+      { numero: '5.5', descripcion: 'Programa de recorridos de verificación de la comisión de seguridad e higiene.' },
+      { numero: '5.6', descripcion: 'Actas de los recorridos de verificación realizados por la comisión.' },
+      { numero: '5.13', descripcion: 'Capacitación a los integrantes de la comisión de seguridad e higiene.' }
+    ],
+    condition: (values) => values.comisionSeguridadHigiene === 'sí'
+  },
+  
+  
+  { 
+    id: 'NOM-026', 
+    title: 'Colores y señales de seguridad e higiene, e identificación de riesgos por fluidos conducidos en tuberías', 
+    puntos: [
+      { numero: '5.2', descripcion: 'Constancias de competencias o habilidades laborales sobre la interpretación de elementos de señalización en el centro de trabajo.' },
+      { numero: '5.3', descripcion: 'Mantenimiento de la aplicación del color, señalización e identificación de tuberías para asegurar visibilidad y legibilidad.' },
+      { numero: '5.4', descripcion: 'Ubicación de señales de seguridad e higiene de manera que sean observadas e interpretadas correctamente por los trabajadores.' }
+    ],
+    condition: (values) => values.senalizacionSeguridad === 'sí' // Agregar este campo en formValues si aplica
+  },
+
+    
+  { 
+    id: 'NOM-030', 
+    title: 'Servicios preventivos de seguridad y salud en el trabajo', 
+    puntos: [
+      { numero: '4.1', descripcion: 'Designación de un responsable de seguridad y salud en el trabajo para actividades preventivas en el centro de trabajo.' },
+      { numero: '4.3', descripcion: 'Diagnóstico integral o por áreas de las condiciones de seguridad y salud en el trabajo.' },
+      { numero: '4.4', descripcion: 'Programa de seguridad y salud en el trabajo basado en el diagnóstico de seguridad y salud.' },
+      { numero: '4.5', descripcion: 'Comunicación del diagnóstico y programa de seguridad a la comisión de seguridad e higiene o trabajadores.' }
+    ],
+    condition: (values) => values.seguridadSalud === 'sí' // Agregar este campo en formValues si aplica
+  },
+
 
 
 
@@ -1779,7 +1893,7 @@ const NormaNoms = () => {
               name="materialc"
               value="No"
               onChange={handleInputChange}
-              checked={formValues.manejocargas === 'No'}
+              checked={formValues.materialc === 'No'}
             />
             No
           </label>
@@ -1963,7 +2077,8 @@ const NormaNoms = () => {
                             ))}
                           </td>
                           <td>
-                            <a href={`/noms/${norma.id}.pdf`} target="_blank" rel="noopener noreferrer">Descargar</a>
+                          <a href={`/noms/${norma.id}.pdf`} target="_blank" rel="noopener noreferrer">Descargar</a>
+
                           </td>
                         </tr>
                       );
@@ -1983,4 +2098,4 @@ const NormaNoms = () => {
   );
 };
 
-export default NormaNoms;
+export default NormaNoms;  
