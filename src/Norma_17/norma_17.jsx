@@ -11,8 +11,6 @@ import logo from '../logos/logo.png'; // Importa la imagen del logo correctament
 
 
 
-
-
 const RiskAssessmentTable = () => {
 
   const [areas, setAreas] = useState([
@@ -650,7 +648,7 @@ useEffect(() => {
             
 
             <div className="full-width-cell">
-            <label htmlFor="descripcion-actividad" className="titulo-descripcion">puestos      </label>
+            <label htmlFor="descripcion-actividad" className="titulo-descripcion">Puestos</label>
               <div className="puesto-con-botones">
                 <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange}>
                   <option value="" disabled>Seleccione un puesto</option>
@@ -725,99 +723,122 @@ useEffect(() => {
 
 
               
-          <td className="header right-aligned" colSpan="3" style={{ backgroundColor: 'red' }}>
-          <div className="text1">Principales partes del cuerpo expuestas al riesgo:</div>
+<td className="header-cell" colSpan="3" style={{ backgroundColor: 'red', padding: '10px' }}>
+  <div className="body-parts-title">Principales partes del cuerpo expuestas al riesgo:</div>
+  
+  <table className="body-parts-table">
+    <tbody>
+      <tr>
+        <td className="risk-label-cell">Cabeza y Oídos</td>
+        <td className="risk-mark-cell">{affectedBodyParts.includes('Cabeza y Oídos') ? 'X' : ''}</td>
+        <td className="risk-label-cell">Tronco</td>
+        <td className="risk-mark-cell">{affectedBodyParts.includes('Tronco') ? 'X' : ''}</td>
+      </tr>
+      <tr>
+        <td className="risk-label-cell">Ojos y Cara</td>
+        <td className="risk-mark-cell">{affectedBodyParts.includes('Ojos y Cara') ? 'X' : ''}</td>
+        <td className="risk-label-cell">Sistema respiratorio</td>
+        <td className="risk-mark-cell">{affectedBodyParts.includes('Sistema respiratorio') ? 'X' : ''}</td>
+      </tr>
+      <tr>
+        <td className="risk-label-cell">Brazos y Manos</td>
+        <td className="risk-mark-cell">{affectedBodyParts.includes('Brazos y Manos') ? 'X' : ''}</td>
+        <td className="risk-label-cell">Extremidades inferiores</td>
+        <td className="risk-mark-cell">{affectedBodyParts.includes('Extremidades inferiores') ? 'X' : ''}</td>
+      </tr>
+    </tbody>
+  </table>
+</td>
 
-            <div className="body-parts-container">
-              
-              <div className="left-column">
-                
-                <div className="risk-item">Cabeza y Oídos: <span className="risk-mark">{affectedBodyParts.includes('Cabeza y Oídos') ? 'X' : ''}</span></div>
-                <div className="risk-item">Ojos y Cara: <span className="risk-mark">{affectedBodyParts.includes('Ojos y Cara') ? 'X' : ''}</span></div>
-                <div className="risk-item">Brazos y Manos: <span className="risk-mark">{affectedBodyParts.includes('Brazos y Manos') ? 'X' : ''}</span></div>
-              </div>
-              <div className="right-column">
-                <div className="risk-item">Tronco: <span className="risk-mark">{affectedBodyParts.includes('Tronco') ? 'X' : ''}</span></div>
-                <div className="risk-item">Sistema respiratorio: <span className="risk-mark">{affectedBodyParts.includes('Sistema respiratorio') ? 'X' : ''}</span></div>
-                <div className="risk-item">Extremidades inferiores: <span className="risk-mark">{affectedBodyParts.includes('Extremidades inferiores') ? 'X' : ''}</span></div>
-              </div>
-            </div>
-            
-          </td>
+
 
             
   
-          <td className="header-td" style={{ backgroundColor: 'red' }} colSpan="2">
-            <div className="header-td">
-            Aquí se integra el nuevo código en la sección de Áreas
-<div className="label-action">
-  <label htmlFor="area">Área:</label>
-  <div className="area-con-botones">
-    <select id="area" value={areaSeleccionada} onChange={handleAreaChange}>
-      {areas.map((area, index) => (
-        <option key={index} value={area.nombre}>
-          {area.nombre}
-        </option>
-      ))}
-    </select>
-    
-    {/* Botón para agregar área */}
-    <button className="btn-agregar" onClick={handleAddAreaClick}>
-      Agregar Área
-    </button>
-    
-    {/* Botón para borrar área */}
-    <button className="btn-borrar" onClick={handleDeleteAreaClick}>
-      Borrar Área
-    </button>
-  </div>
-</div>
+<td className="header-td" colSpan="3">
+  <div className="additional-data-title">Datos adicionales</div>
 
-{/* Modal para borrar áreas */}
-<Modal isOpen={isAreaModalOpen} onRequestClose={handleAreaModalClose}>
-  <div className="modal-container">
-    <h2>Selecciona las áreas a borrar</h2>
-    <div className="areas-lista">
-      {areas.length > 0 ? (
-        areas.map((area, index) => (
-          <div className="area-item" key={index}>
-            <input
-              type="checkbox"
-              value={area.nombre}
-              onChange={handleAreaSelectionChange}
-              checked={areasSeleccionadasParaBorrar.includes(area.nombre)}
-            />
-            <label>{area.nombre}</label>
-          </div>
-        ))
-      ) : (
-        <p>No hay áreas disponibles para borrar</p>
-      )}
-    </div>
-    <button onClick={handleDeleteSelectedAreas}>Borrar seleccionadas</button>
-    <button onClick={handleAreaModalClose}>Cerrar</button>
-  </div>
-</Modal>
+  <table className="details-table">
+    <tbody>
+      {/* Fila de Área */}
+      <tr>
+        <td className="label-cell">Área:</td>
+        <td className="input-cell">
+          <select id="area" value={areaSeleccionada} onChange={handleAreaChange} className="select-area">
+            {areas.map((area, index) => (
+              <option key={index} value={area.nombre}>
+                {area.nombre}
+              </option>
+            ))}
+          </select>
+        </td>
+        <td className="button-cell">
+          <button className="btn-agregar" onClick={handleAddAreaClick}>Agregar</button>
+          <button className="btn-borrar" onClick={handleDeleteAreaClick}>Borrar</button>
+        </td>
+      </tr>
 
-                <div className="label-action">Fecha de inspección: <input type="date" defaultValue="2023-09-13" /></div>
-                <div>
-                  <label htmlFor="tiempoExposicion">Tiempo de exposición:</label>
-                  <select
-                    id="tiempoExposicion"
-                    className="small-input"
-                    value={tiempoExposicion}
-                    onChange={(e) => setTiempoExposicion(e.target.value)}
-                  >
-                    <option value="2hrs">2 horas</option>
-                    <option value="4hrs">4 horas</option>
-                    <option value="6hrs">6 horas</option>
-                    <option value="8hrs">8 horas</option>
-                    <option value="10hrs">10 horas</option>
-                    <option value="12hrs">12 horas</option>
-                  </select>
+      {/* Modal para borrar áreas */}
+      <Modal isOpen={isAreaModalOpen} onRequestClose={handleAreaModalClose} className="overlay">
+        <div className="modal-container">
+          <h2>Selecciona las áreas a borrar</h2>
+          <div className="areas-lista">
+            {areas.length > 0 ? (
+              areas.map((area, index) => (
+                <div className="area-item" key={index}>
+                  <input
+                    type="checkbox"
+                    value={area.nombre}
+                    onChange={handleAreaSelectionChange}
+                    checked={areasSeleccionadasParaBorrar.includes(area.nombre)}
+                  />
+                  <label>{area.nombre}</label>
                 </div>
-            </div>
-          </td>
+              ))
+            ) : (
+              <p>No hay áreas disponibles para borrar</p>
+            )}
+          </div>
+          <div className="modal-buttons">
+            <button onClick={handleDeleteSelectedAreas}>Borrar seleccionadas</button>
+            <button onClick={handleAreaModalClose}>Cerrar</button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Fila de Fecha de inspección */}
+      <tr>
+        <td className="label-cell">Fecha de inspección:</td>
+        <td colSpan="2" className="input-cell">
+          <input type="date" id="fechaInspeccion" defaultValue="2023-09-13" className="date-input" />
+        </td>
+      </tr>
+
+      {/* Fila de Tiempo de exposición */}
+      <tr>
+        <td className="label-cell">Tiempo de exposición:</td>
+        <td colSpan="2" className="input-cell">
+          <select
+            id="tiempoExposicion"
+            className="select-tiempo"
+            value={tiempoExposicion}
+            onChange={(e) => setTiempoExposicion(e.target.value)}
+          >
+            <option value="2hrs">2 horas</option>
+            <option value="4hrs">4 horas</option>
+            <option value="6hrs">6 horas</option>
+            <option value="8hrs">8 horas</option>
+            <option value="10hrs">10 horas</option>
+            <option value="12hrs">12 horas</option>
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</td>
+
+
+
+
           
           </tr>
           
@@ -827,7 +848,7 @@ useEffect(() => {
         
         <tbody>
           <tr>
-          <td colSpan="2" className="left-section"> 
+          <td colSpan="3" className="left-section"> 
   <tb className="text1">Identificación de peligros</tb>
   <ul className="hazard-list">
     {Object.keys(hazards).map(hazard => (
@@ -997,7 +1018,7 @@ useEffect(() => {
           </tr>
           
           <tr>
-            <td colSpan="5" className="right-aligned" >
+            <td colSpan="7" className="right-aligned" >
               <div className="text1" >Evaluación de riesgo de trabajo</div>
               <table className="inner-table" >
                 <thead >
@@ -1053,18 +1074,31 @@ useEffect(() => {
                 </tbody>
               </table>
             </td>
-            <td colSpan="3" className="right-aligned" > 
-              <div className="text1" >Clasificación de Magnitud de Riesgo</div>
-              <div className="risk-magnitude" style={{ backgroundColor: 'white' }}>
-                <div className="risk-value">Magnitud del Riesgo: {calculateRisk().toFixed(2)}</div>
-                <div className="risk-classification">
-                  Clasificación: {calculateRisk() > 400 ? 'Muy Alto' : calculateRisk() > 200 ? 'Alto' : calculateRisk() > 70 ? 'Notable' : calculateRisk() > 20 ? 'Moderado' : 'Bajo o Aceptable'}
-                </div>
-                <div className="risk-action">
-                  Acción: {calculateRisk() > 400 ? 'Detención inmediata' : calculateRisk() > 200 ? 'Corrección inmediata' : calculateRisk() > 70 ? 'Corrección urgente' : calculateRisk() > 20 ? 'Debe corregirse' : 'Tolerable'}
-                </div>
-              </div>
-            </td>
+            
+            <td colSpan="3" className="right-aligned">
+  <div className="risk-title">Clasificación de Magnitud de Riesgo</div>
+  <table className="risk-magnitude-table">
+    <tbody>
+      <tr>
+        <td className="risk-label-cell">Magnitud del Riesgo:</td>
+        <td className="risk-value-cell">{calculateRisk().toFixed(2)}</td>
+      </tr>
+      <tr>
+        <td className="risk-label-cell">Clasificación:</td>
+        <td className="risk-classification-cell">
+          {calculateRisk() > 400 ? 'Muy Alto' : calculateRisk() > 200 ? 'Alto' : calculateRisk() > 70 ? 'Notable' : calculateRisk() > 20 ? 'Moderado' : 'Bajo o Aceptable'}
+        </td>
+      </tr>
+      <tr>
+        <td className="risk-label-cell">Acción:</td>
+        <td className="risk-action-cell">
+          {calculateRisk() > 400 ? 'Detención inmediata' : calculateRisk() > 200 ? 'Corrección inmediata' : calculateRisk() > 70 ? 'Corrección urgente' : calculateRisk() > 20 ? 'Debe corregirse' : 'Tolerable'}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</td>
+
           </tr>
         </tbody>
       </table>
