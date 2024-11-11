@@ -268,9 +268,13 @@ const RiskTable = () => {
 
   return (
     <div className="risk-table-container">
+      
       <div className="logo-container" style={{ textAlign: 'center', marginBottom: '20px' }}>
         <img src={logo} alt="SIACH Logo" style={{ width: '200px', marginLeft: '-900px' }} />
       </div>
+      <h6>ANÁLISIS DE RIESGO POTENCIAL GENERADO POR EQUIPOS MÓVILES
+      NOM-004-STPS-1999</h6>
+    
       <table className="risk-table" style={{ backgroundColor: 'white' }}>
         <thead>
           <tr>

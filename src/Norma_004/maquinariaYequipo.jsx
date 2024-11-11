@@ -4,7 +4,6 @@ import html2canvas from 'html2canvas';
 import { addDoc, updateDoc, doc, collection } from 'firebase/firestore';
 import { db } from '../firebase';
 import logo from '../logos/logo.png';
-import Modal from 'react-modal';
 
 const RiskTable = () => {
   // Estados para capturar los datos del formulario
@@ -198,6 +197,8 @@ const RiskTable = () => {
       <div className="logo-container" style={{ textAlign: 'center', marginBottom: '20px' }}>
         <img src={logo} alt="SIACH Logo" style={{ width: '200px', marginLeft: '-900px' }} />
       </div>
+      <h6>NOM-004-STPS-1999 
+      "ANALISIS DE RIESGO POTENCIAL POR MAQUINARIA Y EQUIPO"</h6>
       <table className="risk-table" style={{ backgroundColor: 'white' }}>
         <thead>
           <tr>
