@@ -23,8 +23,11 @@
 
 .risk-table {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  font-size: 10px; /* Ajusta el tamaño de fuente para hacer la tabla más pequeña */
   border-collapse: collapse;
-  margin-top: 20px;
+  box-sizing: border-box; /* Asegura que padding y border no cambien el tamaño */
 }
 
 
