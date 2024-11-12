@@ -5,6 +5,23 @@ import { addDoc, updateDoc, doc, collection } from 'firebase/firestore';
 import { db } from '../firebase';
 import logo from '../logos/logo.png';
 
+const protectionImages = {
+  'Caídas de Altura': ['/images/10.png', '/images/34.png'],
+  'Exposición a Temperaturas': ['/images/6.png'],
+  'Exposición a Electricidad Estática': ['/images/6.png', '/images/4.png'],
+  'Exposición a Sustancias Químicas': ['/images/7.png', '/images/13.png', '/images/6.png', '/images/17.png'],
+  'Exposición a Radiaciones': ['/images/16.png'],
+  'Exposición agentes Biológicos': ['/images/18.png', '/images/16.png'],
+  'Exposición a Ruido': ['/images/19.png', '/images/5.png'],
+  'Exposición a Vibraciones': ['/images/14.png', '/images/4.png'],
+  'Superficies cortantes': ['/images/6.png', '/images/1.png', '/images/21.png'],
+  'Caídas a nivel o desnivel': ['/images/4.png'],
+  'Daños Ergonómicos': ['/images/15.png'],
+  'Calentamiento de materia prima, subproducto o producto': ['/images/6.png', '/images/15.png'],
+  'Proyección de material o herramienta': ['/images/7.png', '/images/12.png'],
+  'Mantenimiento preventivo, correctivo o predictivo': ['/images/12.png', '/images/3.png'],
+};
+
 const RiskTable = () => {
   const [nombreMaquinaria, setNombreMaquinaria] = useState('');
   const [poe, setPoe] = useState('');
@@ -16,7 +33,7 @@ const RiskTable = () => {
   const [exposure, setExposure] = useState('Ocasionalmente');
   const [probability, setProbability] = useState('Coincidencia extremadamente remota pero concebible');
   const [selectedBodyImage, setSelectedBodyImage] = useState(null);
-  const [selectedEPPImages, setSelectedEPPImages] = useState(['/images/3.png', '/images/4.png', '/images/6.png']);
+  const [selectedEPPImages, setSelectedEPPImages] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [tableId, setTableId] = useState(null);
 
@@ -66,20 +83,21 @@ const RiskTable = () => {
     });
   };
 
-  const handleAddEPPImage = (e) => {
-    const selectedImage = e.target.value;
-    if (selectedImage && !selectedEPPImages.includes(selectedImage)) {
-      setSelectedEPPImages(prevImages => [...prevImages, selectedImage]);
+  const handleCheckboxChange = (e, hazard) => {
+    const checked = e.target.checked;
+    const imagesToAdd = protectionImages[hazard] || [];
+
+    if (checked) {
+      // Agregar imágenes sin duplicados
+      setSelectedEPPImages((prevImages) => Array.from(new Set([...prevImages, ...imagesToAdd])));
+    } else {
+      // Remover imágenes para el peligro deseleccionado
+      setSelectedEPPImages((prevImages) => prevImages.filter(img => !imagesToAdd.includes(img)));
     }
   };
 
-  const handleSelectBodyImage = (e) => {
-    const selectedImage = e.target.value;
-    setSelectedBodyImage(selectedImage);
-  };
-
   const handleRemoveEPPImage = (imageToRemove) => {
-    setSelectedEPPImages(prevImages => prevImages.filter(image => image !== imageToRemove));
+    setSelectedEPPImages((prevImages) => prevImages.filter((image) => image !== imageToRemove));
   };
 
   const calcularValorConsecuencia = (consequence) => {
@@ -237,6 +255,30 @@ const RiskTable = () => {
                   </tr>
                 </tbody>
               </table>
+
+              {/* Tabla adicional debajo de Insertar Imagen con Imágenes de EPP seleccionadas */}
+              <table className="additional-table">
+                <thead>
+                  <tr>
+                    <th>Información Adicional</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      {selectedEPPImages.map((img, index) => (
+                        <img
+                          key={index}
+                          src={img}
+                          alt="EPP"
+                          className="selected-image"
+                          onClick={() => handleRemoveEPPImage(img)}
+                        />
+                      ))}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             <div className="identification-table">
@@ -248,58 +290,12 @@ const RiskTable = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Caídas de Altura</td>
-                    <td><input type="checkbox" /></td>
-                  </tr>
-                  <tr>
-                    <td>Exposición a Temperaturas</td>
-                    <td><input type="checkbox" /></td>
-                  </tr>
-                  <tr>
-                    <td>Exposición a Electricidad Estática</td>
-                    <td><input type="checkbox" /></td>
-                  </tr>
-                  <tr>
-                    <td>Exposición a Sustancias Químicas</td>
-                    <td><input type="checkbox" /></td>
-                  </tr>
-                  <tr>
-                    <td>Exposición a Radiaciones</td>
-                    <td><input type="checkbox" /></td>
-                  </tr>
-                  <tr>
-                    <td>Exposición a Ruido</td>
-                    <td><input type="checkbox" /></td>
-                  </tr>
-                  <tr>
-                    <td>Exposición a Vibraciones</td>
-                    <td><input type="checkbox" /></td>
-                  </tr>
-                  <tr>
-                    <td>Superficies Cortantes</td>
-                    <td><input type="checkbox" /></td>
-                  </tr>
-                  <tr>
-                    <td>Caídas a nivel o desnivel</td>
-                    <td><input type="checkbox" /></td>
-                  </tr>
-                  <tr>
-                    <td>Daños Ergonomicos</td>
-                    <td><input type="checkbox" /></td>
-                  </tr>
-                  <tr>
-                    <td>Calentamiento de materia prima, subproducto o producto</td>
-                    <td><input type="checkbox" /></td>
-                  </tr>
-                  <tr>
-                    <td>Proyección de material o herramienta</td>
-                    <td><input type="checkbox" /></td>
-                  </tr>
-                  <tr>
-                    <td>Mantenimiento preventivo, correctivo o predictivo</td>
-                    <td><input type="checkbox" /></td>
-                  </tr>
+                  {Object.keys(protectionImages).map((hazard, idx) => (
+                    <tr key={idx}>
+                      <td>{hazard}</td>
+                      <td><input type="checkbox" onChange={(e) => handleCheckboxChange(e, hazard)} /></td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

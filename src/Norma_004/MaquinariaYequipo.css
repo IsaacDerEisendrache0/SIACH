@@ -17,15 +17,20 @@
     justify-content: space-between;
   }
   
-  .image-insert-table,
-  .evaluation-table {
+  .image-insert-table {
     flex: 1;
     margin: 10px 5px;
   }
   
-  /* Ajuste para hacer más larga la tabla de identificación de peligros */
+  /* Ajuste para hacer más corta la tabla de identificación de peligros */
   .identification-table {
-    flex: 2; /* Incrementa el valor flex para que ocupe más espacio */
+    flex: 1.5; /* Reducido el valor flex para ocupar menos espacio */
+    margin: 10px 5px;
+  }
+  
+  /* Ajuste para hacer más grande la tabla de evaluación de riesgo de trabajo */
+  .evaluation-table {
+    flex: 2; /* Incrementado el valor flex para ocupar más espacio */
     margin: 10px 5px;
   }
   
@@ -62,5 +67,19 @@
   
   .button-container {
     margin-top: 20px;
+  }
+  
+  /* Estilo para las imágenes del EPP en Información Adicional */
+  .additional-table .selected-image {
+    width: 25%; /* Ajusta el ancho para que sean un poco más pequeñas */
+    margin: 5px;
+    object-fit: contain;
+    border: 2px solid red; /* Borde rojo */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 5px; /* Espacio interno para un efecto de margen interior */
+    background-color: white; /* Fondo blanco para que destaque */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para darle profundidad */
+    cursor: pointer;
+    display: inline-block;
   }
   
