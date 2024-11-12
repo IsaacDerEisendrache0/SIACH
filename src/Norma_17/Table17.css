@@ -95,9 +95,10 @@
 }
 
 .hazard-list {
-  list-style-type: none;
+  list-style-type: none; /* Elimina los puntos de lista si no son necesarios */
   padding: 0;
   margin: 0;
+  text-align: left; /* Asegura la alineación a la izquierda */
 }
 
 /* Asegúrate de que la celda ocupe todo el espacio disponible */
@@ -530,15 +531,16 @@ button {
   display: flex;
   flex-direction: column; /* Coloca los elementos en una columna */
   width: 100%; /* Ocupa todo el ancho disponible */
-  margin-bottom: 3px; /* Separación del contenedor respecto a otros elementos */
+  margin-bottom: 2px; /* Separación del contenedor respecto a otros elementos */
 }
 
 .titulo-descripcion {
   display: inline-block; /* Asegura que el texto se mantenga en una línea */
-  width: 100%; /* Ocupa todo el ancho disponible */
+  width: 50%; /* Ocupa todo el ancho disponible */
   white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-  font-weight: bold;
-  font-size: 16px;
+  text-align: left;
+  display: block;
+  font-size: 18px;
 }
 
 
@@ -788,4 +790,135 @@ button {
 .risk-classification-cell,
 .risk-action-cell {
   width: 50%;
+}
+
+
+
+
+/* /////////////////////////////////////////////////*/ 
+
+
+/* Contenedor principal sin borde */
+.no-border-cell {
+  padding: 10px;
+}
+
+/* Sección de puestos */
+.puestos-section {
+  margin-bottom: 20px;
+}
+
+/* Título de la sección */
+.titulo-descripcion {
+  font-weight: bold;
+  font-size: 16px;
+  color: white;
+  margin-bottom: 5px;
+}
+
+/* Contenedor del select y botones de puestos */
+.puesto-con-botones {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Estilo del select de puestos */
+.select-puesto {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* Botones de agregar y borrar */
+.btn-agregar, .btn-borrar {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+/* Contenedor de descripción de actividad */
+.contenedor-descripcion {
+  margin-top: 20px;
+}
+
+/* Estilo del textarea para descripción de actividad */
+.textarea-descripcion {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+
+
+/* /////////////////////////////////////////////////*/ 
+
+
+
+
+/* /////////////////////////////////////////////////*/ 
+/* Para la tabla completa */
+/* Estilos para toda la tabla */
+.custom-table {
+  border-collapse: collapse; /* Funde los bordes de la tabla */
+  border-spacing: 0; /* Asegura que no haya espacios entre celdas */
+  width: 100%; /* Asegura que la tabla use todo el ancho */
+}
+
+/* Estilo específico para la fila sin bordes */
+.no-border-row td {
+  border: none !important; /* Fuerza la eliminación de cualquier borde en las celdas de esta fila */
+  padding: 10px; /* Ajusta el padding según tus necesidades */
+}
+
+/* Contenedor para posicionar el botón sobre la imagen */
+.logo-container {
+  position: relative;
+  display: inline-block;
+}
+
+
+
+/* Botón de eliminación posicionado en la esquina superior derecha de la imagen */
+.remove-logo-button {
+  position: absolute;
+  top: 5px;
+  right: 0px;
+  padding: 3px 6px;
+  font-size: 0.7em;
+  background-color:  black;
+  border: none;
+  border-radius: 50%;
+  color: white; 
+  cursor: pointer;
+}
+
+.remove-logo-button:hover {
+  background-color: black;
+}
+
+
+/* Contenedor del logo para mantener alineación y posicionamiento */
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 320px; /* Ajusta el ancho máximo del contenedor según tu preferencia */
+  height: auto;
+}
+
+/* Imagen del logo */
+.company-logo {
+  width: 100%; /* Ocupa todo el ancho del contenedor */
+  height: auto; /* Mantiene la proporción de la imagen */
+  max-width: 250px; /* Tamaño máximo de la imagen */
+  max-height: 100px; /* Tamaño máximo de la imagen */
+  object-fit: contain; /* Asegura que la imagen se ajuste sin deformarse */
 }

@@ -4,7 +4,9 @@ import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { collection, addDoc, getDocs, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase'; // Importar la configuración de Firebase
-import logo from '../logos/logo.png'; // Importa la imagen del logo correctamente
+import logo from '../logos/logo.png';
+import maxion from '../logos/maxion.jpeg';
+import safran from '../logos/safran.jpeg';
 
 
 
@@ -633,63 +635,105 @@ useEffect(() => {
     setSelectedSubOption(''); // Reinicia la subcategoría
     setShowSubDropdown(true); // Muestra el segundo menú al seleccionar una opción principal
   };
+
+
+
+  const logos = [
+    { nombre: 'Safran', url: safran },
+    { nombre: 'Maxion', url: maxion },
+  ];
+  
+
+  // Estado para almacenar el logo seleccionado
+  const [logoSeleccionado, setLogoSeleccionado] = useState(null);
+
+  // Maneja el cambio de selección en el menú desplegable
+  const handleLogoChange = (event) => {
+    setLogoSeleccionado(event.target.value); // Guarda la URL del logo seleccionado
+  };
+
+  // Maneja la eliminación del logo y muestra el menú desplegable nuevamente
+  const handleRemoveLogo = () => {
+    setLogoSeleccionado(null); // Elimina el logo seleccionado
+  };
   
 
   return (
       <div class="main-table">
 
-        <table class="custom-table" className="table-container" style={{ backgroundColor: 'white' }}>
-          
-        <thead>
-        <img src={logo} alt="SIACH Logo" style={{ width: '200px', marginLeft: '-200px' }} />
+        <table class="custom-table" className="table-container" style={{ backgroundColor: 'white' }}><thead>
+        
+      
+        
+        <tr className="no-border-row">
+  {/* Nueva fila superior con celdas individuales para cada sección */}
+  <td colSpan="3">
+    <img src={logo} alt="SIACH Logo" className="siach-logo" />
+  </td>
+  <td colSpan="4" style={{ backgroundColor: 'white' }}>
+  <h3 className="section-header" style={{ color: 'black' }}>
+    Análisis de Riesgo y Determinación de equipo de protección personal NOM-017-STPS-2008
+  </h3>
+</td>
+
+  <td colSpan="3">
+    {logoSeleccionado ? (
+      <div className="logo-container">
+        <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" />
+        <button onClick={handleRemoveLogo} className="remove-logo-button">×</button>
+      </div>
+    ) : (
+      <select onChange={handleLogoChange} className="logo-dropdown">
+        <option value="">Selecciona una empresa</option>
+        {logos.map((logo, index) => (
+          <option key={index} value={logo.url}>
+            {logo.nombre}
+          </option>
+        ))}
+      </select>
+    )}
+  </td>
+</tr>
+
+
+
+      
+
 
           <tr>
           <td className="no-border-cell" colSpan="3">
-            
-
-            <div className="full-width-cell">
+          <div className="puestos-section">
             <label htmlFor="descripcion-actividad" className="titulo-descripcion">Puestos</label>
-              <div className="puesto-con-botones">
-                <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange}>
-                  <option value="" disabled>Seleccione un puesto</option>
-                  {puestos.map((puesto, index) => (
-                    <option key={index} value={puesto}>
-                      {puesto}
-                    </option>
-                  ))}
-                </select>
-
-                {/* Botón para agregar puesto */}
-                <button className="btn-agregar" onClick={handleAddPuestoClick}>
-                  Agregar
-                </button>
-
-                {/* Botón para borrar puestos */}
-                <button className="btn-borrar" onClick={handleDeletePuestoClick}>
-                  Borrar
-                </button>
-              </div>
+            <div className="puesto-con-botones">
+              <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange} className="select-puesto">
+                <option value="" disabled>Seleccione un puesto</option>
+                {puestos.map((puesto, index) => (
+                  <option key={index} value={puesto}>
+                    {puesto}
+                  </option>
+                ))}
+              </select>
+              <button className="btn-agregar" onClick={handleAddPuestoClick}>Agregar</button>
+              <button className="btn-borrar" onClick={handleDeletePuestoClick}>Borrar</button>
             </div>
+          </div>
 
-  {/* Área de descripción de actividad */}
-      <div className="contenedor-descripcion">
-      <label htmlFor="descripcion-actividad" className="titulo-descripcion">
-        Descripción de la actividad:
-      </label>
-      <textarea
-        id="descripcion-actividad"
-        name="descripcion-actividad"
-        rows="3"
-        cols="50"
-        className="textarea-descripcion"
-        placeholder="Escribe aquí la descripción de la actividad..."
-        value={descripcionActividad} // Vincular al estado
-        onChange={(e) => setDescripcionActividad(e.target.value)} // Actualizar estado al cambiar
-      ></textarea>
-    </div>
+          {/* Área de descripción de actividad */}
+          <div className="contenedor-descripcion">
+            <label htmlFor="descripcion-actividad" className="titulo-descripcion">Descripción de la actividad:</label>
+            <textarea
+              id="descripcion-actividad"
+              name="descripcion-actividad"
+              rows="3"
+              cols="50"
+              className="textarea-descripcion"
+              placeholder="Escribe aquí la descripción de la actividad..."
+              value={descripcionActividad}
+              onChange={(e) => setDescripcionActividad(e.target.value)}
+            ></textarea>
+          </div>
+        </td>
 
-
-  </td>
 
 
 
@@ -719,10 +763,11 @@ useEffect(() => {
     <button onClick={handleDeleteSelectedPuestos}>Borrar seleccionados</button>
     <button onClick={handleModalClose}>Cerrar</button>
   </div>
+  
 </Modal>
 
 
-              
+
 <td className="header-cell" colSpan="3" style={{ backgroundColor: 'red', padding: '10px' }}>
   <div className="body-parts-title">Principales partes del cuerpo expuestas al riesgo:</div>
   
@@ -835,15 +880,8 @@ useEffect(() => {
     </tbody>
   </table>
 </td>
-
-
-
-
-          
-          </tr>
-          
-          
-          
+</tr>
+        
         </thead>
         
         <tbody>
