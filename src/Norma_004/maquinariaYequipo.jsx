@@ -88,10 +88,8 @@ const RiskTable = () => {
     const imagesToAdd = protectionImages[hazard] || [];
 
     if (checked) {
-      // Agregar imágenes sin duplicados
       setSelectedEPPImages((prevImages) => Array.from(new Set([...prevImages, ...imagesToAdd])));
     } else {
-      // Remover imágenes para el peligro deseleccionado
       setSelectedEPPImages((prevImages) => prevImages.filter(img => !imagesToAdd.includes(img)));
     }
   };
@@ -256,33 +254,11 @@ const RiskTable = () => {
                 </tbody>
               </table>
 
-              {/* Tabla adicional debajo de Insertar Imagen con Imágenes de EPP seleccionadas */}
-              <table className="additional-table">
-                <thead>
-                  <tr>
-                    <th>Información Adicional</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      {selectedEPPImages.map((img, index) => (
-                        <img
-                          key={index}
-                          src={img}
-                          alt="EPP"
-                          className="selected-image"
-                          onClick={() => handleRemoveEPPImage(img)}
-                        />
-                      ))}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+             
             </div>
 
             <div className="identification-table">
-              <table className="risk-table" >
+              <table className="risk-table">
                 <thead>
                   <tr className="red">
                     <th>Identificación de peligros</th>
@@ -364,6 +340,31 @@ const RiskTable = () => {
                   </tr>
                 </tbody>
               </table>
+
+              {/* Nueva tabla en el área señalada */}
+              <table className="additional-table">
+                <thead>
+                  <tr>
+                    <th>Información Adicional</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      {selectedEPPImages.map((img, index) => (
+                        <img
+                          key={index}
+                          src={img}
+                          alt="EPP"
+                          className="selected-image"
+                          onClick={() => handleRemoveEPPImage(img)}
+                        />
+                      ))}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
             </div>
           </div>
         </tbody>
