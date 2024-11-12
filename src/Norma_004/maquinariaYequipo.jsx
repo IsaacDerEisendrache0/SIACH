@@ -6,14 +6,12 @@ import { db } from '../firebase';
 import logo from '../logos/logo.png';
 
 const RiskTable = () => {
-  // Estados para capturar los datos del formulario
   const [nombreMaquinaria, setNombreMaquinaria] = useState('');
   const [poe, setPoe] = useState('');
   const [tiempoExposicion, setTiempoExposicion] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [fechaInspeccion, setFechaInspeccion] = useState('');
 
-  // Estados adicionales
   const [consequence, setConsequence] = useState('Lesiones sin baja');
   const [exposure, setExposure] = useState('Ocasionalmente');
   const [probability, setProbability] = useState('Coincidencia extremadamente remota pero concebible');
@@ -21,7 +19,6 @@ const RiskTable = () => {
   const [selectedEPPImages, setSelectedEPPImages] = useState(['/images/3.png', '/images/4.png', '/images/6.png']);
   const [isEditing, setIsEditing] = useState(false);
   const [tableId, setTableId] = useState(null);
-
 
   useEffect(() => {
     const tableToEdit = JSON.parse(localStorage.getItem('tableToEdit'));
@@ -39,15 +36,6 @@ const RiskTable = () => {
       localStorage.removeItem('tableToEdit');
     }
   }, []);
-
-  const eppImages = [
-    '/images/1.png', '/images/2.png', '/images/3.png', '/images/4.png',
-    '/images/5.png', '/images/6.png', '/images/7.png', '/images/8.png',
-    '/images/9.png', '/images/10.png', '/images/11.png', '/images/12.png',
-    '/images/13.png', '/images/14.png', '/images/15.png', '/images/16.png',
-    '/images/17.png', '/images/18.png', '/images/19.png', '/images/20.png',
-    '/images/21.png', '/images/34.png'
-  ];
 
   const saveTable = async (tableData, tableId = null) => {
     try {
@@ -93,25 +81,6 @@ const RiskTable = () => {
   const handleRemoveEPPImage = (imageToRemove) => {
     setSelectedEPPImages(prevImages => prevImages.filter(image => image !== imageToRemove));
   };
-
-  const opcionesConsecuencia = [
-    'Catástrofe', 'Varias muertes', 'Muerte',
-    'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'
-  ];
-
-  const opcionesExposicion = [
-    'Continuamente', 'Frecuentemente', 'Ocasionalmente',
-    'Irregularmente', 'Raramente'
-  ];
-
-  const opcionesProbabilidad = [
-    'Es el resultado más probable y esperado',
-    'Es completamente posible, no será nada extraño',
-    'Sería una secuencia o coincidencia rara pero posible, ha ocurrido',
-    'Coincidencia muy rara, pero se sabe que ha ocurrido',
-    'Coincidencia extremadamente remota pero concebible',
-    'Coincidencia prácticamente imposible, jamás ha ocurrido'
-  ];
 
   const calcularValorConsecuencia = (consequence) => {
     const valoresConsecuencia = {
@@ -194,54 +163,49 @@ const RiskTable = () => {
 
   return (
     <div className="risk-table-container">
-      <div className="logo-container" style={{ textAlign: 'center', marginBottom: '20px' }}>
-        <img src={logo} alt="SIACH Logo" style={{ width: '200px', marginLeft: '-900px' }} />
+      <div className="logo-container">
+        <img src={logo} alt="SIACH Logo" className="logo" />
       </div>
-      <h6>NOM-004-STPS-1999 
-      "ANALISIS DE RIESGO POTENCIAL POR MAQUINARIA Y EQUIPO"</h6>
-      <table className="risk-table" style={{ backgroundColor: 'white' }}>
+      <h6>NOM-004-STPS-1999 "ANALISIS DE RIESGO POTENCIAL POR MAQUINARIA Y EQUIPO"</h6>
+      <table className="risk-table">
         <thead>
           <tr>
             <th className="red">Nombre de la maquinaria</th>
             <td colSpan="20">
               <input
-                placeholder='Introduzca un nombre'
+                placeholder="Introduzca un nombre"
                 type="text"
                 value={nombreMaquinaria}
                 onChange={(e) => setNombreMaquinaria(e.target.value)}
-                style={{ width: '100%' }}
               />
             </td>
             <th className="red">POE:</th>
             <td colSpan="10">
               <input
-                placeholder='Introduzca el POE'
+                placeholder="Introduzca el POE"
                 type="text"
                 value={poe}
                 onChange={(e) => setPoe(e.target.value)}
-                style={{ width: '100%' }}
               />
             </td>
             <th className="red">Tiempo de exposición:</th>
             <td colSpan="10">
               <input
-                placeholder='Introduzca el tiempo'
+                placeholder="Introduzca el tiempo"
                 type="text"
                 value={tiempoExposicion}
                 onChange={(e) => setTiempoExposicion(e.target.value)}
-                style={{ width: '100%' }}
               />
             </td>
           </tr>
           <tr>
             <th className="red">Descripción de la maquinaria o equipo:</th>
-            <td colSpan="30">
+            <td colSpan="40">
               <input
-                placeholder='Introduzca una descripción'
+                placeholder="Introduzca una descripción"
                 type="text"
                 value={descripcion}
                 onChange={(e) => setDescripcion(e.target.value)}
-                style={{ width: '100%' }}
               />
             </td>
             <th className="red">Fecha de inspección:</th>
@@ -250,44 +214,134 @@ const RiskTable = () => {
                 type="date"
                 value={fechaInspeccion}
                 onChange={(e) => setFechaInspeccion(e.target.value)}
-                style={{ width: '100%' }}
               />
             </td>
           </tr>
         </thead>
+
         <tbody>
-          <tr>
-            <td colSpan="4" className="risk-evaluation-section">
-              <table style={{ width: '100%' }}>
+          <div className="table-flex-container">
+            <div className="image-insert-table">
+              <table>
                 <thead>
                   <tr className="red">
-                    <th colSpan="3" style={{ fontSize: '20px' }}>Evaluación de riesgo de trabajo</th>
+                    <th>Insertar imagen</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td style={{ fontSize: '16px' }}>Consecuencia</td>
-                    <td style={{ fontSize: '16px' }}>Exposición</td>
-                    <td style={{ fontSize: '16px' }}>Probabilidad</td>
+                    <td>
+                      <input type="file" accept="image/*" onChange={(e) => setSelectedBodyImage(URL.createObjectURL(e.target.files[0]))} />
+                      {selectedBodyImage && <img src={selectedBodyImage} alt="Seleccionada" className="selected-image" />}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="identification-table">
+              <table className="risk-table" >
+                <thead>
+                  <tr className="red">
+                    <th>Identificación de peligros</th>
+                    <th>Si/No</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Caídas de Altura</td>
+                    <td><input type="checkbox" /></td>
+                  </tr>
+                  <tr>
+                    <td>Exposición a Temperaturas</td>
+                    <td><input type="checkbox" /></td>
+                  </tr>
+                  <tr>
+                    <td>Exposición a Electricidad Estática</td>
+                    <td><input type="checkbox" /></td>
+                  </tr>
+                  <tr>
+                    <td>Exposición a Sustancias Químicas</td>
+                    <td><input type="checkbox" /></td>
+                  </tr>
+                  <tr>
+                    <td>Exposición a Radiaciones</td>
+                    <td><input type="checkbox" /></td>
+                  </tr>
+                  <tr>
+                    <td>Exposición a Ruido</td>
+                    <td><input type="checkbox" /></td>
+                  </tr>
+                  <tr>
+                    <td>Exposición a Vibraciones</td>
+                    <td><input type="checkbox" /></td>
+                  </tr>
+                  <tr>
+                    <td>Superficies Cortantes</td>
+                    <td><input type="checkbox" /></td>
+                  </tr>
+                  <tr>
+                    <td>Caídas a nivel o desnivel</td>
+                    <td><input type="checkbox" /></td>
+                  </tr>
+                  <tr>
+                    <td>Daños Ergonomicos</td>
+                    <td><input type="checkbox" /></td>
+                  </tr>
+                  <tr>
+                    <td>Calentamiento de materia prima, subproducto o producto</td>
+                    <td><input type="checkbox" /></td>
+                  </tr>
+                  <tr>
+                    <td>Proyección de material o herramienta</td>
+                    <td><input type="checkbox" /></td>
+                  </tr>
+                  <tr>
+                    <td>Mantenimiento preventivo, correctivo o predictivo</td>
+                    <td><input type="checkbox" /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="evaluation-table">
+              <table>
+                <thead>
+                  <tr className="red">
+                    <th colSpan="3">Evaluación de riesgo de trabajo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Consecuencia</td>
+                    <td>Exposición</td>
+                    <td>Probabilidad</td>
                   </tr>
                   <tr>
                     <td>
-                      <select value={consequence} onChange={(e) => setConsequence(e.target.value)} style={{ width: '100%' }}>
-                        {opcionesConsecuencia.map((opcion, idx) => (
+                      <select value={consequence} onChange={(e) => setConsequence(e.target.value)}>
+                        {['Catástrofe', 'Varias muertes', 'Muerte', 'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'].map((opcion, idx) => (
                           <option key={idx} value={opcion}>{opcion}</option>
                         ))}
                       </select>
                     </td>
                     <td>
-                      <select value={exposure} onChange={(e) => setExposure(e.target.value)} style={{ width: '100%' }}>
-                        {opcionesExposicion.map((opcion, idx) => (
+                      <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
+                        {['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente'].map((opcion, idx) => (
                           <option key={idx} value={opcion}>{opcion}</option>
                         ))}
                       </select>
                     </td>
                     <td>
-                      <select value={probability} onChange={(e) => setProbability(e.target.value)} style={{ width: '100%' }}>
-                        {opcionesProbabilidad.map((opcion, idx) => (
+                      <select value={probability} onChange={(e) => setProbability(e.target.value)}>
+                        {[
+                          'Es el resultado más probable y esperado',
+                          'Es completamente posible, no será nada extraño',
+                          'Sería una secuencia o coincidencia rara pero posible, ha ocurrido',
+                          'Coincidencia muy rara, pero se sabe que ha ocurrido',
+                          'Coincidencia extremadamente remota pero concebible',
+                          'Coincidencia prácticamente imposible, jamás ha ocurrido'
+                        ].map((opcion, idx) => (
                           <option key={idx} value={opcion}>{opcion}</option>
                         ))}
                       </select>
@@ -300,51 +354,26 @@ const RiskTable = () => {
                   </tr>
                 </tbody>
               </table>
-              <table className="risk-classification" style={{ width: '100%', marginTop: '20px', backgroundColor: 'white' }}>
+              <table className="risk-classification">
                 <thead>
                   <tr className="red">
-                    <th colSpan="3" style={{ fontSize: '20px', color: 'black' }}>Clasificación de Magnitud de Riesgo</th>
+                    <th colSpan="3">Clasificación de Magnitud de Riesgo</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr style={{ backgroundColor: color }}>
-                    <td style={{ fontSize: '16px' }}>Magnitud del Riesgo: {magnitudRiesgo}</td>
-                    <td style={{ fontSize: '16px' }}>Clasificación: {clasificacion}</td>
-                    <td style={{ fontSize: '16px' }}>Acción: {accion}</td>
+                    <td>Magnitud del Riesgo: {magnitudRiesgo}</td>
+                    <td>Clasificación: {clasificacion}</td>
+                    <td>Acción: {accion}</td>
                   </tr>
                 </tbody>
               </table>
-            </td>
-            <td style={{ verticalAlign: 'top' }}>
-              <div style={{ marginTop: '20px' }}>
-                <h4 className="red" style={{ display: 'inline-block', marginRight: '10px', fontSize: '14px' }}>Equipo de Protección Personal Sugerido</h4>
-                <select onChange={handleSelectBodyImage} style={{ width: '100%', height: '30px', marginLeft: '10px' }}>
-                  <option value="">Seleccione Imagen del cuerpo</option>
-                  {/* Renderizar opciones aquí */}
-                </select>
-                {selectedBodyImage && <img src={selectedBodyImage} alt="Selected Body Part" style={{ width: '60%', height: 'auto', marginTop: '10px' }} />}
-              </div>
-            </td>
-            <td colSpan="20" className="epp-suggested" style={{ verticalAlign: 'top' }}>
-              <div style={{ marginTop: '20px' }}>
-                <h4 className="red" style={{ display: 'inline-block', marginRight: '10px', fontSize: '14px' }}>Seleccione EPP</h4>
-                <select onChange={handleAddEPPImage} style={{ width: '100%', height: '30px', marginRight: '20px' }}>
-                  <option value="">Seleccione EPP</option>
-                  {eppImages.map((eppImage, idx) => (
-                    <option key={idx} value={eppImage}>{`EPP ${idx + 1}`}</option>
-                  ))}
-                </select>
-                <div className="epp-images-grid" style={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap', gap: '5px', justifyContent: 'flex-start' }}>
-                  {selectedEPPImages.map((imgSrc, idx) => (
-                    <img key={idx} src={imgSrc} alt={`EPP ${idx + 1}`} className="epp-image" style={{ width: '50px', height: '50px' }} onClick={() => handleRemoveEPPImage(imgSrc)} />
-                  ))}
-                </div>
-              </div>
-            </td>
-          </tr>
+            </div>
+          </div>
         </tbody>
       </table>
-      <div style={{ marginTop: '20px' }}>
+      
+      <div className="button-container">
         <button onClick={downloadImage} className="download-button">
           Descargar PDF
         </button>
@@ -352,8 +381,6 @@ const RiskTable = () => {
           {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
         </button>
       </div>
-
-      
     </div>
   );
 };

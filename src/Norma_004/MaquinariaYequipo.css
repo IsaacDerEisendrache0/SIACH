@@ -1,0 +1,66 @@
+.risk-table-container {
+    margin-top: 20px;
+  }
+  
+  .logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .logo {
+    width: 200px;
+    margin-left: -900px;
+  }
+  
+  .table-flex-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .image-insert-table,
+  .evaluation-table {
+    flex: 1;
+    margin: 10px 5px;
+  }
+  
+  /* Ajuste para hacer más larga la tabla de identificación de peligros */
+  .identification-table {
+    flex: 2; /* Incrementa el valor flex para que ocupe más espacio */
+    margin: 10px 5px;
+  }
+  
+  .identification-table .risk-table td,
+  .identification-table .risk-table th {
+    width: 100%; /* Hace que las celdas ocupen el ancho completo */
+    padding: 10px; /* Añade un poco de padding para mayor tamaño */
+  }
+  
+  .image-insert-table .selected-image {
+    width: 100%;
+    margin-top: 5px;
+  }
+  
+  .risk-table,
+  .risk-classification {
+    width: 100%;
+    background-color: white;
+  }
+  
+  .risk-table input,
+  .risk-table select {
+    width: 100%;
+  }
+  
+  .red {
+    color: red;
+  }
+  
+  .download-button,
+  .save-button {
+    margin-top: 20px;
+  }
+  
+  .button-container {
+    margin-top: 20px;
+  }
+  
