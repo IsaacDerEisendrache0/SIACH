@@ -278,10 +278,10 @@ const normas = [
 
 
 ];
-
 const NormaNoms = () => {
   const [selectedNormas, setSelectedNormas] = useState([]);
   const [step, setStep] = useState(1);
+  const [history, setHistory] = useState([]); // Historial de pasos
   const [showModal9, setShowModal9] = useState(false);
   const [showModal10, setShowModal10] = useState(false);
   const [showModal12, setShowModal12] = useState(false);
@@ -335,17 +335,6 @@ const NormaNoms = () => {
     alturaConstruccion: '',
     materialp: '',
   });
-  const handleNext = () => {
-    setStep(step + 1);
-  };
-
-  const handleBack = () => {
-    if (step > 1) {
-      setStep(step - 1);
-    } else {
-      navigate(-1);
-    }
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -355,6 +344,36 @@ const NormaNoms = () => {
       return newValues;
     });
   };
+
+  const handleNext = () => {
+    setHistory([...history, step]); // Guardar el paso actual en el historial
+    if (step === 5 && formValues.maquinariaMateriales === "no") {
+      setStep(7);
+    } else if (step === 7 && formValues.trabajosAltura === "no") {
+      setStep(9);
+    } else if (step === 7 && formValues.trabajosAltura === "sí") {
+      setStep(8);
+    } else if (step === 9 && formValues.actividadesRelacionadas === "no") {
+      setStep(11);
+    } else if (step === 9 && formValues.actividadesRelacionadas === "sí") {
+      setStep(10);
+    } else {
+      setStep(step + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (history.length > 0) {
+      const previousStep = history[history.length - 1];
+      setHistory(history.slice(0, -1)); // Eliminar el último paso del historial
+      setStep(previousStep); // Volver al paso anterior en el historial
+    } else {
+      setStep(step - 1); // Retroceso estándar si no hay historial
+    }
+  };
+
+
+
 
   const handleCheckboxChange = (e, field) => {
     const { value } = e.target;
@@ -582,7 +601,7 @@ const NormaNoms = () => {
 )}
 
         {/* Paso 3 */}
-{step === 3 && (
+        {step === 3 && (
   <div className="step3">
     <h3>Área de trabajo</h3>
     <label>¿Desarrolla sus actividades de producción, comercialización, transporte y almacenamiento o prestación de servicios en: edificios, locales, instalaciones y/o áreas exteriores, tales como pasillos, patios, techos, estacionamientos, áreas de circulación de vehículos, áreas de carga y descarga de materiales?</label>
@@ -595,71 +614,75 @@ const NormaNoms = () => {
       No
     </label>
 
-    {/* Nueva sección de elementos del centro de trabajo */}
-    <h4>Seleccione los elementos con que cuenta su centro de trabajo:</h4>
-    <label>
-      <input
-        type="checkbox"
-        value="escaleras"
-        onChange={(e) => handleCheckboxChange(e, 'elementos')}
-        checked={formValues.elementos.includes('escaleras')}
-      />
-      Escaleras
-    </label>
-    <label>
-      <input
-        type="checkbox"
-        value="rampas"
-        onChange={(e) => handleCheckboxChange(e, 'elementos')}
-        checked={formValues.elementos.includes('rampas')}
-      />
-      Rampas
-    </label>
-    <label>
-      <input
-        type="checkbox"
-        value="escalas"
-        onChange={(e) => handleCheckboxChange(e, 'elementos')}
-        checked={formValues.elementos.includes('escalas')}
-      />
-      Escalas
-    </label>
-    <label>
-      <input
-        type="checkbox"
-        value="puentesPlataformasElevadas"
-        onChange={(e) => handleCheckboxChange(e, 'elementos')}
-        checked={formValues.elementos.includes('puentesPlataformasElevadas')}
-      />
-      Puentes y plataformas elevadas
-    </label>
-    <label>
-      <input
-        type="checkbox"
-        value="transitoVehiculos"
-        onChange={(e) => handleCheckboxChange(e, 'elementos')}
-        checked={formValues.elementos.includes('transitoVehiculos')}
-      />
-      Áreas de tránsito de vehículos
-    </label>
-    <label>
-      <input
-        type="checkbox"
-        value="espuelasFerrocarril"
-        onChange={(e) => handleCheckboxChange(e, 'elementos')}
-        checked={formValues.elementos.includes('espuelasFerrocarril')}
-      />
-      Espuelas de ferrocarril activas
-    </label>
-    <label>
-      <input
-        type="checkbox"
-        value="ventilacionArtificial"
-        onChange={(e) => handleCheckboxChange(e, 'elementos')}
-        checked={formValues.elementos.includes('ventilacionArtificial')}
-      />
-      Sistemas de ventilación artificial
-    </label>
+    {/* Nueva sección de elementos del centro de trabajo, solo si "areaTrabajo" es "sí" */}
+    {formValues.areaTrabajo === "sí" && (
+      <>
+        <h4>Seleccione los elementos con que cuenta su centro de trabajo:</h4>
+        <label>
+          <input
+            type="checkbox"
+            value="escaleras"
+            onChange={(e) => handleCheckboxChange(e, 'elementos')}
+            checked={formValues.elementos.includes('escaleras')}
+          />
+          Escaleras
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            value="rampas"
+            onChange={(e) => handleCheckboxChange(e, 'elementos')}
+            checked={formValues.elementos.includes('rampas')}
+          />
+          Rampas
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            value="escalas"
+            onChange={(e) => handleCheckboxChange(e, 'elementos')}
+            checked={formValues.elementos.includes('escalas')}
+          />
+          Escalas
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            value="puentesPlataformasElevadas"
+            onChange={(e) => handleCheckboxChange(e, 'elementos')}
+            checked={formValues.elementos.includes('puentesPlataformasElevadas')}
+          />
+          Puentes y plataformas elevadas
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            value="transitoVehiculos"
+            onChange={(e) => handleCheckboxChange(e, 'elementos')}
+            checked={formValues.elementos.includes('transitoVehiculos')}
+          />
+          Áreas de tránsito de vehículos
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            value="espuelasFerrocarril"
+            onChange={(e) => handleCheckboxChange(e, 'elementos')}
+            checked={formValues.elementos.includes('espuelasFerrocarril')}
+          />
+          Espuelas de ferrocarril activas
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            value="ventilacionArtificial"
+            onChange={(e) => handleCheckboxChange(e, 'elementos')}
+            checked={formValues.elementos.includes('ventilacionArtificial')}
+          />
+          Sistemas de ventilación artificial
+        </label>
+      </>
+    )}
 
     <div className="buttons">
       <button onClick={handleBack}>Regresar</button>
@@ -668,7 +691,6 @@ const NormaNoms = () => {
   </div>
 )}
 
-{/* Paso 4 */}
 {step === 4 && (
   <div className="step4">
     <h3>Uso de maquinaria o equipo</h3>
@@ -681,12 +703,14 @@ const NormaNoms = () => {
       <input type="radio" name="maquinaria" value="no" onChange={handleInputChange} />
       No
     </label>
+
     <div className="buttons">
       <button onClick={handleBack}>Regresar</button>
       <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
     </div>
   </div>
 )}
+
 
 {/* Paso 5 */}
 {step === 5 && (
@@ -703,13 +727,12 @@ const NormaNoms = () => {
     </label>
     <div className="buttons">
       <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+      <button onClick={handleNext} disabled={!formValues.maquinariaMateriales}>Continuar</button>
     </div>
   </div>
 )}
 
-{/* Paso 6 */}
-{step === 6 && (
+{step === 6 && formValues.maquinariaMateriales === "sí" && (
   <div className="step6">
     <h3>Tipos de maquinaria para manejo de materiales</h3>
     <label>Seleccione la maquinaria que se utiliza en el centro de trabajo para el manejo de materiales:</label>
@@ -783,7 +806,6 @@ const NormaNoms = () => {
   </div>
 )}
 
-{/* Paso 7 */}
 {step === 7 && (
   <div className="step7">
     <h3>Actividades en alturas</h3>
@@ -878,121 +900,121 @@ const NormaNoms = () => {
   </div>
 )}
 
-        {/* Paso 9 - Recipientes sujetos a presión */}
-        {step === 9 && (
-          <div className="step9">
-            <h3>Recipientes Sujetos a Presión</h3>
-            <label>
-              ¿En su centro de trabajo se cuenta con recipientes sujetos a presión -interna o externa- como compresores,
-              intercambiadores de calor, torres de enfriamiento, marmitas, tanques suavizadores, filtros, reactores,
-              autoclaves, colchones de aire, entre otros?
-            </label>
-            <p>
-              Para consultar los recipientes que quedan exceptuados del cumplimiento de la NOM-020-STPS-2011, dé clic en el ícono.
-            </p>
+{step === 9 && (
+  <div className="step9">
+    <h3>Recipientes Sujetos a Presión</h3>
+    <label>
+      ¿En su centro de trabajo se cuenta con recipientes sujetos a presión -interna o externa- como compresores,
+      intercambiadores de calor, torres de enfriamiento, marmitas, tanques suavizadores, filtros, reactores,
+      autoclaves, colchones de aire, entre otros?
+    </label>
+    <p>
+      Para consultar los recipientes que quedan exceptuados del cumplimiento de la NOM-020-STPS-2011, dé clic en el ícono.
+    </p>
 
-            <img
-              src={iconImage}
-              alt="Consultar recipientes exceptuados"
-              style={{ cursor: 'pointer', width: '50px' }}
-              onClick={() => setShowModal9(true)}
-            />
+    <img
+      src={iconImage}
+      alt="Consultar recipientes exceptuados"
+      style={{ cursor: 'pointer', width: '50px' }}
+      onClick={() => setShowModal9(true)}
+    />
 
-            <label>
-              <input type="radio" name="recipientesPresion" value="sí" onChange={handleInputChange} />
-              Sí
-            </label>
-            <label>
-              <input type="radio" name="recipientesPresion" value="no" onChange={handleInputChange} />
-              No
-            </label>
-            <div className="buttons">
-              <button onClick={handleBack}>Regresar</button>
-              <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
-            </div>
-          </div>
-        )}
+    <label>
+      <input type="radio" name="recipientesPresion" value="sí" onChange={handleInputChange} />
+      Sí
+    </label>
+    <label>
+      <input type="radio" name="recipientesPresion" value="no" onChange={handleInputChange} />
+      No
+    </label>
 
-        {/* Modal para el paso 9 */}
-        {showModal9 && (
-          <div className="modal">
-            <div className="modal-content">
-              <span className="close" onClick={() => setShowModal9(false)}>&times;</span>
-              <img src={exceptImage} alt="Recipientes exceptuados" style={{ width: '100%' }} />
-            </div>
-          </div>
-        )}
+    <div className="buttons">
+      <button onClick={handleBack}>Regresar</button>
+      <button onClick={handleNext} disabled={!formValues.recipientesPresion}>Continuar</button>
+    </div>
+  </div>
+)}
 
-        {/* Paso 10 - Categorías de recipientes sujetos a presión */}
-        {step === 10 && (
-          <div className="step10">
-            <h3>Categorías de Recipientes Sujetos a Presión</h3>
-            <label>
-              Indique la(s) categoría(s) en la(s) se clasifica(n) el (los) recipiente(s) sujeto(s) a presión instalado(s) en su
-              centro de trabajo.
-            </label>
-            <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
+{showModal9 && (
+  <div className="modal">
+    <div className="modal-content">
+      <span className="close" onClick={() => setShowModal9(false)}>&times;</span>
+      <img src={exceptImage} alt="Recipientes exceptuados" style={{ width: '100%' }} />
+    </div>
+  </div>
+)}
 
-            <img
-              src={iconImage}
-              alt="Consultar tabla de clasificación"
-              style={{ cursor: 'pointer', width: '50px' }}
-              onClick={() => setShowModal10(true)}
-            />
+{/* Paso 10 - Categorías de Recipientes Sujetos a Presión */}
+{step === 10 && (
+  <div className="step10">
+    <h3>Categorías de Recipientes Sujetos a Presión</h3>
+    <label>
+      Indique la(s) categoría(s) en la(s) se clasifica(n) el (los) recipiente(s) sujeto(s) a presión instalado(s) en su
+      centro de trabajo.
+    </label>
+    <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
 
-            <div className="checkbox-group">
-              <label>
-                <input
-                  type="checkbox"
-                  value="categoriaI"
-                  onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
-                  checked={formValues.categoriasRecipientes.includes('categoriaI')}
-                />
-                Categoría I
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  value="categoriaII"
-                  onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
-                  checked={formValues.categoriasRecipientes.includes('categoriaII')}
-                />
-                Categoría II
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  value="categoriaIII"
-                  onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
-                  checked={formValues.categoriasRecipientes.includes('categoriaIII')}
-                />
-                Categoría III
-              </label>
-            </div>
+    <img
+      src={iconImage}
+      alt="Consultar tabla de clasificación"
+      style={{ cursor: 'pointer', width: '50px' }}
+      onClick={() => setShowModal10(true)}
+    />
 
-            <div className="buttons">
-              <button onClick={handleBack}>Regresar</button>
-              <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
-            </div>
-          </div>
-        )}
+    <div className="checkbox-group">
+      <label>
+        <input
+          type="checkbox"
+          value="categoriaI"
+          onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
+          checked={formValues.categoriasRecipientes.includes('categoriaI')}
+        />
+        Categoría I
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          value="categoriaII"
+          onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
+          checked={formValues.categoriasRecipientes.includes('categoriaII')}
+        />
+        Categoría II
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          value="categoriaIII"
+          onChange={(e) => handleCheckboxChange(e, 'categoriasRecipientes')}
+          checked={formValues.categoriasRecipientes.includes('categoriaIII')}
+        />
+        Categoría III
+      </label>
+    </div>
 
-        {/* Modal para el paso 10 */}
-        {showModal10 && (
-          <div className="modal">
-            <div className="modal-content">
-              <span className="close" onClick={() => setShowModal10(false)}>&times;</span>
-              <img src={categoriasImage} alt="Categorías de recipientes sujetos a presión" style={{ width: '100%' }} />
-            </div>
-          </div>
-        )}
+    <div className="buttons">
+      <button onClick={handleBack}>Regresar</button>
+      <button onClick={handleNext}>Continuar</button>
+    </div>
+  </div>
+)}
+
+{showModal10 && (
+  <div className="modal">
+    <div className="modal-content">
+      <span className="close" onClick={() => setShowModal10(false)}>&times;</span>
+      <img src={categoriasImage} alt="Categorías de recipientes sujetos a presión" style={{ width: '100%' }} />
+    </div>
+  </div>
+)}
 
 
-        
-    {/* Paso 11 - Recipientes Criogénicos */}
-    {step === 11 && (
-      <div className="step11">
-        <h3>Recipientes Criogénicos</h3>
+
+
+
+
+{step === 11 && (
+  <div className="step11">
+    <h3>Recipientes Criogénicos</h3>
         <label>¿En su centro de trabajo se utilizan recipientes criogénicos?</label>
         <label>
           <input
@@ -1014,13 +1036,12 @@ const NormaNoms = () => {
           />
           No
         </label>
-        <div className="buttons">
-          <button onClick={handleBack}>Regresar</button>
-          <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
-        </div>
-      </div>
-    )}
-
+    <div className="buttons">
+      <button onClick={handleBack}>Regresar</button>
+      <button onClick={handleNext}>Continuar</button>
+    </div>
+  </div>
+)}
     {/* Paso 12 - Recipientes criogénicos */}
     {step === 12 && (
       <div className="step12">
@@ -1961,7 +1982,7 @@ const NormaNoms = () => {
               name="materialc"
               value="No"
               onChange={handleInputChange}
-              checked={formValues.manejocargas === 'No'}
+              checked={formValues.materialc === 'No'}
             />
             No
           </label>
