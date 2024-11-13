@@ -70,16 +70,71 @@
 }
   
 /* Estilo para las imágenes del EPP en Información Adicional con tamaño reducido */
+/* Estilo para la tabla de Información Adicional con ancho fijo */
+.additional-table {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Alinear las imágenes al inicio */
+    width: 100%; /* Ajusta el ancho al 100% del contenedor principal o especifica un ancho fijo */
+    max-width: 800px; /* O define un ancho específico, por ejemplo, 800px */
+    padding: 16px;
+    border: 1px solid white;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */
+    margin: 0 auto; /* Centrar la tabla dentro de su contenedor principal */
+}
+
+/* Estilo para las imágenes de EPP en Información Adicional */
 .additional-table .selected-image {
-    width: 60px; /* Tamaño reducido para las imágenes */
+    width: 70px; /* Tamaño reducido para las imágenes */
     height: 60px; /* Mantener la altura para que sean cuadradas */
     margin: 8px;
     object-fit: contain;
-    border: 1px solid red; /* Borde rojo */
+ 
     border-radius: 8px; /* Bordes redondeados */
     padding: 3px; /* Espacio interno para un efecto de margen interior */
     background-color: white; /* Fondo blanco para que destaque */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para darle profundidad */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0); /* Sombra para darle profundidad */
     cursor: pointer;
     display: inline-block;
+}
+/* Contenedor de la tabla de triángulos */
+.additional-info-table {
+    width: 100%;
+    max-width: 800px;
+    min-height: 200px; /* Altura mínima para mantener el tamaño incluso sin imágenes */
+    max-height: 300px; /* Altura máxima fija */
+    overflow-y: auto; /* Agrega desplazamiento si hay demasiadas imágenes */
+    padding: 16px;
+    border: 1px solid #ffffff;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Estilo para el contenedor de imágenes dentro de la tabla de triángulos */
+.triangle-images-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centrar las imágenes */
+    width: 100%;
+    gap: 10px; /* Espacio entre las imágenes */
+}
+
+/* Estilo para las imágenes dentro de la tabla de triángulos */
+.triangle-images-container .selected-image {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+
+    border-radius: 8px;
+    padding: 3px;
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0);
+    cursor: pointer;
 }

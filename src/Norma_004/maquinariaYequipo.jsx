@@ -28,12 +28,12 @@ const RiskTable = () => {
   const [tiempoExposicion, setTiempoExposicion] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [fechaInspeccion, setFechaInspeccion] = useState('');
-
   const [consequence, setConsequence] = useState('Lesiones sin baja');
   const [exposure, setExposure] = useState('Ocasionalmente');
   const [probability, setProbability] = useState('Coincidencia extremadamente remota pero concebible');
   const [selectedBodyImage, setSelectedBodyImage] = useState(null);
   const [selectedEPPImages, setSelectedEPPImages] = useState([]);
+  const [selectedTriangleImages, setSelectedTriangleImages] = useState([]); // Nuevo estado para triángulos
   const [isEditing, setIsEditing] = useState(false);
   const [tableId, setTableId] = useState(null);
 
@@ -92,6 +92,18 @@ const RiskTable = () => {
     } else {
       setSelectedEPPImages((prevImages) => prevImages.filter(img => !imagesToAdd.includes(img)));
     }
+  };
+
+  const handleSelectImage = (e) => {
+    const selectedImage = e.target.value;
+    if (selectedImage && !selectedTriangleImages.includes(selectedImage)) {
+      setSelectedTriangleImages((prevImages) => [...prevImages, selectedImage]);
+    }
+    e.target.value = ''; // Reiniciar el select después de agregar una imagen
+  };
+
+  const handleRemoveTriangleImage = (imageToRemove) => {
+    setSelectedTriangleImages((prevImages) => prevImages.filter((image) => image !== imageToRemove));
   };
 
   const handleRemoveEPPImage = (imageToRemove) => {
@@ -247,14 +259,55 @@ const RiskTable = () => {
                 <tbody>
                   <tr>
                     <td>
-                      <input type="file" accept="image/*" onChange={(e) => setSelectedBodyImage(URL.createObjectURL(e.target.files[0]))} />
-                      {selectedBodyImage && <img src={selectedBodyImage} alt="Seleccionada" className="selected-image" />}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setSelectedBodyImage(URL.createObjectURL(e.target.files[0]))}
+                      />
+                      {selectedBodyImage && (
+                        <img src={selectedBodyImage} alt="Seleccionada" className="selected-image" />
+                      )}
                     </td>
                   </tr>
                 </tbody>
               </table>
 
-             
+              {/* Tabla de triángulos con select */}
+              <table className="additional-info-table">
+                <thead>
+                  <tr className="red">
+                    <th colSpan="2">Tabla de Triángulos</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <select onChange={handleSelectImage}>
+                        <option value="">Selecciona una imagen</option>
+                        {[...Array(24)].map((_, index) => (
+                          <option key={index} value={`/images/Imagen${index + 1}.png`}>
+                            Imagen {index + 1}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    {/* Contenedor de imágenes seleccionadas desde el select */}
+                    <td className="triangle-images-container">
+                      {selectedTriangleImages.map((img, index) => (
+                        <img
+                          key={index}
+                          src={img}
+                          alt="Triangle"
+                          className="selected-image"
+                          onClick={() => handleRemoveTriangleImage(img)}
+                        />
+                      ))}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             <div className="identification-table">
@@ -269,7 +322,12 @@ const RiskTable = () => {
                   {Object.keys(protectionImages).map((hazard, idx) => (
                     <tr key={idx}>
                       <td>{hazard}</td>
-                      <td><input type="checkbox" onChange={(e) => handleCheckboxChange(e, hazard)} /></td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          onChange={(e) => handleCheckboxChange(e, hazard)}
+                        />
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -341,35 +399,29 @@ const RiskTable = () => {
                 </tbody>
               </table>
 
-              {/* Nueva tabla en el área señalada */}
+              {/* Tabla adicional para mostrar las imágenes de EPP seleccionadas */} 
               <table className="additional-table">
-                <thead>
-                  <tr>
-                    <th>Información Adicional</th>
-                  </tr>
-                </thead>
                 <tbody>
                   <tr>
-                    <td>
-                      {selectedEPPImages.map((img, index) => (
-                        <img
-                          key={index}
-                          src={img}
-                          alt="EPP"
-                          className="selected-image"
-                          onClick={() => handleRemoveEPPImage(img)}
-                        />
-                      ))}
-                    </td>
+                    {selectedEPPImages.map((img, index) => (
+                      <img
+                        key={index}
+                        src={img}
+                        alt="EPP"
+                        className="selected-image"
+                        onClick={() => handleRemoveEPPImage(img)}
+                      />
+                    ))}
                   </tr>
                 </tbody>
               </table>
-
+              
             </div>
           </div>
+          <textarea name="textarea"rows="3" cols="155 " id="observaciones" placeholder='Observaciones'></textarea>
         </tbody>
       </table>
-      
+
       <div className="button-container">
         <button onClick={downloadImage} className="download-button">
           Descargar PDF
