@@ -1100,7 +1100,7 @@ const NormaNoms = () => {
         {/* Paso 13 - Generadores de vapor o calderas */}
         {step === 13 && (
           <div className="step13">
-            <h3></h3>
+           <h3>Generadores de Vapor y Calderas</h3>
             <label>
             ¿En su centro de trabajo están instalados generadores de vapor o calderas?
             </label>
@@ -1489,7 +1489,7 @@ const NormaNoms = () => {
 
 {step === 24 && (
   <div className="step25">
-    <h3></h3>
+   <h3>Inclusión de Trabajadores con Discapacidad</h3>
     <label>
     ¿En su centro de trabajo laboran trabajadores con discapacidad?
     </label>
@@ -1524,7 +1524,7 @@ const NormaNoms = () => {
   
   {step === 25 && (
         <div>
-          <h3></h3>
+         <h3>Tipos de Discapacidad del Personal</h3>
           <label>
           Seleccione el tipo de discapacidad que presenta el personal que labora en su centro de trabajo:
           </label>
@@ -1569,9 +1569,9 @@ const NormaNoms = () => {
 
 {step === 26 && (
         <div>
-          <h3>
-          </h3>
-          <label >¿En su centro de trabajo, existe algún área donde los trabajadores estén expuestos a niveles de ruido superiores a 80 decibeles?</label>
+        <h3>Exposición a Ruido en el Centro de Trabajo</h3>
+
+         <label >¿En su centro de trabajo, existe algún área donde los trabajadores estén expuestos a niveles de ruido superiores a 80 decibeles?</label>
           <label>
             <input
               type="radio"
@@ -1611,8 +1611,7 @@ const NormaNoms = () => {
 
 {step === 27 && (
         <div>
-          <h3>
-          </h3>
+          <h3>Exposición a Temperaturas Bajas en el Centro de Trabajo</h3>
           <label> ¿En su centro de trabajo, los trabajadores están expuestos a instalaciones, equipos, productos o materiales que ocasionen que su temperatura corporal descienda a menos de 36 grados centígrados?</label>
           <label>
             <input
@@ -1644,8 +1643,7 @@ const NormaNoms = () => {
 
       {step === 28 && (
         <div>
-          <h3>
-          </h3>
+          <h3>Exposición a Temperaturas Altas en el Centro de Trabajo</h3>
           <label> ¿Los trabajadores realizan actividades o están expuestos a instalaciones, equipos, productos o materiales que ocasionen que su temperatura corporal sea mayor a 38 grados centígrados?
           </label>
           <label>
@@ -1678,8 +1676,7 @@ const NormaNoms = () => {
       
 {step === 29 && (
         <div>
-          <h3>
-          </h3>
+          <h3>Exposición a Vibraciones en el Centro de Trabajo</h3>
           <label> ¿Los trabajadores están expuestos a vibraciones producidas por la operación de maquinaria, equipos o herramientas?
 
           </label>
@@ -1760,8 +1757,7 @@ const NormaNoms = () => {
               
 {step === 31 && (
         <div>
-          <h3>
-          </h3>
+         <h3>Manejo Manual de Cargas en el Centro de Trabajo</h3>
           <label> ¿En su centro de trabajo se realizan actividades que impliquen el manejo manual de cargas mayores a 3kg de forma cotidiana (más de una vez al día)?
 
           </label>
@@ -1845,7 +1841,7 @@ const NormaNoms = () => {
 
 {step === 33 && (
           <div className="step33">
-            <h3></h3>
+            <h3>Actividades Agrícolas con Insumos Fitosanitarios</h3>
             <label>
             Seleccione el tipo de actividades agrícolas que desarrollan los trabajadores con insumos fitosanitarios o plaguicidas e insumos de nutrición vegetal o fertilizantes:
             </label>
@@ -1894,7 +1890,7 @@ const NormaNoms = () => {
 
 {step === 34 && (
           <div className="step34">
-            <h3></h3>
+            <h3>Infraestructura para Actividades Agrícolas</h3>
             <label>
             Indique el tipo de infraestructura (elementos de producción) que se utiliza en el centro de trabajo para el desarrollo de actividades agrícolas:            </label>
             <div className="checkbox-group">
@@ -1960,8 +1956,7 @@ const NormaNoms = () => {
 
 {step === 35 && (
         <div>
-          <h3>
-          </h3>
+         <h3>Trabajos de Construcción en el Centro de Trabajo</h3>
           <label> ¿El centro de trabajo realiza trabajos de construcción?
 
 
@@ -2033,8 +2028,7 @@ const NormaNoms = () => {
 
 {step === 37 && (
         <div>
-          <h3>
-          </h3>
+         <h3>Manejo y Exposición a Sustancias Químicas Peligrosas</h3>
           <label> ¿En el centro de trabajo se manejan, transportan, procesan o almacenan sustancias químicas que por sus propiedades, niveles de concentración y tiempo de exposición sean capaces de contaminar el medio ambiente laboral, alterar la salud de los trabajadores y/o dañar el centro de trabajo?
 
 
