@@ -418,7 +418,7 @@ const RiskTable = () => {
   <button onClick={saveTableData} className="save-button">
     {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
   </button>
-</div>
+</div>  
     </div>
     
     

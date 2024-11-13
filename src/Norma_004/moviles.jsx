@@ -301,12 +301,7 @@ const RiskTable = () => {
                   <option key={idx} value={area}>{area}</option>
                 ))}
               </select>
-              <td>
-  <div className="button-group" style={{ display: 'flex', gap: '0' }}>
-    <button className='button-area' onClick={() => openModal('Agregar')}>Agregar área</button>
-    <button className='button-area' onClick={() => openModal('Eliminar')}>Eliminar área</button>
-  </div>
-</td>
+          
             </td>
             <th className="red">POE:</th>
             <td colSpan="10">
@@ -331,7 +326,7 @@ const RiskTable = () => {
           </tr>
           <tr>
             <th className="red">Descripción de la maquinaria o equipo:</th>
-            <td colSpan="30">
+            <td colSpan="50">
               <input 
                 placeholder='Introduzca una descripción' 
                 type="text"
@@ -341,7 +336,7 @@ const RiskTable = () => {
               />
             </td>
             <th className="red">Fecha de inspección:</th>
-            <td colSpan="13">
+            <td colSpan="12">
               <input 
                 type="date"
                 value={fechaInspeccion}
@@ -529,7 +524,12 @@ const RiskTable = () => {
           <button onClick={closeModal}>Cancelar</button>
         </div>
       </Modal>
+      <div className="button-group" style={{ display: 'flex', gap: '0' }}>
+    <button className='button-area' onClick={() => openModal('Agregar')}>Agregar área</button>
+    <button className='button-area' onClick={() => openModal('Eliminar')}>Eliminar área</button>
+  </div>
     </div>
+    
   );
 };
 
