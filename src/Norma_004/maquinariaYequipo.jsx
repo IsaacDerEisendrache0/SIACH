@@ -251,11 +251,6 @@ const RiskTable = () => {
           <div className="table-flex-container">
             <div className="image-insert-table">
               <table>
-                <thead>
-                  <tr className="red">
-                    <th>Insertar imagen</th>
-                  </tr>
-                </thead>
                 <tbody>
                   <tr>
                     <td>
@@ -274,11 +269,6 @@ const RiskTable = () => {
 
               {/* Tabla de triángulos con select */}
               <table className="additional-info-table">
-                <thead>
-                  <tr className="red">
-                    <th colSpan="2">Tabla de Triángulos</th>
-                  </tr>
-                </thead>
                 <tbody>
                   <tr>
                     <td>
@@ -421,17 +411,20 @@ const RiskTable = () => {
           <textarea name="textarea"rows="3" cols="155 " id="observaciones" placeholder='Observaciones'></textarea>
         </tbody>
       </table>
-
       <div className="button-container">
-        <button onClick={downloadImage} className="download-button">
-          Descargar PDF
-        </button>
-        <button onClick={saveTableData} className="save-button">
-          {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
-        </button>
-      </div>
+  <button onClick={downloadImage} className="download-button">
+    Descargar PDF
+  </button>
+  <button onClick={saveTableData} className="save-button">
+    {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
+  </button>
+</div>
     </div>
+    
+    
+    
   );
+
 };
 
 export default RiskTable;
