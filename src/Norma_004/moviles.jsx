@@ -4,6 +4,8 @@ import html2canvas from 'html2canvas';
 import { addDoc, updateDoc, doc, collection } from 'firebase/firestore';
 import { db } from '../firebase';
 import logo from '../logos/logo.png';
+import Maxion from '../logos/maxion.jpeg';
+import Safran from '../logos/safran.jpeg';
 import Modal from 'react-modal';
 
 const RiskTable = () => {
@@ -29,6 +31,13 @@ const RiskTable = () => {
   const [modalAction, setModalAction] = useState('');
   const [newArea, setNewArea] = useState('');
   const [selectedAreaToRemove, setSelectedAreaToRemove] = useState('');
+  const [isCapturing, setIsCapturing] = useState(false);
+  const [logoSeleccionado, setLogoSeleccionado] = useState(null);
+
+  const logos = [
+    { nombre: 'Maxion', url: Maxion },
+    { nombre: 'Safran', url: Safran }
+  ];
 
   useEffect(() => {
     const tableToEdit = JSON.parse(localStorage.getItem('tableToEdit'));
@@ -80,6 +89,14 @@ const RiskTable = () => {
     }
   };
 
+  const handleLogoChange = (event) => {
+    setLogoSeleccionado(event.target.value);
+  };
+
+  const handleRemoveLogo = () => {
+    setLogoSeleccionado(null);
+  };
+
   const saveTable = async (tableData, tableId = null) => {
     try {
       if (tableId) {
@@ -97,23 +114,27 @@ const RiskTable = () => {
   };
 
   const downloadImage = () => {
-    const input = document.querySelector('.risk-table-container');
+    setIsCapturing(true);
+    setTimeout(() => {
+      const input = document.querySelector('.risk-table-container');
 
-    // Aumentamos la escala para una mejor calidad de imagen
-    html2canvas(input, { scale: 2, useCORS: true, backgroundColor: null }).then((canvas) => {
-      // Convertimos el canvas a imagen (formato PNG)
-      const imgData = canvas.toDataURL('image/png');
+      // Aumentamos la escala para una mejor calidad de imagen
+      html2canvas(input, { scale: 2, useCORS: true, backgroundColor: null }).then((canvas) => {
+        // Convertimos el canvas a imagen (formato PNG)
+        const imgData = canvas.toDataURL('image/png');
 
-      // Creamos un enlace para la descarga
-      const link = document.createElement('a');
-      link.href = imgData;
-      link.download = 'tabla_herramientas_manual.png'; // Nombre del archivo
+        // Creamos un enlace para la descarga
+        const link = document.createElement('a');
+        link.href = imgData;
+        link.download = 'tabla_herramientas_manual.png'; // Nombre del archivo
 
-      // Simulamos un clic en el enlace para descargar la imagen
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
+        // Simulamos un clic en el enlace para descargar la imagen
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setIsCapturing(false);
+      });
+    }, 100);
   };
 
   // Agregar imágenes de EPP seleccionadas
@@ -268,12 +289,34 @@ const RiskTable = () => {
 
   return (
     <div className="risk-table-container">
-      
-      <div className="logo-container" style={{ textAlign: 'center', marginBottom: '20px' }}>
-        <img src={logo} alt="SIACH Logo" style={{ width: '200px', marginLeft: '-900px' }} />
-      </div>
-      <h6>ANÁLISIS DE RIESGO POTENCIAL GENERADO POR EQUIPOS MÓVILES
-      NOM-004-STPS-1999</h6>
+      <tr className="no-border-row">
+        <td colSpan="3">
+          <img src={logo} alt="SIACH Logo" className="siach-logo" />
+        </td>
+        <td colSpan="4" style={{ backgroundColor: 'white' }}>
+          <h4 className="section-header" style={{ color: 'black' }}>
+          ANÁLISIS DE RIESGO POTENCIAL GENERADO POR EQUIPOS MÓVILES
+          NOM-004-STPS-1999
+          </h4>
+        </td>
+        <td colSpan="3">
+          {logoSeleccionado ? (
+            <div className="logo-container">
+              <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" />
+              <button onClick={handleRemoveLogo} className="remove-logo-button">×</button>
+            </div>
+          ) : (
+            <select onChange={handleLogoChange} className="logo-dropdown">
+              <option value="">Selecciona una empresa</option>
+              {logos.map((logo, index) => (
+                <option key={index} value={logo.url}>
+                  {logo.nombre}
+                </option>
+              ))}
+            </select>
+          )}
+        </td>
+      </tr>
     
       <table className="risk-table" style={{ backgroundColor: 'white' }}>
         <thead>
@@ -467,14 +510,16 @@ const RiskTable = () => {
           </tr>
         </tbody>
       </table>
-      <div style={{ marginTop: '20px' }}>
-        <button onClick={downloadImage} className="download-button">
-          Descargar PDF
-        </button>
-        <button onClick={saveTableData} className="save-button">
-          {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
-        </button>
-      </div>
+      {!isCapturing && (
+        <div style={{ marginTop: '20px' }}>
+          <button onClick={downloadImage} className="download-button">
+            Descargar PDF
+          </button>
+          <button onClick={saveTableData} className="save-button">
+            {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
+          </button>
+        </div>
+      )}
 
       <Modal
         isOpen={modalIsOpen}
@@ -524,10 +569,12 @@ const RiskTable = () => {
           <button onClick={closeModal}>Cancelar</button>
         </div>
       </Modal>
-      <div className="button-group" style={{ display: 'flex', gap: '0' }}>
-    <button className='button-area' onClick={() => openModal('Agregar')}>Agregar área</button>
-    <button className='button-area' onClick={() => openModal('Eliminar')}>Eliminar área</button>
-  </div>
+      {!isCapturing && (
+        <div className="button-group" style={{ display: 'flex', gap: '0' }}>
+          <button className='button-area' onClick={() => openModal('Agregar')}>Agregar área</button>
+          <button className='button-area' onClick={() => openModal('Eliminar')}>Eliminar área</button>
+        </div>
+      )}
     </div>
     
   );

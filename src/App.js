@@ -15,7 +15,7 @@ import backgroundImage from './logos/for.png'; // Importa la imagen de fondo des
 function Navigation() {
   const auth = getAuth();
   const navigate = useNavigate();
-
+  
   const handleLogout = async () => {
     try {
       await signOut(auth);

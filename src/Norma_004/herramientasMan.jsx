@@ -178,7 +178,7 @@ const handlePeligroChange = (peligro) => {
     <div >
       <div id="pdf-content" className="risk-table">
         <div className="logo-container" style={{ textAlign: 'center', marginBottom: '20px' }}>
-          <img src={logo} alt="SIACH Logo" style={{ width: '200px', marginLeft: '-1100px' }} />
+          <img src={logo} alt="SIACH Logo" style={{ width: '200px', marginLeft: '300px' }} />
         </div>
       <table className="main-table">
           <thead>
