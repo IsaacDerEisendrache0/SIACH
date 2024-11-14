@@ -9,7 +9,8 @@ import NormaNOMs from './Norma_NOMs/norma_noms';
 import Login from './componentes/Loginlogin';
 import SavedTables from './Norma_17/SavedTables';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
-import logo from './logos/logo.png'; // Importa la imagen del logo correctamente
+import logo from './logos/logo.png'; // Importa el logo
+import backgroundImage from './logos/for.png'; // Importa la imagen de fondo desde la carpeta images
 
 function Navigation() {
   const auth = getAuth();
@@ -101,7 +102,16 @@ function App() {
   }
 
   return (
-    <div className="app-container">
+    <div
+      className="app-container"
+      style={{
+        backgroundImage: `url(${backgroundImage})`, // Asigna la imagen de fondo
+        backgroundSize: 'cover', // Hace que la imagen cubra todo el área
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        minHeight: '100vh',
+      }}
+    >
       <header className="App-header">
         {isAuthenticated && <Navigation />}
         <Routes>
@@ -110,7 +120,7 @@ function App() {
           <Route path="/norma_004" element={<Norma04 />} />
           <Route path="/norma_030" element={<Norma030 />} />
           <Route path="/saved-tables" element={<SavedTables />} />
-          <Route path="/" element={<HomePage />} /> {/* Mostrar el selector de normas en la página de inicio */}
+          <Route path="/" element={<HomePage />} />
         </Routes>
       </header>
     </div>
