@@ -278,25 +278,31 @@ const RiskAssessmentTable = () => {
   };
 
   const downloadImage = () => {
+    // Selecciona los botones de agregar y borrar
+    const buttons = document.querySelectorAll('.btn-agregar, .btn-borrar');
+  
+    // Oculta los botones agregando la clase 'hidden-buttons'
+    buttons.forEach(button => button.classList.add('hidden-buttons'));
+  
     const input = document.querySelector('.table-container');
-
-    // Aumentamos la escala para una mejor calidad de imagen
+  
     html2canvas(input, { scale: 2, useCORS: true, backgroundColor: null }).then((canvas) => {
-        // Convertimos el canvas a imagen (formato PNG)
-        const imgData = canvas.toDataURL('image/png');
-
-        // Creamos un enlace para la descarga
-        const link = document.createElement('a');
-        link.href = imgData;
-        link.download = 'tabla_herramientas_manual.png'; // Nombre del archivo
-
-        // Simulamos un clic en el enlace para descargar la imagen
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+      const imgData = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = imgData;
+      link.download = 'tabla_herramientas_manual.png';
+  
+      // Inicia la descarga de la imagen
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+  
+      // Vuelve a mostrar los botones eliminando la clase 'hidden-buttons'
+      buttons.forEach(button => button.classList.remove('hidden-buttons'));
     });
-    
-};
+  };
+  
+  
 
 
 
@@ -657,6 +663,8 @@ useEffect(() => {
     setLogoSeleccionado(null); // Elimina el logo seleccionado
   };
   
+  const [hideButtons, setHideButtons] = useState(false);
+
 
   return (
       <div class="main-table">
@@ -702,21 +710,26 @@ useEffect(() => {
 
           <tr>
           <td className="no-border-cell" colSpan="3">
-          <div className="puestos-section">
-            <label htmlFor="descripcion-actividad" className="titulo-descripcion">Puestos</label>
-            <div className="puesto-con-botones">
-              <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange} className="select-puesto">
-                <option value="" disabled>Seleccione un puesto</option>
-                {puestos.map((puesto, index) => (
-                  <option key={index} value={puesto}>
-                    {puesto}
-                  </option>
-                ))}
-              </select>
-              <button className="btn-agregar" onClick={handleAddPuestoClick}>Agregar</button>
-              <button className="btn-borrar" onClick={handleDeletePuestoClick}>Borrar</button>
-            </div>
-          </div>
+          <label htmlFor="descripcion-actividad" className="titulo-descripcion">Puestos:</label>
+
+              <div className="puesto-con-botones">
+                <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange} className="select-puesto">
+                  <option value="" disabled>Seleccione un puesto</option>
+                  {puestos.map((puesto, index) => (
+                    <option key={index} value={puesto}>
+                      {puesto}
+                    </option>
+                  ))}
+                </select>
+                {!hideButtons && (
+                  <>
+                    <button className="btn-agregar" onClick={handleAddPuestoClick}>Agregar</button>
+                    <button className="btn-borrar" onClick={handleDeletePuestoClick}>Borrar</button>
+                  </>
+                )}
+              </div>
+
+
 
           {/* Área de descripción de actividad */}
           <div className="contenedor-descripcion">
@@ -795,9 +808,6 @@ useEffect(() => {
   </table>
 </td>
 
-
-
-            
   
 <td className="header-td" colSpan="3">
   <div className="additional-data-title">Datos adicionales</div>
@@ -820,6 +830,7 @@ useEffect(() => {
           <button className="btn-agregar" onClick={handleAddAreaClick}>Agregar</button>
           <button className="btn-borrar" onClick={handleDeleteAreaClick}>Borrar</button>
         </td>
+
       </tr>
 
       {/* Modal para borrar áreas */}
