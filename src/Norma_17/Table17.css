@@ -84,7 +84,7 @@
 /* Estilos de lista y elementos de riesgo */
 .hazard-item {
   position: relative; /* Contenedor relativo para los checkboxes */
-  padding: 10px 0; /* Espacio alrededor del texto */
+  padding: 5px 0; /* Espacio alrededor del texto */
 }
 
 .hazard-checkbox {
@@ -628,7 +628,7 @@ button {
   text-align: right;
   width: 25%;
   color: white;
-  background-color: red;
+  background-color: rgb(255, 0, 0);
 }
 
 /* Celdas de entrada */
@@ -641,6 +641,8 @@ button {
 /* Celdas de botones */
 .button-cell {
   padding: 8px;
+  background-color: white;
+
   text-align: left;
   width: 25%;
 }
@@ -851,7 +853,7 @@ button {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 18px !important; /* Aumenta el tamaño de la fuente y usa !important */
   resize: vertical;
   box-sizing: border-box;
 }
@@ -921,4 +923,10 @@ button {
   max-width: 250px; /* Tamaño máximo de la imagen */
   max-height: 100px; /* Tamaño máximo de la imagen */
   object-fit: contain; /* Asegura que la imagen se ajuste sin deformarse */
+}
+
+
+
+.hidden-buttons {
+  display: none;
 }

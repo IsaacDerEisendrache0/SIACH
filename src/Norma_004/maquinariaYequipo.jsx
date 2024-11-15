@@ -191,8 +191,8 @@ const RiskTable = () => {
 
   return (
     <div className="risk-table-container">
-      <div className="logo-container">
-        <img src={logo} alt="SIACH Logo" className="logo" />
+      <div className="logo-container" style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <img src={logo} alt="SIACH Logo" style={{ width: '200px', marginLeft: '-100px' }} />
       </div>
       <h6>NOM-004-STPS-1999 "ANALISIS DE RIESGO POTENCIAL POR MAQUINARIA Y EQUIPO"</h6>
       <table className="risk-table">
