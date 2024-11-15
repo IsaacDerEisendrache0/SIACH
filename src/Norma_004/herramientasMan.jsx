@@ -21,7 +21,7 @@ const RiskTable = () => {
       'Coincidencia prácticamente imposible, jamás ha ocurrido'
     ],
     tiempoExposicion: ['0-2 hrs', '2-4 hrs', '4-8 hrs', '8+ hrs'],
-    energia: ['Eléctrica', 'Manual', 'Mecánica', 'Hidráulica', 'Eólica']
+    energia: ['Eléctrica', 'Manual', 'Mecánica', 'Hidráulica', 'Eólica', 'Termica por combustion']
   };
 
   const partesPorPeligro = {
@@ -219,7 +219,7 @@ const handlePeligroChange = (peligro) => {
           </thead>
           <tbody>
             <tr>
-              <td rowSpan="2" colSpan="3">
+              <td  colSpan="3">
                 <div className="image-section">
                   <input type="file" accept="image/*" onChange={handleImageChange} />
                   {state.errorMessage && <p style={{ color: 'red' }}>{state.errorMessage}</p>}
@@ -381,8 +381,6 @@ const handlePeligroChange = (peligro) => {
           <RiskTables />
         </div>
       </div>
-
-      
       <button onClick={downloadImage} className="download-button">
         Descargar Imagen
       </button>

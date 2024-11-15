@@ -334,6 +334,7 @@ const NormaNoms = () => {
     superficieConstruir: '',
     alturaConstruccion: '',
     materialp: '',
+    comunicacionRuido: '',
   });
 
   const handleInputChange = (e) => {
@@ -418,11 +419,26 @@ const NormaNoms = () => {
           setStep(26);
         }
     } else if (step === 26) {
+        if (formValues.exposicionRuido === "Sí") {
+          setStep(27);
+        } else if (formValues.exposicionRuido === "No") {
+          setStep(39);
+        } else if (formValues.exposicionRuido === "No sé") {
+          setStep(39); // O el paso que corresponda
+        }
+    } else if (step === 39) {
         // Lógica para el paso 15 según el valor de cargasEstaticas
-        if (formValues.exposicionRuido === "sí") {
-          setStep(25);
-        } else if (formValues.exposicionRuido === "no") {
-          setStep(26);
+        if (formValues.comunicacionRuido === "sí") {
+          setStep(27);
+        } else if (formValues.comunicacionRuido === "no") {
+          setStep(27);
+        }
+    } else if (step === 27) {
+        // Lógica para el paso 15 según el valor de cargasEstaticas
+        if (formValues.comunicacionRuido === "sí") {
+          setStep(28);
+        } else if (formValues.comunicacionRuido === "no") {
+          setStep(28);
         }
     } else {
       setStep(step + 1);
@@ -543,8 +559,10 @@ const NormaNoms = () => {
         return formValues.superficieConstruir !== '' && formValues.alturaConstruccion !== '';
       case 37:
         return formValues.materialp !== '';
+      case 39:
+        return formValues.comunicacionRuido !== '';
       case 38:
-        return formValues.nuevoCampo !== ''; // Reemplaza 'nuevoCampo' con el nombre correcto si aplica
+        return formValues.nuevoCampo  !== ''; // Reemplaza 'nuevoCampo' con el nombre correcto si aplica
       default:
         return false;
     }
@@ -1636,7 +1654,6 @@ const NormaNoms = () => {
 {step === 26 && (
         <div>
         <h3>Exposición a Ruido en el Centro de Trabajo</h3>
-
          <label >¿En su centro de trabajo, existe algún área donde los trabajadores estén expuestos a niveles de ruido superiores a 80 decibeles?</label>
           <label>
             <input
@@ -1674,6 +1691,39 @@ const NormaNoms = () => {
           </div>
         </div>
       )}
+{step === 39 && (
+  <div className="step38">
+   <h3>Inclusión de Trabajadores con Discapacidad</h3>
+    <label>
+    ¿En su centro de trabajo, los trabajadores en condiciones normales de operación necesitan levantar la voz para comunicarse cuando se encuentran a una distancia de aproximadamente un metro?
+    </label>
+    <label>
+      <input
+        type="radio"
+        name="comunicacionRuido"
+        value="sí"
+        onChange={handleInputChange}
+        checked={formValues.comunicacionRuido=== 'sí'}
+      />
+      Sí
+    </label>
+    <label>
+      <input
+        type="radio"
+        name="comunicacionRuido"
+        value="no"
+        onChange={handleInputChange}
+        checked={formValues.comunicacionRuido === 'no'}
+      />
+      No
+    </label>
+
+    <div className="buttons">
+      <button onClick={handleBack}>Regresar</button>
+      <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+    </div>
+  </div>
+)}
 
 {step === 27 && (
         <div>

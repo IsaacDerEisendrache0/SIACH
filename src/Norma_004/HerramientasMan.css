@@ -1,224 +1,133 @@
-.main-table {
-  width: 100%;
-  min-width: 1300px; /* Asegúrate de ajustar el valor según tus necesidades */
-  border-collapse: collapse;
-  text-align: center;
-  font-size: 14px;
+:root {
+  --primary-red: #e60000; /* Color primario */
+  --border-color: #ddd; /* Color de bordes */
+  --background-light: #fff; /* Fondo claro */
+  --button-bg: #e60000; /* Fondo de los botones */
+  --button-hover-bg: #cc0000; /* Fondo al pasar el mouse sobre botones */
+  --button-text: #fff; /* Texto de los botones */
+  --border-radius: 8px; /* Bordes redondeados */
+  --font-family: 'Arial', sans-serif; /* Fuente principal */
+  --font-size-small: 12px; /* Tamaño de fuente base */
 }
 
-.main-table th, .main-table td {
-  border: 1px solid #000;
-  padding: 3px;
-}
-
-.main-table th {
-  background-color: #ff0303;
-  color: white;
-  font-weight: bold;
-}
-
-.main-table td input[type="text"],
-.main-table td textarea,
-.main-table td select {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 5px;
-  font-size: 13px;
-  
-}
-
-.header-cell {
-  background-color: #ff0000;
-  color: white;
-  font-weight: bold;
-}
-
-.image-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-}
-
-.image-preview {
-  max-width: 400px;
-  max-height: 400px;
-  margin-top: 10px;
-  border: 1px solid #000;
-}
-
-.risk-magnitude-container {
-  margin-top: 10px;
-}
-
-.risk-magnitude-bar {
-  padding: 5px;
-  color: white;
-  text-align: center;
-  font-weight: bold;
-}
-
-.download-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.download-button:hover {
-  background-color: #45a049;
-}
-
-.observations-section {
-  margin-top: 20px;
-}
-
-.no-border {
-  border: none;
-}
-
-.compact-table th, .compact-table td {
-  padding: 0px;
-  text-align: center;
-}
-
-.risk-table th, .risk-table td {
-  vertical-align: middle;
-}
-
-textarea {
-  resize: none;
-}
-
-textarea,
-select,
-input[type="text"] {
-  font-size: 15px;
-}
-
-.header-top {
-  background-color: #d9d9d9;
-}
-
-.value-cell {
-  background-color: #add8e6;
-}
-
-.main-table td:nth-child(2),
-.main-table th:nth-child(2) {
-  background-color: #f0f0f0;
-}
-
-.image-cell {
-  text-align: center;
-  vertical-align: top;
+body {
+  font-family: var(--font-family);
+  margin: 0;
   padding: 0;
+  background-color: #f4f4f4;
 }
 
-.main-table .header-secondary {
-  background-color: #f2f2f2;
-  font-weight: bold;
-  text-align: left;
-}
-
-.identification-section {
-  font-weight: bold;
-  background-color: #d9d9d9;
-}
-
-.header-table th {
-  background-color: #ffcccb;
-  font-weight: bold;
-}
-
-.risk-level {
-  background-color: #add8e6;
-  font-weight: bold;
-}
-
-.risk-cell {
-  background-color: #f0f0f0;
-  color: black;
-}
-
-
-.row-container {
-  display: flex;
-  justify-content: space-between;
-}
-
-.checkbox-container {
-  margin-left: auto; /* Empuja el checkbox hacia la derecha */
-}
-
-
-/* Estilos exclusivos para la tabla de equipo de protección personal */
-.epp-table {
+.risk-table-container {
+  padding: 20px;
+  background-color: var(--background-light);
+  border: 2px solid var(--primary-red); /* Borde rojo para el contenedor */
+  border-radius: var(--border-radius);
+  max-width: 1400px;
   width: 100%;
-  border-collapse: collapse;
-  text-align: center;
-  font-size: 14px;
-}
-
-.epp-table th, .epp-table td {
-  border: 1px solid #000;
-  padding: 3px;
-}
-
-.epp-table th {
-  background-color: #d9d9d9;
-  color: black;
-  font-weight: bold;
-}
-
-.epp-table .header {
-  background-color: #d9d9d9;
-  font-weight: bold;
-  text-align: center;
-}
-
-.epp-table td {
-  background-color: white;
-  text-align: center;
-}
-
-
-/* Estilos exclusivos para la tabla de partes del cuerpo expuestas al riesgo */
-.risk-body-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: center;
-  font-size: 14px;
-}
-
-.risk-body-table th, .risk-body-table td {
-  border: 1px solid #000;
-  padding: 3px;
-}
-
-.risk-body-table th {
-  background-color: #d9d9d9;
-  color: black;
-  font-weight: bold;
-}
-
-.risk-body-table .header {
-  background-color: #d9d9d9;
-  font-weight: bold;
-  text-align: center;
-}
-
-.risk-body-table td {
-  background-color: white;
-  text-align: center;
-}
-.main-table {
-  background-color: white !important;
+  margin: 20px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .risk-table {
-  background-color: white !important;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-small);
+  border: 1px solid var(--border-color); /* Borde de la tabla */
+}
+
+.risk-table th,
+.risk-table td {
+  border: 1px solid var(--border-color); /* Borde de las celdas */
+  padding: 8px;
+  text-align: left;
+}
+
+.risk-table th {
+  background-color: var(--primary-red);
+  color: var(--button-text);
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--button-text); /* Borde inferior de los encabezados */
+}
+
+.risk-selects select {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  font-family: var(--font-family);
+}
+
+.epp-suggested .red {
+  color: var(--primary-red);
+  font-weight: bold;
+}
+
+
+
+
+.logo-container img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+  /* Sin borde alrededor de las imágenes */
+}
+
+.button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  padding: 8px 12px;
+  border: 2px solid var(--primary-red); /* Borde de los botones */
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: bold;
+  font-size: var(--font-size-small);
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.button:hover {
+  background-color: var(--button-hover-bg);
+  transform: translateY(-2px);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.risk-info,
+.safety-info {
+  margin: 20px 0;
+  border: 2px solid var(--primary-red); /* Borde alrededor de la información */
+  padding: 10px;
+  border-radius: var(--border-radius);
+}
+
+.risk-info h4,
+.safety-info h4 {
+  color: var(--primary-red);
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.uploaded-image {
+  border: 1px solid var(--primary-red);
+  border-radius: var(--border-radius);
+  margin-top: 5px;
+  max-width: 20px;  
+  max-height: 20px; 
+  width: 20%;
+  height: auto;
+  object-fit: contain;
+}
+
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.button-group .button {
+  flex: 1;
 }

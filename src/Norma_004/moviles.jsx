@@ -322,7 +322,7 @@ const RiskTable = () => {
         <thead>
           <tr>
             <th className="red">Nombre de la maquinaria</th>
-            <td colSpan="20">
+            <td colSpan="25">
               <input 
                 placeholder='Introduzca un nombre' 
                 type="text" 
@@ -347,7 +347,7 @@ const RiskTable = () => {
           
             </td>
             <th className="red">POE:</th>
-            <td colSpan="10">
+            <td colSpan="20">
               <input 
                 placeholder='Introduzca el POE' 
                 type="text"
@@ -357,7 +357,7 @@ const RiskTable = () => {
               />
             </td>
             <th className="red">Tiempo de exposición:</th>
-            <td colSpan="10">
+            <td colSpan="15">
               <input 
                 placeholder='Introduzca el tiempo' 
                 type="text"
