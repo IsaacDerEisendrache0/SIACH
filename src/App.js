@@ -10,7 +10,7 @@ import Login from './componentes/Loginlogin';
 import SavedTables from './Norma_17/SavedTables';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import logo from './logos/logo.png'; // Importa el logo
-import backgroundImage from './logos/for.png'; // Importa la imagen de fondo desde la carpeta images
+import backgroundImage from './logos/neg.png'; // Importa la imagen de fondo desde la carpeta images
 
 function Navigation() {
   const auth = getAuth();

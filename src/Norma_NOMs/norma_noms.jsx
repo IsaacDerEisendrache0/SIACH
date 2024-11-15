@@ -344,24 +344,90 @@ const NormaNoms = () => {
       return newValues;
     });
   };
-
+  
   const handleNext = () => {
     setHistory([...history, step]); // Guardar el paso actual en el historial
+  
     if (step === 5 && formValues.maquinariaMateriales === "no") {
       setStep(7);
     } else if (step === 7 && formValues.trabajosAltura === "no") {
       setStep(9);
     } else if (step === 7 && formValues.trabajosAltura === "sí") {
       setStep(8);
-    } else if (step === 9 && formValues.actividadesRelacionadas === "no") {
-      setStep(11);
-    } else if (step === 9 && formValues.actividadesRelacionadas === "sí") {
-      setStep(10);
+    } else if (step === 9) {
+      // Lógica para el paso 9 según el valor de recipientesPresion
+      if (formValues.recipientesPresion === "sí") {
+        setStep(10);
+      } else if (formValues.recipientesPresion === "no") {
+        setStep(11);
+      }
+    } else if (step === 11) {
+      // Lógica para el paso 11 según el valor de recipientesCriogenicos
+      if (formValues.recipientesCriogenicos === "sí") {
+        setStep(12);
+      } else if (formValues.recipientesCriogenicos === "no") {
+        setStep(13);
+      }
+    } else if (step === 13) {
+      // Lógica para el paso 13 según el valor de generadoresVapor
+      if (formValues.generadoresVapor === "sí") {
+        setStep(14);
+      } else if (formValues.generadoresVapor === "no") {
+        setStep(15);
+      }
+    } else if (step === 15) {
+      // Lógica para el paso 15 según el valor de cargasEstaticas
+      if (formValues.cargasEstaticas === "sí") {
+        setStep(16);
+      } else if (formValues.cargasEstaticas === "no") {
+        setStep(17);
+      }
+    } else if (step === 17) {
+        // Lógica para el paso 15 según el valor de cargasEstaticas
+        if (formValues.soldaduraCorte === "sí") {
+          setStep(18);
+        } else if (formValues.soldaduraCorte === "no") {
+          setStep(19);
+        }
+    } else if (step === 19) {
+        // Lógica para el paso 15 según el valor de cargasEstaticas
+        if (formValues.instalacionesElectricas === "sí") {
+          setStep(20);
+        } else if (formValues.instalacionesElectricas === "no") {
+          setStep(22);
+        }
+    } else if (step === 20) {
+        // Lógica para el paso 15 según el valor de cargasEstaticas
+        if (formValues.mantenimientoLineasElectricas === "sí") {
+          setStep(21);
+        } else if (formValues.mantenimientoLineasElectricas === "no") {
+          setStep(22);
+        }
+    } else if (step === 22) {
+        // Lógica para el paso 15 según el valor de cargasEstaticas
+        if (formValues.trabajosEspaciosConfinados === "sí") {
+          setStep(23);
+        } else if (formValues.trabajosEspaciosConfinados === "no") {
+          setStep(24);
+        }
+    } else if (step === 24) {
+        // Lógica para el paso 15 según el valor de cargasEstaticas
+        if (formValues.trabajadoresDiscapacidad === "sí") {
+          setStep(25);
+        } else if (formValues.trabajadoresDiscapacidad === "no") {
+          setStep(26);
+        }
+    } else if (step === 26) {
+        // Lógica para el paso 15 según el valor de cargasEstaticas
+        if (formValues.exposicionRuido === "sí") {
+          setStep(25);
+        } else if (formValues.exposicionRuido === "no") {
+          setStep(26);
+        }
     } else {
       setStep(step + 1);
     }
   };
-
   const handleBack = () => {
     if (history.length > 0) {
       const previousStep = history[history.length - 1];
@@ -371,7 +437,7 @@ const NormaNoms = () => {
       setStep(step - 1); // Retroceso estándar si no hay historial
     }
   };
-
+  
 
 
 
@@ -1488,7 +1554,7 @@ const NormaNoms = () => {
         
 
 {step === 24 && (
-  <div className="step25">
+  <div className="step24">
    <h3>Inclusión de Trabajadores con Discapacidad</h3>
     <label>
     ¿En su centro de trabajo laboran trabajadores con discapacidad?
