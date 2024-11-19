@@ -80,7 +80,7 @@ const RiskTable = () => {
     '/images/21.png', '/images/34.png'
   ];
 
-  // Manejo de subida de imagen
+  // Manejo de subida de imagen o captura de foto
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -289,34 +289,28 @@ const RiskTable = () => {
 
   return (
     <div className="risk-table-container">
-      <tr className="no-border-row">
-        <td colSpan="3">
-          <img src={logo} alt="SIACH Logo" className="siach-logo" />
-        </td>
-        <td colSpan="4" style={{ backgroundColor: 'white' }}>
-          <h4 className="section-header" style={{ color: 'black' }}>
+      <div className="logo-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <img src={logo} alt="SIACH Logo" className="siach-logo" style={{ marginRight: '20px' }} />
+        <h4 className="section-header" style={{ color: 'black' }}>
           ANÁLISIS DE RIESGO POTENCIAL GENERADO POR EQUIPOS MÓVILES
           NOM-004-STPS-1999
-          </h4>
-        </td>
-        <td colSpan="3">
-          {logoSeleccionado ? (
-            <div className="logo-container">
-              <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" />
-              <button onClick={handleRemoveLogo} className="remove-logo-button">×</button>
-            </div>
-          ) : (
-            <select onChange={handleLogoChange} className="logo-dropdown">
-              <option value="">Selecciona una empresa</option>
-              {logos.map((logo, index) => (
-                <option key={index} value={logo.url}>
-                  {logo.nombre}
-                </option>
-              ))}
-            </select>
-          )}
-        </td>
-      </tr>
+        </h4>
+        {logoSeleccionado ? (
+          <div className="logo-container" style={{ display: 'flex', alignItems: 'center' }}>
+            <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" style={{ marginLeft: '20px' }} />
+            <button onClick={handleRemoveLogo} className="remove-logo-button" style={{ marginLeft: '10px' }}>×</button>
+          </div>
+        ) : (
+          <select onChange={handleLogoChange} className="logo-dropdown" style={{ marginLeft: '20px' }}>
+            <option value="">Selecciona una empresa</option>
+            {logos.map((logo, index) => (
+              <option key={index} value={logo.url}>
+                {logo.nombre}
+              </option>
+            ))}
+          </select>
+        )}
+      </div>
     
       <table className="risk-table" style={{ backgroundColor: 'white' }}>
         <thead>
@@ -392,9 +386,10 @@ const RiskTable = () => {
         <tbody>
           <tr>
             <td className="image-section" colSpan="3">
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-                <input type="file" accept="image/*" onChange={handleImageUpload} style={{ marginBottom: '10px', width: '100%' }} />
-                {image && <img src={image} alt="Uploaded" className="uploaded-image" style={{ width: '100%', height: '300px', objectFit: 'cover', border: '1px solid #ccc', borderRadius: '10px' }} />}
+              <div>
+                <button className="upload-button" onClick={() => document.getElementById('upload-image').click()}>Subir Imagen o Tomar Foto</button>
+                <input id="upload-image" type="file" accept="image/*" onChange={handleImageUpload} capture="environment" style={{ display: 'none' }} />
+                {image && <img src={image} alt="Uploaded" className="uploaded" />}
               </div>
             </td>
             <td className="risk-info" colSpan="5">
@@ -479,22 +474,22 @@ const RiskTable = () => {
                 </tbody>
               </table>
             </td>
-            <td style={{ verticalAlign: 'top' }}>
+            <td style={{ verticalAlign: 'top', width: '10%' }} className='epp-suggested' colSpan="">
               <div style={{ marginTop: '20px' }}>
-                <h4 className="red" style={{ display: 'inline-block', marginRight: '10px', fontSize: '14px' }}>Equipo de Protección Personal Sugerido</h4>
-                <select onChange={handleSelectBodyImage} style={{ width: '100%', height: '30px', marginLeft: '10px' }}>
+                <h6 className="red" style={{ display: 'inline-block', marginRight: '200px', fontSize: '14px' }}>Protección sugerido</h6>
+                <select onChange={handleSelectBodyImage} style={{ width: '80%', height: '30px', marginLeft: '30x' }}>
                   <option value="">Seleccione Imagen del cuerpo</option>
                   {Object.keys(optionImages).map((key) => (
                     <option key={key} value={optionImages[key]}>{key}</option>
                   ))}
                 </select>
-                {selectedBodyImage && <img src={selectedBodyImage} alt="Selected Body Part" style={{ width: '60%', height: 'auto', marginTop: '10px' }} />}
+                {selectedBodyImage && <img src={selectedBodyImage} alt="Selected Body Part" style={{ width: '70%', height: 'auto', marginTop: '10px' }} />}
               </div>
             </td>
-            <td colSpan="20" className="epp-suggested" style={{ verticalAlign: 'top' }}>
+            <td colSpan="10" className="epp-suggested" style={{ verticalAlign: 'top', width: '23%' }}>
               <div style={{ marginTop: '20px' }}>
-                <h4 className="red" style={{ display: 'inline-block', marginRight: '10px', fontSize: '14px' }}>Seleccione EPP</h4>
-                <select onChange={handleAddEPPImage} style={{ width: '100%', height: '30px', marginRight: '20px' }}>
+                <h5 className="red" style={{ display: 'inline-block', marginRight: '10px', fontSize: '14px' }}>Seleccione EPP</h5>
+                <select onChange={handleAddEPPImage} style={{ width: '70%', height: '30px', marginRight: '20px' }}>
                   <option value="">Seleccione EPP</option>
                   {eppImages.map((eppImage, idx) => (
                     <option key={idx} value={eppImage}>{`EPP ${idx + 1}`}</option>

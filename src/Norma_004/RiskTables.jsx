@@ -162,7 +162,7 @@ const RiskTable = ({ index }) => {
             <tr>
               <th colSpan="3">Nombre de la maquinaria o equipo:</th>
               <th colSpan="2">
-                <textarea placeholder="Nombre de la maquinaria"></textarea>
+                <textarea placeholder="Nombre de la maquinaria" name='textarea'rows={1} cols={44}></textarea>
               </th>
               <th colSpan="3">Energía utilizada:</th>
               <th colSpan="2">
@@ -177,7 +177,7 @@ const RiskTable = ({ index }) => {
                 <textarea
                   value={state.maquinariaDescripcion}
                   onChange={(e) => handleChange('maquinariaDescripcion', e.target.value)}
-                  placeholder="Describa la maquinaria o equipo"
+                  placeholder="Describa la maquinaria o equipo" name='textarea' rows={1} cols={69}
                 />
               </th>
               <th colSpan="4">Área:</th>
@@ -346,7 +346,7 @@ const RiskTable = ({ index }) => {
                     value={state.observacionesGenerales}
                     onChange={(e) => handleChange('observacionesGenerales', e.target.value)}
                     placeholder="Agregar observaciones generales aquí"
-                    rows="2"
+                    rows="2" cols={219}
                   />
                 </div>
               </td>

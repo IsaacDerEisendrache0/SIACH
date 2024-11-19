@@ -183,12 +183,12 @@ const handlePeligroChange = (peligro) => {
       <table className="main-table">
           <thead>
             <tr>
-              <th colSpan="3">Nombre de la maquinaria o equipo:</th>
+              <th colSpan="2">Nombre de la maquinaria o equipo:</th>
               <th colSpan="2">
-                <textarea placeholder="Nombre de la maquinaria"></textarea>
+                <textarea placeholder="Nombre de la maquinaria" name='textarea' rows="1" cols={63}></textarea>
               </th>
               <th colSpan="3">Energía utilizada:</th>
-              <th colSpan="2">
+              <th colSpan="5">
                 <select value={state.energiaUtilizada} onChange={(e) => handleChange('energiaUtilizada', e.target.value)}>
                   {renderOptions(opciones.energia)}
                 </select>
@@ -200,7 +200,7 @@ const handlePeligroChange = (peligro) => {
                 <textarea
                   value={state.maquinariaDescripcion}
                   onChange={(e) => handleChange('maquinariaDescripcion', e.target.value)}
-                  placeholder="Describa la maquinaria o equipo"
+                  placeholder="Describa la maquinaria o equipo"name="textarea"rows="1" cols="63 "
                 />
               </th>
               <th colSpan="4">Área:</th>
@@ -219,7 +219,7 @@ const handlePeligroChange = (peligro) => {
           </thead>
           <tbody>
             <tr>
-              <td  colSpan="3">
+              <td  colSpan="3" rowSpan="2">
                 <div className="image-section">
                   <input type="file" accept="image/*" onChange={handleImageChange} />
                   {state.errorMessage && <p style={{ color: 'red' }}>{state.errorMessage}</p>}
@@ -369,7 +369,7 @@ const handlePeligroChange = (peligro) => {
                     value={state.observacionesGenerales}
                     onChange={(e) => handleChange('observacionesGenerales', e.target.value)}
                     placeholder="Agregar observaciones generales aquí"
-                    rows="2"
+                    rows="2" cols={219}
                   />
                 </div>
               </td>

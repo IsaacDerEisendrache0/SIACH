@@ -408,7 +408,7 @@ const RiskTable = () => {
               
             </div>
           </div>
-          <textarea name="textarea"rows="3" cols="155 " id="observaciones" placeholder='Observaciones'></textarea>
+          <textarea name="textarea"rows="3" cols="212 " id="observaciones" placeholder='Observaciones'></textarea>
         </tbody>
       </table>
       <div className="button-container">
