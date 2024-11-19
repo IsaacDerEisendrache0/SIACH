@@ -6,21 +6,30 @@ body {
     background-color: #f5f5f5;
   }
   
-  /* Dashboard Container */
   .dashboard-container {
     display: flex;
     height: 100vh;
+    position: relative; /* Para posicionar el botón de toggle */
   }
   
   /* Sidebar */
   .sidebar {
-    width: 250px;
     background-color: #2c3e50;
     color: #ecf0f1;
     display: flex;
     flex-direction: column;
     padding: 20px;
-    transition: 0.3s ease;
+    transition: width 0.3s ease;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .sidebar.collapsed {
+    width: 100px;
+  }
+  
+  .sidebar.expanded {
+    width: 250px;
   }
   
   .sidebar-header {
@@ -37,11 +46,14 @@ body {
   }
   
   .sidebar-menu li {
+    display: flex;
+    align-items: center;
     padding: 10px 15px;
     margin: 5px 0;
     cursor: pointer;
     border-radius: 5px;
-    transition: 0.3s ease;
+    transition: background-color 0.3s ease;
+    white-space: nowrap; /* Evitar salto de línea en textos */
   }
   
   .sidebar-menu li:hover {
@@ -53,11 +65,56 @@ body {
     background-color: #2980b9;
   }
   
+  .menu-icon {
+    font-size: 1.2rem;
+    margin-right: 10px;
+  }
+  
+  .sidebar.collapsed .menu-icon {
+    margin-right: 0;
+  }
+  
+  .sidebar.collapsed li span {
+    display: none;
+  }
+  
+  /* Toggle Button */
+.sidebar-toggle {
+    position: absolute;
+    top: 15px; /* Ajusta el espacio desde arriba */
+    left: 25px; /* Mueve el botón hacia la derecha */
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    padding: 5px 10px;
+    cursor: pointer;
+    z-index: 1000;
+  }
+  
+  .sidebar-toggle:hover {
+    background-color: #2980b9;
+  }
+  
+  /* Otros estilos (mantener como en tu CSS actual) */
+  /* No se requieren cambios adicionales */
+  
+  
   /* Main Content */
   .main-content {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
+    transition: margin-left 0.3s ease;
+  }
+  
+  .main-content {
+    margin-left: 70px;
+  }
+  
+  .sidebar.expanded + .main-content {
+    margin-left: 250px;
   }
   
   /* Header */
@@ -70,7 +127,7 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
-  .search-input {
+  .header-left .search-input {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 20px;
@@ -78,7 +135,7 @@ body {
     transition: 0.3s ease;
   }
   
-  .search-input:focus {
+  .header-left .search-input:focus {
     border-color: #3498db;
   }
   
@@ -122,16 +179,5 @@ body {
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .table-container {
-    margin-top: 20px;
-  }
-  
-  .placeholder {
-    padding: 20px;
-    color: #888;
-    font-size: 1.2rem;
-    text-align: center;
   }
   

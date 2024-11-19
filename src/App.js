@@ -11,6 +11,8 @@ import SavedTables from "./Norma_17/SavedTables";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import logo from "./logos/logo.png"; // Importa el logo
 import "./dashboard.css"; // Archivo CSS personalizado
+import { FaTachometerAlt, FaRegFileAlt, FaRegChartBar, FaBars } from "react-icons/fa"; // Iconos de FontAwesome
+
 
 
 // Función Navigation DEBE estar al nivel superior
@@ -48,8 +50,8 @@ function Navigation() {
 function Dashboard() {
     const navigate = useNavigate();
     const [selectedNorma, setSelectedNorma] = useState(null);
+    const [isSidebarExpanded, setIsSidebarExpanded] = useState(true); // Comienza expandida
   
-    // Definimos las tablas asociadas a cada norma
     const tablasPorNorma = {
       "N-017": <Norma17 />,
       "N-004": <Norma04 />,
@@ -60,52 +62,75 @@ function Dashboard() {
     const handleSelectNorma = (norma) => {
       setSelectedNorma(norma);
     };
+  
+    const toggleSidebar = () => {
+      setIsSidebarExpanded((prevState) => !prevState);
+    };
 
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
-      <aside className="sidebar">
+      <aside className={`sidebar ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
         <div className="sidebar-header">
-          <h2>Kaiadmin</h2>
+          <h2>{isSidebarExpanded ? "Siach" : ""}</h2>
         </div>
         <ul className="sidebar-menu">
-          <li onClick={() => navigate("/")}>Dashboard</li>
-          <li onClick={() => handleSelectNorma("N-017")}>Norma 017</li>
-          <li onClick={() => handleSelectNorma("N-004")}>Norma 004</li>
-          <li onClick={() => handleSelectNorma("N-030")}>Norma 030</li>
+          <li onClick={() => navigate("/")}>
+            <FaTachometerAlt className="menu-icon" />
+            {isSidebarExpanded && <span>Dashboard</span>}
+          </li>
+          <li onClick={() => handleSelectNorma("N-017")}>
+            <FaRegFileAlt className="menu-icon" />
+            {isSidebarExpanded && <span>Norma 017</span>}
+          </li>
+          <li onClick={() => handleSelectNorma("N-004")}>
+            <FaRegFileAlt className="menu-icon" />
+            {isSidebarExpanded && <span>Norma 004</span>}
+          </li>
+          <li onClick={() => handleSelectNorma("N-030")}>
+            <FaRegChartBar className="menu-icon" />
+            {isSidebarExpanded && <span>Norma 030</span>}
+          </li>
           <li onClick={() => handleSelectNorma("Asistente NOMs")}>
-            Asistente NOMs
+            <FaRegFileAlt className="menu-icon" />
+            {isSidebarExpanded && <span>Asistente NOMs</span>}
           </li>
         </ul>
       </aside>
+
+      {/* Toggle Button */}
+      <button className="sidebar-toggle" onClick={toggleSidebar}>
+        <FaBars />
+      </button>
 
       {/* Main Content */}
       <div className="main-content">
         {/* Header */}
         <header className="header">
-          <div className="header-left">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="search-input"
-            />
-          </div>
-          <div className="header-right">
-            <button className="btn-notification">🔔</button>
-            <div className="profile-info">
-              <img
-                src="https://via.placeholder.com/40"
-                alt="User"
-                className="profile-pic"
-              />
-              <span>Hi, User</span>
-            </div>
-          </div>
+        <div className="header">
+  <div className="header-left">
+    <input type="text" placeholder="Search..." className="search-input" />
+  </div>
+  <div className="header-right">
+    <button className="btn-notification">🔔</button>
+    <div className="profile-info">
+      <img
+        src="https://via.placeholder.com/40"
+        alt="User"
+        className="profile-pic"
+      />
+      <span>Hi, User</span>
+    </div>
+    {/* Botón de alternar */}
+    <button className="sidebar-toggle" onClick={toggleSidebar}>
+      <FaBars />
+    </button>
+  </div>
+</div>
         </header>
 
         {/* Dashboard Content */}
         <main className="dashboard-main">
-          {/* Renderizamos la tabla correspondiente */}
           <div className="norma-content">
             {selectedNorma ? (
               <div className="table-container">
