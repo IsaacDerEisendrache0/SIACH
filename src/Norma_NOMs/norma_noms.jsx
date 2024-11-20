@@ -391,11 +391,11 @@ const NormaNoms = () => {
       // Lógica para el paso 28 según la exposición al calor
       setStep(formValues.exposicioncalor === "Sí" ? 29 : 40);
     } else if (step === 29) {
-      // Desde el paso 29, siempre pasa al 30
-      setStep(30);
+      // Lógica para el paso 29 según la exposición a vibraciones
+      setStep(formValues.vibraciones === "Sí" ? 30 : 31);
     } else if (step === 40) {
-      // Desde el paso 40, siempre pasa al 30
-      setStep(30);
+      // Desde el paso 40, siempre pasa al 29
+      setStep(29);
     } else if (step === 30) {
       setStep(31);
     } else if (step === 31) {
@@ -417,6 +417,7 @@ const NormaNoms = () => {
       setStep(step + 1);
     }
   };
+  
   const handleBack = () => {
     if (history.length > 0) {
       const previousStep = history[history.length - 1];
@@ -1835,9 +1836,9 @@ const NormaNoms = () => {
 
 {step === 30 && (
           <div className="step30">
-            <h3>Tipos de Espacios Confinados</h3>
+            <h3>Identificación de partes del cuerpo expuestas a vibraciones</h3>
             <label>
-              Seleccione el tipo de espacio confinado en las cuales se desarrollarán las actividades en el centro de trabajo:
+            Seleccione qué partes del cuerpo están expuestas a las vibraciones:
             </label>
             <div className="checkbox-group">
               <label>
