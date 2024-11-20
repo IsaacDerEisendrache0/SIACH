@@ -104,13 +104,13 @@ body {
   /* Main Content */
   .main-content {
     flex: 1;
-    padding: 20px;
+    padding: 10px;
     overflow-y: auto;
     transition: margin-left 0.3s ease;
   }
   
   .main-content {
-    margin-left: 70px;
+    margin-left: 5px;
   }
   
   .sidebar.expanded + .main-content {
@@ -165,19 +165,77 @@ body {
     object-fit: cover;
   }
   
+
+
+
+
   /* Dashboard Main */
-  .dashboard-main {
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+  /* Contenedor del perfil */
+.profile-section {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  width: 250px;
+  position: relative;
+}
+
+.profile-section:hover {
+  background-color: #f8f9fa;
+}
+
+/* Imagen de perfil */
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+/* Detalles del perfil */
+.profile-details h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.profile-details p {
+  margin: 0;
+  font-size: 14px;
+  color: gray;
+}
+
+/* Menú desplegable */
+.dropdown-menu {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 200px;
+}
+
+.dropdown-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-menu li {
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f8f9fa;
+}
+
   
-  .norma-content {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
   

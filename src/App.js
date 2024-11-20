@@ -9,16 +9,15 @@ import NormaNOMs from "./Norma_NOMs/norma_noms";
 import Login from "./componentes/Loginlogin";
 import SavedTables from "./Norma_17/SavedTables";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import logo from "./logos/logo.png"; // Importa el logo
 import "./dashboard.css"; // Archivo CSS personalizado
 import { FaTachometerAlt, FaRegFileAlt, FaRegChartBar, FaBars } from "react-icons/fa"; // Iconos de FontAwesome
 
-
-
-// Función Navigation DEBE estar al nivel superior
-function Navigation() {
-  const auth = getAuth();
+function Dashboard() {
   const navigate = useNavigate();
+  const [selectedNorma, setSelectedNorma] = useState(null);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+
+  const auth = getAuth();
 
   const handleLogout = async () => {
     try {
@@ -29,43 +28,24 @@ function Navigation() {
     }
   };
 
-  return (
-    <div className="navbar bg-light p-3 shadow-sm">
-      <button className="btn btn-primary me-2" onClick={() => navigate("/")}>
-        Inicio
-      </button>
-      <button
-        className="btn btn-primary me-2"
-        onClick={() => navigate("/saved-tables")}
-      >
-        Ver Tablas Guardadas
-      </button>
-      <button className="btn btn-danger" onClick={handleLogout}>
-        Cerrar sesión
-      </button>
-    </div>
-  );
-}
+  const handleHome = () => {
+    navigate("/");
+  };
 
-function Dashboard() {
-    const navigate = useNavigate();
-    const [selectedNorma, setSelectedNorma] = useState(null);
-    const [isSidebarExpanded, setIsSidebarExpanded] = useState(true); // Comienza expandida
-  
-    const tablasPorNorma = {
-      "N-017": <Norma17 />,
-      "N-004": <Norma04 />,
-      "N-030": <Norma030 />,
-      "Asistente NOMs": <NormaNOMs />,
-    };
-  
-    const handleSelectNorma = (norma) => {
-      setSelectedNorma(norma);
-    };
-  
-    const toggleSidebar = () => {
-      setIsSidebarExpanded((prevState) => !prevState);
-    };
+  const tablasPorNorma = {
+    "N-017": <Norma17 />,
+    "N-004": <Norma04 />,
+    "N-030": <Norma030 />,
+    "Asistente NOMs": <NormaNOMs />,
+  };
+
+  const handleSelectNorma = (norma) => {
+    setSelectedNorma(norma);
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarExpanded((prevState) => !prevState);
+  };
 
   return (
     <div className="dashboard-container">
@@ -95,6 +75,10 @@ function Dashboard() {
             <FaRegFileAlt className="menu-icon" />
             {isSidebarExpanded && <span>Asistente NOMs</span>}
           </li>
+          <li onClick={() => navigate("/saved-tables")}>
+            <FaRegFileAlt className="menu-icon" />
+            {isSidebarExpanded && <span>Ver Tablas Guardadas</span>}
+          </li>
         </ul>
       </aside>
 
@@ -107,42 +91,40 @@ function Dashboard() {
       <div className="main-content">
         {/* Header */}
         <header className="header">
-        <div className="header">
-  <div className="header-left">
-    <input type="text" placeholder="Search..." className="search-input" />
-  </div>
-  <div className="header-right">
-    <button className="btn-notification">🔔</button>
-    <div className="profile-info">
-      <img
-        src="https://via.placeholder.com/40"
-        alt="User"
-        className="profile-pic"
-      />
-      <span>Hi, User</span>
-    </div>
-    {/* Botón de alternar */}
-    <button className="sidebar-toggle" onClick={toggleSidebar}>
-      <FaBars />
-    </button>
-  </div>
-</div>
+          <div className="header-left">
+            <button className="btn btn-primary me-2" onClick={handleHome}>
+              Inicio
+            </button>
+            <button className="btn btn-danger" onClick={handleLogout}>
+              Cerrar sesión
+            </button>
+          </div>
+
+          <div className="header-right">
+            <div className="profile-section">
+              <img
+                src="https://via.placeholder.com/40"
+                alt="User Avatar"
+                className="profile-pic"
+              />
+              <div className="profile-details">
+                <h4>Hizrian</h4>
+                <p>hello@example.com</p>
+              </div>
+            </div>
+          </div>
         </header>
 
         {/* Dashboard Content */}
         <main className="dashboard-main">
-          <div className="norma-content">
-            {selectedNorma ? (
-              <div className="table-container">
-                <h3>{`Tabla correspondiente a la ${selectedNorma}`}</h3>
-                {tablasPorNorma[selectedNorma]}
-              </div>
-            ) : (
-              <div className="placeholder">
-                <h3>Selecciona una norma para visualizar sus tablas</h3>
-              </div>
-            )}
-          </div>
+          {selectedNorma ? (
+            <div className="table-container">
+              <h3>{`Tabla correspondiente a la ${selectedNorma}`}</h3>
+              {tablasPorNorma[selectedNorma]}
+            </div>
+          ) : (
+            <div className="placeholder"></div>
+          )}
         </main>
       </div>
     </div>
@@ -184,7 +166,6 @@ function App() {
       style={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}
     >
       <header className="App-header">
-        {isAuthenticated && <Navigation />}
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/norma_17" element={<Norma17 />} />
