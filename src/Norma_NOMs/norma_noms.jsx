@@ -335,6 +335,7 @@ const NormaNoms = () => {
     alturaConstruccion: '',
     materialp: '',
     comunicacionRuido: '',
+    condicionesClimaticas: '',
   });
 
   const handleInputChange = (e) => {
@@ -345,102 +346,74 @@ const NormaNoms = () => {
       return newValues;
     });
   };
-  
   const handleNext = () => {
     setHistory([...history, step]); // Guardar el paso actual en el historial
   
     if (step === 5 && formValues.maquinariaMateriales === "no") {
       setStep(7);
-    } else if (step === 7 && formValues.trabajosAltura === "no") {
-      setStep(9);
-    } else if (step === 7 && formValues.trabajosAltura === "sí") {
-      setStep(8);
+    } else if (step === 7) {
+      setStep(formValues.trabajosAltura === "no" ? 9 : 8);
     } else if (step === 9) {
       // Lógica para el paso 9 según el valor de recipientesPresion
-      if (formValues.recipientesPresion === "sí") {
-        setStep(10);
-      } else if (formValues.recipientesPresion === "no") {
-        setStep(11);
-      }
+      setStep(formValues.recipientesPresion === "sí" ? 10 : 11);
     } else if (step === 11) {
       // Lógica para el paso 11 según el valor de recipientesCriogenicos
-      if (formValues.recipientesCriogenicos === "sí") {
-        setStep(12);
-      } else if (formValues.recipientesCriogenicos === "no") {
-        setStep(13);
-      }
+      setStep(formValues.recipientesCriogenicos === "sí" ? 12 : 13);
     } else if (step === 13) {
       // Lógica para el paso 13 según el valor de generadoresVapor
-      if (formValues.generadoresVapor === "sí") {
-        setStep(14);
-      } else if (formValues.generadoresVapor === "no") {
-        setStep(15);
-      }
+      setStep(formValues.generadoresVapor === "sí" ? 14 : 15);
     } else if (step === 15) {
       // Lógica para el paso 15 según el valor de cargasEstaticas
-      if (formValues.cargasEstaticas === "sí") {
-        setStep(16);
-      } else if (formValues.cargasEstaticas === "no") {
-        setStep(17);
-      }
+      setStep(formValues.cargasEstaticas === "sí" ? 16 : 17);
     } else if (step === 17) {
-        // Lógica para el paso 15 según el valor de cargasEstaticas
-        if (formValues.soldaduraCorte === "sí") {
-          setStep(18);
-        } else if (formValues.soldaduraCorte === "no") {
-          setStep(19);
-        }
+      setStep(formValues.soldaduraCorte === "sí" ? 18 : 19);
     } else if (step === 19) {
-        // Lógica para el paso 15 según el valor de cargasEstaticas
-        if (formValues.instalacionesElectricas === "sí") {
-          setStep(20);
-        } else if (formValues.instalacionesElectricas === "no") {
-          setStep(22);
-        }
+      setStep(formValues.instalacionesElectricas === "sí" ? 20 : 22);
     } else if (step === 20) {
-        // Lógica para el paso 15 según el valor de cargasEstaticas
-        if (formValues.mantenimientoLineasElectricas === "sí") {
-          setStep(21);
-        } else if (formValues.mantenimientoLineasElectricas === "no") {
-          setStep(22);
-        }
+      setStep(formValues.mantenimientoLineasElectricas === "sí" ? 21 : 22);
     } else if (step === 22) {
-        // Lógica para el paso 15 según el valor de cargasEstaticas
-        if (formValues.trabajosEspaciosConfinados === "sí") {
-          setStep(23);
-        } else if (formValues.trabajosEspaciosConfinados === "no") {
-          setStep(24);
-        }
+      setStep(formValues.trabajosEspaciosConfinados === "sí" ? 23 : 24);
     } else if (step === 24) {
-        // Lógica para el paso 15 según el valor de cargasEstaticas
-        if (formValues.trabajadoresDiscapacidad === "sí") {
-          setStep(25);
-        } else if (formValues.trabajadoresDiscapacidad === "no") {
-          setStep(26);
-        }
+      setStep(formValues.trabajadoresDiscapacidad === "sí" ? 25 : 26);
     } else if (step === 26) {
-        if (formValues.exposicionRuido === "Sí") {
-          setStep(27);
-        } else if (formValues.exposicionRuido === "No") {
-          setStep(39);
-        } else if (formValues.exposicionRuido === "No sé") {
-          setStep(39); // O el paso que corresponda
-        }
+      if (formValues.exposicionRuido === "Sí") {
+        setStep(27);
+      } else {
+        setStep(39); // Va al paso 39 si selecciona "No" o "No sé"
+      }
     } else if (step === 39) {
-        // Lógica para el paso 15 según el valor de cargasEstaticas
-        if (formValues.comunicacionRuido === "sí") {
-          setStep(27);
-        } else if (formValues.comunicacionRuido === "no") {
-          setStep(27);
-        }
+      // Desde el paso 39, siempre pasa al 27
+      setStep(27);
     } else if (step === 27) {
-        // Lógica para el paso 15 según el valor de cargasEstaticas
-        if (formValues.comunicacionRuido === "sí") {
-          setStep(28);
-        } else if (formValues.comunicacionRuido === "no") {
-          setStep(28);
-        }
+      // Desde el paso 27, siempre pasa al 28
+      setStep(28);
+    } else if (step === 28) {
+      // Lógica para el paso 28 según la exposición al calor
+      setStep(formValues.exposicioncalor === "Sí" ? 29 : 40);
+    } else if (step === 29) {
+      // Desde el paso 29, siempre pasa al 30
+      setStep(30);
+    } else if (step === 40) {
+      // Desde el paso 40, siempre pasa al 30
+      setStep(30);
+    } else if (step === 30) {
+      setStep(31);
+    } else if (step === 31) {
+      setStep(32);
+    } else if (step === 32) {
+      setStep(33);
+    } else if (step === 33) {
+      setStep(34);
+    } else if (step === 34) {
+      setStep(35);
+    } else if (step === 35) {
+      setStep(36);
+    } else if (step === 36) {
+      setStep(37);
+    } else if (step === 37) {
+      setStep(38); // Paso final para mostrar normas aplicables
     } else {
+      // Paso predeterminado
       setStep(step + 1);
     }
   };
@@ -561,6 +534,8 @@ const NormaNoms = () => {
         return formValues.materialp !== '';
       case 39:
         return formValues.comunicacionRuido !== '';
+      case 40:
+        return formValues. condicionesClimaticas !== '';
       case 38:
         return formValues.nuevoCampo  !== ''; // Reemplaza 'nuevoCampo' con el nombre correcto si aplica
       default:
@@ -1779,6 +1754,41 @@ const NormaNoms = () => {
               value="No"
               onChange={handleInputChange}
               checked={formValues.exposicioncalor === 'No'}
+            />
+            No
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+          </div>
+        </div>
+      )}
+
+
+
+
+{step === 40 && (
+        <div>
+          <h3>Exposición a Temperaturas Altas en el Centro de Trabajo</h3>
+          <label> ¿En su centro de trabajo existen condiciones climáticas que pueden provocar que la temperatura corporal de los trabajadores sea inferior a 36 grados centígrados o mayor a 38 grados centígrados?
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="condicionesClimaticas"
+              value="Sí"
+              onChange={handleInputChange}
+              checked={formValues.condicionesClimaticas === 'Sí'}
+            />
+            Sí
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="condicionesClimaticas"
+              value="No"
+              onChange={handleInputChange}
+              checked={formValues.condicionesClimaticas === 'No'}
             />
             No
           </label>
