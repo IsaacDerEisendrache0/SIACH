@@ -12,9 +12,9 @@ const App = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-1">
       {/* Botón desplegable para elegir las tablas */}
-      <div className="dropdown mt-3">
+      
         <button
           className="btn btn-primary dropdown-toggle"
           type="button"
@@ -53,7 +53,7 @@ const App = () => {
             </button>
           </li>
         </ul>
-      </div>
+     
 
       {/* Mostrar la tabla seleccionada */}
       <div className="mt-3">

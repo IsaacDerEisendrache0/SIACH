@@ -421,8 +421,6 @@ const RiskTable = () => {
 </div>  
     </div>
     
-    
-    
   );
 
 };

@@ -290,7 +290,7 @@ const RiskTable = () => {
   return (
     <div className="risk-table-container">
       <div className="logo-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <img src={logo} alt="SIACH Logo" className="siach-logo" style={{ marginRight: '20px' }} />
+        <img src={logo} alt="SIACH Logo" className="siach-logo" style={{ marginRight: '5px' }} />
         <h4 className="section-header" style={{ color: 'black' }}>
           ANÁLISIS DE RIESGO POTENCIAL GENERADO POR EQUIPOS MÓVILES
           NOM-004-STPS-1999
