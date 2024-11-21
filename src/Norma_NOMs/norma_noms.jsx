@@ -336,6 +336,7 @@ const NormaNoms = () => {
     materialp: '',
     comunicacionRuido: '',
     condicionesClimaticas: '',
+    teletrabajo: '',
   });
 
   const handleInputChange = (e) => {
@@ -354,16 +355,12 @@ const NormaNoms = () => {
     } else if (step === 7) {
       setStep(formValues.trabajosAltura === "no" ? 9 : 8);
     } else if (step === 9) {
-      // Lógica para el paso 9 según el valor de recipientesPresion
       setStep(formValues.recipientesPresion === "sí" ? 10 : 11);
     } else if (step === 11) {
-      // Lógica para el paso 11 según el valor de recipientesCriogenicos
       setStep(formValues.recipientesCriogenicos === "sí" ? 12 : 13);
     } else if (step === 13) {
-      // Lógica para el paso 13 según el valor de generadoresVapor
       setStep(formValues.generadoresVapor === "sí" ? 14 : 15);
     } else if (step === 15) {
-      // Lógica para el paso 15 según el valor de cargasEstaticas
       setStep(formValues.cargasEstaticas === "sí" ? 16 : 17);
     } else if (step === 17) {
       setStep(formValues.soldaduraCorte === "sí" ? 18 : 19);
@@ -382,24 +379,19 @@ const NormaNoms = () => {
         setStep(39); // Va al paso 39 si selecciona "No" o "No sé"
       }
     } else if (step === 39) {
-      // Desde el paso 39, siempre pasa al 27
-      setStep(27);
+      setStep(27); // Desde el paso 39, siempre pasa al 27
     } else if (step === 27) {
-      // Desde el paso 27, siempre pasa al 28
-      setStep(28);
+      setStep(28); // Desde el paso 27, siempre pasa al 28
     } else if (step === 28) {
-      // Lógica para el paso 28 según la exposición al calor
-      setStep(formValues.exposicioncalor === "Sí" ? 29 : 40);
+      setStep(formValues.exposicioncalor === "Sí" ? 29 : 40); // Lógica para el paso 28 según la exposición al calor
     } else if (step === 29) {
-      // Lógica para el paso 29 según la exposición a vibraciones
-      setStep(formValues.vibraciones === "Sí" ? 30 : 31);
+      setStep(formValues.vibraciones === "Sí" ? 30 : 31); // Lógica para el paso 29 según la exposición a vibraciones
     } else if (step === 40) {
-      // Desde el paso 40, siempre pasa al 29
-      setStep(29);
+      setStep(29); // Desde el paso 40, siempre pasa al 29
     } else if (step === 30) {
       setStep(31);
     } else if (step === 31) {
-      setStep(32);
+      setStep(formValues.manejocargas === "Sí" ? 32 : 33); // Lógica para el paso 31 según la selección
     } else if (step === 32) {
       setStep(33);
     } else if (step === 33) {
@@ -407,17 +399,20 @@ const NormaNoms = () => {
     } else if (step === 34) {
       setStep(35);
     } else if (step === 35) {
-      setStep(36);
+      // Lógica actualizada para el paso 35
+      if (formValues.materialc === "No") {
+        setStep(41); // Ir al paso 41 si selecciona "No"
+      } else {
+        setStep(36); // Ir al paso 36 si selecciona "Sí"
+      }
     } else if (step === 36) {
       setStep(37);
     } else if (step === 37) {
       setStep(38); // Paso final para mostrar normas aplicables
     } else {
-      // Paso predeterminado
-      setStep(step + 1);
+      setStep(step + 1); // Paso predeterminado
     }
   };
-  
   const handleBack = () => {
     if (history.length > 0) {
       const previousStep = history[history.length - 1];
@@ -538,7 +533,9 @@ const NormaNoms = () => {
       case 40:
         return formValues. condicionesClimaticas !== '';
       case 38:
-        return formValues.nuevoCampo  !== ''; // Reemplaza 'nuevoCampo' con el nombre correcto si aplica
+        return formValues.nuevoCampo  !== '';
+      case 41:
+        return formValues.teletrabajo  !== ''; // Reemplaza 'nuevoCampo' con el nombre correcto si aplica
       default:
         return false;
     }
@@ -1918,9 +1915,9 @@ const NormaNoms = () => {
 
 {step === 32 && (
           <div className="step32">
-            <h3>Tipos de Espacios Confinados</h3>
+            <h3>Actividades relacionadas con el manejo manual de cargas</h3>
             <label>
-              Seleccione el tipo de espacio confinado en las cuales se desarrollarán las actividades en el centro de trabajo:
+              Seleccione la actividad a la que el personal se encuentra expuesto en el manejo manual de cargas:
             </label>
             <div className="checkbox-group">
               <label>
@@ -2003,7 +2000,7 @@ const NormaNoms = () => {
                Manejo
               </label>
 
-            </div>
+              </div>
             <div className="buttons">
               <button onClick={handleBack}>Regresar</button>
               <button onClick={handleNext} disabled={!isStepCompleted()}>
@@ -2114,6 +2111,43 @@ const NormaNoms = () => {
           </div>
         </div>
       )}
+
+
+
+{step === 41 && (
+        <div>
+         <h3>Modalidad de Teletrabajo</h3>
+          <label> ¿El centro de trabajo cuenta con personas trabajadoras realizando actividades bajo la modalidad de Teletrabajo en domicilios particulares?
+
+
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="teletrabajo"
+              value="Sí"
+              onChange={handleInputChange}
+              checked={formValues.teletrabajo === 'Sí'}
+            />
+            Sí
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="teletrabajo"
+              value="No"
+              onChange={handleInputChange}
+              checked={formValues.teletrabajo === 'No'}
+            />
+            No
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+          </div>
+        </div>
+      )}
+
 
        {/* Paso 36 - Clasificación del tamaño de la obra de construcción */}
        {step === 36 && (
