@@ -721,13 +721,15 @@ useEffect(() => {
                     </option>
                   ))}
                 </select>
-                {!hideButtons && (
+                
+              </div>
+
+              {!hideButtons && (
                   <>
                     <button className="btn-agregar" onClick={handleAddPuestoClick}>Agregar</button>
                     <button className="btn-borrar" onClick={handleDeletePuestoClick}>Borrar</button>
                   </>
                 )}
-              </div>
 
 
 

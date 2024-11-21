@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig';
-import 'bootstrap/dist/css/bootstrap.min.css'; 
-import './Login.css'; // Asegúrate de importar el CSS
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth, db } from '../firebase/firebaseConfig'; // Importa auth y db desde firebaseConfig
+import { doc, getDoc } from 'firebase/firestore';
+import './Login.css'; // Estilos personalizados (opcional)
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -13,8 +13,26 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(''); // Reinicia el mensaje de error antes de intentar el login
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userEmail = userCredential.user.email; // Obtener el correo electrónico del usuario
+      const userId = userCredential.user.uid;
+
+      // Guardar el correo en el localStorage
+      localStorage.setItem("userEmail", userEmail);
+
+      // Recuperar datos del usuario desde Firestore (opcional)
+      const userDocRef = doc(db, 'users', userId);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        console.log('Datos del usuario:', userData);
+      } else {
+        console.error('No se encontraron datos del usuario en Firestore');
+      }
+
       navigate('/'); // Redirige a la página inicial de tu aplicación
     } catch (err) {
       console.error('Error de inicio de sesión:', err);

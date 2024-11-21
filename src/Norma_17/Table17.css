@@ -325,8 +325,9 @@
 }
 
 button {
+
   padding: 5px 10px;
-  font-size: 14px;
+  font-size: 16px;
   border-radius: 4px;
   cursor: pointer;
 }
@@ -342,7 +343,7 @@ button {
 
 /* Estilo del menú desplegable */
 .puesto-con-botones select {
-  max-width: 210px; /* Asegura que no crezca demasiado */
+  max-width: 350px; /* Asegura que no crezca demasiado */
   padding: 5px;
 }
 
