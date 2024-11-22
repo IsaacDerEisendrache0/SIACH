@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { auth, db } from "./firebase/firebaseConfig";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore"; // Firestore para manejo de documentos
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import Norma17 from "./Norma_17/norma_17";
@@ -20,7 +20,7 @@ function Dashboard() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [profileImage, setProfileImage] = useState("https://via.placeholder.com/100");
   const [userEmail, setUserEmail] = useState("");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para el menú desplegable
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -28,26 +28,18 @@ function Dashboard() {
       if (currentUser) {
         setUserEmail(currentUser.email);
 
+        // Recuperar datos del usuario desde Firestore
         const userDoc = await getDoc(doc(db, "users", currentUser.uid));
         if (userDoc.exists()) {
           const userData = userDoc.data();
           if (userData.profileImage) {
-            setProfileImage(userData.profileImage);
+            setProfileImage(userData.profileImage); // Establecer la imagen recuperada
           }
         }
       }
     };
 
     fetchUserData();
-
-    // Mostrar arte ASCII en la consola
-    const artAscii = `
-       O
-      /|\\
-      / \\
-    `;
-    console.log("¡Bienvenido al Dashboard!");
-    console.log(artAscii);
   }, []);
 
   const handleImageChange = async (event) => {
@@ -58,6 +50,7 @@ function Dashboard() {
         const imageBase64 = reader.result;
         setProfileImage(imageBase64);
 
+        // Guardar la imagen en Firestore
         if (auth.currentUser) {
           const userDocRef = doc(db, "users", auth.currentUser.uid);
           await setDoc(userDocRef, { profileImage: imageBase64 }, { merge: true });
@@ -69,20 +62,34 @@ function Dashboard() {
     }
   };
 
-  const toggleMenu = () => setIsMenuOpen((prevState) => !prevState);
+  const toggleMenu = () => {
+  setIsMenuOpen((prevState) => !prevState);
+  console.log("isMenuOpen:", !isMenuOpen); // Verificar el cambio de estado
+};
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      navigate("/login", { replace: true });
-    } catch (err) {
-      console.error("Error al cerrar sesión:", err);
-    }
+  
+
+const handleLogout = async () => {
+  try {
+    await signOut(auth); // Cierra sesión con Firebase Auth
+    navigate("/login", { replace: true }); // Redirige al login
+  } catch (err) {
+    console.error("Error al cerrar sesión:", err);
+  }
+};
+
+
+  const handleSelectNorma = (norma) => {
+    setSelectedNorma(norma);
   };
 
-  const handleSelectNorma = (norma) => setSelectedNorma(norma);
+  const toggleSidebar = () => {
+    setIsSidebarExpanded((prevState) => !prevState);
+  };
 
-  const toggleSidebar = () => setIsSidebarExpanded((prevState) => !prevState);
+  const handleHome = () => {
+    navigate("/");
+  };
 
   const tablasPorNorma = {
     "N-017": <Norma17 />,
@@ -93,6 +100,7 @@ function Dashboard() {
 
   return (
     <div className="dashboard-container">
+      {/* Sidebar */}
       <aside className={`sidebar ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
         <div className="sidebar-header">
           <h2>{isSidebarExpanded ? "Siach" : ""}</h2>
@@ -125,27 +133,229 @@ function Dashboard() {
         </ul>
       </aside>
 
+      {/* Toggle Button */}
       <button className="sidebar-toggle" onClick={toggleSidebar}>
         <FaBars />
       </button>
 
+      {/* Main Content */}
       <div className="main-content">
+        {/* Header */}
         <header className="header">
-          <div className="profile-section" onClick={toggleMenu}>
-            <img src={profileImage} alt="User Avatar" className="profile-pic" />
-            <div className="profile-details">
-              <p className="user-email">{userEmail || "Cargando correo..."}</p>
-            </div>
-            {isMenuOpen && (
-              <div className="custom-dropdown">
-                <button onClick={() => navigate("/")}>Inicio</button>
-                <button onClick={handleLogout}>Cerrar sesión</button>
-                <input type="file" id="fileInput" style={{ display: "none" }} onChange={handleImageChange} />
-              </div>
-            )}
+          <div className="header-right">
+
+            
+          <div
+  className="profile-section"
+  onClick={toggleMenu}
+  style={{
+    cursor: "pointer",
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    padding: "12px",
+    borderRadius: "12px",
+    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.15)",
+    backgroundColor: "#fff",
+    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+  }}
+>
+  <img
+    src={profileImage}
+    alt="User Avatar"
+    className="profile-pic"
+    style={{
+      width: "55px",
+      height: "55px",
+      borderRadius: "50%",
+      marginRight: "12px",
+      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+    }}
+  />
+  <div
+    className="profile-details"
+    style={{
+      display: "flex",
+      flexDirection: "column",
+    }}
+  >
+    <p
+      className="user-email"
+      style={{
+        margin: 0,
+        fontSize: "15px",
+        color: "#333",
+        fontWeight: 500,
+      }}
+    >
+      {userEmail || "Cargando correo..."}
+    </p>
+  </div>
+
+  {isMenuOpen && (
+    <div
+      className="custom-dropdown"
+      style={{
+        position: "absolute",
+        top: "110%",
+        right: "0",
+        backgroundColor: "#fff",
+        boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
+        borderRadius: "10px",
+        padding: "10px",
+        zIndex: 1000,
+        opacity: 1,
+        transform: "translateY(0)",
+      }}
+    >
+      {/* Botón Inicio */}
+      <button
+        className="dropdown-item"
+        style={{
+          display: "block",
+          margin: "8px 0",
+          width: "100%",
+          padding: "12px 15px",
+          textAlign: "left",
+          backgroundColor: "transparent",
+          border: "none",
+          borderRadius: "6px",
+          cursor: "pointer",
+          fontSize: "14px",
+          color: "#212529",
+          fontWeight: 500,
+          transition: "background-color 0.3s ease, transform 0.2s ease",
+        }}
+        onMouseOver={(e) => {
+          e.target.style.backgroundColor = "#007bff";
+          e.target.style.color = "#fff";
+        }}
+        onMouseOut={(e) => {
+          e.target.style.backgroundColor = "transparent";
+          e.target.style.color = "#212529";
+        }}
+        onClick={() => navigate("/")}
+      >
+        Inicio
+      </button>
+
+      {/* Botón Cerrar Sesión */}
+      <button
+        className="dropdown-item"
+        style={{
+          display: "block",
+          margin: "8px 0",
+          width: "100%",
+          padding: "12px 15px",
+          textAlign: "left",
+          backgroundColor: "transparent",
+          border: "none",
+          borderRadius: "6px",
+          cursor: "pointer",
+          fontSize: "14px",
+          color: "#212529",
+          fontWeight: 500,
+          transition: "background-color 0.3s ease, transform 0.2s ease",
+        }}
+        onMouseOver={(e) => {
+          e.target.style.backgroundColor = "#007bff";
+          e.target.style.color = "#fff";
+        }}
+        onMouseOut={(e) => {
+          e.target.style.backgroundColor = "transparent";
+          e.target.style.color = "#212529";
+        }}
+        onClick={handleLogout}
+      >
+        Cerrar sesión
+      </button>
+
+      {/* Botón Agregar Imagen */}
+      <button
+        className="dropdown-item"
+        style={{
+          display: "block",
+          margin: "8px 0",
+          width: "100%",
+          padding: "12px 15px",
+          textAlign: "left",
+          backgroundColor: "transparent",
+          border: "none",
+          borderRadius: "6px",
+          cursor: "pointer",
+          fontSize: "14px",
+          color: "#212529",
+          fontWeight: 500,
+          transition: "background-color 0.3s ease, transform 0.2s ease",
+        }}
+        onMouseOver={(e) => {
+          e.target.style.backgroundColor = "#28a745"; /* Fondo verde */
+          e.target.style.color = "#fff"; /* Texto blanco */
+        }}
+        onMouseOut={(e) => {
+          e.target.style.backgroundColor = "transparent";
+          e.target.style.color = "#212529";
+        }}
+        onClick={() => document.getElementById("fileInput").click()}
+      >
+        Agregar Imagen
+      </button>
+
+      {/* Botón Eliminar Imagen */}
+      <button
+        className="dropdown-item"
+        style={{
+          display: "block",
+          margin: "8px 0",
+          width: "100%",
+          padding: "12px 15px",
+          textAlign: "left",
+          backgroundColor: "transparent",
+          border: "none",
+          borderRadius: "6px",
+          cursor: "pointer",
+          fontSize: "14px",
+          color: "#212529",
+          fontWeight: 500,
+          transition: "background-color 0.3s ease, transform 0.2s ease",
+        }}
+        onMouseOver={(e) => {
+          e.target.style.backgroundColor = "#dc3545"; /* Fondo rojo */
+          e.target.style.color = "#fff"; /* Texto blanco */
+        }}
+        onMouseOut={(e) => {
+          e.target.style.backgroundColor = "transparent";
+          e.target.style.color = "#212529";
+        }}
+        onClick={() => setProfileImage("https://via.placeholder.com/100")}
+      >
+        Eliminar Imagen
+      </button>
+
+      {/* Input oculto para cargar imagen */}
+      <input
+        type="file"
+        id="fileInput"
+        style={{ display: "none" }}
+        onChange={handleImageChange}
+      />
+    </div>
+  )}
+</div>
+
+
+
+          
+            <input
+              type="file"
+              id="fileInput"
+              style={{ display: "none" }}
+              onChange={handleImageChange}
+            />
           </div>
         </header>
 
+        {/* Dashboard Content */}
         <main className="dashboard-main">
           {selectedNorma ? (
             <div className="table-container">
@@ -153,15 +363,7 @@ function Dashboard() {
               {tablasPorNorma[selectedNorma]}
             </div>
           ) : (
-            <div className="placeholder">
-              <pre style={{ fontSize: "16px", textAlign: "center" }}>
-                {`
-                   O
-                  /|\\
-                  / \\
-                `}
-              </pre>
-            </div>
+            <div className="placeholder"></div>
           )}
         </main>
       </div>
@@ -179,12 +381,6 @@ function App() {
         if (window.location.pathname === "/login") {
           navigate("/");
         }
-        console.log("¡Bienvenido de nuevo!");
-        console.log(`
-            O
-           | |
-          O   O
-        `);
       } else {
         if (window.location.pathname !== "/login") {
           navigate("/login");
@@ -201,7 +397,10 @@ function App() {
   }
 
   return (
-    <div className="app-container" style={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}>
+    <div
+      className="app-container"
+      style={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}
+    >
       <header className="App-header">
         <Routes>
           <Route path="/login" element={<Login />} />
