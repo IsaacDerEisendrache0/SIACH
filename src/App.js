@@ -12,7 +12,7 @@ import Login from "./componentes/Loginlogin";
 import SavedTables from "./Norma_17/SavedTables";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import "./dashboard.css";
-import { FaTachometerAlt, FaRegFileAlt, FaRegChartBar, FaBars } from "react-icons/fa";
+import { FaTachometerAlt, FaRegFileAlt, FaRegChartBar, FaBars, FaChevronDown } from "react-icons/fa";
 import Moviles from "./Norma_004/moviles";
 import Maquinaria from "./Norma_004/maquinariaYequipo";
 import HerramientasManuales from "./Norma_004/herramientasMan";
@@ -24,6 +24,7 @@ function Dashboard() {
   const [profileImage, setProfileImage] = useState("https://via.placeholder.com/100");
   const [userEmail, setUserEmail] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para el menú desplegable
+  const [isNorma004Expanded, setIsNorma004Expanded] = useState(false); // Estado para el menú desplegable de Norma 004
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -91,39 +92,58 @@ function Dashboard() {
     navigate("/");
   };
 
+  const toggleNorma004Menu = () => {
+    setIsNorma004Expanded((prevState) => !prevState);
+  };
+
   const tablasPorNorma = {
     "N-017": <Norma17 />, 
-    "N-004": (
-      <div>
-        <Moviles />
-        <Maquinaria />
-        <HerramientasManuales />
-      </div>
-    ),
+    "Moviles": <Moviles />, 
+    "Maquinaria": <Maquinaria />, 
+    "Herramientas Manuales": <HerramientasManuales />,
     "N-030": <Norma030 />,
     "Asistente NOMs": <NormaNOMs />,
   };
+  
 
   return (
+    
     <div className="dashboard-container">
       {/* Sidebar */}
       <aside className={`sidebar ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
         <div className="sidebar-header">
-          <h2>{isSidebarExpanded ? "Siach" : ""}</h2>
+          <h2>{isSidebarExpanded ? "SIACH" : ""}</h2>
         </div>
         <ul className="sidebar-menu">
-          <li onClick={() => navigate("/")}>
-            <FaTachometerAlt className="menu-icon" />
-            {isSidebarExpanded && <span>Dashboard</span>}
-          </li>
+          
           <li onClick={() => handleSelectNorma("N-017")}>
             <FaRegFileAlt className="menu-icon" />
             {isSidebarExpanded && <span>Norma 017</span>}
           </li>
-          <li onClick={() => handleSelectNorma("N-004")}>
+          <li onClick={toggleNorma004Menu}>
             <FaRegFileAlt className="menu-icon" />
-            {isSidebarExpanded && <span>Norma 004</span>}
+            {isSidebarExpanded && (
+              <span>
+                Norma 004 <FaChevronDown className={`chevron-icon ${isNorma004Expanded ? "expanded" : "collapsed"}`} />
+              </span>
+            )}
           </li>
+          {isNorma004Expanded && isSidebarExpanded && (
+            <ul className="submenu">
+              <li onClick={() => handleSelectNorma("Moviles")}>
+                <FaRegFileAlt className="submenu-icon" />
+                <span>Moviles</span>
+              </li>
+              <li onClick={() => handleSelectNorma("Maquinaria")}>
+                <FaRegFileAlt className="submenu-icon" />
+                <span>Maquinaria</span>
+              </li>
+              <li onClick={() => handleSelectNorma("Herramientas Manuales")}>
+                <FaRegFileAlt className="submenu-icon" />
+                <span>Herramientas Manuales</span>
+              </li>
+            </ul>
+          )}
           <li onClick={() => handleSelectNorma("N-030")}>
             <FaRegChartBar className="menu-icon" />
             {isSidebarExpanded && <span>Norma 030</span>}
@@ -134,7 +154,11 @@ function Dashboard() {
           </li>
           <li onClick={() => navigate("/saved-tables")}>
             <FaRegFileAlt className="menu-icon" />
-            {isSidebarExpanded && <span>Ver Tablas Guardadas</span>}
+            {isSidebarExpanded && <span>Tablas Guardadas</span>}
+          </li>
+          <li onClick={() => handleSelectNorma("Resumen")}>
+            <FaRegFileAlt className="menu-icon" />
+            {isSidebarExpanded && <span>Resumen</span>}
           </li>
         </ul>
       </aside>
@@ -397,7 +421,6 @@ function App() {
     >
       <header className="App-header">
         <Routes>
-          <Route path="/login" element={<Login />} />
           <Route path="/norma_17" element={<Norma17 />} />
           <Route path="/norma_004" element={<Norma04 />} />
           <Route path="/norma_030" element={<Norma030 />} />
