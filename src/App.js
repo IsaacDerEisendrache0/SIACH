@@ -426,6 +426,7 @@ function App() {
           <Route path="/norma_17" element={<Norma17 />} />
           <Route path="/norma_004" element={<Norma04 />} />
           <Route path="/norma_030" element={<Norma030 />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/saved-tables" element={<SavedTables />} />
           <Route path="/" element={<Dashboard />} />
         </Routes>
