@@ -1,7 +1,7 @@
-// firebaseConfig.js
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage"; // Agregar Storage
 
 const firebaseConfig = {
   apiKey: "AIzaSyBYqInVt7UjKxKmELfMnW_BkTJr0erKf7o",
@@ -9,12 +9,13 @@ const firebaseConfig = {
   projectId: "siach-df969",
   storageBucket: "siach-df969.appspot.com",
   messagingSenderId: "506973198690",
-  appId: "1:506973198690:web:e603297d7df67362c3f43b"
+  appId: "1:506973198690:web:e603297d7df67362c3f43b",
 };
 
 // Inicializa Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app); // Inicializa Storage
 
-export { auth, db };
+export { auth, db, storage };
