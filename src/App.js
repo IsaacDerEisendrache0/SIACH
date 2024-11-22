@@ -13,6 +13,9 @@ import SavedTables from "./Norma_17/SavedTables";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import "./dashboard.css";
 import { FaTachometerAlt, FaRegFileAlt, FaRegChartBar, FaBars } from "react-icons/fa";
+import Moviles from "./Norma_004/moviles";
+import Maquinaria from "./Norma_004/maquinariaYequipo";
+import HerramientasManuales from "./Norma_004/herramientasMan";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -63,21 +66,18 @@ function Dashboard() {
   };
 
   const toggleMenu = () => {
-  setIsMenuOpen((prevState) => !prevState);
-  console.log("isMenuOpen:", !isMenuOpen); // Verificar el cambio de estado
-};
+    setIsMenuOpen((prevState) => !prevState);
+    console.log("isMenuOpen:", !isMenuOpen); // Verificar el cambio de estado
+  };
 
-  
-
-const handleLogout = async () => {
-  try {
-    await signOut(auth); // Cierra sesión con Firebase Auth
-    navigate("/login", { replace: true }); // Redirige al login
-  } catch (err) {
-    console.error("Error al cerrar sesión:", err);
-  }
-};
-
+  const handleLogout = async () => {
+    try {
+      await signOut(auth); // Cierra sesión con Firebase Auth
+      navigate("/login", { replace: true }); // Redirige al login
+    } catch (err) {
+      console.error("Error al cerrar sesión:", err);
+    }
+  };
 
   const handleSelectNorma = (norma) => {
     setSelectedNorma(norma);
@@ -92,8 +92,14 @@ const handleLogout = async () => {
   };
 
   const tablasPorNorma = {
-    "N-017": <Norma17 />,
-    "N-004": <Norma04 />,
+    "N-017": <Norma17 />, 
+    "N-004": (
+      <div>
+        <Moviles />
+        <Maquinaria />
+        <HerramientasManuales />
+      </div>
+    ),
     "N-030": <Norma030 />,
     "Asistente NOMs": <NormaNOMs />,
   };
@@ -143,215 +149,203 @@ const handleLogout = async () => {
         {/* Header */}
         <header className="header">
           <div className="header-right">
+            <div
+              className="profile-section"
+              onClick={toggleMenu}
+              style={{
+                cursor: "pointer",
+                position: "relative",
+                display: "flex",
+                alignItems: "center",
+                padding: "12px",
+                borderRadius: "12px",
+                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.15)",
+                backgroundColor: "#fff",
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+              }}
+            >
+              <img
+                src={profileImage}
+                alt="User Avatar"
+                className="profile-pic"
+                style={{
+                  width: "55px",
+                  height: "55px",
+                  borderRadius: "50%",
+                  marginRight: "12px",
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                }}
+              />
+              <div
+                className="profile-details"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <p
+                  className="user-email"
+                  style={{
+                    margin: 0,
+                    fontSize: "15px",
+                    color: "#333",
+                    fontWeight: 500,
+                  }}
+                >
+                  {userEmail || "Cargando correo..."}
+                </p>
+              </div>
 
-            
-          <div
-  className="profile-section"
-  onClick={toggleMenu}
-  style={{
-    cursor: "pointer",
-    position: "relative",
-    display: "flex",
-    alignItems: "center",
-    padding: "12px",
-    borderRadius: "12px",
-    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.15)",
-    backgroundColor: "#fff",
-    transition: "transform 0.3s ease, box-shadow 0.3s ease",
-  }}
->
-  <img
-    src={profileImage}
-    alt="User Avatar"
-    className="profile-pic"
-    style={{
-      width: "55px",
-      height: "55px",
-      borderRadius: "50%",
-      marginRight: "12px",
-      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-    }}
-  />
-  <div
-    className="profile-details"
-    style={{
-      display: "flex",
-      flexDirection: "column",
-    }}
-  >
-    <p
-      className="user-email"
-      style={{
-        margin: 0,
-        fontSize: "15px",
-        color: "#333",
-        fontWeight: 500,
-      }}
-    >
-      {userEmail || "Cargando correo..."}
-    </p>
-  </div>
+              {isMenuOpen && (
+                <div
+                  className="custom-dropdown"
+                  style={{
+                    position: "absolute",
+                    top: "110%",
+                    right: "0",
+                    backgroundColor: "#fff",
+                    boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
+                    borderRadius: "10px",
+                    padding: "10px",
+                    zIndex: 1000,
+                    opacity: 1,
+                    transform: "translateY(0)",
+                  }}
+                >
+                  {/* Botón Inicio */}
+                  <button
+                    className="dropdown-item"
+                    style={{
+                      display: "block",
+                      margin: "8px 0",
+                      width: "100%",
+                      padding: "12px 15px",
+                      textAlign: "left",
+                      backgroundColor: "transparent",
+                      border: "none",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      fontSize: "14px",
+                      color: "#212529",
+                      fontWeight: 500,
+                      transition: "background-color 0.3s ease, transform 0.2s ease",
+                    }}
+                    onMouseOver={(e) => {
+                      e.target.style.backgroundColor = "#007bff";
+                      e.target.style.color = "#fff";
+                    }}
+                    onMouseOut={(e) => {
+                      e.target.style.backgroundColor = "transparent";
+                      e.target.style.color = "#212529";
+                    }}
+                    onClick={() => navigate("/")}
+                  >
+                    Inicio
+                  </button>
 
-  {isMenuOpen && (
-    <div
-      className="custom-dropdown"
-      style={{
-        position: "absolute",
-        top: "110%",
-        right: "0",
-        backgroundColor: "#fff",
-        boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
-        borderRadius: "10px",
-        padding: "10px",
-        zIndex: 1000,
-        opacity: 1,
-        transform: "translateY(0)",
-      }}
-    >
-      {/* Botón Inicio */}
-      <button
-        className="dropdown-item"
-        style={{
-          display: "block",
-          margin: "8px 0",
-          width: "100%",
-          padding: "12px 15px",
-          textAlign: "left",
-          backgroundColor: "transparent",
-          border: "none",
-          borderRadius: "6px",
-          cursor: "pointer",
-          fontSize: "14px",
-          color: "#212529",
-          fontWeight: 500,
-          transition: "background-color 0.3s ease, transform 0.2s ease",
-        }}
-        onMouseOver={(e) => {
-          e.target.style.backgroundColor = "#007bff";
-          e.target.style.color = "#fff";
-        }}
-        onMouseOut={(e) => {
-          e.target.style.backgroundColor = "transparent";
-          e.target.style.color = "#212529";
-        }}
-        onClick={() => navigate("/")}
-      >
-        Inicio
-      </button>
+                  {/* Botón Cerrar Sesión */}
+                  <button
+                    className="dropdown-item"
+                    style={{
+                      display: "block",
+                      margin: "8px 0",
+                      width: "100%",
+                      padding: "12px 15px",
+                      textAlign: "left",
+                      backgroundColor: "transparent",
+                      border: "none",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      fontSize: "14px",
+                      color: "#212529",
+                      fontWeight: 500,
+                      transition: "background-color 0.3s ease, transform 0.2s ease",
+                    }}
+                    onMouseOver={(e) => {
+                      e.target.style.backgroundColor = "#007bff";
+                      e.target.style.color = "#fff";
+                    }}
+                    onMouseOut={(e) => {
+                      e.target.style.backgroundColor = "transparent";
+                      e.target.style.color = "#212529";
+                    }}
+                    onClick={handleLogout}
+                  >
+                    Cerrar sesión
+                  </button>
 
-      {/* Botón Cerrar Sesión */}
-      <button
-        className="dropdown-item"
-        style={{
-          display: "block",
-          margin: "8px 0",
-          width: "100%",
-          padding: "12px 15px",
-          textAlign: "left",
-          backgroundColor: "transparent",
-          border: "none",
-          borderRadius: "6px",
-          cursor: "pointer",
-          fontSize: "14px",
-          color: "#212529",
-          fontWeight: 500,
-          transition: "background-color 0.3s ease, transform 0.2s ease",
-        }}
-        onMouseOver={(e) => {
-          e.target.style.backgroundColor = "#007bff";
-          e.target.style.color = "#fff";
-        }}
-        onMouseOut={(e) => {
-          e.target.style.backgroundColor = "transparent";
-          e.target.style.color = "#212529";
-        }}
-        onClick={handleLogout}
-      >
-        Cerrar sesión
-      </button>
+                  {/* Botón Agregar Imagen */}
+                  <button
+                    className="dropdown-item"
+                    style={{
+                      display: "block",
+                      margin: "8px 0",
+                      width: "100%",
+                      padding: "12px 15px",
+                      textAlign: "left",
+                      backgroundColor: "transparent",
+                      border: "none",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      fontSize: "14px",
+                      color: "#212529",
+                      fontWeight: 500,
+                      transition: "background-color 0.3s ease, transform 0.2s ease",
+                    }}
+                    onMouseOver={(e) => {
+                      e.target.style.backgroundColor = "#28a745"; /* Fondo verde */
+                      e.target.style.color = "#fff"; /* Texto blanco */
+                    }}
+                    onMouseOut={(e) => {
+                      e.target.style.backgroundColor = "transparent";
+                      e.target.style.color = "#212529";
+                    }}
+                    onClick={() => document.getElementById("fileInput").click()}
+                  >
+                    Agregar Imagen
+                  </button>
 
-      {/* Botón Agregar Imagen */}
-      <button
-        className="dropdown-item"
-        style={{
-          display: "block",
-          margin: "8px 0",
-          width: "100%",
-          padding: "12px 15px",
-          textAlign: "left",
-          backgroundColor: "transparent",
-          border: "none",
-          borderRadius: "6px",
-          cursor: "pointer",
-          fontSize: "14px",
-          color: "#212529",
-          fontWeight: 500,
-          transition: "background-color 0.3s ease, transform 0.2s ease",
-        }}
-        onMouseOver={(e) => {
-          e.target.style.backgroundColor = "#28a745"; /* Fondo verde */
-          e.target.style.color = "#fff"; /* Texto blanco */
-        }}
-        onMouseOut={(e) => {
-          e.target.style.backgroundColor = "transparent";
-          e.target.style.color = "#212529";
-        }}
-        onClick={() => document.getElementById("fileInput").click()}
-      >
-        Agregar Imagen
-      </button>
+                  {/* Botón Eliminar Imagen */}
+                  <button
+                    className="dropdown-item"
+                    style={{
+                      display: "block",
+                      margin: "8px 0",
+                      width: "100%",
+                      padding: "12px 15px",
+                      textAlign: "left",
+                      backgroundColor: "transparent",
+                      border: "none",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      fontSize: "14px",
+                      color: "#212529",
+                      fontWeight: 500,
+                      transition: "background-color 0.3s ease, transform 0.2s ease",
+                    }}
+                    onMouseOver={(e) => {
+                      e.target.style.backgroundColor = "#dc3545"; /* Fondo rojo */
+                      e.target.style.color = "#fff"; /* Texto blanco */
+                    }}
+                    onMouseOut={(e) => {
+                      e.target.style.backgroundColor = "transparent";
+                      e.target.style.color = "#212529";
+                    }}
+                    onClick={() => setProfileImage("https://via.placeholder.com/100")}
+                  >
+                    Eliminar Imagen
+                  </button>
 
-      {/* Botón Eliminar Imagen */}
-      <button
-        className="dropdown-item"
-        style={{
-          display: "block",
-          margin: "8px 0",
-          width: "100%",
-          padding: "12px 15px",
-          textAlign: "left",
-          backgroundColor: "transparent",
-          border: "none",
-          borderRadius: "6px",
-          cursor: "pointer",
-          fontSize: "14px",
-          color: "#212529",
-          fontWeight: 500,
-          transition: "background-color 0.3s ease, transform 0.2s ease",
-        }}
-        onMouseOver={(e) => {
-          e.target.style.backgroundColor = "#dc3545"; /* Fondo rojo */
-          e.target.style.color = "#fff"; /* Texto blanco */
-        }}
-        onMouseOut={(e) => {
-          e.target.style.backgroundColor = "transparent";
-          e.target.style.color = "#212529";
-        }}
-        onClick={() => setProfileImage("https://via.placeholder.com/100")}
-      >
-        Eliminar Imagen
-      </button>
-
-      {/* Input oculto para cargar imagen */}
-      <input
-        type="file"
-        id="fileInput"
-        style={{ display: "none" }}
-        onChange={handleImageChange}
-      />
-    </div>
-  )}
-</div>
-
-
-
-          
-            <input
-              type="file"
-              id="fileInput"
-              style={{ display: "none" }}
-              onChange={handleImageChange}
-            />
+                  {/* Input oculto para cargar imagen */}
+                  <input
+                    type="file"
+                    id="fileInput"
+                    style={{ display: "none" }}
+                    onChange={handleImageChange}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </header>
 
