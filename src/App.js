@@ -10,6 +10,7 @@ import Norma030 from "./Norma_030/norma_030";
 import NormaNOMs from "./Norma_NOMs/norma_noms";
 import Login from "./componentes/Loginlogin";
 import SavedTables from "./Norma_17/SavedTables";
+import Resumen from "./ResumenTabla/resumen";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import "./dashboard.css";
 import { FaTachometerAlt, FaRegFileAlt, FaRegChartBar, FaBars, FaChevronDown } from "react-icons/fa";
@@ -103,6 +104,7 @@ function Dashboard() {
     "Herramientas Manuales": <HerramientasManuales />,
     "N-030": <Norma030 />,
     "Asistente NOMs": <NormaNOMs />,
+    "Resumen": <Resumen />,
   };
   
 
@@ -433,6 +435,3 @@ function App() {
 }
 
 export default App;
-
-
-
