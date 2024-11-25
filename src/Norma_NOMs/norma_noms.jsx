@@ -28,6 +28,8 @@ const normas = [
       { numero: '5.5', descripcion: 'Plan de atención a emergencias de incendio.' },
       { numero: '5.7', descripcion: 'Programa anual y registros de simulacros.' },
       { numero: '5.8', descripcion: 'Capacitación de brigadas de emergencia.' },
+
+      
     ],
     condition: (values) => values.recipientesPresion === 'sí'
   },
@@ -1057,7 +1059,9 @@ const NormaNoms = () => {
 
     <div className="buttons">
       <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext}>Continuar</button>
+      <button onClick={handleNext} disabled={formValues.categoriasRecipientes.length === 0}>
+        Continuar
+      </button>
     </div>
   </div>
 )}
@@ -1079,30 +1083,32 @@ const NormaNoms = () => {
 {step === 11 && (
   <div className="step11">
     <h3>Recipientes Criogénicos</h3>
-        <label>¿En su centro de trabajo se utilizan recipientes criogénicos?</label>
-        <label>
-          <input
-            type="radio"
-            name="recipientesCriogenicos"
-            value="sí"
-            onChange={handleInputChange}
-            checked={formValues.recipientesCriogenicos === 'sí'}
-          />
-          Sí
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="recipientesCriogenicos"
-            value="no"
-            onChange={handleInputChange}
-            checked={formValues.recipientesCriogenicos === 'no'}
-          />
-          No
-        </label>
+    <label>¿En su centro de trabajo se utilizan recipientes criogénicos?</label>
+    <label>
+      <input
+        type="radio"
+        name="recipientesCriogenicos"
+        value="sí"
+        onChange={handleInputChange}
+        checked={formValues.recipientesCriogenicos === 'sí'}
+      />
+      Sí
+    </label>
+    <label>
+      <input
+        type="radio"
+        name="recipientesCriogenicos"
+        value="no"
+        onChange={handleInputChange}
+        checked={formValues.recipientesCriogenicos === 'no'}
+      />
+      No
+    </label>
     <div className="buttons">
       <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext}>Continuar</button>
+      <button onClick={handleNext} disabled={!formValues.recipientesCriogenicos}>
+        Continuar
+      </button>
     </div>
   </div>
 )}
@@ -1586,50 +1592,56 @@ const NormaNoms = () => {
 )}
 
   
-  {step === 25 && (
-        <div>
-         <h3>Tipos de Discapacidad del Personal</h3>
-          <label>
-          Seleccione el tipo de discapacidad que presenta el personal que labora en su centro de trabajo:
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              value="Discapacidad física"
-              onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
-            />
-            Discapacidad física
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              value="Discapacidad mental"
-              onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
-            />
-            Discapacidad mental
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              value="Discapacidad intelectual"
-              onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
-            />
-            Discapacidad intelectual
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              value="Discapacidad sensorial"
-              onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
-            />
-            Discapacidad sensorial
-          </label>
-          <div className="buttons">
-            <button onClick={handleBack}>Regresar</button>
-            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
-          </div>
-        </div>
-      )}
+{step === 25 && (
+  <div>
+    <h3>Tipos de Discapacidad del Personal</h3>
+    <label>
+      Seleccione el tipo de discapacidad que presenta el personal que labora en su centro de trabajo:
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="Discapacidad física"
+        onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
+        checked={formValues.tiposDiscapacidad.includes('Discapacidad física')}
+      />
+      Discapacidad física
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="Discapacidad mental"
+        onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
+        checked={formValues.tiposDiscapacidad.includes('Discapacidad mental')}
+      />
+      Discapacidad mental
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="Discapacidad intelectual"
+        onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
+        checked={formValues.tiposDiscapacidad.includes('Discapacidad intelectual')}
+      />
+      Discapacidad intelectual
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="Discapacidad sensorial"
+        onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
+        checked={formValues.tiposDiscapacidad.includes('Discapacidad sensorial')}
+      />
+      Discapacidad sensorial
+    </label>
+    <div className="buttons">
+      <button onClick={handleBack}>Regresar</button>
+      <button onClick={handleNext} disabled={formValues.tiposDiscapacidad.length === 0}>
+        Siguiente
+      </button>
+    </div>
+  </div>
+)}
 
 {step === 26 && (
         <div>
@@ -1971,51 +1983,48 @@ const NormaNoms = () => {
 
 
 {step === 33 && (
-          <div className="step33">
-            <h3>Actividades Agrícolas con Insumos Fitosanitarios</h3>
-            <label>
-            Seleccione el tipo de actividades agrícolas que desarrollan los trabajadores con insumos fitosanitarios o plaguicidas e insumos de nutrición vegetal o fertilizantes:
-            </label>
-            <div className="checkbox-group">
-              <label>
-                <input
-                  type="checkbox"
-                  value="Traslado"
-                  onChange={(e) => handleCheckboxChange(e, 'actagricolas')}
-                  checked={formValues.actagricolas.includes('Traslado')}
-                />
-              
-              Traslado
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  value="Almacenamiento"
-                  onChange={(e) => handleCheckboxChange(e, 'actagricolas')}
-                  checked={formValues.actagricolas.includes('Almacenamiento')}
-                />
-                Almacenamiento
-
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  value="Manejo"
-                  onChange={(e) => handleCheckboxChange(e, 'actagricolas')}
-                  checked={formValues.actagricolas.includes('Manejo')}
-                />
-               Manejo
-              </label>
-
-              </div>
-            <div className="buttons">
-              <button onClick={handleBack}>Regresar</button>
-              <button onClick={handleNext} disabled={!isStepCompleted()}>
-                Continuar
-              </button>
-            </div>
-          </div>
-        )}
+  <div className="step33">
+    <h3>Actividades Agrícolas con Insumos Fitosanitarios</h3>
+    <label>
+      Seleccione el tipo de actividades agrícolas que desarrollan los trabajadores con insumos fitosanitarios o plaguicidas e insumos de nutrición vegetal o fertilizantes:
+    </label>
+    <div className="checkbox-group">
+      <label>
+        <input
+          type="checkbox"
+          value="Traslado"
+          onChange={(e) => handleCheckboxChange(e, 'actagricolas')}
+          checked={formValues.actagricolas.includes('Traslado')}
+        />
+        Traslado
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          value="Almacenamiento"
+          onChange={(e) => handleCheckboxChange(e, 'actagricolas')}
+          checked={formValues.actagricolas.includes('Almacenamiento')}
+        />
+        Almacenamiento
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          value="Manejo"
+          onChange={(e) => handleCheckboxChange(e, 'actagricolas')}
+          checked={formValues.actagricolas.includes('Manejo')}
+        />
+        Manejo
+      </label>
+    </div>
+    <div className="buttons">
+      <button onClick={handleBack}>Regresar</button>
+      <button onClick={handleNext} disabled={formValues.actagricolas.length === 0}>
+        Continuar
+      </button>
+    </div>
+  </div>
+)}
 
 
 
@@ -2197,7 +2206,7 @@ const NormaNoms = () => {
 
 {step === 42 && (
   <div>
-    <h3>Trabajos de Construcción en el Centro de Trabajo</h3>
+    <h3>Procesos Relacionados con Petróleo y Gas</h3>
     <label>
       ¿El centro de trabajo cuenta con procesos de: extracción de petróleo o gas natural; 
       producción de petroquímicos o gas licuado de petróleo (gas L.P.); almacenamiento y distribución 
