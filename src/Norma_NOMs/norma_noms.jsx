@@ -6,6 +6,7 @@ import exceptImage from './images/excepted_recipients.png';
 import categoriasImage from './images/categorias_presion.png';
 import criogenicosImage from './images/criogenicos.png';
 import generadoresImage from './images/generadores_vapor.png';
+import riesgoImage from './images/riesgo-incendio.png';
 
 // Continuación del array normas con más normas y sus condiciones
 const normas = [
@@ -19,7 +20,7 @@ const normas = [
     ],
     condition: (values) => values.area === 'centro'
   },
-  { 
+  {
     id: 'NOM-002', 
     title: 'Prevención y protección contra incendios', 
     puntos: [
@@ -28,11 +29,17 @@ const normas = [
       { numero: '5.5', descripcion: 'Plan de atención a emergencias de incendio.' },
       { numero: '5.7', descripcion: 'Programa anual y registros de simulacros.' },
       { numero: '5.8', descripcion: 'Capacitación de brigadas de emergencia.' },
-
-      
+      { numero: '5.8', descripcion: 'Programa de capacitación teórico-práctico en materia de prevención contra incendios y atención a emergencias.' },
+      { numero: '5.8', descripcion: 'Capacitar a todo el personal en los procedimientos de emergencia y evacuación.' },
+      { numero: '5.11', descripcion: 'Programa interno de protección civil / liberación por Autogestión o Dictamen de Cumplimiento de la NOM-002-STPS-2010.' },
+      { numero: '5.11', descripcion: 'D Preventiva Anual (PC / PASST), Cada 2 años (UV).' },
+      { numero: '7.2', descripcion: 'Programa anual de revisión mensual de los extintores.' },
+      { numero: '7.4', descripcion: 'Programa anual de revisión y pruebas a los equipos contra incendio, a los medios de detección y, en su caso, a las alarmas de incendio y sistemas fijos contra incendio.' },
+      { numero: '7.5', descripcion: 'Programa anual de revisión a las instalaciones eléctricas de las áreas del centro de trabajo.' }
     ],
     condition: (values) => values.recipientesPresion === 'sí'
-  },
+  }
+  ,
   { 
     id: 'NOM-004', 
     title: 'Uso de maquinaria y equipo', 
@@ -103,28 +110,37 @@ const normas = [
     ],
     condition: (values) => values.cargasEstaticas === 'sí'
   },
-  { 
-    id: 'NOM-027', 
-    title: 'Actividades de soldadura y corte', 
+  {
+    id: 'NOM-027',
+    title: 'Actividades de soldadura y corte',
     puntos: [
       { numero: '5.2', descripcion: 'Análisis de riesgos potenciales en actividades de soldadura y corte.' },
       { numero: '5.3', descripcion: 'Registro de trabajadores informados sobre riesgos de soldadura.' },
       { numero: '5.4', descripcion: 'Programa específico para actividades de soldadura y corte.' },
       { numero: '5.5', descripcion: 'Procedimientos de seguridad en soldadura y corte.' },
-      { numero: '5.17', descripcion: 'Botiquín de primeros auxilios en áreas de soldadura y corte.' }
+      { numero: '5.13', descripcion: 'Documento que acredite que se capacita, adiestra y autoriza a los trabajadores para dar mantenimiento preventivo y, en su caso, correctivo, al equipo y maquinaria utilizada en las actividades de soldadura y corte del centro de trabajo.' },
+      { numero: '5.17', descripcion: 'Botiquín de primeros auxilios en áreas de soldadura y corte.' },
+      { numero: '5.17', descripcion: 'Disponer de un botiquín de primeros auxilios en el área donde se desarrollen actividades de soldadura y corte, que incluya los materiales determinados en el análisis de riesgos potenciales. F Preventiva Permanente.' },
+      { numero: '10.6', descripcion: 'Permisos de autorización previo a realizar actividades de soldadura y corte para personal interno y externo. D Preventiva Permanente.' },
+      { numero: '11 f)', descripcion: 'Plan de atención a emergencias y traslado de víctimas.' }
     ],
     condition: (values) => values.soldaduraCorte === 'sí'
   },
 
-  { 
-    id: 'NOM-029', 
-    title: 'Mantenimiento de instalaciones eléctricas', 
+  {
+    id: 'NOM-029',
+    title: 'Mantenimiento de instalaciones eléctricas',
     puntos: [
-      { numero: '5.2', descripcion: 'Plan de trabajo y determinación de riesgos para mantenimiento de instalaciones eléctricas.' },
-      { numero: '5.3', descripcion: 'Diagrama unifilar y cuadro de cargas actualizado.' },
-      { numero: '5.4', descripcion: 'Procedimientos de seguridad en actividades de mantenimiento eléctrico.' },
-      { numero: '5.7', descripcion: 'Programa específico de revisión y conservación de equipo eléctrico.' },
-      { numero: '5.15', descripcion: 'Plan de atención a emergencias para mantenimiento eléctrico.' }
+      { numero: '5.2', descripcion: 'Plan de trabajo y determinación de riesgos por cada actividad de mantenimiento de las instalaciones eléctricas. D Preventiva Permanente.' },
+      { numero: '5.3', descripcion: 'Diagrama unifilar y cuadro de cargas actualizado de la instalación eléctrica, con base en lo dispuesto por la NOM-001-SEDE-2012. D Preventiva Único, mantener actualizado.' },
+      { numero: '5.4', descripcion: 'Procedimientos de seguridad para las actividades de mantenimiento de las instalaciones eléctricas, la selección y uso de equipo de trabajo, maquinaria, herramientas e implementos de protección aislante, y la colocación del sistema de puesta a tierra temporal. D Preventiva Único, mantener actualizado.' },
+      { numero: '5.7', descripcion: 'Programa específico de revisión y conservación del equipo de trabajo, maquinaria, herramientas e implementos de protección aislante utilizados para trabajos de mantenimiento eléctrico. D Preventiva/Correctiva Anual.' },
+      { numero: '5.8', descripcion: 'Procedimientos para la revisión, conservación, almacenamiento y reemplazo del equipo de trabajo, maquinaria, herramientas e implementos de protección aislante, utilizados en las actividades de mantenimiento de las instalaciones eléctricas. D Preventiva Único, mantener actualizado.' },
+      { numero: '5.13', descripcion: 'Documento que acredita que se autoriza por escrito a trabajadores capacitados para realizar actividades de mantenimiento de las instalaciones eléctricas en altura, espacios confinados o subestaciones, así como partes vivas. D Preventiva Permanente.' },
+      { numero: '5.14', descripcion: 'Documento que acredite que se informa a los trabajadores que realizan actividades de mantenimiento de las instalaciones eléctricas, sobre los riesgos a los que están expuestos y de las medidas de seguridad que deben adoptar para la actividad a desarrollar. D Preventiva Permanente.' },
+      { numero: '5.15', descripcion: 'Plan de atención a emergencias, disponible para su consulta y aplicación. D Preventiva Único, mantener actualizado.' },
+      { numero: '5.17', descripcion: 'Capacitar y adiestrar a los trabajadores que realicen actividades de mantenimiento de las instalaciones eléctricas. D Preventiva Anual.' },
+      { numero: '5.19', descripcion: 'Registros de los resultados de mantenimiento en instalaciones eléctricas.' }
     ],
     condition: (values) => values.mantenimientoLineasElectricas === 'sí'
   },
@@ -289,6 +305,7 @@ const NormaNoms = () => {
   const [showModal12, setShowModal12] = useState(false);
   const [showModal14, setShowModal14] = useState(false);
   const [showTable, setShowTable] = useState(false);
+  const [showModal2, setShowModal2] = useState(false); // Estado para el nuevo modal
   const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
@@ -577,6 +594,13 @@ const NormaNoms = () => {
 {step === 2 && (
   <div className="step2">
     <h3>Determinación del grado de riesgo de incendio</h3>
+    <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
+    <img
+      src={iconImage} // Asegúrate de que `iconImage` sea específico para este paso
+      alt="Tabla de clasificación de riesgo de incendio"
+      style={{ cursor: 'pointer', width: '50px' }}
+      onClick={() => setShowModal2(true)} // Abre el modal específico para este paso
+    />
     <div className="inventory-fields">
       <label>
         Superficie construida:
@@ -641,30 +665,51 @@ const NormaNoms = () => {
 
     <label>¿Tiene inventario de materiales pirofóricos o explosivos?</label>
     <label>
-      <input 
-        type="radio" 
-        name="materialesPiroforicos" 
-        value="sí" 
-        onChange={handleInputChange} 
+      <input
+        type="radio"
+        name="materialesPiroforicos"
+        value="sí"
+        onChange={handleInputChange}
+        checked={formValues.materialesPiroforicos === 'sí'}
       />
       Sí
     </label>
     <label>
-      <input 
-        type="radio" 
-        name="materialesPiroforicos" 
-        value="no" 
-        onChange={handleInputChange} 
+      <input
+        type="radio"
+        name="materialesPiroforicos"
+        value="no"
+        onChange={handleInputChange}
+        checked={formValues.materialesPiroforicos === 'no'}
       />
       No
     </label>
 
     <div className="buttons">
       <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+      <button onClick={handleNext} disabled={!isStepCompleted()}>
+        Continuar
+      </button>
     </div>
+
+    {showModal2 && (
+      <div className="modal">
+        <div className="modal-content">
+          <span className="close" onClick={() => setShowModal2(false)}>
+            &times;
+          </span>
+          {/* Aquí colocamos la imagen específica de este paso */}
+          <img
+            src={riesgoImage} // Reemplaza con la imagen específica para el paso 2
+            alt="Tabla de clasificación de riesgo de incendio"
+            style={{ width: '100%' }}
+          />
+        </div>
+      </div>
+    )}
   </div>
 )}
+
 
         {/* Paso 3 */}
         {step === 3 && (
