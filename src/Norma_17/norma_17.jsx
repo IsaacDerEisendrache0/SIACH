@@ -280,27 +280,36 @@ const RiskAssessmentTable = () => {
   const downloadImage = () => {
     // Selecciona los botones de agregar y borrar
     const buttons = document.querySelectorAll('.btn-agregar, .btn-borrar');
-  
+    
     // Oculta los botones agregando la clase 'hidden-buttons'
     buttons.forEach(button => button.classList.add('hidden-buttons'));
   
-    const input = document.querySelector('.table-container');
-  
-    html2canvas(input, { scale: 2, useCORS: true, backgroundColor: null }).then((canvas) => {
+    // Selecciona la tabla principal para capturar
+    const tableElement = document.querySelector('.main-table');
+    
+    html2canvas(tableElement, {
+      scrollX: -window.scrollX,
+      scrollY: -window.scrollY,
+      windowWidth: tableElement.scrollWidth,
+      windowHeight: tableElement.scrollHeight,
+      useCORS: true,
+      backgroundColor: null,
+    }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const link = document.createElement('a');
       link.href = imgData;
       link.download = 'tabla_herramientas_manual.png';
-  
+    
       // Inicia la descarga de la imagen
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-  
+    
       // Vuelve a mostrar los botones eliminando la clase 'hidden-buttons'
       buttons.forEach(button => button.classList.remove('hidden-buttons'));
     });
   };
+  
   
   
 
@@ -664,6 +673,35 @@ useEffect(() => {
   };
   
   const [hideButtons, setHideButtons] = useState(false);
+
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const tableContainer = document.querySelector('.table-container');
+  
+    let isDragging = false;
+    let startX, scrollLeft;
+  
+    // Manejo del toque (táctil) para dispositivos móviles
+    tableContainer.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      startX = e.touches[0].pageX - tableContainer.offsetLeft;
+      scrollLeft = tableContainer.scrollLeft;
+    });
+  
+    tableContainer.addEventListener('touchend', () => {
+      isDragging = false;
+    });
+  
+    tableContainer.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const x = e.touches[0].pageX - tableContainer.offsetLeft;
+      const walk = (x - startX) * 2; // Ajusta la velocidad del desplazamiento
+      tableContainer.scrollLeft = scrollLeft - walk;
+    });
+  });
+  
+  
 
 
   return (

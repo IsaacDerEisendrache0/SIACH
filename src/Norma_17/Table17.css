@@ -1,9 +1,15 @@
 /* === Tamaño de la Tabla Principal === */
+
 .main-table {
-  max-width: 1600px; /* Aumenta el ancho máximo a 1200px */
-  margin: 0 auto; /* Centra la tabla en la pantalla */
-  padding: 10px;
+  min-width: 1200px; /* Define un ancho mínimo suficiente para evitar la compactación */
+  width: auto; /* Permite que la tabla mantenga su tamaño natural */
+  overflow: auto; /* Habilita el desplazamiento si es necesario */
 }
+
+.hide-for-capture {
+  display: none !important;
+}
+
 
 .main-table th, 
 .main-table td, 
@@ -150,9 +156,15 @@
 }
 
 .table-container {
-  width: 100%;
-  margin: 0 auto; /* Centra la tabla */
+  cursor: grab; /* Muestra un cursor indicativo para arrastrar */
 }
+
+.table-container:active {
+  cursor: grabbing; /* Cambia el cursor cuando se está arrastrando */
+}
+
+
+
 
 .images-in-row {
   display: flex;
@@ -204,9 +216,9 @@
     width: 100%; /* Mantén el ancho completo para tablas */
   }
 
-  .main-table th, .main-table td, .custom-table th, .custom-table td {
-    padding: 6px;
-    font-size: 0.8rem; /* Reduce el tamaño de fuente */
+  .main-table th, .main-table td {
+    min-width: 150px; /* Ajusta el ancho mínimo de las celdas para evitar la compactación */
+    padding: 10px; /* Añade espacio alrededor del texto */
   }
 
   .label-action {
