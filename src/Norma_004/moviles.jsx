@@ -179,13 +179,13 @@ const RiskTable = () => {
   // Calcular valores de consecuencia, exposición y probabilidad
   const calcularValorConsecuencia = (consequence) => {
     const valoresConsecuencia = {
-      'Catástrofe': 50,
-      'Varias muertes': 25,
-      'Muerte': 15,
-      'Lesiones graves': 10,
+      'Catástrofe': 100,
+      'Varias muertes': 50,
+      'Muerte': 25,
+      'Lesiones graves': 15,
       'Lesiones con baja': 5,
       'Lesiones sin baja': 1
-    };
+    }; 
     return valoresConsecuencia[consequence] || 0;
   };
 
@@ -195,7 +195,8 @@ const RiskTable = () => {
       'Frecuentemente': 6,
       'Ocasionalmente': 3,
       'Irregularmente': 2,
-      'Raramente': 1
+      'Raramente': 1,
+      'Remotamente': 0.1
     };
     return valoresExposicion[exposure] || 0;
   };
@@ -205,9 +206,9 @@ const RiskTable = () => {
       'Es el resultado más probable y esperado': 10,
       'Es completamente posible, no será nada extraño': 6,
       'Sería una secuencia o coincidencia rara pero posible, ha ocurrido': 3,
-      'Coincidencia muy rara, pero se sabe que ha ocurrido': 2,
-      'Coincidencia extremadamente remota pero concebible': 1,
-      'Coincidencia prácticamente imposible, jamás ha ocurrido': 0.5
+      'Coincidencia muy rara, pero se sabe que ha ocurrido': 1,
+      'Coincidencia extremadamente remota pero concebible': 0.5,
+      'Coincidencia prácticamente imposible, jamás ha ocurrido': 0.1
     };
     return valoresProbabilidad[probability] || 0;
   };

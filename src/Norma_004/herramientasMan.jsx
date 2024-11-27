@@ -67,27 +67,27 @@ const RiskTable = () => {
   
 
   const [selectedPeligros, setSelectedPeligros] = useState([]);
-const [affectedBodyParts, setAffectedBodyParts] = useState([]);
+  const [affectedBodyParts, setAffectedBodyParts] = useState([]);
 
-const handlePeligroChange = (peligro) => {
-  const isSelected = selectedPeligros.includes(peligro);
+  const handlePeligroChange = (peligro) => {
+    const isSelected = selectedPeligros.includes(peligro);
 
-  let newSelectedPeligros = [];
-  let newAffectedParts = [];
+    let newSelectedPeligros = [];
+    let newAffectedParts = [];
 
-  if (isSelected) {
-    // Deseleccionar peligro y eliminar partes del cuerpo asociadas
-    newSelectedPeligros = selectedPeligros.filter(item => item !== peligro);
-    newAffectedParts = affectedBodyParts.filter(part => !partesPorPeligro[peligro].includes(part));
-  } else {
-    // Seleccionar peligro y agregar partes del cuerpo asociadas
-    newSelectedPeligros = [...selectedPeligros, peligro];
-    newAffectedParts = [...new Set([...affectedBodyParts, ...partesPorPeligro[peligro]])];
-  }
+    if (isSelected) {
+      // Deseleccionar peligro y eliminar partes del cuerpo asociadas
+      newSelectedPeligros = selectedPeligros.filter(item => item !== peligro);
+      newAffectedParts = affectedBodyParts.filter(part => !partesPorPeligro[peligro].includes(part));
+    } else {
+      // Seleccionar peligro y agregar partes del cuerpo asociadas
+      newSelectedPeligros = [...selectedPeligros, peligro];
+      newAffectedParts = [...new Set([...affectedBodyParts, ...partesPorPeligro[peligro]])];
+    }
 
-  setSelectedPeligros(newSelectedPeligros);
-  setAffectedBodyParts(newAffectedParts);
-};
+    setSelectedPeligros(newSelectedPeligros);
+    setAffectedBodyParts(newAffectedParts);
+  };
 
   
   const [state, setState] = useState({
@@ -101,6 +101,14 @@ const handlePeligroChange = (peligro) => {
     imagePreview: null,
     errorMessage: ''
   });
+
+  const [consequence, setConsequence] = useState(1);
+  const [exposure, setExposure] = useState(1);
+  const [probability, setProbability] = useState(1);
+
+  const handleConsequenceChange = (e) => setConsequence(parseFloat(e.target.value));
+  const handleExposureChange = (e) => setExposure(parseFloat(e.target.value));
+  const handleProbabilityChange = (e) => setProbability(parseFloat(e.target.value));
 
   const handleChange = useCallback((field, value) => {
     setState(prevState => ({ ...prevState, [field]: value }));
@@ -117,29 +125,34 @@ const handlePeligroChange = (peligro) => {
     }
   };
 
-  
-
-  
-  const obtenerColorPorRiesgo = (magnitude) => {
-    if (magnitude >= 500) return 'red';
-    if (magnitude >= 100) return 'orange';
-    if (magnitude >= 50) return 'yellow';
-    if (magnitude >= 10) return 'green';
-    return 'lightgreen';
+  const calcularMagnitudRiesgo = () => {
+    const valorConsecuencia = consequence;
+    const valorExposicion = exposure;
+    const valorProbabilidad = probability;
+    return Math.floor(valorConsecuencia * valorExposicion * valorProbabilidad);
   };
 
-  const calculateRisk = () => {
-    return consequence * exposure * probability;
+  const obtenerClasificacionRiesgo = (magnitud) => {
+    if (magnitud > 400) {
+      return { color: 'red', texto: 'Muy Alto: Detención inmediata', accion: 'Inmediata', clasificacion: 'Muy Alto' };
+    } else if (magnitud > 200) {
+      return { color: 'orange', texto: 'Alto: Corrección inmediata', accion: 'Urgente', clasificacion: 'Alto' };
+    } else if (magnitud > 70) {
+      return { color: 'yellow', texto: 'Notable: Corrección urgente', accion: 'Programada', clasificacion: 'Notable' };
+    } else if (magnitud > 20) {
+      return { color: 'green', texto: 'Moderado: Debe corregirse', accion: 'Programada', clasificacion: 'Moderado' };
+    } else {
+      return { color: 'blue', texto: 'Bajo o Aceptable: Tolerable', accion: 'Sin acción requerida', clasificacion: 'Bajo' };
+    }
   };
 
-  const [consequence, setConsequence] = useState(10);
-  const [exposure, setExposure] = useState(10);
-  const [probability, setProbability] = useState(10);
+  const obtenerColorPorRiesgo = (magnitud) => {
+    const clasificacion = obtenerClasificacionRiesgo(magnitud);
+    return clasificacion.color;
+  };
 
-  const handleConsequenceChange = (e) => setConsequence(parseFloat(e.target.value));
-  const handleExposureChange = (e) => setExposure(parseFloat(e.target.value));
-  const handleProbabilityChange = (e) => setProbability(parseFloat(e.target.value));
-
+  const magnitudRiesgo = calcularMagnitudRiesgo();
+  const { color, accion, clasificacion } = obtenerClasificacionRiesgo(magnitudRiesgo);
 
   const downloadImage = () => {
     // Seleccionar el contenedor con el ID 'pdf-content'
@@ -184,39 +197,44 @@ const handlePeligroChange = (peligro) => {
           <table className="main-table" style={{ width: '100%' }}>
             <thead>
               <tr>
-                <th colSpan="2">Nombre de la maquinaria o equipo:</th>
+                <th colSpan="2" className="nombre-maquinaria">Nombre de la maquinaria o equipo:</th>
                 <th colSpan="3">
-                  <textarea placeholder="Nombre de la maquinaria" name='textarea' rows="1" cols={50}></textarea>
+                  <textarea className="nombre-maquinaria" placeholder="Nombre de la maquinaria" name='textarea' rows="1" cols={30}></textarea>
                 </th>
-                <th colSpan="2">Energía utilizada:</th>
-                <th colSpan="3">
-                  <select value={state.energiaUtilizada} onChange={(e) => handleChange('energiaUtilizada', e.target.value)} style={{ width: '100%' }}>
+                <th colSpan="1" className="energia-utilizada">Energía utilizada:</th>
+                <th colSpan="2">
+                  <select className="energia-utilizada" value={state.energiaUtilizada} onChange={(e) => handleChange('energiaUtilizada', e.target.value)} style={{ width: '100%' }}>
                     {renderOptions(opciones.energia)}
                   </select>
                 </th>
-              </tr>
-              <tr>
-                <th colSpan="2">Descripción de la maquinaria o equipo:</th>
+                <th colSpan="2" className="tiempo-exposicion">Tiempo de exposición:</th>
                 <th colSpan="3">
-                  <textarea
-                    value={state.maquinariaDescripcion}
-                    onChange={(e) => handleChange('maquinariaDescripcion', e.target.value)}
-                    placeholder="Describa la maquinaria o equipo"
-                    cols={50}
-                  />
-                </th>
-                <th colSpan="2">Área:</th>
-                <th colSpan="3"><input type="text" placeholder="Escriba el área" style={{ width: '100%' }} /></th>
-              </tr>
-              <tr>
-                <th colSpan="3">Localización esquemática de los riesgos en la maquinaria y/o equipo:</th>
-                <th colSpan="3"><input type="text" placeholder="Escriba el POE" style={{ width: '100%' }} /></th>
-                <th colSpan="2">Tiempo de exposición:</th>
-                <th colSpan="2">
-                  <select value={state.tiempoExposicion} onChange={(e) => handleChange('tiempoExposicion', e.target.value)} style={{ width: '100%' }}>
+                  <select className="tiempo-exposicion" value={state.tiempoExposicion} onChange={(e) => handleChange('tiempoExposicion', e.target.value)} style={{ width: '100%' }}>
                     {renderOptions(opciones.tiempoExposicion)}
                   </select>
                 </th>
+              </tr>
+              <tr>
+                <th colSpan="2" className="descripcion-maquinaria">Descripción de la maquinaria o equipo:</th>
+                <th colSpan="3">
+                  <textarea className="descripcion-maquinaria"
+                    value={state.maquinariaDescripcion}
+                    onChange={(e) => handleChange('maquinariaDescripcion', e.target.value)}
+                    placeholder="Describa la maquinaria o equipo"
+                    cols={30}
+                  />
+                </th>
+                <th colSpan="1" className="area">Área:</th>
+                <th colSpan="1">
+                  <input className="area" type="text" placeholder="Escriba el área" style={{ width: '100%' }} /></th>
+                <th colSpan="3" className="poe">POE </th>
+                <th colSpan="3">
+                  <input className="poe" type="text" placeholder="Escriba el POE" style={{ width: '100%' }} /></th>
+              </tr>
+              <tr>
+                <th colSpan="3">Localización esquemática de los riesgos en la maquinaria y/o equipo:</th>
+                
+
               </tr>
             </thead>
             <tbody>
@@ -240,7 +258,7 @@ const handlePeligroChange = (peligro) => {
                     </table>
                   </div>
                 </td>
-                <td colSpan="5" className="right-aligned">
+                <td colSpan="8" className="right-aligned">
                   <div className="text1">Evaluación de riesgo de trabajo</div>
                     <table className="inner-table" style={{ width: '100%' }}>
                       <thead>
@@ -251,14 +269,15 @@ const handlePeligroChange = (peligro) => {
                           <th>Magnitud del Riesgo</th>
                         </tr>
                       </thead>
+                      
                       <tbody>
                         <tr>
-                          <td>
+                          <td colSpan="1">
                             <select value={consequence} onChange={handleConsequenceChange} style={{ width: '100%' }}>
-                              <option value={50}>Catástrofe</option>
-                              <option value={25}>Varias muertes</option>
-                              <option value={15}>Muerte</option>
-                              <option value={10}>Lesiones graves</option>
+                              <option value={100}>Catástrofe</option>
+                              <option value={50}>Varias muertes</option>
+                              <option value={25}>Muerte</option>
+                              <option value={15}>Lesiones graves</option>
                               <option value={5}>Lesiones con baja</option>
                               <option value={1}>Lesiones sin baja</option>
                             </select>
@@ -286,46 +305,32 @@ const handlePeligroChange = (peligro) => {
                             </select>
                             <div>Valor: {probability}</div>
                           </td>
-                          <td style={{ backgroundColor: obtenerColorPorRiesgo(calculateRisk()) }}>
-                            {calculateRisk().toFixed(2)}
+                          <td style={{ backgroundColor: obtenerColorPorRiesgo(magnitudRiesgo) }}>
+                            {magnitudRiesgo.toFixed(2)}
                           </td>
                         </tr>
                       </tbody>
                     </table>
                   </td>
-                  
-                  <td colSpan="2">
-                    <table className="epp-table" style={{ width: '100%' }}>
-                      <thead>
-                        <tr>
-                          <th>Equipo de Protección Personal sugerido:</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {[...Array(4)].map((_, index) => ( // 4 filas con select vacíos inicialmente
-                          <tr key={index}>
-                            <td>
-                              <select defaultValue="" style={{ width: '100%' }}>
-                                <option value="" disabled>
-                                  Seleccione un EPP
-                                </option>
-                                {listaEPP.map((epp, i) => (
-                                  <option key={i} value={epp}>{epp}</option>
-                                ))}
-                              </select>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </td>
-              </tr>          
+                 
+              </tr>
+              
+  <td colSpan="8" style={{ backgroundColor: color, color: 'black', textAlign: 'center', padding: '1px' }}>
+    <div style={{ fontSize: '14px' }}>Clasificación de magnitud de riesgo</div>
+    <div style={{ display: 'flex', justifyContent: 'space-around', padding: '1px', fontSize: '12px' }}>
+      <div>Magnitud del Riesgo: {magnitudRiesgo}</div>
+      <div>Clasificación: {clasificacion}</div>
+      <div>Acción: {accion}</div>
+    </div>
+  </td>
+
+              
               <tr>
-                <td colSpan="5">
+                <td colSpan="2">
                   <table className="main-table" style={{ width: '100%' }}>
                     <thead>
                       <tr>
-                        <th colSpan="5">Identificaciones de Riesgos:</th>
+                        <th colSpan="6">Identificaciones de Riesgos:</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -336,11 +341,10 @@ const handlePeligroChange = (peligro) => {
                           checked={selectedPeligros.includes(peligro)} 
                           onChange={() => handlePeligroChange(peligro)}
                         />
-                        <span style={{ marginLeft: "8px" }}>{peligro}</span>
+                        <span style={{ marginLeft: "1px" }}>{peligro}</span>
                       </div>
                     ))}
-
-
+                  
                     </tbody>
                   </table>
                 </td>
@@ -366,11 +370,36 @@ const handlePeligroChange = (peligro) => {
                     </tbody>
                   </table>
                 </td>
+                <td colSpan="5">
+                    <table className="epp-table" style={{ width: '100%' }}>
+                      <thead>
+                        <tr>
+                          <th>Equipo de Protección Personal sugerido:</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[...Array(6)].map((_, index) => ( // 4 filas con select vacíos inicialmente
+                          <tr key={index}>
+                            <td>
+                              <select defaultValue="" style={{ width: '100%' }}>
+                                <option value="" disabled>
+                                  Seleccione un EPP
+                                </option>
+                                {listaEPP.map((epp, i) => (
+                                  <option key={i} value={epp}>{epp}</option>
+                                ))}
+                              </select>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </td>
 
                 </tr>
 
               <tr>
-                <td colSpan="9">
+                <td colSpan="11">
                   <div>
                     <label htmlFor="observaciones">Observaciones:</label>
                     <textarea
@@ -378,12 +407,13 @@ const handlePeligroChange = (peligro) => {
                       value={state.observacionesGenerales}
                       onChange={(e) => handleChange('observacionesGenerales', e.target.value)}
                       placeholder="Agregar observaciones generales aquí"
-                      rows="2"
+                      rows="2" cols={150}
                       style={{ width: '100%' }}
                     />
                   </div>
                 </td>
               </tr>
+
             </tbody>
           </table>
         </div>
