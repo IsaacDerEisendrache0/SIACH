@@ -24,11 +24,25 @@
 }
 
 /* Estilo general de la tabla interna */
-.inner-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0 auto; /* Centra la tabla */
+.inner-table select {
+  width: 100%; /* Asegura que ocupen todo el ancho de su celda */
+  padding: 10px; /* Aumenta el espacio interno para mayor clicabilidad */
+  font-size: 16px; /* Aumenta el tamaño de la fuente */
+  border-radius: 4px; /* Añade bordes redondeados */
+  border: 1px solid #ccc; /* Añade un borde claro */
+  background-color: #f9f9f9; /* Fondo claro */
+  color: #333; /* Color del texto */
+  box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total */
 }
+
+.text-size-adjustable {
+  font-size: 16px; /* Tamaño de texto base */
+  font-weight: normal; /* Peso estándar del texto */
+  color: #333; /* Color estándar del texto */
+  text-align: center; /* Alineación centrada */
+}
+
+
 
 /* Centra el contenido de las celdas que contienen tablas internas */
 .table-cell {
@@ -212,8 +226,9 @@
 
 /* Pantallas pequeñas (móviles) */
 @media (max-width: 768px) {
-  .inner-table, .risk-table, .container-full-width, .main-table {
-    width: 100%; /* Mantén el ancho completo para tablas */
+  .inner-table select {
+    font-size: 14px; /* Reduce el tamaño de fuente para pantallas pequeñas */
+    padding: 8px; /* Ajusta el espacio interno */
   }
 
   .main-table th, .main-table td {

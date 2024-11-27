@@ -825,35 +825,35 @@ useEffect(() => {
         
       
         
-        <tr className="no-border-row">
-  {/* Nueva fila superior con celdas individuales para cada sección */}
-  <td colSpan="3">
-    <img src={logo} alt="SIACH Logo" className="siach-logo" />
-  </td>
-  <td colSpan="4" style={{ backgroundColor: 'white' }}>
-  <h3 className="section-header" style={{ color: 'black' }}>
-    Análisis de Riesgo y Determinación de equipo de protección personal NOM-017-STPS-2008
-  </h3>
-</td>
+          <tr className="no-border-row">
+            {/* Nueva fila superior con celdas individuales para cada sección */}
+            <td colSpan="3">
+              <img src={logo} alt="SIACH Logo" className="siach-logo" />
+            </td>
+            <td colSpan="4" style={{ backgroundColor: 'white' }}>
+            <h3 className="section-header" style={{ color: 'black' }}>
+              Análisis de Riesgo y Determinación de equipo de protección personal NOM-017-STPS-2008
+            </h3>
+          </td>
 
-  <td colSpan="3">
-    {logoSeleccionado ? (
-      <div className="logo-container">
-        <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" />
-        <button onClick={handleRemoveLogo} className="remove-logo-button">×</button>
-      </div>
-    ) : (
-      <select onChange={handleLogoChange} className="logo-dropdown">
-        <option value="">Selecciona una empresa</option>
-        {logos.map((logo, index) => (
-          <option key={index} value={logo.url}>
-            {logo.nombre}
-          </option>
-        ))}
-      </select>
-    )}
-  </td>
-</tr>
+            <td colSpan="3">
+              {logoSeleccionado ? (
+                <div className="logo-container">
+                  <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" />
+                  <button onClick={handleRemoveLogo} className="remove-logo-button">×</button>
+                </div>
+              ) : (
+                <select onChange={handleLogoChange} className="logo-dropdown">
+                  <option value="">Selecciona una empresa</option>
+                  {logos.map((logo, index) => (
+                    <option key={index} value={logo.url}>
+                      {logo.nombre}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </td>
+          </tr>
 
 
 
@@ -904,320 +904,320 @@ useEffect(() => {
 
 
 
-<Modal isOpen={isModalOpen} onRequestClose={handleModalClose}>
-  <div className="modal-container">
-    <h2>Selecciona los puestos a borrar</h2>
+        <Modal isOpen={isModalOpen} onRequestClose={handleModalClose}>
+          <div className="modal-container">
+            <h2>Selecciona los puestos a borrar</h2>
 
-    {/* Muestra los puestos en el modal */}
-    <div className="puestos-lista">
-      {puestos.length > 0 ? (
-        puestos.map((puesto, index) => (
-          <div className="puesto-item" key={index}>
-            <input
-              type="checkbox"
-              value={puesto}
-              onChange={handlePuestoSelectionChange}
-              checked={puestosSeleccionadosParaBorrar.includes(puesto)}
-            />
-            <label>{puesto}</label>
+            {/* Muestra los puestos en el modal */}
+            <div className="puestos-lista">
+              {puestos.length > 0 ? (
+                puestos.map((puesto, index) => (
+                  <div className="puesto-item" key={index}>
+                    <input
+                      type="checkbox"
+                      value={puesto}
+                      onChange={handlePuestoSelectionChange}
+                      checked={puestosSeleccionadosParaBorrar.includes(puesto)}
+                    />
+                    <label>{puesto}</label>
+                  </div>
+                ))
+              ) : (
+                <p>No hay puestos disponibles para borrar</p>
+              )}
+            </div>
+
+            <button onClick={handleDeleteSelectedPuestos}>Borrar seleccionados</button>
+            <button onClick={handleModalClose}>Cerrar</button>
           </div>
-        ))
-      ) : (
-        <p>No hay puestos disponibles para borrar</p>
-      )}
-    </div>
-
-    <button onClick={handleDeleteSelectedPuestos}>Borrar seleccionados</button>
-    <button onClick={handleModalClose}>Cerrar</button>
-  </div>
-  
-</Modal>
+          
+        </Modal>
 
 
 
-<td className="header-cell" colSpan="3" style={{ backgroundColor: 'red', padding: '10px' }}>
-  <div className="body-parts-title">Principales partes del cuerpo expuestas al riesgo:</div>
-  
-  <table className="body-parts-table">
-    <tbody>
-      <tr>
-        <td className="risk-label-cell">Cabeza y Oídos</td>
-        <td className="risk-mark-cell">{affectedBodyParts.includes('Cabeza y Oídos') ? 'X' : ''}</td>
-        <td className="risk-label-cell">Tronco</td>
-        <td className="risk-mark-cell">{affectedBodyParts.includes('Tronco') ? 'X' : ''}</td>
-      </tr>
-      <tr>
-        <td className="risk-label-cell">Ojos y Cara</td>
-        <td className="risk-mark-cell">{affectedBodyParts.includes('Ojos y Cara') ? 'X' : ''}</td>
-        <td className="risk-label-cell">Sistema respiratorio</td>
-        <td className="risk-mark-cell">{affectedBodyParts.includes('Sistema respiratorio') ? 'X' : ''}</td>
-      </tr>
-      <tr>
-        <td className="risk-label-cell">Brazos y Manos</td>
-        <td className="risk-mark-cell">{affectedBodyParts.includes('Brazos y Manos') ? 'X' : ''}</td>
-        <td className="risk-label-cell">Extremidades inferiores</td>
-        <td className="risk-mark-cell">{affectedBodyParts.includes('Extremidades inferiores') ? 'X' : ''}</td>
-      </tr>
-    </tbody>
-  </table>
-</td>
-
-  
-<td className="header-td" colSpan="3">
-  <div className="additional-data-title">Datos adicionales</div>
-
-  <table className="details-table">
-    <tbody>
-      {/* Fila de Área */}
-      <tr>
-        <td className="label-cell">Área:</td>
-        <td className="input-cell">
-          <select id="area" value={areaSeleccionada} onChange={handleAreaChange} className="select-area">
-            {areas.map((area, index) => (
-              <option key={index} value={area.nombre}>
-                {area.nombre}
-              </option>
-            ))}
-          </select>
-        </td>
-        <td className="button-cell">
-          <button className="btn-agregar" onClick={handleAddAreaClick}>Agregar</button>
-          <button className="btn-borrar" onClick={handleDeleteAreaClick}>Borrar</button>
+        <td className="header-cell" colSpan="3" style={{ backgroundColor: 'red', padding: '10px' }}>
+          <div className="body-parts-title">Principales partes del cuerpo expuestas al riesgo:</div>
+          
+          <table className="body-parts-table">
+            <tbody>
+              <tr>
+                <td className="risk-label-cell">Cabeza y Oídos</td>
+                <td className="risk-mark-cell">{affectedBodyParts.includes('Cabeza y Oídos') ? 'X' : ''}</td>
+                <td className="risk-label-cell">Tronco</td>
+                <td className="risk-mark-cell">{affectedBodyParts.includes('Tronco') ? 'X' : ''}</td>
+              </tr>
+              <tr>
+                <td className="risk-label-cell">Ojos y Cara</td>
+                <td className="risk-mark-cell">{affectedBodyParts.includes('Ojos y Cara') ? 'X' : ''}</td>
+                <td className="risk-label-cell">Sistema respiratorio</td>
+                <td className="risk-mark-cell">{affectedBodyParts.includes('Sistema respiratorio') ? 'X' : ''}</td>
+              </tr>
+              <tr>
+                <td className="risk-label-cell">Brazos y Manos</td>
+                <td className="risk-mark-cell">{affectedBodyParts.includes('Brazos y Manos') ? 'X' : ''}</td>
+                <td className="risk-label-cell">Extremidades inferiores</td>
+                <td className="risk-mark-cell">{affectedBodyParts.includes('Extremidades inferiores') ? 'X' : ''}</td>
+              </tr>
+            </tbody>
+          </table>
         </td>
 
-      </tr>
+  
+        <td className="header-td" colSpan="3">
+          <div className="additional-data-title">Datos adicionales</div>
 
-      {/* Modal para borrar áreas */}
-      <Modal isOpen={isAreaModalOpen} onRequestClose={handleAreaModalClose} className="overlay">
-        <div className="modal-container">
-          <h2>Selecciona las áreas a borrar</h2>
-          <div className="areas-lista">
-            {areas.length > 0 ? (
-              areas.map((area, index) => (
-                <div className="area-item" key={index}>
-                  <input
-                    type="checkbox"
-                    value={area.nombre}
-                    onChange={handleAreaSelectionChange}
-                    checked={areasSeleccionadasParaBorrar.includes(area.nombre)}
-                  />
-                  <label>{area.nombre}</label>
+          <table className="details-table">
+            <tbody>
+              {/* Fila de Área */}
+              <tr>
+                <td className="label-cell">Área:</td>
+                <td className="input-cell">
+                  <select id="area" value={areaSeleccionada} onChange={handleAreaChange} className="select-area">
+                    {areas.map((area, index) => (
+                      <option key={index} value={area.nombre}>
+                        {area.nombre}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td className="button-cell">
+                  <button className="btn-agregar" onClick={handleAddAreaClick}>Agregar</button>
+                  <button className="btn-borrar" onClick={handleDeleteAreaClick}>Borrar</button>
+                </td>
+
+              </tr>
+
+              {/* Modal para borrar áreas */}
+              <Modal isOpen={isAreaModalOpen} onRequestClose={handleAreaModalClose} className="overlay">
+                <div className="modal-container">
+                  <h2>Selecciona las áreas a borrar</h2>
+                  <div className="areas-lista">
+                    {areas.length > 0 ? (
+                      areas.map((area, index) => (
+                        <div className="area-item" key={index}>
+                          <input
+                            type="checkbox"
+                            value={area.nombre}
+                            onChange={handleAreaSelectionChange}
+                            checked={areasSeleccionadasParaBorrar.includes(area.nombre)}
+                          />
+                          <label>{area.nombre}</label>
+                        </div>
+                      ))
+                    ) : (
+                      <p>No hay áreas disponibles para borrar</p>
+                    )}
+                  </div>
+                  <div className="modal-buttons">
+                    <button onClick={handleDeleteSelectedAreas}>Borrar seleccionadas</button>
+                    <button onClick={handleAreaModalClose}>Cerrar</button>
+                  </div>
                 </div>
-              ))
-            ) : (
-              <p>No hay áreas disponibles para borrar</p>
-            )}
-          </div>
-          <div className="modal-buttons">
-            <button onClick={handleDeleteSelectedAreas}>Borrar seleccionadas</button>
-            <button onClick={handleAreaModalClose}>Cerrar</button>
-          </div>
-        </div>
-      </Modal>
+              </Modal>
 
-      {/* Fila de Fecha de inspección */}
-      <tr>
-        <td className="label-cell">Fecha de inspección:</td>
-        <td colSpan="2" className="input-cell">
-          <input type="date" id="fechaInspeccion" defaultValue="2023-09-13" className="date-input" />
-        </td>
-      </tr>
+              {/* Fila de Fecha de inspección */}
+              <tr>
+                <td className="label-cell">Fecha de inspección:</td>
+                <td colSpan="2" className="input-cell">
+                  <input type="date" id="fechaInspeccion" defaultValue="2023-09-13" className="date-input" />
+                </td>
+              </tr>
 
-      {/* Fila de Tiempo de exposición */}
-      <tr>
-        <td className="label-cell">Tiempo de exposición:</td>
-        <td colSpan="2" className="input-cell">
-          <select
-            id="tiempoExposicion"
-            className="select-tiempo"
-            value={tiempoExposicion}
-            onChange={(e) => setTiempoExposicion(e.target.value)}
-          >
-            <option value="2hrs">2 horas</option>
-            <option value="4hrs">4 horas</option>
-            <option value="6hrs">6 horas</option>
-            <option value="8hrs">8 horas</option>
-            <option value="10hrs">10 horas</option>
-            <option value="12hrs">12 horas</option>
-          </select>
+              {/* Fila de Tiempo de exposición */}
+              <tr>
+                <td className="label-cell">Tiempo de exposición:</td>
+                <td colSpan="2" className="input-cell">
+                  <select
+                    id="tiempoExposicion"
+                    className="select-tiempo"
+                    value={tiempoExposicion}
+                    onChange={(e) => setTiempoExposicion(e.target.value)}
+                  >
+                    <option value="2hrs">2 horas</option>
+                    <option value="4hrs">4 horas</option>
+                    <option value="6hrs">6 horas</option>
+                    <option value="8hrs">8 horas</option>
+                    <option value="10hrs">10 horas</option>
+                    <option value="12hrs">12 horas</option>
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </td>
-      </tr>
-    </tbody>
-  </table>
-</td>
-</tr>
+        </tr>
         
         </thead>
         
         <tbody>
           <tr>
-          <td colSpan="3" className="left-section"> 
-  <tb className="text1">Identificación de peligros</tb>
-  <ul className="hazard-list">
-    {Object.keys(hazards).map(hazard => (
-      <li key={hazard} className="hazard-item">
-        {hazard}
-        <label className="hazard-checkbox">
-          <input
-            type="checkbox"
-            name={hazard}
-            checked={hazards[hazard]}
-            onChange={handleCheckboxChange}
-          />
-        </label>
-      </li>
-    ))}
-  </ul>
-</td>
-
-
-
-
-<Modal isOpen={isImageModalOpen} onRequestClose={() => setIsImageModalOpen(false)} className="modal-container">
-  <h3 style={{ fontSize: '16px', marginBottom: '10px' }}>Selecciona una imagen para {hazardWithImages}</h3>
-  <div className="image-selection-container">
-    {selectedImagesForHazard.map((image, index) => (
-      <div key={index} className="image-option">
-        <img
-          src={image}
-          alt={`Opción ${index}`}
-          onClick={() => handleImageSelect(image)}
-        />
-      </div>
-    ))}
-  </div>
-  <div className="button-group">
-    <button onClick={() => setIsImageModalOpen(false)}>Cerrar</button>
-  </div>
-</Modal>
-
-            <td colSpan="2" className="right-section right-aligned" style={{ backgroundColor: 'white' }}>
-              <div className="text1">Equipo utilizado<br></br></div>
-              <div className="section-content">
-                <select value={selectedOptionEquipoUtilizado} onChange={handleOptionChangeEquipoUtilizado}>
-                  <option value="">Selecciona la extremidad afectada</option>
-                  <option value="option1">Cabeza</option>
-                  <option value="option2">Tronco</option>
-                  <option value="option3">Pies</option>
-                  <option value="option4">Brazos</option>
-                  <option value="option5">Cabeza y Tronco</option>
-                  <option value="option6">Brazos y Pies</option>
-                  <option value="option7">Cabeza y Pies</option>
-                  <option value="option8">Cabeza y Brazos</option>
-                  <option value="option9">Cabeza y Tronco</option>
-                  <option value="option10">Tronco y Brazos</option>
-                  <option value="option11">Todas las Extremidades</option>
-                </select>
-                {selectedOptionEquipoUtilizado && optionImages[selectedOptionEquipoUtilizado] && (
-                  <div className="protection-image-container">
-                    <img
-                      src={optionImages[selectedOptionEquipoUtilizado]}
-                      alt={`Equipo utilizado para ${selectedOptionEquipoUtilizado}`}
-                      className="protection-image2"
-                    />
-                  </div>
-                )}
-              </div>
+            <td colSpan="3" className="left-section"> 
+              <tb className="text1">Identificación de peligros</tb>
+              <ul className="hazard-list">
+                {Object.keys(hazards).map(hazard => (
+                  <li key={hazard} className="hazard-item">
+                    {hazard}
+                    <label className="hazard-checkbox">
+                      <input
+                        type="checkbox"
+                        name={hazard}
+                        checked={hazards[hazard]}
+                        onChange={handleCheckboxChange}
+                      />
+                    </label>
+                  </li>
+                ))}
+              </ul>
             </td>
-              <td colSpan="2" className="right-section right-aligned">
-                <div className="text1">Equipo de protección personal sugerido</div>
-                <div className="body-and-hazards-container">
-                  <select value={selectedOptionProteccionSugerida} onChange={handleOptionChangeProteccionSugerida}>
-                    <option value="">Selecciona la extremidad afectada</option>
-                    <option value="option1">Cabeza</option>
-                    <option value="option2">Tronco</option>
-                    <option value="option3">Pies</option>
-                    <option value="option4">Brazos</option>
-                    <option value="option5">Cabeza y Tronco</option>
-                    <option value="option6">Brazos y Pies</option>
-                    <option value="option7">Cabeza y Pies</option>
-                    <option value="option8">Cabeza y Brazos</option>
-                    <option value="option9">Cabeza y Tronco</option>
-                    <option value="option10">Tronco y Brazos</option>
-                    <option value="option11">Todas las Extremidades</option>
-                  </select>
-                  <div className="images-in-row">  {/* Nueva clase para alinear en fila */}
-                    {selectedOptionProteccionSugerida && optionImages[selectedOptionProteccionSugerida] && (
-                      <div className="body-image-left">
+
+
+
+
+    <Modal isOpen={isImageModalOpen} onRequestClose={() => setIsImageModalOpen(false)} className="modal-container">
+      <h3 style={{ fontSize: '16px', marginBottom: '10px' }}>Selecciona una imagen para {hazardWithImages}</h3>
+      <div className="image-selection-container">
+        {selectedImagesForHazard.map((image, index) => (
+          <div key={index} className="image-option">
+            <img
+              src={image}
+              alt={`Opción ${index}`}
+              onClick={() => handleImageSelect(image)}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="button-group">
+        <button onClick={() => setIsImageModalOpen(false)}>Cerrar</button>
+      </div>
+    </Modal>
+
+                <td colSpan="2" className="right-section right-aligned" style={{ backgroundColor: 'white' }}>
+                  <div className="text1">Equipo utilizado<br></br></div>
+                  <div className="section-content">
+                    <select value={selectedOptionEquipoUtilizado} onChange={handleOptionChangeEquipoUtilizado}>
+                      <option value="">Selecciona la extremidad afectada</option>
+                      <option value="option1">Cabeza</option>
+                      <option value="option2">Tronco</option>
+                      <option value="option3">Pies</option>
+                      <option value="option4">Brazos</option>
+                      <option value="option5">Cabeza y Tronco</option>
+                      <option value="option6">Brazos y Pies</option>
+                      <option value="option7">Cabeza y Pies</option>
+                      <option value="option8">Cabeza y Brazos</option>
+                      <option value="option9">Cabeza y Tronco</option>
+                      <option value="option10">Tronco y Brazos</option>
+                      <option value="option11">Todas las Extremidades</option>
+                    </select>
+                    {selectedOptionEquipoUtilizado && optionImages[selectedOptionEquipoUtilizado] && (
+                      <div className="protection-image-container">
                         <img
-                          src={optionImages[selectedOptionProteccionSugerida]}
-                          alt={`Equipo de protección sugerido para ${selectedOptionProteccionSugerida}`}
-                          className="protection-image3"
+                          src={optionImages[selectedOptionEquipoUtilizado]}
+                          alt={`Equipo utilizado para ${selectedOptionEquipoUtilizado}`}
+                          className="protection-image2"
                         />
                       </div>
                     )}
-                    
                   </div>
+                </td>
+                  <td colSpan="2" className="right-section right-aligned">
+                    <div className="text1">Equipo de protección personal sugerido</div>
+                    <div className="body-and-hazards-container">
+                      <select value={selectedOptionProteccionSugerida} onChange={handleOptionChangeProteccionSugerida}>
+                        <option value="">Selecciona la extremidad afectada</option>
+                        <option value="option1">Cabeza</option>
+                        <option value="option2">Tronco</option>
+                        <option value="option3">Pies</option>
+                        <option value="option4">Brazos</option>
+                        <option value="option5">Cabeza y Tronco</option>
+                        <option value="option6">Brazos y Pies</option>
+                        <option value="option7">Cabeza y Pies</option>
+                        <option value="option8">Cabeza y Brazos</option>
+                        <option value="option9">Cabeza y Tronco</option>
+                        <option value="option10">Tronco y Brazos</option>
+                        <option value="option11">Todas las Extremidades</option>
+                      </select>
+                      <div className="images-in-row">  {/* Nueva clase para alinear en fila */}
+                        {selectedOptionProteccionSugerida && optionImages[selectedOptionProteccionSugerida] && (
+                          <div className="body-image-left">
+                            <img
+                              src={optionImages[selectedOptionProteccionSugerida]}
+                              alt={`Equipo de protección sugerido para ${selectedOptionProteccionSugerida}`}
+                              className="protection-image3"
+                            />
+                          </div>
+                        )}
+                        
+                      </div>
+                    </div>
+                  </td>
+
+                <td colSpan="2" className="epp-component-right-section">
+                  {/* Título de EPP Recomendado */}
+                  <div className="epp-component-title">EPP Recomendado</div>
+
+                  {/* Contenedor para las imágenes de EPP */}
+                  <div className="epp-component-hazard-images">
+                    {selectedImages.length > 0 ? (
+                      selectedImages.map((image, index) => (
+                        <img
+                          key={index}
+                          src={image}
+                          alt={`Protección ${index}`}
+                          className="epp-component-image"
+                          onClick={() => handleImageRemove(image)}
+                        />
+                      ))
+                    ) : (
+                      <div className="epp-component-no-epp">No hay EPP seleccionado</div>
+                    )}
+                  </div>
+
+              <div>
+                {/* Contenedor del menú principal */}
+                <div className="epp-dropdown-container">
+                  {/* Menú desplegable principal */}
+                  <select
+                    value={selectedMainOption}
+                    onChange={handleMainOptionChange}
+                    className="epp-dropdown"
+                  >
+                    <option value="" disabled>Selecciona el equipo</option>
+                    {Object.keys(eppOptions)
+                      .filter((option) => autoSelectedOptions.includes(option)) // Mostrar solo las opciones detectadas
+                      .map((option, index) => (
+                        <option key={index} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                  </select>
                 </div>
-              </td>
 
-              <td colSpan="2" className="epp-component-right-section">
-  {/* Título de EPP Recomendado */}
-  <div className="epp-component-title">EPP Recomendado</div>
+                {/* Menú desplegable de subcategorías */}
+                {showSubDropdown && selectedMainOption && (
+                  <select
+                    value={selectedSubOption}
+                    onChange={handleSubOptionChange}
+                    className="epp-sub-dropdown"
+                  >
+                    <option value="" disabled>Selecciona el tipo de {selectedMainOption.toLowerCase()}</option>
+                    {eppOptions[selectedMainOption]?.map((subOption, index) => (
+                      <option key={index} value={subOption}>
+                        {subOption}
+                      </option>
+                    ))}
+                  </select>
+                )}
 
-  {/* Contenedor para las imágenes de EPP */}
-  <div className="epp-component-hazard-images">
-    {selectedImages.length > 0 ? (
-      selectedImages.map((image, index) => (
-        <img
-          key={index}
-          src={image}
-          alt={`Protección ${index}`}
-          className="epp-component-image"
-          onClick={() => handleImageRemove(image)}
-        />
-      ))
-    ) : (
-      <div className="epp-component-no-epp">No hay EPP seleccionado</div>
-    )}
-  </div>
-
-  <div>
-    {/* Contenedor del menú principal */}
-    <div className="epp-dropdown-container">
-      {/* Menú desplegable principal */}
-      <select
-        value={selectedMainOption}
-        onChange={handleMainOptionChange}
-        className="epp-dropdown"
-      >
-        <option value="" disabled>Selecciona el equipo</option>
-        {Object.keys(eppOptions)
-          .filter((option) => autoSelectedOptions.includes(option)) // Mostrar solo las opciones detectadas
-          .map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-      </select>
-    </div>
-
-    {/* Menú desplegable de subcategorías */}
-    {showSubDropdown && selectedMainOption && (
-      <select
-        value={selectedSubOption}
-        onChange={handleSubOptionChange}
-        className="epp-sub-dropdown"
-      >
-        <option value="" disabled>Selecciona el tipo de {selectedMainOption.toLowerCase()}</option>
-        {eppOptions[selectedMainOption]?.map((subOption, index) => (
-          <option key={index} value={subOption}>
-            {subOption}
-          </option>
-        ))}
-      </select>
-    )}
-
-    {/* Mostrar la lista de selecciones acumuladas */}
-    <div className="epp-selection-list">
-      {selectionList.map((selection, index) => (
-        <div key={index} className="epp-selection-item">
-          {selection}
-        </div>
-      ))}
-    </div>
-  </div>
-</td>  
+                {/* Mostrar la lista de selecciones acumuladas */}
+                <div className="epp-selection-list">
+                  {selectionList.map((selection, index) => (
+                    <div key={index} className="epp-selection-item">
+                      {selection}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </td>  
           </tr>
           
           <tr>
@@ -1225,16 +1225,16 @@ useEffect(() => {
               <div className="text1" >Evaluación de riesgo de trabajo</div>
               <table className="inner-table" >
                 <thead >
-                  <tr >
+                  <tr>
                     <th>Consecuencia</th>
                     <th style={{ backgroundColor: 'red' }} >Exposición</th>
                     <th>Probabilidad</th>
                     <th>Magnitud del Riesgo</th>
                   </tr>
                 </thead>
-                <tbody> 
+                <tbody>
                   <tr>
-                    <td >
+                    <td>
                       <select value={consequence} onChange={handleConsequenceChange}>
                         <option value={100}>Catástrofe</option>
                         <option value={50}>Varias muertes</option>
@@ -1244,7 +1244,7 @@ useEffect(() => {
                         <option value={1}>Lesiones sin baja</option>
                       </select>
                       {/* Mostrar el valor seleccionado de Consecuencia */}
-                      <div>Valor: {consequence}</div>
+                      <div className="text-size-adjustable" >Valor: {consequence}</div>
                     </td> 
                     <td >
                       <select value={exposure} onChange={handleExposureChange} >
@@ -1256,7 +1256,7 @@ useEffect(() => {
                         <option value={0.5}>Remotamente</option>
                       </select>
                       {/* Mostrar el valor seleccionado de Exposición */}
-                      <div style={{ backgroundColor: 'white' }}>Valor: {exposure} </div>
+                      <div className="text-size-adjustable" style={{ backgroundColor: 'white' }}>Valor: {exposure} </div>
                     </td>
                     <td>
                       <select value={probability} onChange={handleProbabilityChange}>
@@ -1268,9 +1268,9 @@ useEffect(() => {
                         <option value={0.1}>Coincidencia prácticamente imposible, jamás ha ocurrido</option>
                       </select>
                       {/* Mostrar el valor seleccionado de Probabilidad */}
-                      <div>Valor: {probability}</div>
+                      <div className="text-size-adjustable" >Valor: {probability}</div>
                     </td>
-                    <td style={{ backgroundColor: getRiskColor(calculateRisk()) }}>
+                    <td className="text-size-adjustable" style={{ backgroundColor: getRiskColor(calculateRisk()) }}>
                       {calculateRisk().toFixed(2)}
                     </td>
                   </tr>
