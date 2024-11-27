@@ -1,0 +1,90 @@
+/* Estilo para la tabla principal */
+.tabla-principal {
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+}
+  
+.tabla-header {
+    border: 1px solid black;
+    background-color: #d3d3d3;
+}
+  
+.tabla-riesgo {
+    border: 1px solid black;
+    text-align: center;
+}
+  
+.tolerable {
+    background-color: #00bfff; /* Azul */
+    color: black; /* Texto negro */
+    font-weight: bold; /* Resalta el texto */
+    text-align: center;
+}
+  
+.moderado {
+    background-color: #90ee90; /* Verde */
+    color: black; 
+    font-weight: bold; 
+    text-align: center;
+}
+  
+.notable {
+    background-color: #ffff99; /* Amarillo */
+    color: black;
+    font-weight: bold;
+    text-align: center;
+}
+  
+.elevado {
+    background-color: #ffa07a; /* Naranja */
+    color: black;
+    font-weight: bold;
+    text-align: center;
+}
+  
+.grave {
+    background-color: #ff4500; /* Rojo */
+    color: white; /* Texto blanco */
+    font-weight: bold;
+    text-align: center;
+}
+  
+.tabla-area {
+    text-align: left;
+    padding-left: 10px;
+}
+  
+.boton-expandir {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+  
+.boton-eliminar {
+    color: #ff4500;
+    cursor: pointer;
+}
+  
+.tabla-subtabla {
+    padding: 0;
+}
+  
+.tabla-interna {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0;
+}
+  
+.tabla-interna th,
+.tabla-interna td {
+    border: 1px solid black;
+    padding: 5px;
+    text-align: center;
+}
+  
+.tabla-interna th {
+    font-weight: bold;
+}

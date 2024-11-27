@@ -1,59 +1,144 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { collection, onSnapshot, deleteDoc, doc } from "firebase/firestore";
+import { db } from "../firebase";
+import { FaTrash } from "react-icons/fa"; // Importar el icono de basura
+import "./TablaResumen.css"; // Importa los estilos externos
 
 const TablaResumen = () => {
-  const data = [
-    { area: "GENERAL", tolerable: 2, moderado: 0, notable: 0, elevado: 1, grave: 0 },
-    { area: "ADMINISTRATIVO", tolerable: 1, moderado: 0, notable: 0, elevado: 0, grave: 1 },
-    { area: "SISTEMAS", tolerable: 1, moderado: 0, notable: 0, elevado: 1, grave: 0 },
-  ];
+  const [data, setData] = useState([]);
+  const [expandedAreas, setExpandedAreas] = useState([]); // Control de áreas expandidas
 
+  useEffect(() => {
+    // Obtener datos en tiempo real desde Firestore
+    const unsubscribe = onSnapshot(collection(db, "resumen"), (snapshot) => {
+      const areasData = snapshot.docs.map((doc) => ({
+        area: doc.id,
+        ...doc.data(),
+      }));
+      setData(areasData);
+    });
+
+    // Limpiar suscripción cuando el componente se desmonte
+    return () => unsubscribe();
+  }, []);
+
+  // Función para eliminar un registro
+  const deleteArea = async (id) => {
+    try {
+      await deleteDoc(doc(db, "resumen", id));
+      alert("Registro eliminado con éxito.");
+    } catch (error) {
+      console.error("Error al eliminar el registro:", error);
+      alert("Error al eliminar el registro.");
+    }
+  };
+
+  // Función para expandir o contraer los puestos de un área
+  const toggleExpandArea = (areaId) => {
+    setExpandedAreas((prevExpandedAreas) =>
+      prevExpandedAreas.includes(areaId)
+        ? prevExpandedAreas.filter((id) => id !== areaId)
+        : [...prevExpandedAreas, areaId]
+    );
+  };
+
+  // Calcular los totales acumulados
   const total = data.reduce(
     (acc, row) => {
       return {
-        tolerable: acc.tolerable + row.tolerable,
-        moderado: acc.moderado + row.moderado,
-        notable: acc.notable + row.notable,
-        elevado: acc.elevado + row.elevado,
-        grave: acc.grave + row.grave,
+        tolerable: acc.tolerable + (row.tolerable || 0),
+        moderado: acc.moderado + (row.moderado || 0),
+        notable: acc.notable + (row.notable || 0),
+        elevado: acc.elevado + (row.elevado || 0),
+        grave: acc.grave + (row.grave || 0),
       };
     },
     { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 }
-  ); /*hago como qur trabajo xd */
+  );
 
   return (
-    <div style={{ overflowX: "auto" }}>
-      <table style={{ borderCollapse: "collapse", width: "100%", textAlign: "center" }}>
+    <div className="tabla-container">
+      <table className="tabla-principal">
         <thead>
           <tr>
-            <th rowSpan="2" style={{ border: "1px solid black", backgroundColor: "#d3d3d3" }}>Área</th>
-            <th colSpan="5" style={{ border: "1px solid black", backgroundColor: "#d3d3d3" }}>Magnitud de riesgo</th>
+            <th rowSpan="2" className="tabla-header">Área</th>
+            <th colSpan="5" className="tabla-header">Magnitud de riesgo</th>
+            <th rowSpan="2" className="tabla-header">Acción</th>
           </tr>
           <tr>
-            <th style={{ border: "1px solid black", backgroundColor: "#00bfff" }}>Tolerable</th>
-            <th style={{ border: "1px solid black", backgroundColor: "#90ee90" }}>Moderado</th>
-            <th style={{ border: "1px solid black", backgroundColor: "#ffff99" }}>Notable</th>
-            <th style={{ border: "1px solid black", backgroundColor: "#ffa07a" }}>Elevado</th>
-            <th style={{ border: "1px solid black", backgroundColor: "#ff4500", color: "white" }}>Grave</th>
+            <th className="tabla-riesgo tolerable">Tolerable</th>
+            <th className="tabla-riesgo moderado">Moderado</th>
+            <th className="tabla-riesgo notable">Notable</th>
+            <th className="tabla-riesgo elevado">Elevado</th>
+            <th className="tabla-riesgo grave">Grave</th>
           </tr>
         </thead>
         <tbody>
           {data.map((row, index) => (
-            <tr key={index}>
-              <td style={{ border: "1px solid black" }}>{row.area}</td>
-              <td style={{ border: "1px solid black" }}>{row.tolerable}</td>
-              <td style={{ border: "1px solid black" }}>{row.moderado}</td>
-              <td style={{ border: "1px solid black" }}>{row.notable}</td>
-              <td style={{ border: "1px solid black" }}>{row.elevado}</td>
-              <td style={{ border: "1px solid black" }}>{row.grave}</td>
-            </tr>
+            <React.Fragment key={index}>
+              <tr>
+                <td className="tabla-area">
+                  <button
+                    onClick={() => toggleExpandArea(row.area)}
+                    className="boton-expandir"
+                  >
+                    {expandedAreas.includes(row.area) ? "▼" : "▶"}
+                  </button>
+                  {row.area}
+                </td>
+                <td>{row.tolerable || 0}</td>
+                <td>{row.moderado || 0}</td>
+                <td>{row.notable || 0}</td>
+                <td>{row.elevado || 0}</td>
+                <td>{row.grave || 0}</td>
+                <td>
+                  <FaTrash
+                    onClick={() => deleteArea(row.area)}
+                    className="boton-eliminar"
+                  />
+                </td>
+              </tr>
+              {expandedAreas.includes(row.area) && row.puestos && (
+                <tr>
+                <td colSpan="7" className="tabla-subtabla">
+                  <table className="tabla-interna">
+                    <thead>
+                      <tr>
+                        <th className="tabla-header">Puesto</th>
+                        <th className="tolerable">Tolerable</th>
+                        <th className="moderado">Moderado</th>
+                        <th className="notable">Notable</th>
+                        <th className="elevado">Elevado</th>
+                        <th className="grave">Grave</th>
+                      </tr>
+                    </thead>
+                      <tbody>
+                        {row.puestos.map((puesto, idx) => (
+                          <tr key={idx}>
+                            <td>{puesto.nombre}</td>
+                            <td>{puesto.tolerable || 0}</td>
+                            <td>{puesto.moderado || 0}</td>
+                            <td>{puesto.notable || 0}</td>
+                            <td>{puesto.elevado || 0}</td>
+                            <td>{puesto.grave || 0}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                  </table>
+                </td>
+              </tr>
+              
+              )}
+            </React.Fragment>
           ))}
           <tr>
-            <th style={{ border: "1px solid black", backgroundColor: "#d3d3d3" }}>TOTAL</th>
-            <th style={{ border: "1px solid black" }}>{total.tolerable}</th>
-            <th style={{ border: "1px solid black" }}>{total.moderado}</th>
-            <th style={{ border: "1px solid black" }}>{total.notable}</th>
-            <th style={{ border: "1px solid black" }}>{total.elevado}</th>
-            <th style={{ border: "1px solid black" }}>{total.grave}</th>
+            <th>TOTAL</th>
+            <th>{total.tolerable}</th>
+            <th>{total.moderado}</th>
+            <th>{total.notable}</th>
+            <th>{total.elevado}</th>
+            <th>{total.grave}</th>
+            <th></th>
           </tr>
         </tbody>
       </table>
