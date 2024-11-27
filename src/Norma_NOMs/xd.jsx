@@ -6,6 +6,7 @@ import exceptImage from './images/excepted_recipients.png';
 import categoriasImage from './images/categorias_presion.png';
 import criogenicosImage from './images/criogenicos.png';
 import generadoresImage from './images/generadores_vapor.png';
+import riesgoImage from './images/riesgo-incendio.png';
 
 // Continuación del array normas con más normas y sus condiciones
 const normas = [
@@ -19,7 +20,7 @@ const normas = [
     ],
     condition: (values) => values.area === 'centro'
   },
-  { 
+  {
     id: 'NOM-002', 
     title: 'Prevención y protección contra incendios', 
     puntos: [
@@ -28,9 +29,17 @@ const normas = [
       { numero: '5.5', descripcion: 'Plan de atención a emergencias de incendio.' },
       { numero: '5.7', descripcion: 'Programa anual y registros de simulacros.' },
       { numero: '5.8', descripcion: 'Capacitación de brigadas de emergencia.' },
+      { numero: '5.8', descripcion: 'Programa de capacitación teórico-práctico en materia de prevención contra incendios y atención a emergencias.' },
+      { numero: '5.8', descripcion: 'Capacitar a todo el personal en los procedimientos de emergencia y evacuación.' },
+      { numero: '5.11', descripcion: 'Programa interno de protección civil / liberación por Autogestión o Dictamen de Cumplimiento de la NOM-002-STPS-2010.' },
+      { numero: '5.11', descripcion: 'D Preventiva Anual (PC / PASST), Cada 2 años (UV).' },
+      { numero: '7.2', descripcion: 'Programa anual de revisión mensual de los extintores.' },
+      { numero: '7.4', descripcion: 'Programa anual de revisión y pruebas a los equipos contra incendio, a los medios de detección y, en su caso, a las alarmas de incendio y sistemas fijos contra incendio.' },
+      { numero: '7.5', descripcion: 'Programa anual de revisión a las instalaciones eléctricas de las áreas del centro de trabajo.' }
     ],
     condition: (values) => values.recipientesPresion === 'sí'
-  },
+  }
+  ,
   { 
     id: 'NOM-004', 
     title: 'Uso de maquinaria y equipo', 
@@ -101,28 +110,37 @@ const normas = [
     ],
     condition: (values) => values.cargasEstaticas === 'sí'
   },
-  { 
-    id: 'NOM-027', 
-    title: 'Actividades de soldadura y corte', 
+  {
+    id: 'NOM-027',
+    title: 'Actividades de soldadura y corte',
     puntos: [
       { numero: '5.2', descripcion: 'Análisis de riesgos potenciales en actividades de soldadura y corte.' },
       { numero: '5.3', descripcion: 'Registro de trabajadores informados sobre riesgos de soldadura.' },
       { numero: '5.4', descripcion: 'Programa específico para actividades de soldadura y corte.' },
       { numero: '5.5', descripcion: 'Procedimientos de seguridad en soldadura y corte.' },
-      { numero: '5.17', descripcion: 'Botiquín de primeros auxilios en áreas de soldadura y corte.' }
+      { numero: '5.13', descripcion: 'Documento que acredite que se capacita, adiestra y autoriza a los trabajadores para dar mantenimiento preventivo y, en su caso, correctivo, al equipo y maquinaria utilizada en las actividades de soldadura y corte del centro de trabajo.' },
+      { numero: '5.17', descripcion: 'Botiquín de primeros auxilios en áreas de soldadura y corte.' },
+      { numero: '5.17', descripcion: 'Disponer de un botiquín de primeros auxilios en el área donde se desarrollen actividades de soldadura y corte, que incluya los materiales determinados en el análisis de riesgos potenciales. F Preventiva Permanente.' },
+      { numero: '10.6', descripcion: 'Permisos de autorización previo a realizar actividades de soldadura y corte para personal interno y externo. D Preventiva Permanente.' },
+      { numero: '11 f)', descripcion: 'Plan de atención a emergencias y traslado de víctimas.' }
     ],
     condition: (values) => values.soldaduraCorte === 'sí'
   },
 
-  { 
-    id: 'NOM-029', 
-    title: 'Mantenimiento de instalaciones eléctricas', 
+  {
+    id: 'NOM-029',
+    title: 'Mantenimiento de instalaciones eléctricas',
     puntos: [
-      { numero: '5.2', descripcion: 'Plan de trabajo y determinación de riesgos para mantenimiento de instalaciones eléctricas.' },
-      { numero: '5.3', descripcion: 'Diagrama unifilar y cuadro de cargas actualizado.' },
-      { numero: '5.4', descripcion: 'Procedimientos de seguridad en actividades de mantenimiento eléctrico.' },
-      { numero: '5.7', descripcion: 'Programa específico de revisión y conservación de equipo eléctrico.' },
-      { numero: '5.15', descripcion: 'Plan de atención a emergencias para mantenimiento eléctrico.' }
+      { numero: '5.2', descripcion: 'Plan de trabajo y determinación de riesgos por cada actividad de mantenimiento de las instalaciones eléctricas. D Preventiva Permanente.' },
+      { numero: '5.3', descripcion: 'Diagrama unifilar y cuadro de cargas actualizado de la instalación eléctrica, con base en lo dispuesto por la NOM-001-SEDE-2012. D Preventiva Único, mantener actualizado.' },
+      { numero: '5.4', descripcion: 'Procedimientos de seguridad para las actividades de mantenimiento de las instalaciones eléctricas, la selección y uso de equipo de trabajo, maquinaria, herramientas e implementos de protección aislante, y la colocación del sistema de puesta a tierra temporal. D Preventiva Único, mantener actualizado.' },
+      { numero: '5.7', descripcion: 'Programa específico de revisión y conservación del equipo de trabajo, maquinaria, herramientas e implementos de protección aislante utilizados para trabajos de mantenimiento eléctrico. D Preventiva/Correctiva Anual.' },
+      { numero: '5.8', descripcion: 'Procedimientos para la revisión, conservación, almacenamiento y reemplazo del equipo de trabajo, maquinaria, herramientas e implementos de protección aislante, utilizados en las actividades de mantenimiento de las instalaciones eléctricas. D Preventiva Único, mantener actualizado.' },
+      { numero: '5.13', descripcion: 'Documento que acredita que se autoriza por escrito a trabajadores capacitados para realizar actividades de mantenimiento de las instalaciones eléctricas en altura, espacios confinados o subestaciones, así como partes vivas. D Preventiva Permanente.' },
+      { numero: '5.14', descripcion: 'Documento que acredite que se informa a los trabajadores que realizan actividades de mantenimiento de las instalaciones eléctricas, sobre los riesgos a los que están expuestos y de las medidas de seguridad que deben adoptar para la actividad a desarrollar. D Preventiva Permanente.' },
+      { numero: '5.15', descripcion: 'Plan de atención a emergencias, disponible para su consulta y aplicación. D Preventiva Único, mantener actualizado.' },
+      { numero: '5.17', descripcion: 'Capacitar y adiestrar a los trabajadores que realicen actividades de mantenimiento de las instalaciones eléctricas. D Preventiva Anual.' },
+      { numero: '5.19', descripcion: 'Registros de los resultados de mantenimiento en instalaciones eléctricas.' }
     ],
     condition: (values) => values.mantenimientoLineasElectricas === 'sí'
   },
@@ -287,6 +305,7 @@ const NormaNoms = () => {
   const [showModal12, setShowModal12] = useState(false);
   const [showModal14, setShowModal14] = useState(false);
   const [showTable, setShowTable] = useState(false);
+  const [showModal2, setShowModal2] = useState(false); // Estado para el nuevo modal
   const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
@@ -334,6 +353,10 @@ const NormaNoms = () => {
     superficieConstruir: '',
     alturaConstruccion: '',
     materialp: '',
+    comunicacionRuido: '',
+    condicionesClimaticas: '',
+    teletrabajo: '',
+    procesosPetroleoGas: '',
   });
 
   const handleInputChange = (e) => {
@@ -344,24 +367,75 @@ const NormaNoms = () => {
       return newValues;
     });
   };
-
   const handleNext = () => {
     setHistory([...history, step]); // Guardar el paso actual en el historial
+  
     if (step === 5 && formValues.maquinariaMateriales === "no") {
       setStep(7);
-    } else if (step === 7 && formValues.trabajosAltura === "no") {
-      setStep(9);
-    } else if (step === 7 && formValues.trabajosAltura === "sí") {
-      setStep(8);
-    } else if (step === 9 && formValues.actividadesRelacionadas === "no") {
-      setStep(11);
-    } else if (step === 9 && formValues.actividadesRelacionadas === "sí") {
-      setStep(10);
+    } else if (step === 7) {
+      setStep(formValues.trabajosAltura === "no" ? 9 : 8);
+    } else if (step === 9) {
+      setStep(formValues.recipientesPresion === "sí" ? 10 : 11);
+    } else if (step === 11) {
+      setStep(formValues.recipientesCriogenicos === "sí" ? 12 : 13);
+    } else if (step === 13) {
+      setStep(formValues.generadoresVapor === "sí" ? 14 : 15);
+    } else if (step === 15) {
+      setStep(formValues.cargasEstaticas === "sí" ? 16 : 17);
+    } else if (step === 17) {
+      setStep(formValues.soldaduraCorte === "sí" ? 18 : 19);
+    } else if (step === 19) {
+      setStep(formValues.instalacionesElectricas === "sí" ? 20 : 22);
+    } else if (step === 20) {
+      setStep(formValues.mantenimientoLineasElectricas === "sí" ? 21 : 22);
+    } else if (step === 22) {
+      setStep(formValues.trabajosEspaciosConfinados === "sí" ? 23 : 24);
+    } else if (step === 24) {
+      setStep(formValues.trabajadoresDiscapacidad === "sí" ? 25 : 26);
+    } else if (step === 26) {
+      if (formValues.exposicionRuido === "Sí") {
+        setStep(27);
+      } else {
+        setStep(39); // Va al paso 39 si selecciona "No" o "No sé"
+      }
+    } else if (step === 39) {
+      setStep(27); // Desde el paso 39, siempre pasa al 27
+    } else if (step === 27) {
+      setStep(28); // Desde el paso 27, siempre pasa al 28
+    } else if (step === 28) {
+      setStep(formValues.exposicioncalor === "Sí" ? 29 : 40); // Lógica para el paso 28 según la exposición al calor
+    } else if (step === 29) {
+      setStep(formValues.vibraciones === "Sí" ? 30 : 31); // Lógica para el paso 29 según la exposición a vibraciones
+    } else if (step === 40) {
+      setStep(29); // Desde el paso 40, siempre pasa al 29
+    } else if (step === 30) {
+      setStep(31);
+    } else if (step === 31) {
+      setStep(formValues.manejocargas === "Sí" ? 32 : 33); // Lógica para el paso 31 según la selección
+    } else if (step === 32) {
+      setStep(33);
+    } else if (step === 33) {
+      setStep(34);
+    } else if (step === 34) {
+      setStep(35);
+    } else if (step === 35) {
+      if (formValues.materialc === "No") {
+        setStep(41); // Ir al paso 41 si selecciona "No"
+      } else {
+        setStep(36); // Ir al paso 36 si selecciona "Sí"
+      }
+    } else if (step === 41) {
+      setStep(42); // Siempre ir al paso 42
+    } else if (step === 42) {
+      setStep(37); // Siempre ir al paso 37
+    } else if (step === 36) {
+      setStep(37);
+    } else if (step === 37) {
+      setStep(38); // Paso final para mostrar normas aplicables
     } else {
-      setStep(step + 1);
+      setStep(step + 1); // Paso predeterminado
     }
   };
-
   const handleBack = () => {
     if (history.length > 0) {
       const previousStep = history[history.length - 1];
@@ -371,7 +445,7 @@ const NormaNoms = () => {
       setStep(step - 1); // Retroceso estándar si no hay historial
     }
   };
-
+  
 
 
 
@@ -477,8 +551,17 @@ const NormaNoms = () => {
         return formValues.superficieConstruir !== '' && formValues.alturaConstruccion !== '';
       case 37:
         return formValues.materialp !== '';
+      case 39:
+        return formValues.comunicacionRuido !== '';
+      case 40:
+        return formValues. condicionesClimaticas !== '';
       case 38:
-        return formValues.nuevoCampo !== ''; // Reemplaza 'nuevoCampo' con el nombre correcto si aplica
+        return formValues.nuevoCampo  !== '';
+      case 41:
+        return formValues.teletrabajo  !== '';
+      case 42:
+        return formValues.procesosPetroleoGas  !== '';
+         // Reemplaza 'nuevoCampo' con el nombre correcto si aplica
       default:
         return false;
     }
@@ -511,6 +594,13 @@ const NormaNoms = () => {
 {step === 2 && (
   <div className="step2">
     <h3>Determinación del grado de riesgo de incendio</h3>
+    <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
+    <img
+      src={iconImage} // Asegúrate de que `iconImage` sea específico para este paso
+      alt="Tabla de clasificación de riesgo de incendio"
+      style={{ cursor: 'pointer', width: '50px' }}
+      onClick={() => setShowModal2(true)} // Abre el modal específico para este paso
+    />
     <div className="inventory-fields">
       <label>
         Superficie construida:
@@ -575,30 +665,51 @@ const NormaNoms = () => {
 
     <label>¿Tiene inventario de materiales pirofóricos o explosivos?</label>
     <label>
-      <input 
-        type="radio" 
-        name="materialesPiroforicos" 
-        value="sí" 
-        onChange={handleInputChange} 
+      <input
+        type="radio"
+        name="materialesPiroforicos"
+        value="sí"
+        onChange={handleInputChange}
+        checked={formValues.materialesPiroforicos === 'sí'}
       />
       Sí
     </label>
     <label>
-      <input 
-        type="radio" 
-        name="materialesPiroforicos" 
-        value="no" 
-        onChange={handleInputChange} 
+      <input
+        type="radio"
+        name="materialesPiroforicos"
+        value="no"
+        onChange={handleInputChange}
+        checked={formValues.materialesPiroforicos === 'no'}
       />
       No
     </label>
 
     <div className="buttons">
       <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+      <button onClick={handleNext} disabled={!isStepCompleted()}>
+        Continuar
+      </button>
     </div>
+
+    {showModal2 && (
+      <div className="modal">
+        <div className="modal-content">
+          <span className="close" onClick={() => setShowModal2(false)}>
+            &times;
+          </span>
+          {/* Aquí colocamos la imagen específica de este paso */}
+          <img
+            src={riesgoImage} // Reemplaza con la imagen específica para el paso 2
+            alt="Tabla de clasificación de riesgo de incendio"
+            style={{ width: '100%' }}
+          />
+        </div>
+      </div>
+    )}
   </div>
 )}
+
 
         {/* Paso 3 */}
         {step === 3 && (
@@ -993,7 +1104,9 @@ const NormaNoms = () => {
 
     <div className="buttons">
       <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext}>Continuar</button>
+      <button onClick={handleNext} disabled={formValues.categoriasRecipientes.length === 0}>
+        Continuar
+      </button>
     </div>
   </div>
 )}
@@ -1015,30 +1128,32 @@ const NormaNoms = () => {
 {step === 11 && (
   <div className="step11">
     <h3>Recipientes Criogénicos</h3>
-        <label>¿En su centro de trabajo se utilizan recipientes criogénicos?</label>
-        <label>
-          <input
-            type="radio"
-            name="recipientesCriogenicos"
-            value="sí"
-            onChange={handleInputChange}
-            checked={formValues.recipientesCriogenicos === 'sí'}
-          />
-          Sí
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="recipientesCriogenicos"
-            value="no"
-            onChange={handleInputChange}
-            checked={formValues.recipientesCriogenicos === 'no'}
-          />
-          No
-        </label>
+    <label>¿En su centro de trabajo se utilizan recipientes criogénicos?</label>
+    <label>
+      <input
+        type="radio"
+        name="recipientesCriogenicos"
+        value="sí"
+        onChange={handleInputChange}
+        checked={formValues.recipientesCriogenicos === 'sí'}
+      />
+      Sí
+    </label>
+    <label>
+      <input
+        type="radio"
+        name="recipientesCriogenicos"
+        value="no"
+        onChange={handleInputChange}
+        checked={formValues.recipientesCriogenicos === 'no'}
+      />
+      No
+    </label>
     <div className="buttons">
       <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext}>Continuar</button>
+      <button onClick={handleNext} disabled={!formValues.recipientesCriogenicos}>
+        Continuar
+      </button>
     </div>
   </div>
 )}
@@ -1100,7 +1215,7 @@ const NormaNoms = () => {
         {/* Paso 13 - Generadores de vapor o calderas */}
         {step === 13 && (
           <div className="step13">
-            <h3></h3>
+           <h3>Generadores de Vapor y Calderas</h3>
             <label>
             ¿En su centro de trabajo están instalados generadores de vapor o calderas?
             </label>
@@ -1488,8 +1603,8 @@ const NormaNoms = () => {
         
 
 {step === 24 && (
-  <div className="step25">
-    <h3></h3>
+  <div className="step24">
+   <h3>Inclusión de Trabajadores con Discapacidad</h3>
     <label>
     ¿En su centro de trabajo laboran trabajadores con discapacidad?
     </label>
@@ -1522,56 +1637,61 @@ const NormaNoms = () => {
 )}
 
   
-  {step === 25 && (
-        <div>
-          <h3></h3>
-          <label>
-          Seleccione el tipo de discapacidad que presenta el personal que labora en su centro de trabajo:
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              value="Discapacidad física"
-              onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
-            />
-            Discapacidad física
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              value="Discapacidad mental"
-              onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
-            />
-            Discapacidad mental
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              value="Discapacidad intelectual"
-              onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
-            />
-            Discapacidad intelectual
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              value="Discapacidad sensorial"
-              onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
-            />
-            Discapacidad sensorial
-          </label>
-          <div className="buttons">
-            <button onClick={handleBack}>Regresar</button>
-            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
-          </div>
-        </div>
-      )}
+{step === 25 && (
+  <div>
+    <h3>Tipos de Discapacidad del Personal</h3>
+    <label>
+      Seleccione el tipo de discapacidad que presenta el personal que labora en su centro de trabajo:
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="Discapacidad física"
+        onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
+        checked={formValues.tiposDiscapacidad.includes('Discapacidad física')}
+      />
+      Discapacidad física
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="Discapacidad mental"
+        onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
+        checked={formValues.tiposDiscapacidad.includes('Discapacidad mental')}
+      />
+      Discapacidad mental
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="Discapacidad intelectual"
+        onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
+        checked={formValues.tiposDiscapacidad.includes('Discapacidad intelectual')}
+      />
+      Discapacidad intelectual
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="Discapacidad sensorial"
+        onChange={(e) => handleCheckboxChange(e, 'tiposDiscapacidad')}
+        checked={formValues.tiposDiscapacidad.includes('Discapacidad sensorial')}
+      />
+      Discapacidad sensorial
+    </label>
+    <div className="buttons">
+      <button onClick={handleBack}>Regresar</button>
+      <button onClick={handleNext} disabled={formValues.tiposDiscapacidad.length === 0}>
+        Siguiente
+      </button>
+    </div>
+  </div>
+)}
 
 {step === 26 && (
         <div>
-          <h3>
-          </h3>
-          <label >¿En su centro de trabajo, existe algún área donde los trabajadores estén expuestos a niveles de ruido superiores a 80 decibeles?</label>
+        <h3>Exposición a Ruido en el Centro de Trabajo</h3>
+         <label >¿En su centro de trabajo, existe algún área donde los trabajadores estén expuestos a niveles de ruido superiores a 80 decibeles?</label>
           <label>
             <input
               type="radio"
@@ -1608,11 +1728,43 @@ const NormaNoms = () => {
           </div>
         </div>
       )}
+{step === 39 && (
+  <div className="step38">
+   <h3>Inclusión de Trabajadores con Discapacidad</h3>
+    <label>
+    ¿En su centro de trabajo, los trabajadores en condiciones normales de operación necesitan levantar la voz para comunicarse cuando se encuentran a una distancia de aproximadamente un metro?
+    </label>
+    <label>
+      <input
+        type="radio"
+        name="comunicacionRuido"
+        value="sí"
+        onChange={handleInputChange}
+        checked={formValues.comunicacionRuido=== 'sí'}
+      />
+      Sí
+    </label>
+    <label>
+      <input
+        type="radio"
+        name="comunicacionRuido"
+        value="no"
+        onChange={handleInputChange}
+        checked={formValues.comunicacionRuido === 'no'}
+      />
+      No
+    </label>
+
+    <div className="buttons">
+      <button onClick={handleBack}>Regresar</button>
+      <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+    </div>
+  </div>
+)}
 
 {step === 27 && (
         <div>
-          <h3>
-          </h3>
+          <h3>Exposición a Temperaturas Bajas en el Centro de Trabajo</h3>
           <label> ¿En su centro de trabajo, los trabajadores están expuestos a instalaciones, equipos, productos o materiales que ocasionen que su temperatura corporal descienda a menos de 36 grados centígrados?</label>
           <label>
             <input
@@ -1644,8 +1796,7 @@ const NormaNoms = () => {
 
       {step === 28 && (
         <div>
-          <h3>
-          </h3>
+          <h3>Exposición a Temperaturas Altas en el Centro de Trabajo</h3>
           <label> ¿Los trabajadores realizan actividades o están expuestos a instalaciones, equipos, productos o materiales que ocasionen que su temperatura corporal sea mayor a 38 grados centígrados?
           </label>
           <label>
@@ -1675,11 +1826,45 @@ const NormaNoms = () => {
         </div>
       )}
 
+
+
+
+{step === 40 && (
+        <div>
+          <h3>Exposición a Temperaturas Altas en el Centro de Trabajo</h3>
+          <label> ¿En su centro de trabajo existen condiciones climáticas que pueden provocar que la temperatura corporal de los trabajadores sea inferior a 36 grados centígrados o mayor a 38 grados centígrados?
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="condicionesClimaticas"
+              value="Sí"
+              onChange={handleInputChange}
+              checked={formValues.condicionesClimaticas === 'Sí'}
+            />
+            Sí
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="condicionesClimaticas"
+              value="No"
+              onChange={handleInputChange}
+              checked={formValues.condicionesClimaticas === 'No'}
+            />
+            No
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+          </div>
+        </div>
+      )}
+
       
 {step === 29 && (
         <div>
-          <h3>
-          </h3>
+          <h3>Exposición a Vibraciones en el Centro de Trabajo</h3>
           <label> ¿Los trabajadores están expuestos a vibraciones producidas por la operación de maquinaria, equipos o herramientas?
 
           </label>
@@ -1712,9 +1897,9 @@ const NormaNoms = () => {
 
 {step === 30 && (
           <div className="step30">
-            <h3>Tipos de Espacios Confinados</h3>
+            <h3>Identificación de partes del cuerpo expuestas a vibraciones</h3>
             <label>
-              Seleccione el tipo de espacio confinado en las cuales se desarrollarán las actividades en el centro de trabajo:
+            Seleccione qué partes del cuerpo están expuestas a las vibraciones:
             </label>
             <div className="checkbox-group">
               <label>
@@ -1760,8 +1945,7 @@ const NormaNoms = () => {
               
 {step === 31 && (
         <div>
-          <h3>
-          </h3>
+         <h3>Manejo Manual de Cargas en el Centro de Trabajo</h3>
           <label> ¿En su centro de trabajo se realizan actividades que impliquen el manejo manual de cargas mayores a 3kg de forma cotidiana (más de una vez al día)?
 
           </label>
@@ -1795,9 +1979,9 @@ const NormaNoms = () => {
 
 {step === 32 && (
           <div className="step32">
-            <h3>Tipos de Espacios Confinados</h3>
+            <h3>Actividades relacionadas con el manejo manual de cargas</h3>
             <label>
-              Seleccione el tipo de espacio confinado en las cuales se desarrollarán las actividades en el centro de trabajo:
+              Seleccione la actividad a la que el personal se encuentra expuesto en el manejo manual de cargas:
             </label>
             <div className="checkbox-group">
               <label>
@@ -1844,57 +2028,54 @@ const NormaNoms = () => {
 
 
 {step === 33 && (
-          <div className="step33">
-            <h3></h3>
-            <label>
-            Seleccione el tipo de actividades agrícolas que desarrollan los trabajadores con insumos fitosanitarios o plaguicidas e insumos de nutrición vegetal o fertilizantes:
-            </label>
-            <div className="checkbox-group">
-              <label>
-                <input
-                  type="checkbox"
-                  value="Traslado"
-                  onChange={(e) => handleCheckboxChange(e, 'actagricolas')}
-                  checked={formValues.actagricolas.includes('Traslado')}
-                />
-              
-              Traslado
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  value="Almacenamiento"
-                  onChange={(e) => handleCheckboxChange(e, 'actagricolas')}
-                  checked={formValues.actagricolas.includes('Almacenamiento')}
-                />
-                Almacenamiento
-
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  value="Manejo"
-                  onChange={(e) => handleCheckboxChange(e, 'actagricolas')}
-                  checked={formValues.actagricolas.includes('Manejo')}
-                />
-               Manejo
-              </label>
-
-            </div>
-            <div className="buttons">
-              <button onClick={handleBack}>Regresar</button>
-              <button onClick={handleNext} disabled={!isStepCompleted()}>
-                Continuar
-              </button>
-            </div>
-          </div>
-        )}
+  <div className="step33">
+    <h3>Actividades Agrícolas con Insumos Fitosanitarios</h3>
+    <label>
+      Seleccione el tipo de actividades agrícolas que desarrollan los trabajadores con insumos fitosanitarios o plaguicidas e insumos de nutrición vegetal o fertilizantes:
+    </label>
+    <div className="checkbox-group">
+      <label>
+        <input
+          type="checkbox"
+          value="Traslado"
+          onChange={(e) => handleCheckboxChange(e, 'actagricolas')}
+          checked={formValues.actagricolas.includes('Traslado')}
+        />
+        Traslado
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          value="Almacenamiento"
+          onChange={(e) => handleCheckboxChange(e, 'actagricolas')}
+          checked={formValues.actagricolas.includes('Almacenamiento')}
+        />
+        Almacenamiento
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          value="Manejo"
+          onChange={(e) => handleCheckboxChange(e, 'actagricolas')}
+          checked={formValues.actagricolas.includes('Manejo')}
+        />
+        Manejo
+      </label>
+    </div>
+    <div className="buttons">
+      <button onClick={handleBack}>Regresar</button>
+      <button onClick={handleNext} disabled={formValues.actagricolas.length === 0}>
+        Continuar
+      </button>
+    </div>
+  </div>
+)}
 
 
 
 {step === 34 && (
           <div className="step34">
-            <h3></h3>
+            <h3>Infraestructura para Actividades Agrícolas</h3>
             <label>
             Indique el tipo de infraestructura (elementos de producción) que se utiliza en el centro de trabajo para el desarrollo de actividades agrícolas:            </label>
             <div className="checkbox-group">
@@ -1960,8 +2141,7 @@ const NormaNoms = () => {
 
 {step === 35 && (
         <div>
-          <h3>
-          </h3>
+         <h3>Trabajos de Construcción en el Centro de Trabajo</h3>
           <label> ¿El centro de trabajo realiza trabajos de construcción?
 
 
@@ -1992,6 +2172,43 @@ const NormaNoms = () => {
           </div>
         </div>
       )}
+
+
+
+{step === 41 && (
+        <div>
+         <h3>Modalidad de Teletrabajo</h3>
+          <label> ¿El centro de trabajo cuenta con personas trabajadoras realizando actividades bajo la modalidad de Teletrabajo en domicilios particulares?
+
+
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="teletrabajo"
+              value="Sí"
+              onChange={handleInputChange}
+              checked={formValues.teletrabajo === 'Sí'}
+            />
+            Sí
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="teletrabajo"
+              value="No"
+              onChange={handleInputChange}
+              checked={formValues.teletrabajo === 'No'}
+            />
+            No
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+          </div>
+        </div>
+      )}
+
 
        {/* Paso 36 - Clasificación del tamaño de la obra de construcción */}
        {step === 36 && (
@@ -2031,10 +2248,46 @@ const NormaNoms = () => {
         )}
 
 
+
+{step === 42 && (
+  <div>
+    <h3>Procesos Relacionados con Petróleo y Gas</h3>
+    <label>
+      ¿El centro de trabajo cuenta con procesos de: extracción de petróleo o gas natural; 
+      producción de petroquímicos o gas licuado de petróleo (gas L.P.); almacenamiento y distribución 
+      de gas natural o gas licuado de petróleo (gas L.P.); o refinación del petróleo crudo y petroquímica básica?
+    </label>
+    <label>
+      <input
+        type="radio"
+        name="procesosPetroleoGas" // Sin espacio inicial
+        value="Sí"
+        onChange={handleInputChange}
+        checked={formValues.procesosPetroleoGas === 'Sí'} // Sin espacio inicial
+      />
+      Sí
+    </label>
+    <label>
+      <input
+        type="radio"
+        name="procesosPetroleoGas" // Sin espacio inicial
+        value="No"
+        onChange={handleInputChange}
+        checked={formValues.procesosPetroleoGas === 'No'} // Sin espacio inicial
+      />
+      No
+    </label>
+    <div className="buttons">
+      <button onClick={handleBack}>Regresar</button>
+      <button onClick={handleNext} disabled={!isStepCompleted()}>Siguiente</button>
+    </div>
+  </div>
+)}
+
+
 {step === 37 && (
         <div>
-          <h3>
-          </h3>
+         <h3>Manejo y Exposición a Sustancias Químicas Peligrosas</h3>
           <label> ¿En el centro de trabajo se manejan, transportan, procesan o almacenan sustancias químicas que por sus propiedades, niveles de concentración y tiempo de exposición sean capaces de contaminar el medio ambiente laboral, alterar la salud de los trabajadores y/o dañar el centro de trabajo?
 
 
@@ -2119,6 +2372,11 @@ const NormaNoms = () => {
                     superficieConstruir: '',
                     alturaConstruccion: '',
                     materialp: '',
+                    comunicacionRuido: '',
+                    condicionesClimaticas: '',
+                    teletrabajo: '',
+                    procesosPetroleoGas: '',
+
                   });
                   setSelectedNormas([]); // Reiniciar las normas seleccionadas
                 }}
@@ -2184,3 +2442,80 @@ const NormaNoms = () => {
 };
 
 export default NormaNoms;  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+console.log(`
+⣿⣿⣿⠋⠁⠀⠀⠉⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⡇⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣷⡀⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣷⠶⠖⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⠃⠀⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⡿⠃⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⡿⠁⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⡟⠁⠀⠀⣶⠀⠀⠀⠀⠀⢻⣿⡿⠟⠛⠛⠿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣦⠀⠀⠘⠀⠀⠀⠀⠀⢸⡟⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠈⠇⠀⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣧⣀⡀⠀⠀⠀⠀⢀⣤⣄⣀⣀⣤⣾⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⢠⠖⠢⡀⣿⣿⠟⠉⠉⠙⢿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⠈⢢⠀⠙⠟⠁⠀⠀⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⠀⠀⠑⡄⠀⣠⡀⠀⠀⠀⠀⠈⢿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⢸⣿⣿⣿⣿⣄⠀⠀⠀⠀⠙⢿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⣸⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⢹⣿⣿
+⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⣿⣿⣿⣿⣿⣿⠟⠁⠀⠀⠀⠀⣸⣿⣿
+⣿⣿⣿⣿⣿⣿⡇⠀⠀⢀⣿⣿⣿⡿⠋⠀⠀⠀⠀⠠⠴⠾⠿⠿⣿
+⣿⣿⣿⣿⣿⣿⣆⠀⠀⣸⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸
+`);

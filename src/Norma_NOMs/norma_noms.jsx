@@ -359,6 +359,11 @@ const NormaNoms = () => {
     procesosPetroleoGas: '',
   });
 
+
+  const [riesgo, setRiesgo] = useState(''); // Estado para almacenar "Ordinario" o "Alto"
+  const [normasPuntos, setNormasPuntos] = useState([]); // Normas relacionadas con el riesgo
+
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormValues((prevValues) => {
@@ -366,6 +371,52 @@ const NormaNoms = () => {
       updateSelectedNormas(newValues);
       return newValues;
     });
+  };
+
+
+  const evaluarRiesgo = () => {
+    const {
+      superficie,
+      invGases,
+      invLiquidosi,
+      invLiquidosc,
+      invSolidos,
+      materialesPiroforicos,
+    } = formValues;
+
+    const sup = parseFloat(superficie) || 0;
+    const gases = parseFloat(invGases) || 0;
+    const liquidosi = parseFloat(invLiquidosi) || 0;
+    const liquidosc = parseFloat(invLiquidosc) || 0;
+    const solidos = parseFloat(invSolidos) || 0;
+
+    let resultado = 'Ordinario';
+    if (
+      sup >= 3000 ||
+      gases >= 3000 ||
+      liquidosi >= 1400 ||
+      liquidosc >= 2000 ||
+      solidos >= 15000 ||
+      materialesPiroforicos === 'sí'
+    ) {
+      resultado = 'Alto';
+    }
+
+    setRiesgo(resultado);
+
+    const puntos = resultado === 'Ordinario'
+      ? [
+          '5.1 Estudio para la clasificación del grado de riesgo de incendio.',
+          '5.2 Contar con un croquis, plano o mapa actualizado del centro de trabajo.',
+          '5.5 tut.',
+        ]
+      : [
+          '5.7 Programa anual y registros de simulacros.',
+          '5.8 Capacitación de brigadas de emergencia.',
+          '7.2 Programa anual de revisión mensual de los extintores.',
+        ];
+
+    setNormasPuntos(puntos);
   };
   const handleNext = () => {
     setHistory([...history, step]); // Guardar el paso actual en el historial
@@ -2321,116 +2372,130 @@ const NormaNoms = () => {
 
 
 {step === 38 && (
-          <div className="step38">
-            <h3 style={{ color: 'blue' }}>Normas Aplicables</h3>
-            <div>
-              <button 
-                onClick={() => {
-                  setStep(1);
-                  setFormValues({
-                    area: '',
-                    superficie: '',
-                    invGases: '',
-                    invLiquidosi: '',
-                    invLiquidosc: '',
-                    invSolidos: '',
-                    materialesPiroforicos: '',
-                    areaTrabajo: '',
-                    elementos: [],
-                    maquinaria: '',
-                    maquinariaMateriales: '',
-                    tiposMaquinaria: [],
-                    trabajosAltura: '',
-                    equiposAltura: [],
-                    recipientesPresion: '',
-                    categoriasRecipientes: [],
-                    generadoresVapor: '',
-                    recipientesCriogenicos: '',
-                    categoriasCriogenicos: [],
-                    categoriasGeneradores: [],
-                    cargasEstaticas: '',
-                    materialesFriccion: '',
-                    soldaduraCorte: '',
-                    soldaduraAltura: '',
-                    instalacionesElectricas: '',
-                    mantenimientoLineasElectricas: '',
-                    mantenimientoEnergizadas: '',
-                    trabajosEspaciosConfinados: '',
-                    tiposEspaciosConfinados: [],
-                    trabajadoresDiscapacidad: '',
-                    tiposDiscapacidad: [],
-                    exposicionRuido: '',
-                    exposicionFrio: '',
-                    exposicioncalor: '',
-                    vibraciones: '',
-                    exvibraciones: [],
-                    manejocargas: '',
-                    actcargas: [],
-                    actagricolas: [],
-                    infrestructura: [],
-                    materialc: '',
-                    superficieConstruir: '',
-                    alturaConstruccion: '',
-                    materialp: '',
-                    comunicacionRuido: '',
-                    condicionesClimaticas: '',
-                    teletrabajo: '',
-                    procesosPetroleoGas: '',
-
-                  });
-                  setSelectedNormas([]); // Reiniciar las normas seleccionadas
-                }}
-                style={{
-                  backgroundColor: '#2196F3',
-                  color: 'white',
-                  padding: '10px 20px',
-                  border: 'none',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                  fontSize: '16px',
-                  margin: '10px 0'
-                }}
-              >
-                Reiniciar
-              </button>
-            </div>
-            <div className="normas-table">
-              <table border="1" align="center" cellPadding="5" cellSpacing="0">
-                <thead>
-                  <tr>
-                    <th>Número</th>
-                    <th>Título de la norma</th>
-                    <th>Puntos Específicos</th>
-                    <th>Obtener archivo de la NOM</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {selectedNormas.length > 0 ? (
-                    selectedNormas.map((id) => {
-                      const norma = normas.find((n) => n.id === id);
-                      return (
-                        <tr key={norma.id}>
-                          <td>{norma.id}</td>
-                          <td>{norma.title}</td>
-                          <td>
-                            {norma.puntos.map((punto, index) => (
-                              <div key={index}>
-                                <strong>{punto.numero}:</strong> {punto.descripcion}
-                              </div>
-                            ))}
-                          </td>
-                          <td>
-                          <a href={`/noms/${norma.id}.pdf`} target="_blank" rel="noopener noreferrer">Descargar</a>
-
-                          </td>
-                        </tr>
-                      );
-                    })
-                  ) : (
-                    <tr>
-                      <td colSpan="4">No se han encontrado normas aplicables</td>
-                    </tr>
-                  )}
+  <div className="step38">
+    <h3 style={{ color: 'blue' }}>Normas Aplicables</h3>
+    <div>
+      <button
+        onClick={() => {
+          setStep(1);
+          setFormValues({
+            area: '',
+            superficie: '',
+            invGases: '',
+            invLiquidosi: '',
+            invLiquidosc: '',
+            invSolidos: '',
+            materialesPiroforicos: '',
+            areaTrabajo: '',
+            elementos: [],
+            maquinaria: '',
+            maquinariaMateriales: '',
+            tiposMaquinaria: [],
+            trabajosAltura: '',
+            equiposAltura: [],
+            recipientesPresion: '',
+            categoriasRecipientes: [],
+            generadoresVapor: '',
+            recipientesCriogenicos: '',
+            categoriasCriogenicos: [],
+            categoriasGeneradores: [],
+            cargasEstaticas: '',
+            materialesFriccion: '',
+            soldaduraCorte: '',
+            soldaduraAltura: '',
+            instalacionesElectricas: '',
+            mantenimientoLineasElectricas: '',
+            mantenimientoEnergizadas: '',
+            trabajosEspaciosConfinados: '',
+            tiposEspaciosConfinados: [],
+            trabajadoresDiscapacidad: '',
+            tiposDiscapacidad: [],
+            exposicionRuido: '',
+            exposicionFrio: '',
+            exposicioncalor: '',
+            vibraciones: '',
+            exvibraciones: [],
+            manejocargas: '',
+            actcargas: [],
+            actagricolas: [],
+            infrestructura: [],
+            materialc: '',
+            superficieConstruir: '',
+            alturaConstruccion: '',
+            materialp: '',
+            comunicacionRuido: '',
+            condicionesClimaticas: '',
+            teletrabajo: '',
+            procesosPetroleoGas: '',
+          });
+          setSelectedNormas([]); // Reiniciar las normas seleccionadas
+          setRiesgo(''); // Reiniciar el nivel de riesgo
+          setNormasPuntos([]); // Reiniciar los puntos aplicables
+        }}
+        style={{
+          backgroundColor: '#2196F3',
+          color: 'white',
+          padding: '10px 20px',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          fontSize: '16px',
+          margin: '10px 0',
+        }}
+      >
+        Reiniciar
+      </button>
+    </div>
+    <div className="normas-table">
+      <p>
+        El grado de riesgo evaluado es: <strong>{riesgo}</strong>
+      </p>
+      <table border="1" align="center" cellPadding="5" cellSpacing="0">
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Título de la norma</th>
+            <th>Puntos Específicos</th>
+            <th>Obtener archivo de la NOM</th>
+          </tr>
+        </thead>
+        <tbody>
+          {selectedNormas.length > 0 ? (
+            selectedNormas.map((id) => {
+              const norma = normas.find((n) => n.id === id);
+              return (
+                <tr key={norma.id}>
+                  <td>{norma.id}</td>
+                  <td>{norma.title}</td>
+                  <td>
+                    {norma.puntos.map((punto, index) => (
+                      <div key={index}>
+                        <strong>{punto.numero}:</strong> {punto.descripcion}
+                      </div>
+                    ))}
+                  </td>
+                  <td>
+                    <a
+                      href={`/noms/${norma.id}.pdf`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        color: '#2196F3',
+                        textDecoration: 'none',
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      Descargar
+                    </a>
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan="4">No se han encontrado normas aplicables</td>
+            </tr>
+          )}
                 </tbody>
               </table>
             </div>
