@@ -131,7 +131,7 @@ const RiskAssessmentTable = () => {
   const [descripcionActividad, setDescripcionActividad] = useState(''); // Descripción de la actividad
   
 
-  
+    
   
 
 

@@ -12,11 +12,13 @@
 
 .risk-table-container {
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 10px;
   max-width: 1600px; /* Ajusta el ancho máximo según sea necesario */
-  width: 100%;
+  width: calc(100% - 250px); /* Ajusta el ancho para que la tabla se mantenga constante al abrir/cerrar la barra lateral */
   margin: auto;
+  overflow-x: auto; /* Permite desplazar horizontalmente si es necesario */
+  transition: width 0.3s ease-in-out;
 }
 
 .risk-table {
@@ -26,6 +28,7 @@
   font-size: 10px; /* Ajusta el tamaño de fuente para hacer la tabla más pequeña */
   border-collapse: collapse;
   box-sizing: border-box; /* Asegura que padding y border no cambien el tamaño */
+  background-color: white !important;
 }
 
 .risk-table th,
@@ -142,8 +145,8 @@ h4.red {
   background-color: var(--button-hover-bg);
   transform: translateY(-2px);
 }
-.button-area1{
 
+.button-area1 {
   width: 20%;
   height: 35px;
   margin-left: 2px;
@@ -196,13 +199,7 @@ h4.red {
 .button-group .button {
   flex: 1;
 }
-.risk-table-container {
-  background-color: white !important;
-}
 
-.risk-table {
-  background-color: white !important;
-}
 .button-area {
   background-color: var(--button-bg);
   color: var(--button-text);
@@ -220,18 +217,12 @@ h4.red {
   transform: translateY(-2px);
 }
 
-.button-group {
-  display: flex;
-  gap: 0; /* Sin espacio horizontal entre los botones */
-}
-
 .uploaded {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 300px; /* Ajustar la altura para que la imagen se muestre grande */
-
   border-radius: var(--border-radius);
   overflow: hidden;
 }
