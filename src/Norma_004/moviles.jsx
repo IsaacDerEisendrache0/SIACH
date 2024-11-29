@@ -426,16 +426,18 @@ const RiskTable = () => {
 
             <th className="red">Área:</th>
             <td colSpan="10">
-              <select
-                value={area}
-                onChange={(e) => setArea(e.target.value)}
-                style={{ width: '100%' }}
-              >
-                <option value="">Seleccione un área</option>
-                {areas.map((area, idx) => (
-                  <option key={idx} value={area}>{area}</option>
-                ))}
-              </select>
+            <select
+              value={area}
+              onChange={(e) => setArea(e.target.value)}
+              style={{ width: '100%' }}
+            >
+              <option value="">Seleccione un área</option>
+              {areas.map((areaObj, idx) => (
+                <option key={idx} value={areaObj.nombre}>{areaObj.nombre}</option>
+              ))}
+            </select>
+
+
           
             </td>
             <th className="red">POE:</th>
