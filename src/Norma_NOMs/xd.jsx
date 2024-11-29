@@ -12,6 +12,7 @@ import riesgoImage from './images/riesgo-incendio.png';
 const normas = [
   { 
     id: 'NOM-001', 
+    tipo: 'Seguridad',
     title: 'Edificios, locales e instalaciones', 
     puntos: [
       { numero: '5.6', descripcion: 'Constancia documental de que proporcionó información a todos los trabajadores para el uso y conservación de las áreas donde realizan sus actividades en el centro de trabajo, incluidas las destinadas para el servicio de los trabajadores' },
@@ -22,6 +23,7 @@ const normas = [
   },
   {
     id: 'NOM-002', 
+    tipo: 'Seguridad',
     title: 'Prevención y protección contra incendios', 
     puntos: [
       { numero: '5.1', descripcion: 'Estudio para la clasificación del grado de riesgo de incendio.' },
@@ -42,6 +44,7 @@ const normas = [
   ,
   { 
     id: 'NOM-004', 
+    tipo: 'Seguridad',
     title: 'Uso de maquinaria y equipo', 
     puntos: [
       { numero: '5.2', descripcion: 'Estudio para analizar el riesgo en maquinaria.' },
@@ -52,6 +55,7 @@ const normas = [
   },
   { 
     id: 'NOM-005', 
+    tipo: 'Seguridad',
     title: 'Manejo de sustancias químicas peligrosas', 
     puntos: [
       { numero: '5.2', descripcion: 'Estudio de riesgos de sustancias químicas peligrosas.' },
@@ -63,6 +67,7 @@ const normas = [
   },
   { 
     id: 'NOM-006', 
+    tipo: 'Seguridad',
     title: 'Manejo y almacenamiento de materiales', 
     puntos: [
       { numero: '5.1', descripcion: 'Programa específico de revisión y mantenimiento de equipos de manejo de materiales.' },
@@ -77,6 +82,7 @@ const normas = [
 
   { 
     id: 'NOM-009', 
+    tipo: 'Seguridad',
     title: 'Trabajos en altura', 
     puntos: [
       { numero: '5.1', descripcion: 'Análisis de condiciones de riesgo en áreas de trabajo en altura.' },
@@ -89,6 +95,7 @@ const normas = [
   },
   { 
     id: 'NOM-020', 
+    tipo: 'Seguridad',
     title: 'Recipientes sujetos a presión', 
     puntos: [
       { numero: '5.2', descripcion: 'Listado actualizado de los equipos instalados en el centro de trabajo.' },
@@ -101,6 +108,7 @@ const normas = [
   },
   { 
     id: 'NOM-022', 
+    tipo: 'Seguridad',
     title: 'Electricidad estática', 
     puntos: [
       { numero: '5.2', descripcion: 'Contar con pararrayos en áreas con sustancias inflamables o explosivas.' },
@@ -112,6 +120,7 @@ const normas = [
   },
   {
     id: 'NOM-027',
+    tipo: 'Seguridad',
     title: 'Actividades de soldadura y corte',
     puntos: [
       { numero: '5.2', descripcion: 'Análisis de riesgos potenciales en actividades de soldadura y corte.' },
@@ -129,6 +138,7 @@ const normas = [
 
   {
     id: 'NOM-029',
+    tipo: 'Seguridad',
     title: 'Mantenimiento de instalaciones eléctricas',
     puntos: [
       { numero: '5.2', descripcion: 'Plan de trabajo y determinación de riesgos por cada actividad de mantenimiento de las instalaciones eléctricas. D Preventiva Permanente.' },
@@ -146,6 +156,7 @@ const normas = [
   },
   { 
     id: 'NOM-034', 
+    tipo: 'Seguridad',
     title: 'Accesibilidad para trabajadores con discapacidad', 
     puntos: [
       { numero: '5.1', descripcion: 'Análisis de compatibilidad del puesto con la discapacidad de cada trabajador.' },
@@ -157,7 +168,8 @@ const normas = [
     condition: (values) => values.trabajadoresDiscapacidad === 'sí'
   },
   { 
-    id: 'NOM-010', 
+    id: 'NOM-010',
+    tipo: 'Salud', 
     title: 'Agentes químicos contaminantes en el ambiente laboral', 
     puntos: [
       { numero: '6.1', descripcion: 'Estudio actualizado de agentes químicos contaminantes del ambiente laboral.' },
@@ -169,6 +181,7 @@ const normas = [
   },
   { 
     id: 'NOM-011', 
+    tipo: 'Salud',
     title: 'Ruido en los centros de trabajo', 
     puntos: [
       { numero: '5.2', descripcion: 'Evaluación de ruido en áreas donde trabajadores estén expuestos a niveles superiores a 80 dB(A).' },
@@ -180,6 +193,7 @@ const normas = [
 
   { 
     id: 'NOM-013', 
+    tipo: 'Salud',
     title: 'Radiaciones no ionizantes', 
     puntos: [
       { numero: '3.1.2', descripcion: 'Reconocimiento, evaluación y control de áreas con radiaciones no ionizantes para prevenir riesgos.' },
@@ -191,6 +205,7 @@ const normas = [
   },
   { 
     id: 'NOM-024', 
+    tipo: 'Salud',
     title: 'Vibraciones en el ambiente laboral', 
     puntos: [
       { numero: '5.2', descripcion: 'Documento informativo sobre los riesgos a la salud por exposición a vibraciones.' },
@@ -202,6 +217,7 @@ const normas = [
   },
   { 
     id: 'NOM-025', 
+    tipo: 'Salud',
     title: 'Iluminación en los centros de trabajo', 
     puntos: [
       { numero: '5.2', descripcion: 'Evaluación de la iluminación en áreas de trabajo comparada con los valores establecidos.' },
@@ -213,6 +229,7 @@ const normas = [
   },
   { 
     id: 'NOM-035', 
+    tipo: 'Salud',
     title: 'Factores de riesgo psicosocial en el trabajo', 
     puntos: [
       { numero: '5.1', descripcion: 'Política de prevención de riesgos psicosociales en el trabajo.' },
@@ -224,6 +241,7 @@ const normas = [
   },
   { 
     id: 'NOM-036-1', 
+    tipo: 'Salud',
     title: 'Factores de riesgo ergonómico por manejo manual de cargas', 
     puntos: [
       { numero: '5.1', descripcion: 'Análisis de los factores de riesgo ergonómico debido al manejo manual de cargas.' },
@@ -235,6 +253,7 @@ const normas = [
   },
   { 
     id: 'NOM-017', 
+    tipo: 'Organización',
     title: 'Equipo de protección personal', 
     puntos: [
       { numero: '5.2', descripcion: 'Análisis de riesgos por puesto de trabajo y determinación del equipo de protección necesario.' },
@@ -246,6 +265,7 @@ const normas = [
   },
   { 
     id: 'NOM-018', 
+    tipo: 'Organización',
     title: 'Identificación y comunicación de peligros por sustancias químicas peligrosas', 
     puntos: [
       { numero: '6.1', descripcion: 'Listado actualizado de sustancias químicas peligrosas en el centro de trabajo.' },
@@ -257,6 +277,7 @@ const normas = [
   },
   { 
     id: 'NOM-019', 
+    tipo: 'Organizacion',
     title: 'Constitución y funcionamiento de las comisiones de seguridad e higiene', 
     puntos: [
       { numero: '5.4', descripcion: 'Acta de constitución de la comisión de seguridad e higiene.' },
@@ -270,6 +291,7 @@ const normas = [
   
   { 
     id: 'NOM-026', 
+    tipo: 'Organización',
     title: 'Colores y señales de seguridad e higiene, e identificación de riesgos por fluidos conducidos en tuberías', 
     puntos: [
       { numero: '5.2', descripcion: 'Constancias de competencias o habilidades laborales sobre la interpretación de elementos de señalización en el centro de trabajo.' },
@@ -282,6 +304,7 @@ const normas = [
     
   { 
     id: 'NOM-030', 
+    tipo: 'Organización',
     title: 'Servicios preventivos de seguridad y salud en el trabajo', 
     puntos: [
       { numero: '4.1', descripcion: 'Designación de un responsable de seguridad y salud en el trabajo para actividades preventivas en el centro de trabajo.' },
@@ -291,6 +314,158 @@ const normas = [
     ],
     condition: (values) => values.seguridadSalud === 'sí' // Agregar este campo en formValues si aplica
   },
+
+  { 
+    id: 'NOM-033', 
+    tipo: 'Seguridad',
+    title: 'Trabajos en espacios confinados', 
+    puntos: [
+      { numero: '6.1', descripcion: 'Identificación y evaluación de los riesgos asociados a trabajos en espacios confinados.' },
+      { numero: '6.2', descripcion: 'Planificación y autorización para realizar trabajos en espacios confinados.' },
+      { numero: '6.3', descripcion: 'Entrenamiento específico para trabajadores que realicen trabajos en espacios confinados.' }
+    ],
+    condition: (values) => values.trabajosEspaciosConfinados === 'sí'
+  },
+  // Normas de Salud
+  { 
+    id: 'NOM-012', 
+    tipo: 'Salud',
+    title: 'Radiaciones ionizantes', 
+    puntos: [
+      { numero: '5.1', descripcion: 'Evaluación de la exposición a radiaciones ionizantes en el lugar de trabajo.' },
+      { numero: '5.2', descripcion: 'Implementación de medidas para minimizar la exposición a radiaciones ionizantes.' }
+    ],
+    condition: (values) => values.invGases === 'sí'
+  },
+  { 
+    id: 'NOM-014', 
+    tipo: 'Salud',
+    title: 'Presiones ambientales anormales', 
+    puntos: [
+      { numero: '4.1', descripcion: 'Evaluación de los efectos de las presiones ambientales anormales sobre la salud de los trabajadores.' },
+      { numero: '4.2', descripcion: 'Implementación de medidas preventivas para los trabajadores expuestos a presiones ambientales anormales.' }
+    ],
+    condition: (values) => values.invLiquidosi === 'sí'
+  },
+  { 
+    id: 'NOM-015', 
+    tipo: 'Salud',
+    title: 'Condiciones térmicas elevadas o abatidas', 
+    puntos: [
+      { numero: '6.1', descripcion: 'Medición y control de las condiciones térmicas en el lugar de trabajo.' },
+      { numero: '6.2', descripcion: 'Implementación de medidas para prevenir riesgos por condiciones térmicas extremas.' }
+    ],
+    condition: (values) => values.exposicioncalor === 'sí' || values.exposicionFrio === 'sí'
+  },
+  { 
+    id: 'NOM-028', 
+    tipo: 'Organización',
+    title: 'Seguridad en procesos y equipos con sustancias químicas', 
+    puntos: [
+      { numero: '5.1', descripcion: 'Evaluación y control de riesgos en procesos con sustancias químicas.' },
+      { numero: '5.2', descripcion: 'Implementación de procedimientos de seguridad en equipos que manejen sustancias químicas.' }
+    ],
+    condition: (values) => values.materialesPiroforicos === 'sí'
+  },
+  // Normas Específicas
+  { 
+    id: 'NOM-003', 
+    tipo: 'Específica',
+    title: 'Plaguicidas y fertilizantes', 
+    puntos: [
+      { numero: '4.1', descripcion: 'Evaluación de los riesgos asociados al manejo de plaguicidas y fertilizantes.' },
+      { numero: '4.2', descripcion: 'Implementación de medidas de seguridad para el manejo adecuado de plaguicidas y fertilizantes.' }
+    ],
+    condition: (values) => values.invSolidos === 'sí'
+  },
+  { 
+    id: 'NOM-007', 
+    tipo: 'Específica',
+    title: 'Instalaciones, maquinaria, equipo y herramientas agrícolas', 
+    puntos: [
+      { numero: '3.1', descripcion: 'Mantenimiento adecuado de las instalaciones y maquinaria agrícola.' },
+      { numero: '3.2', descripcion: 'Capacitación de los trabajadores en el uso seguro de maquinaria y herramientas agrícolas.' }
+    ],
+    condition: (values) => values.maquinaria === 'sí'
+  },
+  { 
+    id: 'NOM-008', 
+    tipo: 'Específica',
+    title: 'Aprovechamiento forestal maderable', 
+    puntos: [
+      { numero: '4.1', descripcion: 'Normas de seguridad en la operación del aprovechamiento forestal maderable.' },
+      { numero: '4.2', descripcion: 'Medidas para la protección del medio ambiente durante el aprovechamiento forestal.' }
+    ],
+    condition: (values) => values.areaTrabajo === 'sí'
+  },
+  { 
+    id: 'NOM-016', 
+    tipo: 'Específica',
+    title: 'Operación y mantenimiento de ferrocarriles', 
+    puntos: [
+      { numero: '5.1', descripcion: 'Normas de seguridad para la operación de ferrocarriles.' },
+      { numero: '5.2', descripcion: 'Mantenimiento adecuado de equipos ferroviarios para prevenir accidentes.' }
+    ],
+    condition: (values) => values.maquinariaMateriales === 'sí'
+  },
+  { 
+    id: 'NOM-023', 
+    tipo: 'Específica',
+    title: 'Trabajos en minas subterráneas y a cielo abierto', 
+    puntos: [
+      { numero: '6.1', descripcion: 'Normas de seguridad para trabajadores en minas subterráneas y a cielo abierto.' },
+      { numero: '6.2', descripcion: 'Medidas para la prevención de accidentes en minas subterráneas y a cielo abierto.' }
+    ],
+    condition: (values) => values.materialc === 'sí'
+  },
+  { 
+    id: 'NOM-031', 
+    tipo: 'Específica',
+    title: 'Construcción', 
+    puntos: [
+      { numero: '7.1', descripcion: 'Condiciones de seguridad en la construcción de obras.' },
+      { numero: '7.2', descripcion: 'Capacitación en seguridad para los trabajadores de la construcción.' }
+    ],
+    condition: (values) => values.superficieConstruir === 'sí'
+  },
+  { 
+    id: 'NOM-032', 
+    tipo: 'Específica',
+    title: 'Minas subterráneas de carbón', 
+    puntos: [
+      { numero: '8.1', descripcion: 'Medidas de seguridad para trabajadores en minas subterráneas de carbón.' },
+      { numero: '8.2', descripcion: 'Planificación y prevención de riesgos en minas subterráneas de carbón.' }
+    ],
+    condition: (values) => values.alturaConstruccion === 'sí'
+  },
+  { 
+    id: 'NOM-037', 
+    tipo: 'Específica',
+    title: 'Teletrabajo-Condiciones de seguridad y salud en el trabajo', 
+    puntos: [
+      { numero: '4.1', descripcion: 'Condiciones de seguridad y salud para el teletrabajo.' },
+      { numero: '4.2', descripcion: 'Manejo de riesgos psicosociales en el teletrabajo.' }
+    ],
+    condition: (values) => values.teletrabajo === 'sí'
+  }
+  
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+  
 
 
 
@@ -2321,114 +2496,67 @@ const NormaNoms = () => {
 
 
 {step === 38 && (
-          <div className="step38">
-            <h3 style={{ color: 'blue' }}>Normas Aplicables</h3>
-            <div>
-              <button 
-                onClick={() => {
-                  setStep(1);
-                  setFormValues({
-                    area: '',
-                    superficie: '',
-                    invGases: '',
-                    invLiquidosi: '',
-                    invLiquidosc: '',
-                    invSolidos: '',
-                    materialesPiroforicos: '',
-                    areaTrabajo: '',
-                    elementos: [],
-                    maquinaria: '',
-                    maquinariaMateriales: '',
-                    tiposMaquinaria: [],
-                    trabajosAltura: '',
-                    equiposAltura: [],
-                    recipientesPresion: '',
-                    categoriasRecipientes: [],
-                    generadoresVapor: '',
-                    recipientesCriogenicos: '',
-                    categoriasCriogenicos: [],
-                    categoriasGeneradores: [],
-                    cargasEstaticas: '',
-                    materialesFriccion: '',
-                    soldaduraCorte: '',
-                    soldaduraAltura: '',
-                    instalacionesElectricas: '',
-                    mantenimientoLineasElectricas: '',
-                    mantenimientoEnergizadas: '',
-                    trabajosEspaciosConfinados: '',
-                    tiposEspaciosConfinados: [],
-                    trabajadoresDiscapacidad: '',
-                    tiposDiscapacidad: [],
-                    exposicionRuido: '',
-                    exposicionFrio: '',
-                    exposicioncalor: '',
-                    vibraciones: '',
-                    exvibraciones: [],
-                    manejocargas: '',
-                    actcargas: [],
-                    actagricolas: [],
-                    infrestructura: [],
-                    materialc: '',
-                    superficieConstruir: '',
-                    alturaConstruccion: '',
-                    materialp: '',
-                    comunicacionRuido: '',
-                    condicionesClimaticas: '',
-                    teletrabajo: '',
-                    procesosPetroleoGas: '',
-
-                  });
-                  setSelectedNormas([]); // Reiniciar las normas seleccionadas
-                }}
-                style={{
-                  backgroundColor: '#2196F3',
-                  color: 'white',
-                  padding: '10px 20px',
-                  border: 'none',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                  fontSize: '16px',
-                  margin: '10px 0'
-                }}
-              >
-                Reiniciar
-              </button>
-            </div>
-            <div className="normas-table">
-              <table border="1" align="center" cellPadding="5" cellSpacing="0">
-                <thead>
-                  <tr>
-                    <th>Número</th>
-                    <th>Título de la norma</th>
-                    <th>Puntos Específicos</th>
-                    <th>Obtener archivo de la NOM</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {selectedNormas.length > 0 ? (
-                    selectedNormas.map((id) => {
-                      const norma = normas.find((n) => n.id === id);
-                      return (
-                        <tr key={norma.id}>
-                          <td>{norma.id}</td>
-                          <td>{norma.title}</td>
-                          <td>
-                            {norma.puntos.map((punto, index) => (
-                              <div key={index}>
-                                <strong>{punto.numero}:</strong> {punto.descripcion}
-                              </div>
-                            ))}
-                          </td>
-                          <td>
-                          <a href={`/noms/${norma.id}.pdf`} target="_blank" rel="noopener noreferrer">Descargar</a>
-
-                          </td>
-                        </tr>
-                      );
-                    })
-                  ) : (
-                    <tr>
-                      <td colSpan="4">No se han encontrado normas aplicables</td>
+  <div className="step38">
+    <h3 style={{ color: 'blue' }}>Normas Aplicables</h3>
+    <div>
+      <button 
+        onClick={() => {
+          setStep(1);
+          setFormValues({
+            // Reiniciar el formulario como lo tenías
+          });
+          setSelectedNormas([]); // Reiniciar las normas seleccionadas
+        }}
+        style={{
+          backgroundColor: '#2196F3',
+          color: 'white',
+          padding: '10px 20px',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          fontSize: '16px',
+          margin: '10px 0'
+        }}
+      >
+        Reiniciar
+      </button>
+    </div>
+    <div className="normas-table">
+      <table border="1" align="center" cellPadding="5" cellSpacing="0">
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Título de la norma</th>
+            <th>Tipo de norma</th> {/* Nueva columna para el tipo */}
+            <th>Puntos Específicos</th>
+            <th>Obtener archivo de la NOM</th>
+          </tr>
+        </thead>
+        <tbody>
+          {selectedNormas.length > 0 ? (
+            selectedNormas.map((id) => {
+              const norma = normas.find((n) => n.id === id);
+              return (
+                <tr key={norma.id}>
+                  <td>{norma.id}</td>
+                  <td>{norma.title}</td>
+                  <td>{norma.tipo}</td> {/* Mostrar el tipo de norma aquí */}
+                  <td>
+                    {norma.puntos.map((punto, index) => (
+                      <div key={index}>
+                        <strong>{punto.numero}:</strong> {punto.descripcion}
+                      </div>
+                    ))}
+                  </td>
+                  <td>
+                    <a href={`/noms/${norma.id}.pdf`} target="_blank" rel="noopener noreferrer">Descargar</a>
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan="5">No se han encontrado normas aplicables</td>
                     </tr>
                   )}
                 </tbody>
