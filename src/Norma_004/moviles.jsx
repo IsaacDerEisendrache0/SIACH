@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Moviles.css';
 import html2canvas from 'html2canvas';
-
-import { addDoc, updateDoc, doc, collection, getDoc, setDoc } from 'firebase/firestore';
+import { addDoc, updateDoc, doc, collection } from 'firebase/firestore';
 import { db } from '../firebase';
 import logo from '../logos/logo.png';
 import Maxion from '../logos/maxion.jpeg';
@@ -13,8 +12,7 @@ const RiskTable = () => {
   // Estados para capturar los datos del formulario
   const [nombreMaquinaria, setNombreMaquinaria] = useState('');
   const [area, setArea] = useState('');
-  const [areas, setAreas] = useState(() => JSON.parse(localStorage.getItem('areas_norma044')) || []);
-  const [subAreas, setSubAreas] = useState(() => JSON.parse(localStorage.getItem('subAreas_norma044')) || []);
+  const [areas, setAreas] = useState([]);
   const [poe, setPoe] = useState('');
   const [tiempoExposicion, setTiempoExposicion] = useState('');
   const [descripcion, setDescripcion] = useState('');
@@ -33,8 +31,6 @@ const RiskTable = () => {
   const [modalAction, setModalAction] = useState('');
   const [newArea, setNewArea] = useState('');
   const [selectedAreaToRemove, setSelectedAreaToRemove] = useState('');
-  const [newSubArea, setNewSubArea] = useState('');
-  const [selectedSubAreaToRemove, setSelectedSubAreaToRemove] = useState('');
   const [isCapturing, setIsCapturing] = useState(false);
   const [logoSeleccionado, setLogoSeleccionado] = useState(null);
 
@@ -99,6 +95,22 @@ const RiskTable = () => {
 
   const handleRemoveLogo = () => {
     setLogoSeleccionado(null);
+  };
+
+  const saveTable = async (tableData, tableId = null) => {
+    try {
+      if (tableId) {
+        const docRef = doc(db, 'tablas', tableId);
+        await updateDoc(docRef, tableData); // Actualizar en Firestore
+        alert('Tabla actualizada con éxito en Firestore.');
+      } else {
+        await addDoc(collection(db, 'tablas'), tableData); // Guardar en Firestore
+        alert('Tabla guardada con éxito en Firestore.');
+      }
+    } catch (error) {
+      console.error('Error al guardar en Firestore:', error);
+      alert('Error al guardar la tabla.');
+    }
   };
 
   const downloadImage = () => {
@@ -231,7 +243,6 @@ const RiskTable = () => {
     const tableData = {
       nombreTabla: 'Tabla Moviles',
       areaSeleccionada: area,
-      subAreasSeleccionadas: subAreas,
       hazards: [], // Definir adecuadamente los hazards si es necesario
       consequence,
       exposure,
@@ -247,7 +258,7 @@ const RiskTable = () => {
       hora: new Date().toLocaleTimeString(),
     };
 
-   
+    saveTable(tableData, isEditing ? tableId : null);
   };
 
   const openModal = (action) => {
@@ -261,9 +272,7 @@ const RiskTable = () => {
 
   const handleAddArea = () => {
     if (newArea && !areas.includes(newArea)) {
-      const updatedAreas = [...areas, newArea];
-      setAreas(updatedAreas);
-      localStorage.setItem('areas_norma044', JSON.stringify(updatedAreas));
+      setAreas([...areas, newArea]);
       setNewArea('');
       alert('Área agregada con éxito.');
     }
@@ -272,46 +281,20 @@ const RiskTable = () => {
 
   const handleRemoveArea = () => {
     if (selectedAreaToRemove && areas.includes(selectedAreaToRemove)) {
-      const updatedAreas = areas.filter(a => a !== selectedAreaToRemove);
-      setAreas(updatedAreas);
-      localStorage.setItem('areas_norma044', JSON.stringify(updatedAreas));
+      setAreas(areas.filter(a => a !== selectedAreaToRemove));
       setArea('');
       alert('Área eliminada con éxito.');
     }
     closeModal();
   };
 
-  const handleAddSubArea = () => {
-    if (newSubArea && !subAreas.includes(newSubArea)) {
-      const updatedSubAreas = [...subAreas, newSubArea];
-      setSubAreas(updatedSubAreas);
-      localStorage.setItem('subAreas_norma044', JSON.stringify(updatedSubAreas));
-      setNewSubArea('');
-      alert('Sub-área agregada con éxito.');
-    }
-    closeModal();
-  };
-
-  const handleRemoveSubArea = () => {
-    if (selectedSubAreaToRemove && subAreas.includes(selectedSubAreaToRemove)) {
-      const updatedSubAreas = subAreas.filter(sa => sa !== selectedSubAreaToRemove);
-      setSubAreas(updatedSubAreas);
-      localStorage.setItem('subAreas_norma044', JSON.stringify(updatedSubAreas));
-      alert('Sub-área eliminada con éxito.');
-    }
-    closeModal();
-  };
-
-  
-
-
-
   return (
     <div className="risk-table-container">
       <div className="logo-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <img src={logo} alt="SIACH Logo" className="siach-logo" style={{ marginRight: '5px' }} />
         <h4 className="section-header" style={{ color: 'black' }}>
-          ANÁLISIS DE RIESGO POTENCIAL GENERADO POR EQUIPOS MÓVILES NOM-004-STPS-1999
+          ANÁLISIS DE RIESGO POTENCIAL GENERADO POR EQUIPOS MÓVILES
+          NOM-004-STPS-1999
         </h4>
         {logoSeleccionado ? (
           <div className="logo-container" style={{ display: 'flex', alignItems: 'center' }}>
@@ -329,7 +312,7 @@ const RiskTable = () => {
           </select>
         )}
       </div>
-      
+    
       <table className="risk-table" style={{ backgroundColor: 'white' }}>
         <thead>
           <tr>
@@ -356,6 +339,7 @@ const RiskTable = () => {
                   <option key={idx} value={area}>{area}</option>
                 ))}
               </select>
+          
             </td>
             <th className="red">POE:</th>
             <td colSpan="20">
@@ -390,26 +374,13 @@ const RiskTable = () => {
               />
             </td>
             <th className="red">Fecha de inspección:</th>
-            <td colSpan="5">
+            <td colSpan="12">
               <input 
                 type="date"
                 value={fechaInspeccion}
                 onChange={(e) => setFechaInspeccion(e.target.value)}
                 style={{ width: '100%' }}
               />
-            </td>
-            <th colSpan="2" className='red'>SUB-ÁREAS</th>
-            <td colSpan="18">
-             <select
-               value={selectedSubAreaToRemove}
-               onChange={(e) => setSelectedSubAreaToRemove(e.target.value)}
-               style={{ width: '100%' }}
-             >
-               <option value="">Seleccione una sub-área</option>
-               {subAreas.map((subArea, idx) => (
-                 <option key={idx} value={subArea}>{subArea}</option>
-               ))}
-             </select>
             </td>
           </tr>
         </thead>
@@ -562,7 +533,7 @@ const RiskTable = () => {
           },
         }}
       >
-        <h2>{modalAction} Área/Sub-área</h2>
+        <h2>{modalAction} Área</h2>
         <div>
           {modalAction === 'Agregar' && (
             <div>
@@ -574,14 +545,6 @@ const RiskTable = () => {
                 style={{ marginBottom: '10px', width: '100%' }}
               />
               <button onClick={handleAddArea}>Confirmar Agregar Área</button>
-              <input
-                type="text"
-                placeholder="Nombre de la sub-área"
-                value={newSubArea}
-                onChange={(e) => setNewSubArea(e.target.value)}
-                style={{ marginBottom: '10px', width: '100%', marginTop: '10px' }}
-              />
-              <button onClick={handleAddSubArea}>Confirmar Agregar Sub-área</button>
             </div>
           )}
           {modalAction === 'Eliminar' && (
@@ -597,17 +560,6 @@ const RiskTable = () => {
                 ))}
               </select>
               <button onClick={handleRemoveArea}>Confirmar Eliminar Área</button>
-              <select
-                value={selectedSubAreaToRemove}
-                onChange={(e) => setSelectedSubAreaToRemove(e.target.value)}
-                style={{ marginBottom: '10px', width: '100%', marginTop: '10px' }}
-              >
-                <option value="">Seleccione una sub-área para eliminar</option>
-                {subAreas.map((subArea, idx) => (
-                 <option key={idx} value={subArea}>{subArea}</option>
-                ))}
-              </select>
-              <button onClick={handleRemoveSubArea}>Confirmar Eliminar Sub-área</button>
             </div>
           )}
           <button onClick={closeModal}>Cancelar</button>
@@ -615,8 +567,8 @@ const RiskTable = () => {
       </Modal>
       {!isCapturing && (
         <div className="button-group" style={{ display: 'flex', gap: '0' }}>
-          <button className='button-area' onClick={() => openModal('Agregar')}>Agregar área/sub-área</button>
-          <button className='button-area' onClick={() => openModal('Eliminar')}>Eliminar área/sub-área</button>
+          <button className='button-area' onClick={() => openModal('Agregar')}>Agregar área</button>
+          <button className='button-area' onClick={() => openModal('Eliminar')}>Eliminar área</button>
         </div>
       )}
     </div>
