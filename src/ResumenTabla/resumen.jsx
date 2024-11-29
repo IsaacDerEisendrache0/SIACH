@@ -1,35 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { collection, query, where, onSnapshot, deleteDoc, doc } from "firebase/firestore";
-import { auth, db } from "../firebase/firebaseConfig"; // Importar auth y db desde la configuración de Firebase
+import { collection, onSnapshot, deleteDoc, doc } from "firebase/firestore";
+import { db } from "../firebase";
 import { FaTrash } from "react-icons/fa"; // Importar el icono de basura
-import "./TablaResumen.css"; // Importar los estilos externos
+import "./TablaResumen.css"; // Importa los estilos externos
 
 const TablaResumen = () => {
   const [data, setData] = useState([]);
   const [expandedAreas, setExpandedAreas] = useState([]); // Control de áreas expandidas
 
   useEffect(() => {
-    const user = auth.currentUser;
-
-    if (!user) {
-      console.error("Usuario no autenticado.");
-      setData([]); // Si no hay un usuario autenticado, limpia los datos
-      return;
-    }
-
-    // Consulta para obtener datos en tiempo real filtrados por el userId del usuario autenticado
-    const q = query(
-      collection(db, "resumen"),
-      where("userId", "==", user.uid) // Filtra los documentos por el userId
-    );
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
+    // Obtener datos en tiempo real desde Firestore
+    const unsubscribe = onSnapshot(collection(db, "resumen"), (snapshot) => {
       const areasData = snapshot.docs.map((doc) => ({
         area: doc.id,
         ...doc.data(),
       }));
-
-      setData(areasData); // Actualiza el estado con los datos obtenidos
+      setData(areasData);
     });
 
     // Limpiar suscripción cuando el componente se desmonte
@@ -114,18 +100,18 @@ const TablaResumen = () => {
               </tr>
               {expandedAreas.includes(row.area) && row.puestos && (
                 <tr>
-                  <td colSpan="7" className="tabla-subtabla">
-                    <table className="tabla-interna">
-                      <thead>
-                        <tr>
-                          <th className="tabla-header">Puesto</th>
-                          <th className="tolerable">Tolerable</th>
-                          <th className="moderado">Moderado</th>
-                          <th className="notable">Notable</th>
-                          <th className="elevado">Elevado</th>
-                          <th className="grave">Grave</th>
-                        </tr>
-                      </thead>
+                <td colSpan="7" className="tabla-subtabla">
+                  <table className="tabla-interna">
+                    <thead>
+                      <tr>
+                        <th className="tabla-header">Puesto</th>
+                        <th className="tolerable">Tolerable</th>
+                        <th className="moderado">Moderado</th>
+                        <th className="notable">Notable</th>
+                        <th className="elevado">Elevado</th>
+                        <th className="grave">Grave</th>
+                      </tr>
+                    </thead>
                       <tbody>
                         {row.puestos.map((puesto, idx) => (
                           <tr key={idx}>
@@ -138,9 +124,10 @@ const TablaResumen = () => {
                           </tr>
                         ))}
                       </tbody>
-                    </table>
-                  </td>
-                </tr>
+                  </table>
+                </td>
+              </tr>
+              
               )}
             </React.Fragment>
           ))}
@@ -155,9 +142,6 @@ const TablaResumen = () => {
           </tr>
         </tbody>
       </table>
-      {data.length === 0 && (
-        <p>No hay datos disponibles para este usuario.</p>
-      )}
     </div>
   );
 };
