@@ -450,8 +450,8 @@ const saveTable = async () => {
     await addDoc(collection(db, "tablas"), tableData);
     alert("Tabla guardada con éxito en Firestore.");
 
-    // Actualizar el resumen por área en Firestore
-    const resumenRef = doc(db, "resumen", areaSeleccionada);
+    // Actualizar el resumen por área en la colección `resumen_17`
+    const resumenRef = doc(db, "resumen_17", areaSeleccionada);
     const resumenSnapshot = await getDoc(resumenRef);
 
     let newResumenData = {
@@ -469,38 +469,27 @@ const saveTable = async () => {
       newResumenData = resumenSnapshot.data();
     }
 
-    // Clasificar el riesgo del puesto actual
     const puestoRiesgo = {
       nombre: puestoSeleccionado,
-      tolerable: 0,
-      moderado: 0,
-      notable: 0,
-      elevado: 0,
-      grave: 0,
+      tolerable: risk <= 20 ? 1 : 0,
+      moderado: risk > 20 && risk <= 70 ? 1 : 0,
+      notable: risk > 70 && risk <= 200 ? 1 : 0,
+      elevado: risk > 200 && risk <= 400 ? 1 : 0,
+      grave: risk > 400 ? 1 : 0,
     };
-
-    if (risk <= 20) {
-      newResumenData.tolerable += 1;
-      puestoRiesgo.tolerable = 1;
-    } else if (risk <= 70) {
-      newResumenData.moderado += 1;
-      puestoRiesgo.moderado = 1;
-    } else if (risk <= 200) {
-      newResumenData.notable += 1;
-      puestoRiesgo.notable = 1;
-    } else if (risk <= 400) {
-      newResumenData.elevado += 1;
-      puestoRiesgo.elevado = 1;
-    } else {
-      newResumenData.grave += 1;
-      puestoRiesgo.grave = 1;
-    }
 
     // Actualizar o agregar el puesto a la lista de puestos
     newResumenData.puestos = [
       ...newResumenData.puestos.filter((p) => p.nombre !== puestoSeleccionado),
       puestoRiesgo,
     ];
+
+    // Actualizar los totales acumulados
+    newResumenData.tolerable += puestoRiesgo.tolerable;
+    newResumenData.moderado += puestoRiesgo.moderado;
+    newResumenData.notable += puestoRiesgo.notable;
+    newResumenData.elevado += puestoRiesgo.elevado;
+    newResumenData.grave += puestoRiesgo.grave;
 
     // Guardar o actualizar el resumen del área
     await setDoc(resumenRef, newResumenData);
@@ -509,6 +498,7 @@ const saveTable = async () => {
     alert("Error al guardar la tabla.");
   }
 };
+
 
 
 

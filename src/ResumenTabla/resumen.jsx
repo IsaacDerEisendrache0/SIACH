@@ -9,18 +9,19 @@ const TablaResumen = () => {
   const [expandedAreas, setExpandedAreas] = useState([]); // Control de áreas expandidas
 
   useEffect(() => {
-    // Obtener datos en tiempo real desde Firestore
-    const unsubscribe = onSnapshot(collection(db, "resumen"), (snapshot) => {
+    // Obtener datos en tiempo real desde la colección `resumen_17`
+    const unsubscribe = onSnapshot(collection(db, "resumen_17"), (snapshot) => {
       const areasData = snapshot.docs.map((doc) => ({
         area: doc.id,
         ...doc.data(),
       }));
       setData(areasData);
     });
-
+  
     // Limpiar suscripción cuando el componente se desmonte
     return () => unsubscribe();
-  }, []);
+  }, []); 
+  
 
   // Función para eliminar un registro
   const deleteArea = async (id) => {
