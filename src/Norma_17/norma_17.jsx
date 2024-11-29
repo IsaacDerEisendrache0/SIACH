@@ -7,6 +7,7 @@ import { db } from '../firebase'; // Importar la configuración de Firebase
 import logo from '../logos/logo.png';
 import maxion from '../logos/maxion.jpeg';
 import safran from '../logos/safran.jpeg';
+import { getAuth } from "firebase/auth";
 
 
 
@@ -427,7 +428,18 @@ const handleImageSelect = (image) => {
 
 
 const saveTable = async () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    alert("No estás autenticado.");
+    return;
+  }
+
+  const uid = user.uid; // Obtener UID del usuario
+
   const tableData = {
+    uid, // Asociar al usuario autenticado
     areaSeleccionada,
     puestoSeleccionado,
     hazards,
@@ -446,15 +458,14 @@ const saveTable = async () => {
   };
 
   try {
-    // Guardar la tabla de evaluación en Firestore
     await addDoc(collection(db, "tablas"), tableData);
     alert("Tabla guardada con éxito en Firestore.");
 
-    // Actualizar el resumen por área en la colección `resumen_17`
     const resumenRef = doc(db, "resumen_17", areaSeleccionada);
     const resumenSnapshot = await getDoc(resumenRef);
 
     let newResumenData = {
+      uid, // Asociar al usuario autenticado
       tolerable: 0,
       moderado: 0,
       notable: 0,
@@ -463,7 +474,6 @@ const saveTable = async () => {
       puestos: [],
     };
 
-    // Actualizar los valores según el riesgo calculado
     const risk = calculateRisk();
     if (resumenSnapshot.exists()) {
       newResumenData = resumenSnapshot.data();
@@ -478,26 +488,24 @@ const saveTable = async () => {
       grave: risk > 400 ? 1 : 0,
     };
 
-    // Actualizar o agregar el puesto a la lista de puestos
     newResumenData.puestos = [
       ...newResumenData.puestos.filter((p) => p.nombre !== puestoSeleccionado),
       puestoRiesgo,
     ];
 
-    // Actualizar los totales acumulados
     newResumenData.tolerable += puestoRiesgo.tolerable;
     newResumenData.moderado += puestoRiesgo.moderado;
     newResumenData.notable += puestoRiesgo.notable;
     newResumenData.elevado += puestoRiesgo.elevado;
     newResumenData.grave += puestoRiesgo.grave;
 
-    // Guardar o actualizar el resumen del área
     await setDoc(resumenRef, newResumenData);
   } catch (error) {
     console.error("Error al guardar en Firestore:", error);
     alert("Error al guardar la tabla.");
   }
 };
+
 
 
 

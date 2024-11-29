@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { collection, onSnapshot, deleteDoc, doc } from "firebase/firestore";
+import { collection, onSnapshot, deleteDoc, doc, query, where } from "firebase/firestore";
+import { getAuth } from "firebase/auth"; // Importar para obtener el usuario actual
 import { db } from "../firebase";
 import { FaTrash } from "react-icons/fa"; // Importar el icono de basura
 import "./TablaResumen.css"; // Importa los estilos externos
@@ -9,24 +10,36 @@ const TablaResumen = () => {
   const [expandedAreas, setExpandedAreas] = useState([]); // Control de áreas expandidas
 
   useEffect(() => {
-    // Obtener datos en tiempo real desde la colección `resumen_17`
-    const unsubscribe = onSnapshot(collection(db, "resumen_17"), (snapshot) => {
-      const areasData = snapshot.docs.map((doc) => ({
-        area: doc.id,
-        ...doc.data(),
-      }));
-      setData(areasData);
-    });
-  
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!user) {
+      console.error("No se encontró un usuario autenticado.");
+      return;
+    }
+
+    const uid = user.uid; // UID del usuario actual
+
+    // Obtener datos en tiempo real desde la colección `resumen_17`, filtrando por UID
+    const unsubscribe = onSnapshot(
+      query(collection(db, "resumen_17"), where("uid", "==", uid)), // Filtrar por UID
+      (snapshot) => {
+        const areasData = snapshot.docs.map((doc) => ({
+          area: doc.id,
+          ...doc.data(),
+        }));
+        setData(areasData);
+      }
+    );
+
     // Limpiar suscripción cuando el componente se desmonte
     return () => unsubscribe();
-  }, []); 
-  
+  }, []);
 
   // Función para eliminar un registro
   const deleteArea = async (id) => {
     try {
-      await deleteDoc(doc(db, "resumen", id));
+      await deleteDoc(doc(db, "resumen_17", id));
       alert("Registro eliminado con éxito.");
     } catch (error) {
       console.error("Error al eliminar el registro:", error);
@@ -101,18 +114,18 @@ const TablaResumen = () => {
               </tr>
               {expandedAreas.includes(row.area) && row.puestos && (
                 <tr>
-                <td colSpan="7" className="tabla-subtabla">
-                  <table className="tabla-interna">
-                    <thead>
-                      <tr>
-                        <th className="tabla-header">Puesto</th>
-                        <th className="tolerable">Tolerable</th>
-                        <th className="moderado">Moderado</th>
-                        <th className="notable">Notable</th>
-                        <th className="elevado">Elevado</th>
-                        <th className="grave">Grave</th>
-                      </tr>
-                    </thead>
+                  <td colSpan="7" className="tabla-subtabla">
+                    <table className="tabla-interna">
+                      <thead>
+                        <tr>
+                          <th className="tabla-header">Puesto</th>
+                          <th className="tolerable">Tolerable</th>
+                          <th className="moderado">Moderado</th>
+                          <th className="notable">Notable</th>
+                          <th className="elevado">Elevado</th>
+                          <th className="grave">Grave</th>
+                        </tr>
+                      </thead>
                       <tbody>
                         {row.puestos.map((puesto, idx) => (
                           <tr key={idx}>
@@ -125,10 +138,9 @@ const TablaResumen = () => {
                           </tr>
                         ))}
                       </tbody>
-                  </table>
-                </td>
-              </tr>
-              
+                    </table>
+                  </td>
+                </tr>
               )}
             </React.Fragment>
           ))}
