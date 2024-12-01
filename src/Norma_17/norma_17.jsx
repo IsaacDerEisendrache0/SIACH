@@ -279,37 +279,49 @@ const RiskAssessmentTable = () => {
   };
 
   const downloadImage = () => {
-    // Selecciona los botones de agregar y borrar
-    const buttons = document.querySelectorAll('.btn-agregar, .btn-borrar');
-    
-    // Oculta los botones agregando la clase 'hidden-buttons'
+    // Selecciona todos los botones que deben ocultarse
+    const buttons = document.querySelectorAll(
+      '.btn-agregar, .btn-borrar, .download-button, .save-button'
+    );
+  
+    // Oculta los botones temporalmente
     buttons.forEach(button => button.classList.add('hidden-buttons'));
   
     // Selecciona la tabla principal para capturar
     const tableElement = document.querySelector('.main-table');
-    
+  
     html2canvas(tableElement, {
       scrollX: -window.scrollX,
       scrollY: -window.scrollY,
       windowWidth: tableElement.scrollWidth,
       windowHeight: tableElement.scrollHeight,
       useCORS: true,
-      backgroundColor: null,
-    }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const link = document.createElement('a');
-      link.href = imgData;
-      link.download = 'tabla_herramientas_manual.png';
-    
-      // Inicia la descarga de la imagen
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    
-      // Vuelve a mostrar los botones eliminando la clase 'hidden-buttons'
-      buttons.forEach(button => button.classList.remove('hidden-buttons'));
-    });
+      backgroundColor: '#ffffff', // Fondo blanco explícito
+      scale: 2, // Mejora la calidad
+    })
+      .then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.href = imgData;
+        link.download = 'tabla_herramientas_manual.png';
+  
+        // Descargar la imagen
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+  
+        // Restaurar los botones después de la captura
+        buttons.forEach(button => button.classList.remove('hidden-buttons'));
+      })
+      .catch((error) => {
+        console.error('Error al capturar la tabla:', error);
+  
+        // Asegurarse de restaurar los botones incluso si ocurre un error
+        buttons.forEach(button => button.classList.remove('hidden-buttons'));
+      });
   };
+  
+  
   
   
   
@@ -1071,23 +1083,23 @@ useEffect(() => {
 
 
 
-    <Modal isOpen={isImageModalOpen} onRequestClose={() => setIsImageModalOpen(false)} className="modal-container">
-      <h3 style={{ fontSize: '16px', marginBottom: '10px' }}>Selecciona una imagen para {hazardWithImages}</h3>
-      <div className="image-selection-container">
-        {selectedImagesForHazard.map((image, index) => (
-          <div key={index} className="image-option">
-            <img
-              src={image}
-              alt={`Opción ${index}`}
-              onClick={() => handleImageSelect(image)}
-            />
-          </div>
-        ))}
-      </div>
-      <div className="button-group">
-        <button onClick={() => setIsImageModalOpen(false)}>Cerrar</button>
-      </div>
-    </Modal>
+                <Modal isOpen={isImageModalOpen} onRequestClose={() => setIsImageModalOpen(false)} className="modal-container">
+                  <h3 style={{ fontSize: '16px', marginBottom: '10px' }}>Selecciona una imagen para {hazardWithImages}</h3>
+                  <div className="image-selection-container">
+                    {selectedImagesForHazard.map((image, index) => (
+                      <div key={index} className="image-option">
+                        <img
+                          src={image}
+                          alt={`Opción ${index}`}
+                          onClick={() => handleImageSelect(image)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="button-group">
+                    <button onClick={() => setIsImageModalOpen(false)}>Cerrar</button>
+                  </div>
+                </Modal>
 
                 <td colSpan="2" className="right-section right-aligned" style={{ backgroundColor: 'white' }}>
                   <div className="text1">Equipo utilizado<br></br></div>
@@ -1219,86 +1231,84 @@ useEffect(() => {
           </tr>
           
           <tr>
-            <td colSpan="7" className="right-aligned" >
-              <div className="text1" >Evaluación de riesgo de trabajo</div>
-              <table className="inner-table" >
-                <thead >
-                  <tr>
-                    <th>Consecuencia</th>
-                    <th style={{ backgroundColor: 'red' }} >Exposición</th>
-                    <th>Probabilidad</th>
-                    <th>Magnitud del Riesgo</th>
-                  </tr>
-                </thead>
+          <td colSpan="7" className="right-aligned">
+    <div className="banana-title">Evaluación de riesgo de trabajo</div>
+    <table className="inner-table">
+      <thead>
+        <tr>
+          <th className="apple-header">Consecuencia</th>
+          <th className="apple-header" style={{ backgroundColor: 'red' }}>Exposición</th>
+          <th className="apple-header">Probabilidad</th>
+          <th className="apple-header">Magnitud del Riesgo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <select value={consequence} onChange={handleConsequenceChange} className="cherry-select">
+              <option value={10}>Catástrofe</option>
+              <option value={50}>Varias muertes</option>
+              <option value={25}>Muerte</option>
+              <option value={15}>Lesiones graves</option>
+              <option value={5}>Lesiones con baja</option>
+              <option value={1}>Lesiones sin baja</option>
+            </select>
+            <div className="grape-value">Valor: {consequence}</div>
+          </td>
+          <td>
+            <select value={exposure} onChange={handleExposureChange} className="cherry-select">
+              <option value={10}>Continuamente</option>
+              <option value={6}>Frecuentemente</option>
+              <option value={3}>Ocasionalmente</option>
+              <option value={2}>Irregularmente</option>
+              <option value={1}>Raramente</option>
+              <option value={0.5}>Remotamente</option>
+            </select>
+            <div className="grape-value">Valor: {exposure}</div>
+          </td>
+          <td>
+            <select value={probability} onChange={handleProbabilityChange} className="cherry-select">
+              <option value={10}>Es el resultado más probable y esperado</option>
+              <option value={6}>Es completamente posible, no será nada extraño</option>
+              <option value={3}>Sería una secuencia o coincidencia rara pero posible, ha ocurrido</option>
+              <option value={1}>Coincidencia muy rara, pero se sabe que ha ocurrido</option>
+              <option value={0.5}>Coincidencia extremadamente remota pero concebible</option>
+              <option value={0.1}>Coincidencia prácticamente imposible, jamás ha ocurrido</option>
+            </select>
+            <div className="grape-value">Valor: {probability}</div>
+          </td>
+          <td className="blueberry-risk" style={{ backgroundColor: getRiskColor(calculateRisk()) }}>
+            {calculateRisk().toFixed(2)}
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </td>
+            
+            <td colSpan="3" className="right-aligned">
+              <div className="risk-title">Clasificación de Magnitud de Riesgo</div>
+              <table className="risk-magnitude-table">
                 <tbody>
                   <tr>
-                    <td>
-                      <select value={consequence} onChange={handleConsequenceChange}>
-                        <option value={100}>Catástrofe</option>
-                        <option value={50}>Varias muertes</option>
-                        <option value={25}>Muerte</option>
-                        <option value={15}>Lesiones graves</option>
-                        <option value={5}>Lesiones con baja</option>
-                        <option value={1}>Lesiones sin baja</option>
-                      </select>
-                      {/* Mostrar el valor seleccionado de Consecuencia */}
-                      <div className="text-size-adjustable" >Valor: {consequence}</div>
-                    </td> 
-                    <td >
-                      <select value={exposure} onChange={handleExposureChange} >
-                        <option value={10}>Continuamente</option>
-                        <option value={6}>Frecuentemente</option>
-                        <option value={3}>Ocasionalmente</option>
-                        <option value={2}>Irregularmente</option>
-                        <option value={1}>Raramente</option>
-                        <option value={0.5}>Remotamente</option>
-                      </select>
-                      {/* Mostrar el valor seleccionado de Exposición */}
-                      <div className="text-size-adjustable" style={{ backgroundColor: 'white' }}>Valor: {exposure} </div>
+                    <td className="risk-label-cell">Magnitud del Riesgo:</td>
+                    <td className="risk-value-cell">{calculateRisk().toFixed(2)}</td>
+                  </tr>
+                  <tr>
+                    <td className="risk-label-cell">Clasificación:</td>
+                    <td className="risk-classification-cell">
+                      {calculateRisk() > 400 ? 'Muy Alto' : calculateRisk() > 200 ? 'Alto' : calculateRisk() > 70 ? 'Notable' : calculateRisk() > 20 ? 'Moderado' : 'Bajo o Aceptable'}
                     </td>
-                    <td>
-                      <select value={probability} onChange={handleProbabilityChange}>
-                        <option value={10}>Es el resultado más probable y esperado</option>
-                        <option value={6}>Es completamente posible, no será nada extraño</option>
-                        <option value={3}>Sería una secuencia o coincidencia rara pero posible, ha ocurrido</option>
-                        <option value={1}>Coincidencia muy rara, pero se sabe que ha ocurrido</option>
-                        <option value={0.5}>Coincidencia extremadamente remota pero concebible</option>
-                        <option value={0.1}>Coincidencia prácticamente imposible, jamás ha ocurrido</option>
-                      </select>
-                      {/* Mostrar el valor seleccionado de Probabilidad */}
-                      <div className="text-size-adjustable" >Valor: {probability}</div>
-                    </td>
-                    <td className="text-size-adjustable" style={{ backgroundColor: getRiskColor(calculateRisk()) }}>
-                      {calculateRisk().toFixed(2)}
+                  </tr>
+                  <tr>
+                    <td className="risk-label-cell">Acción:</td>
+                    <td className="risk-action-cell">
+                      {calculateRisk() > 400 ? 'Detención inmediata' : calculateRisk() > 200 ? 'Corrección inmediata' : calculateRisk() > 70 ? 'Corrección urgente' : calculateRisk() > 20 ? 'Debe corregirse' : 'Tolerable'}
                     </td>
                   </tr>
                 </tbody>
               </table>
             </td>
-            
-            <td colSpan="3" className="right-aligned">
-  <div className="risk-title">Clasificación de Magnitud de Riesgo</div>
-  <table className="risk-magnitude-table">
-    <tbody>
-      <tr>
-        <td className="risk-label-cell">Magnitud del Riesgo:</td>
-        <td className="risk-value-cell">{calculateRisk().toFixed(2)}</td>
-      </tr>
-      <tr>
-        <td className="risk-label-cell">Clasificación:</td>
-        <td className="risk-classification-cell">
-          {calculateRisk() > 400 ? 'Muy Alto' : calculateRisk() > 200 ? 'Alto' : calculateRisk() > 70 ? 'Notable' : calculateRisk() > 20 ? 'Moderado' : 'Bajo o Aceptable'}
-        </td>
-      </tr>
-      <tr>
-        <td className="risk-label-cell">Acción:</td>
-        <td className="risk-action-cell">
-          {calculateRisk() > 400 ? 'Detención inmediata' : calculateRisk() > 200 ? 'Corrección inmediata' : calculateRisk() > 70 ? 'Corrección urgente' : calculateRisk() > 20 ? 'Debe corregirse' : 'Tolerable'}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</td>
 
           </tr>
         </tbody>
