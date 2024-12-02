@@ -624,8 +624,77 @@ const NormaNoms = () => {
       setStep(step - 1); // Retroceso estándar si no hay historial
     }
   };
-  
 
+  const [riesgoIncendio, setRiesgoIncendio] = useState(""); // Para guardar el nivel de riesgo
+
+  
+  // Nueva función para filtrar puntos de la NOM-002 según el riesgo
+const filtrarPuntosPorRiesgo = (riesgo) => {
+  const puntos = [
+    {
+      numero: '5.11',
+      descripcion: `
+        Contar con alguno de los documentos que enseguida se señalan, tratándose de centros de trabajo con riesgo de incendio alto:
+        a) El acta y la minuta correspondientes a la verificación satisfactoria del cumplimiento de la presente Norma.
+        b) El dictamen de cumplimiento de esta Norma expedido por una unidad de verificación acreditada y aprobada.
+        c) El acta circunstanciada que resulte de la revisión, verificación, inspección o vigilancia de las condiciones para la prevención y protección contra incendios.`,
+      aplicable: 'Alto',
+    },
+    {
+      numero: '5.10',
+      descripcion: `
+        Contar en las áreas de los centros de trabajo clasificadas con riesgo de incendio ordinario, con medios de detección y equipos contra incendio. 
+        En las de riesgo de incendio alto, además de lo anteriormente señalado, con sistemas fijos de protección contra incendio y alarmas de incendio.`,
+      aplicable: 'Ordinario',
+    },
+  ];
+
+  // Filtra los puntos según el riesgo (Alto u Ordinario)
+  return puntos.filter((punto) => punto.aplicable === riesgo);
+};
+
+// Modificar `evaluarRiesgoIncendio` para llamar a `filtrarPuntosPorRiesgo`
+const evaluarRiesgoIncendio = () => {
+  const {
+    superficie,
+    invGases,
+    invLiquidosi,
+    invLiquidosc,
+    invSolidos,
+    materialesPiroforicos,
+  } = formValues;
+
+  // Evaluar el nivel de riesgo
+  let nivelRiesgo = 'Ordinario';
+  if (
+    superficie >= 3000 ||
+    invGases >= 3000 ||
+    invLiquidosi >= 1400 ||
+    invLiquidosc >= 2000 ||
+    invSolidos >= 15000 ||
+    materialesPiroforicos === 'sí'
+  ) {
+    nivelRiesgo = 'Alto';
+  }
+
+  setRiesgoIncendio(nivelRiesgo);
+
+  // Filtrar puntos específicos según el nivel de riesgo
+  const puntosFiltrados = filtrarPuntosPorRiesgo(nivelRiesgo);
+
+  // Actualizar los puntos específicos de la NOM-002 en `normas`
+  const indexNorma = normas.findIndex((norma) => norma.id === 'NOM-002');
+  if (indexNorma !== -1) {
+    const updatedNormas = [...normas];
+    updatedNormas[indexNorma] = {
+      ...updatedNormas[indexNorma],
+      puntos: puntosFiltrados,
+    };
+    setSelectedNormas([...selectedNormas]); // Actualiza las normas seleccionadas
+  }
+};
+
+  
 
 
   const handleCheckboxChange = (e, field) => {
@@ -775,10 +844,10 @@ const NormaNoms = () => {
     <h3>Determinación del grado de riesgo de incendio</h3>
     <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
     <img
-      src={iconImage} // Asegúrate de que `iconImage` sea específico para este paso
+      src={iconImage}
       alt="Tabla de clasificación de riesgo de incendio"
-      style={{ cursor: 'pointer', width: '50px' }}
-      onClick={() => setShowModal2(true)} // Abre el modal específico para este paso
+      style={{ cursor: "pointer", width: "50px" }}
+      onClick={() => setShowModal2(true)}
     />
     <div className="inventory-fields">
       <label>
@@ -849,7 +918,7 @@ const NormaNoms = () => {
         name="materialesPiroforicos"
         value="sí"
         onChange={handleInputChange}
-        checked={formValues.materialesPiroforicos === 'sí'}
+        checked={formValues.materialesPiroforicos === "sí"}
       />
       Sí
     </label>
@@ -859,17 +928,32 @@ const NormaNoms = () => {
         name="materialesPiroforicos"
         value="no"
         onChange={handleInputChange}
-        checked={formValues.materialesPiroforicos === 'no'}
+        checked={formValues.materialesPiroforicos === "no"}
       />
       No
     </label>
 
     <div className="buttons">
       <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext} disabled={!isStepCompleted()}>
+      <button
+        onClick={() => {
+          evaluarRiesgoIncendio(); // Llama a la función para evaluar el riesgo
+          handleNext(); // Avanza al siguiente paso
+        }}
+        disabled={!isStepCompleted()}
+      >
         Continuar
       </button>
     </div>
+
+    {riesgoIncendio && (
+      <div>
+        <h4>Resultado de Evaluación:</h4>
+        <p>
+          El grado de riesgo de incendio es: <strong>{riesgoIncendio}</strong>
+        </p>
+      </div>
+    )}
 
     {showModal2 && (
       <div className="modal">
@@ -877,17 +961,17 @@ const NormaNoms = () => {
           <span className="close" onClick={() => setShowModal2(false)}>
             &times;
           </span>
-          {/* Aquí colocamos la imagen específica de este paso */}
           <img
-            src={riesgoImage} // Reemplaza con la imagen específica para el paso 2
+            src={riesgoImage}
             alt="Tabla de clasificación de riesgo de incendio"
-            style={{ width: '100%' }}
+            style={{ width: "100%" }}
           />
         </div>
       </div>
     )}
   </div>
 )}
+
 
 
         {/* Paso 3 */}
@@ -2524,13 +2608,21 @@ const NormaNoms = () => {
   <div className="step38">
     <h3 style={{ color: 'blue' }}>Normas Aplicables</h3>
     <div>
-      <button 
+      <button
         onClick={() => {
           setStep(1);
           setFormValues({
-            // Reiniciar el formulario como lo tenías
+            area: '',
+            superficie: '',
+            invGases: '',
+            invLiquidosi: '',
+            invLiquidosc: '',
+            invSolidos: '',
+            materialesPiroforicos: '',
+            // Otros campos iniciales
           });
           setSelectedNormas([]); // Reiniciar las normas seleccionadas
+          setRiesgoIncendio(''); // Reiniciar el riesgo de incendio
         }}
         style={{
           backgroundColor: '#2196F3',
@@ -2552,8 +2644,9 @@ const NormaNoms = () => {
           <tr>
             <th>Número</th>
             <th>Título de la norma</th>
-            <th>Tipo de norma</th> {/* Nueva columna para el tipo */}
+            <th>Tipo de norma</th>
             <th>Puntos Específicos</th>
+            <th>Grado de riesgo de incendio</th> {/* Nueva columna */}
             <th>Obtener archivo de la NOM</th>
           </tr>
         </thead>
@@ -2561,34 +2654,53 @@ const NormaNoms = () => {
           {selectedNormas.length > 0 ? (
             selectedNormas.map((id) => {
               const norma = normas.find((n) => n.id === id);
+
+              // Filtrar puntos específicos de la NOM-002 según el riesgo
+              const puntosEspecificos = norma.id === 'NOM-002' 
+                ? filtrarPuntosPorRiesgo(riesgoIncendio)
+                : norma.puntos;
+
               return (
                 <tr key={norma.id}>
                   <td>{norma.id}</td>
                   <td>{norma.title}</td>
-                  <td>{norma.tipo}</td> {/* Mostrar el tipo de norma aquí */}
+                  <td>{norma.tipo}</td>
                   <td>
-                    {norma.puntos.map((punto, index) => (
+                    {puntosEspecificos.map((punto, index) => (
                       <div key={index}>
                         <strong>{punto.numero}:</strong> {punto.descripcion}
                       </div>
                     ))}
                   </td>
                   <td>
-                    <a href={`/noms/${norma.id}.pdf`} target="_blank" rel="noopener noreferrer">Descargar</a>
+                    {id === 'NOM-002' && riesgoIncendio
+                      ? `Riesgo: ${riesgoIncendio}`
+                      : '-'}
+                  </td>
+                  <td>
+                    <a
+                      href={`/noms/${norma.id}.pdf`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Descargar
+                    </a>
                   </td>
                 </tr>
               );
             })
           ) : (
             <tr>
-              <td colSpan="5">No se han encontrado normas aplicables</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
+              <td colSpan="6">No se han encontrado normas aplicables</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  </div>
+)}
+
+
       </div>
     </div>
   );
@@ -2651,24 +2763,3 @@ export default NormaNoms;
 
 
 
-console.log(`
-⣿⣿⣿⠋⠁⠀⠀⠉⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⡇⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣷⡀⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣷⠶⠖⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⠃⠀⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⡿⠃⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⡿⠁⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⡟⠁⠀⠀⣶⠀⠀⠀⠀⠀⢻⣿⡿⠟⠛⠛⠿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣦⠀⠀⠘⠀⠀⠀⠀⠀⢸⡟⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠈⠇⠀⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣧⣀⡀⠀⠀⠀⠀⢀⣤⣄⣀⣀⣤⣾⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⢠⠖⠢⡀⣿⣿⠟⠉⠉⠙⢿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⠈⢢⠀⠙⠟⠁⠀⠀⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⠀⠀⠑⡄⠀⣠⡀⠀⠀⠀⠀⠈⢿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⢸⣿⣿⣿⣿⣄⠀⠀⠀⠀⠙⢿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⣸⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⢹⣿⣿
-⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⣿⣿⣿⣿⣿⣿⠟⠁⠀⠀⠀⠀⣸⣿⣿
-⣿⣿⣿⣿⣿⣿⡇⠀⠀⢀⣿⣿⣿⡿⠋⠀⠀⠀⠀⠠⠴⠾⠿⠿⣿
-⣿⣿⣿⣿⣿⣿⣆⠀⠀⣸⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸
-`);

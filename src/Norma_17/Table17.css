@@ -654,7 +654,7 @@ button {
   color: black;
   padding: 5px;
   border-bottom: 0px solid #ff0; /* Subrayado en amarillo */
-  margin-bottom: 5px;
+  margin-bottom: 18px;
 }
 
 /* Estilo de la tabla principal */
@@ -671,6 +671,8 @@ button {
   width: 25%;
   color: white;
   background-color: rgb(255, 0, 0);
+  font-size: 16px !important; /* Forzar el tamaño */
+
 }
 
 /* Celdas de entrada */
@@ -683,7 +685,6 @@ button {
 /* Celdas de botones */
 .button-cell {
   padding: 8px;
-  background-color: white;
 
   text-align: left;
   width: 25%;
@@ -760,9 +761,11 @@ button {
 /* Tabla de partes del cuerpo */
 .body-parts-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: collapse;  
   text-align: center;
   background-color: white;
+  font-size: 16px !important; /* Forzar el tamaño */
+
 }
 
 /* Celdas de etiquetas */
