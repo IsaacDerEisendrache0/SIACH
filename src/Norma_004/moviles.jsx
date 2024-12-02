@@ -15,7 +15,7 @@ const RiskTable = () => {
   // Estados para capturar los datos del formulario
   const [nombreMaquinaria, setNombreMaquinaria] = useState('');
   const [area, setArea] = useState('');
-  const [areas, setAreas] = useState([]);
+  const [areas, setAreas] = useState([]); 
   const [poe, setPoe] = useState('');
   const [tiempoExposicion, setTiempoExposicion] = useState('');
   const [descripcion, setDescripcion] = useState('');
@@ -427,21 +427,17 @@ const RiskTable = () => {
             </td>
 
             <th className="red">Área:</th>
-            <td colSpan="10">
-            <select
-              value={area}
-              onChange={(e) => setArea(e.target.value)}
-              style={{ width: '100%' }}
-            >
-              <option value="">Seleccione un área</option>
-              {areas.map((areaObj, idx) => (
-                <option key={idx} value={areaObj.nombre}>{areaObj.nombre}</option>
-              ))}
-            </select>
+<td colSpan="10">
+  <select
+    value=""
+    onChange={(e) => {}}
+    className="area-dropdown-clean"
+    style={{ width: '100%' }}
+  >
+    <option value="">Seleccione un área</option> {/* Opción predeterminada en blanco */}
+  </select>
+</td>
 
-
-          
-            </td>
             <th className="red">POE:</th>
             <td colSpan="20">
               <input 
@@ -462,21 +458,18 @@ const RiskTable = () => {
                 style={{ width: '100%' }}
               />
             </td>
-            <th className='red'>
-              PUESTOS
-            </th>
-            <td colSpan="20">
-              <select
-                value={selectedPuestoToRemove}
-                onChange={(e) => setSelectedPuestoToRemove(e.target.value)}
-                style={{ width: '100%' }}
-              >
-                <option value="">Seleccione un puesto</option>
-                {puestos.map((puesto, idx) => (
-                  <option key={idx} value={puesto}>{puesto}</option>
-                ))}
-              </select>
-            </td>
+            <th className="red">PUESTOS</th>
+<td colSpan="10">
+  <select
+    value=""
+    onChange={(e) => {}}
+    className="puesto-dropdown-clean"
+    style={{ width: '100%' }}
+  >
+    <option value="">Seleccione un puesto</option> {/* Opción predeterminada en blanco */}
+  </select>
+</td>
+
           </tr>
           <tr>
             <th className="red">Descripción de la maquinaria o equipo:</th>
