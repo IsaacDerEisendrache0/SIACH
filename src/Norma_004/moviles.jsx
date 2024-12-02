@@ -2,16 +2,14 @@ import React, { useState, useEffect } from 'react';
 import './Moviles.css';
 import html2canvas from 'html2canvas';
 import { getDoc, setDoc, doc, addDoc, collection, updateDoc } from 'firebase/firestore';
-
 import { db } from '../firebase';
 import logo from '../logos/logo.png';
 import Maxion from '../logos/maxion.jpeg';
 import Safran from '../logos/safran.jpeg';
 import Modal from 'react-modal';
 
-
-
 const RiskTable = () => {
+
   // Estados para capturar los datos del formulario
   const [nombreMaquinaria, setNombreMaquinaria] = useState('');
   const [area, setArea] = useState('');
@@ -32,7 +30,7 @@ const RiskTable = () => {
   const [selectedBodyImage, setSelectedBodyImage] = useState(null);
   const [selectedEPPImages, setSelectedEPPImages] = useState(['/images/3.png', '/images/4.png', '/images/6.png']);
   const [isEditing, setIsEditing] = useState(false);
-  const [setTableId] = useState(null);
+  const [tableId, setTableId] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalAction, setModalAction] = useState('');
   const [newArea, setNewArea] = useState('');
@@ -102,8 +100,6 @@ const RiskTable = () => {
   const handleRemoveLogo = () => {
     setLogoSeleccionado(null);
   };
-
-
 
   const downloadImage = () => {
     setIsCapturing(true);
@@ -188,7 +184,6 @@ const RiskTable = () => {
       'Ocasionalmente': 3,
       'Irregularmente': 2,
       'Raramente': 1,
-      'Remotamente': 0.1
     };
     return valoresExposicion[exposure] || 0;
   };
@@ -288,7 +283,7 @@ const RiskTable = () => {
         elevado: 0,
         grave: 0,
       };
-  
+      
       // Actualizar el resumen con base en el riesgo calculado
       if (risk <= 20) {
         newResumenData.tolerable += 1;
@@ -306,12 +301,30 @@ const RiskTable = () => {
         newResumenData.grave += 1;
         puestoRiesgo.grave = 1;
       }
+      
   
-      // Actualizar o agregar el puesto a la lista de puestos
-      newResumenData.puestos = [
-        ...newResumenData.puestos.filter((p) => p.nombre !== puestoRiesgo.nombre),
-        puestoRiesgo,
-      ];
+
+  
+// Actualizar o agregar el puesto a la lista de puestos
+const existingPuestoIndex = newResumenData.puestos.findIndex(
+  (p) => p.nombre === puestoRiesgo.nombre
+);
+
+if (existingPuestoIndex !== -1) {
+  // Si el puesto ya existe, acumula los valores
+  newResumenData.puestos[existingPuestoIndex] = {
+    ...newResumenData.puestos[existingPuestoIndex],
+    tolerable: newResumenData.puestos[existingPuestoIndex].tolerable + puestoRiesgo.tolerable,
+    moderado: newResumenData.puestos[existingPuestoIndex].moderado + puestoRiesgo.moderado,
+    notable: newResumenData.puestos[existingPuestoIndex].notable + puestoRiesgo.notable,
+    elevado: newResumenData.puestos[existingPuestoIndex].elevado + puestoRiesgo.elevado,
+    grave: newResumenData.puestos[existingPuestoIndex].grave + puestoRiesgo.grave,
+  };
+} else {
+  // Si el puesto no existe, agrégalo
+  newResumenData.puestos.push(puestoRiesgo);
+}
+
   
       // Guardar o actualizar el resumen del área en Firestore
       await setDoc(resumenRef, newResumenData);
@@ -322,8 +335,6 @@ const RiskTable = () => {
       alert("Error al guardar los datos.");
     }
   };
-  
-
 
   const openModal = (action) => {
     setModalAction(action);
@@ -432,11 +443,10 @@ const RiskTable = () => {
               style={{ width: '100%' }}
             >
               <option value="">Seleccione un área</option>
-              {areas.map((areaObj, idx) => (
-                <option key={idx} value={areaObj.nombre}>{areaObj.nombre}</option>
+              {areas.map((area, idx) => (
+                <option key={idx} value={area}>{area}</option>
               ))}
             </select>
-
 
           
             </td>
@@ -464,16 +474,17 @@ const RiskTable = () => {
               PUESTOS
             </th>
             <td colSpan="20">
-              <select
-                value={selectedPuestoToRemove}
-                onChange={(e) => setSelectedPuestoToRemove(e.target.value)}
-                style={{ width: '100%' }}
-              >
-                <option value="">Seleccione un puesto</option>
-                {puestos.map((puesto, idx) => (
-                  <option key={idx} value={puesto}>{puesto}</option>
-                ))}
-              </select>
+            <select
+            value={selectedPuestoToRemove}
+            onChange={(e) => setSelectedPuestoToRemove(e.target.value)}
+            style={{ marginBottom: '10px', width: '100%' }}
+          >
+            <option value="">Seleccione un puesto para eliminar</option>
+            {puestos.map((puesto, idx) => (
+              <option key={idx} value={puesto.nombre}>{puesto.nombrez}</option>
+            ))}
+          </select>
+
             </td>
           </tr>
           <tr>
@@ -699,6 +710,7 @@ const RiskTable = () => {
                 <option key={idx} value={puesto}>{puesto}</option>
               ))}
             </select>
+
             <button onClick={handleRemovePuesto}>Eliminar Puesto</button>
           </div>
           <button onClick={closeModal} style={{ marginTop: '20px' }}>Cancelar</button>
@@ -706,13 +718,15 @@ const RiskTable = () => {
       </Modal>
       {!isCapturing && (
         <div className="button-group" style={{ display: 'flex', gap: '0' }}>
-          <button className='button-area' onClick={() => openModal('Agregar')}>Agregar área</button>
-          <button className='button-area' onClick={() => openModal('Eliminar')}>Eliminar área</button>
-                                                    
+          <button className='button-area' onClick={() => openModal('Agregar')}>
+            Agregar área
+          </button>
+          <button className='button-area' onClick={() => openModal('Eliminar')}>
+            Eliminar área
+          </button>
         </div>
       )}
     </div>
-    
   );
 };
 
