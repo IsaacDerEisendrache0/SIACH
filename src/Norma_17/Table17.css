@@ -93,6 +93,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  align-items: center;
+  transform: translateY(24px); /* Ajusta el valor para mover el elemento hacia abajo */
+
 }
 
 .risk-table, .container-full-width, .main-table table {
@@ -169,11 +172,13 @@
 /* Estilos para texto */
 .text1, .text2 {
   color: black;
-  background-color: yellow;
   font-weight: bold;
   text-align: center;
   margin-bottom: 10px; /* Espacio debajo del título */
+  font-size: 20px !important; /* Aumenta el tamaño de la fuente, usando !important */
 }
+
+
 
 /* Estilo para imágenes y filas */
 .body-image-left {
@@ -438,7 +443,7 @@ button {
 
 /* Título con fondo amarillo */
 .epp-component-title {
-  background-color: yellow;
+  font-size: 20px;
   color: black;
   font-weight: bold;
   text-align: center;
@@ -648,7 +653,7 @@ button {
 /* Título de la sección "Datos adicionales" */
 .additional-data-title {
   font-weight: bold;
-  font-size: 16px;
+  font-size: 20px;
   text-align: center;
   background-color: yellow;
   color: black;
@@ -749,7 +754,7 @@ button {
 /* Título con fondo amarillo y subrayado */
 .body-parts-title {
   font-weight: bold;
-  font-size: 16px;
+  font-size: 20px;
   text-align: center;
   color: black;
   background-color: yellow;
@@ -997,10 +1002,11 @@ button {
 
 /* Encabezados de la tabla */
 .apple-header {
-  font-size: 16px; /* Mantén el tamaño original o ligeramente mayor */
+  font-size: 16px !important; /* Mantén el tamaño original, usando !important */
   font-weight: bold;
   text-align: center;
 }
+
 
 /* Selectores */
 .cherry-select {
