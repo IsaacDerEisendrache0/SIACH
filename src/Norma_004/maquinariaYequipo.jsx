@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './MaquinariaYequipo.css';
 import html2canvas from 'html2canvas';
-import { addDoc, updateDoc, doc, collection } from 'firebase/firestore';
+import { addDoc, updateDoc, doc, collection, getDoc, setDoc} from 'firebase/firestore';
 import { db } from '../firebase';
 import logo from '../logos/logo.png';
 
@@ -33,42 +33,17 @@ const RiskTable = () => {
   const [probability, setProbability] = useState('Coincidencia extremadamente remota pero concebible');
   const [selectedBodyImage, setSelectedBodyImage] = useState(null);
   const [selectedEPPImages, setSelectedEPPImages] = useState([]);
-  const [selectedTriangleImages, setSelectedTriangleImages] = useState([]); // Nuevo estado para triángulos
+  const [selectedTriangleImages, setSelectedTriangleImages] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [tableId, setTableId] = useState(null);
-
-  useEffect(() => {
-    const tableToEdit = JSON.parse(localStorage.getItem('tableToEdit'));
-    if (tableToEdit) {
-      setConsequence(tableToEdit.consequence || 'Lesiones sin baja');
-      setExposure(tableToEdit.exposure || 'Ocasionalmente');
-      setProbability(tableToEdit.probability || 'Coincidencia extremadamente remota pero concebible');
-      setSelectedEPPImages(tableToEdit.selectedImages || []);
-      setDescripcion(tableToEdit.descripcionActividad || '');
-      setPoe(tableToEdit.selectedOptionEquipoUtilizado || '');
-      setTiempoExposicion(tableToEdit.tiempoExposicion || '');
-      setFechaInspeccion(tableToEdit.fecha || '');
-      setTableId(tableToEdit.id || null);
-      setIsEditing(true);
-      localStorage.removeItem('tableToEdit');
-    }
-  }, []);
-
-  const saveTable = async (tableData, tableId = null) => {
-    try {
-      if (tableId) {
-        const docRef = doc(db, 'tablas', tableId);
-        await updateDoc(docRef, tableData);
-        alert('Tabla actualizada con éxito en Firestore.');
-      } else {
-        await addDoc(collection(db, 'tablas'), tableData);
-        alert('Tabla guardada con éxito en Firestore.');
-      }
-    } catch (error) {
-      console.error('Error al guardar en Firestore:', error);
-      alert('Error al guardar la tabla.');
-    }
-  };
+  const [area, setArea] = useState('');
+  const [puestos, setPuestos] = useState([]);
+  const [areas, setAreas] = useState([]);
+  const [showPuestoModal, setShowPuestoModal] = useState(false);
+  const [showAreaModal, setShowAreaModal] = useState(false);
+  const [newPuesto, setNewPuesto] = useState('');
+  const [newArea, setNewArea] = useState('');
+  
 
   const downloadImage = () => {
     const input = document.querySelector('.risk-table-container');
@@ -170,26 +145,120 @@ const RiskTable = () => {
   const magnitudRiesgo = calcularMagnitudRiesgo();
   const { color, accion, clasificacion } = obtenerClasificacionRiesgo(magnitudRiesgo);
 
-  const saveTableData = () => {
+  const handleAddPuesto = () => {
+    if (newPuesto && !puestos.includes(newPuesto)) {
+      const updatedPuestos = [...puestos, newPuesto];
+      setPuestos(updatedPuestos);
+      localStorage.setItem('puestos', JSON.stringify(updatedPuestos));
+      setNewPuesto('');
+      alert('Puesto agregado con éxito.');
+    }
+  };
+
+  const handleAddArea = () => {
+    if (newArea && !areas.includes(newArea)) {
+      const updatedAreas = [...areas, newArea];
+      setAreas(updatedAreas);
+      localStorage.setItem('areas', JSON.stringify(updatedAreas));
+      setNewArea('');
+      alert('Área agregada con éxito.');
+    }
+  };
+
+  useEffect(() => {
+    const savedAreas = JSON.parse(localStorage.getItem('areas')) || [];
+    setAreas(savedAreas);
+    
+    const savedPuestos = JSON.parse(localStorage.getItem('puestos')) || [];
+    setPuestos(savedPuestos);
+  }, []);
+
+  const saveTableData = async () => {
+    const magnitud = calcularMagnitudRiesgo();
+    const { clasificacion } = obtenerClasificacionRiesgo(magnitud);
+  
     const tableData = {
-      nombreTabla: 'Tabla Moviles',
+      nombreMaquinaria,
+      poe,
+      tiempoExposicion,
+      descripcion,
+      fechaInspeccion: fechaInspeccion || new Date().toLocaleDateString(),
       consequence,
       exposure,
       probability,
-      risk: calcularMagnitudRiesgo(),
-      selectedImages: selectedEPPImages,
-      descripcionActividad: descripcion,
-      selectedOptionEquipoUtilizado: poe,
-      selectedOptionProteccionSugerida: selectedBodyImage,
-      tiempoExposicion,
-      norma: 'N-004',
-      fecha: fechaInspeccion || new Date().toLocaleDateString(),
-      hora: new Date().toLocaleTimeString(),
+      magnitud,
+      clasificacion,
+      selectedEPPImages,
+      selectedBodyImage,
+      area,
+      puestos,
     };
-
-    saveTable(tableData, isEditing ? tableId : null);
+  
+    try {
+      if (isEditing && tableId) {
+        const tableRef = doc(db, 'tablas', tableId);
+        await updateDoc(tableRef, tableData);
+        alert('Tabla actualizada exitosamente.');
+      } else {
+        const tableRef = await addDoc(collection(db, 'tablas'), tableData);
+        setTableId(tableRef.id);
+        alert('Tabla guardada exitosamente.');
+      }
+  
+      // Solo llamar a updateResumenData si el área está seleccionada
+      if (area) {
+        await updateResumenData(area, magnitud, clasificacion);
+      }
+    } catch (error) {
+      console.error('Error al guardar datos:', error);
+      alert('Hubo un problema al guardar la tabla.');
+    }
   };
+  
 
+  const updateResumenData = async (area, magnitud, clasificacion) => {
+    if (!area) return;
+  
+    const resumenRef = doc(db, 'resumen', area);
+    const resumenSnapshot = await getDoc(resumenRef);
+  
+    let resumenData = resumenSnapshot.exists()
+      ? resumenSnapshot.data()
+      : { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0, puestos: [] };
+  
+    // Si el puesto ya existía, restar sus valores anteriores
+    const puestoExistente = resumenData.puestos.find((p) => p.nombre === nombreMaquinaria);
+    if (puestoExistente) {
+      resumenData.tolerable -= puestoExistente.tolerable;
+      resumenData.moderado -= puestoExistente.moderado;
+      resumenData.notable -= puestoExistente.notable;
+      resumenData.elevado -= puestoExistente.elevado;
+      resumenData.grave -= puestoExistente.grave;
+    }
+  
+    const puestoRiesgo = {
+      nombre: nombreMaquinaria,
+      tolerable: magnitud <= 20 ? 1 : 0,
+      moderado: magnitud > 20 && magnitud <= 70 ? 1 : 0,
+      notable: magnitud > 70 && magnitud <= 200 ? 1 : 0,
+      elevado: magnitud > 200 && magnitud <= 400 ? 1 : 0,
+      grave: magnitud > 400 ? 1 : 0,
+    };
+  
+    resumenData.puestos = [
+      ...resumenData.puestos.filter((p) => p.nombre !== nombreMaquinaria),
+      puestoRiesgo,
+    ];
+  
+    resumenData.tolerable += puestoRiesgo.tolerable;
+    resumenData.moderado += puestoRiesgo.moderado;
+    resumenData.notable += puestoRiesgo.notable;
+    resumenData.elevado += puestoRiesgo.elevado;
+    resumenData.grave += puestoRiesgo.grave;
+  
+    await setDoc(resumenRef, resumenData);
+  };
+  
   return (
     <div className="risk-table-container">
       <div className="logo-container" style={{ textAlign: 'center', marginBottom: '20px' }}>
@@ -226,6 +295,15 @@ const RiskTable = () => {
                 onChange={(e) => setTiempoExposicion(e.target.value)}
               />
             </td>
+            <th className='red' colSpan="10">ÁREAS</th>
+            <th colSpan="20"> 
+              <select name="areas" value={area} onChange={(e) => setArea(e.target.value)}>
+                <option value="">Seleccione un área</option>
+                {areas.map((area, index) => (
+                  <option key={index} value={area.nombre}>{area.nombre}</option>
+                ))}
+              </select>
+            </th>
           </tr>
           <tr>
             <th className="red">Descripción de la maquinaria o equipo:</th>
@@ -245,9 +323,16 @@ const RiskTable = () => {
                 onChange={(e) => setFechaInspeccion(e.target.value)}
               />
             </td>
+            <th className='red' colSpan="20"> PUESTOS
+              <select name="puestos" value={newPuesto} onChange={(e) => setNewPuesto(e.target.value)}>
+                <option value="">Seleccione un puesto</option>
+                {puestos.map((puesto, index) => (
+                  <option key={index} value={newPuesto.nombre}>{newPuesto.nombre}</option>
+                ))}
+              </select>
+            </th>
           </tr>
         </thead>
-
         <tbody>
           <div className="table-flex-container">
             <div className="image-insert-table">
@@ -355,16 +440,7 @@ const RiskTable = () => {
                     </td>
                     <td>
                       <select value={probability} onChange={(e) => setProbability(e.target.value)}>
-                        {[
-                          'Es el resultado más probable y esperado',
-                          'Es completamente posible, no será nada extraño',
-                          'Sería una secuencia o coincidencia rara pero posible, ha ocurrido',
-                          'Coincidencia muy rara, pero se sabe que ha ocurrido',
-                          'Coincidencia extremadamente remota pero concebible',
-                          'Coincidencia prácticamente imposible, jamás ha ocurrido'
-                        ].map((opcion, idx) => (
-                          <option key={idx} value={opcion}>{opcion}</option>
-                        ))}
+                        {['Es el resultado más probable y esperado', 'Es completamente posible, no será nada extraño', 'Sería una secuencia o coincidencia rara pero posible, ha ocurrido', 'Coincidencia muy rara, pero se sabe que ha ocurrido', 'Coincidencia extremadamente remota pero concebible', 'Coincidencia prácticamente imposible, jamás ha ocurrido'].map((opcion, idx) => (<option key={idx} value={opcion}>{opcion}</option>))}
                       </select>
                     </td>
                   </tr>
@@ -409,21 +485,55 @@ const RiskTable = () => {
               
             </div>
           </div>
-          <textarea name="textarea"rows="3" cols="212 " id="observaciones" placeholder='Observaciones'></textarea>
+          <textarea name="textarea" rows="3" cols="212" id="observaciones" placeholder='Observaciones'></textarea>
         </tbody>
       </table>
-      <div className="button-container">
-  <button onClick={downloadImage} className="download-button">
-    Descargar PDF
-  </button>
-  <button onClick={saveTableData} className="save-button">
-    {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
-  </button>
-</div>  
-    </div>
-    
-  );
+       {/* Modal para Agregar Puesto */}
+       {showPuestoModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h4>Agregar Nuevo Puesto</h4>
+            <input
+              type="text"
+              value={newPuesto}
+              onChange={(e) => setNewPuesto(e.target.value)}
+              placeholder="Ingrese el nombre del puesto"
+            />
+            <div className="modal-buttons">
+              <button onClick={handleAddPuesto}>Agregar Puesto</button>
+              <button onClick={() => setShowPuestoModal(false)}>Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
 
+      {/* Modal para Agregar Área */}
+       {showAreaModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h4>Agregar Nueva Área</h4>
+            <input
+              type="text"
+              value={newArea}
+              onChange={(e) => setNewArea(e.target.value)}
+              placeholder="Ingrese el nombre del área"
+            />
+            <div className="modal-buttons">
+              <button onClick={handleAddArea}>Agregar Área</button>
+              <button onClick={() => setShowAreaModal(false)}>Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="button-container">
+        <button onClick={downloadImage} className="download-button">Descargar PDF</button>
+        <button onClick={saveTableData} className="save-button">{isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}</button>
+        <button onClick={() => setShowAreaModal(true)} className="area-button">Agregar Área</button>
+        <button onClick={() => setShowPuestoModal(true)} className="puesto-button">Agregar Puesto</button>
+      </div>
+    </div>
+  );
 };
 
 export default RiskTable;

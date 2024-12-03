@@ -46,22 +46,33 @@ const RiskTable = () => {
   ];
 
   useEffect(() => {
+
+  const savedAreas = JSON.parse(localStorage.getItem('areas'));
+  if (savedAreas) {
+    setAreas(savedAreas);
+  }
+
+  const savedPuestos = JSON.parse(localStorage.getItem('puestos'));
+  if (savedPuestos) {
+    setPuestos(savedPuestos);
+  }
+
     const tableToEdit = JSON.parse(localStorage.getItem('tableToEdit'));
-    if (tableToEdit) {
-      setArea(tableToEdit.areaSeleccionada || '');
-      setConsequence(tableToEdit.consequence || 'Lesiones sin baja');
-      setExposure(tableToEdit.exposure || 'Ocasionalmente');
-      setProbability(tableToEdit.probability || 'Coincidencia extremadamente remota pero concebible');
-      setSelectedEPPImages(tableToEdit.selectedImages || []);
-      setDescripcion(tableToEdit.descripcionActividad || '');
-      setPoe(tableToEdit.selectedOptionEquipoUtilizado || '');
-      setTiempoExposicion(tableToEdit.tiempoExposicion || '');
-      setFechaInspeccion(tableToEdit.fecha || '');
-      setTableId(tableToEdit.id || null);
-      setIsEditing(true);
-      localStorage.removeItem('tableToEdit');
-    }
-  }, []);
+  if (tableToEdit) {
+    setArea(tableToEdit.areaSeleccionada || '');
+    setConsequence(tableToEdit.consequence || 'Lesiones sin baja');
+    setExposure(tableToEdit.exposure || 'Ocasionalmente');
+    setProbability(tableToEdit.probability || 'Coincidencia extremadamente remota pero concebible');
+    setSelectedEPPImages(tableToEdit.selectedImages || []);
+    setDescripcion(tableToEdit.descripcionActividad || '');
+    setPoe(tableToEdit.selectedOptionEquipoUtilizado || '');
+    setTiempoExposicion(tableToEdit.tiempoExposicion || '');
+    setFechaInspeccion(tableToEdit.fecha || '');
+    setIsEditing(true);
+    localStorage.removeItem('tableToEdit');
+  }
+}, []);
+
 
   const optionImages = {
     option1: '/body/lvl1_head.png',
@@ -323,6 +334,7 @@ const RiskTable = () => {
     }
   };
   
+  
 
 
   const openModal = (action) => {
@@ -334,51 +346,70 @@ const RiskTable = () => {
     setModalIsOpen(false);
   };
   useEffect(() => {
-    const savedAreas = JSON.parse(localStorage.getItem('areas'));
-    if (savedAreas) {
-      setAreas(savedAreas); // Restaurar áreas desde localStorage
-    }
-  
-    const savedPuestos = JSON.parse(localStorage.getItem('puestos'));
-    if (savedPuestos) {
-      setPuestos(savedPuestos); // Restaurar puestos desde localStorage
-    }
-  }, []);
+  // Restaurar áreas y puestos desde localStorage
+  const savedAreas = JSON.parse(localStorage.getItem('areas'));
+  if (savedAreas) {
+    setAreas(savedAreas);
+  }
 
-  const handleAddArea = () => {
-    if (newArea && !areas.includes(newArea)) {
-      const updatedAreas = [...areas, newArea];
-      setAreas(updatedAreas);
-      localStorage.setItem('areas', JSON.stringify(updatedAreas)); // Guardar áreas en localStorage
-      setNewArea('');
-      alert('Área agregada con éxito.');
-    }
-    closeModal();
-  };
+  const savedPuestos = JSON.parse(localStorage.getItem('puestos'));
+  if (savedPuestos) {
+    setPuestos(savedPuestos);
+  }
+
+  const tableToEdit = JSON.parse(localStorage.getItem('tableToEdit'));
+  if (tableToEdit) {
+    setArea(tableToEdit.areaSeleccionada || '');
+    setConsequence(tableToEdit.consequence || 'Lesiones sin baja');
+    setExposure(tableToEdit.exposure || 'Ocasionalmente');
+    setProbability(tableToEdit.probability || 'Coincidencia extremadamente remota pero concebible');
+    setSelectedEPPImages(tableToEdit.selectedImages || []);
+    setDescripcion(tableToEdit.descripcionActividad || '');
+    setPoe(tableToEdit.selectedOptionEquipoUtilizado || '');
+    setTiempoExposicion(tableToEdit.tiempoExposicion || '');
+    setFechaInspeccion(tableToEdit.fecha || '');
+    setIsEditing(true);
+    localStorage.removeItem('tableToEdit');
+  }
+}, []);
+
+
+
+const handleAddArea = () => {
+  if (newArea && !areas.includes(newArea)) {
+    const updatedAreas = [...areas, newArea];
+    setAreas(updatedAreas);
+    localStorage.setItem('areas', JSON.stringify(updatedAreas)); // Guardar áreas en localStorage
+    setNewArea('');
+    alert('Área agregada con éxito.');
+  }
+  closeModal();
+};
 
   const handleRemoveArea = () => {
-    if (selectedAreaToRemove && areas.includes(selectedAreaToRemove)) {
-      const updatedAreas = areas.filter((a) => a !== selectedAreaToRemove);
-      setAreas(updatedAreas);
-      localStorage.setItem('areas', JSON.stringify(updatedAreas)); // Actualizar áreas en localStorage
-      setArea('');
-      alert('Área eliminada con éxito.');
-    }
-    closeModal();
-  };
-  const handleAddPuesto = () => {
-    if (newPuesto && !puestos.includes(newPuesto)) {
-      const updatedPuestos = [...puestos, newPuesto];
-      setPuestos(updatedPuestos);
-      localStorage.setItem('puestos', JSON.stringify(updatedPuestos)); // Guardar puestos en localStorage
-      setNewPuesto('');
-      alert('Puesto agregado con éxito.');
-    }
-  };
+  if (selectedAreaToRemove && areas.includes(selectedAreaToRemove)) {
+    const updatedAreas = areas.filter((a) => a !== selectedAreaToRemove);
+    setAreas(updatedAreas);
+    localStorage.setItem('areas', JSON.stringify(updatedAreas)); // Actualizar áreas en localStorage
+    setArea('');
+    alert('Área eliminada con éxito.');
+  }
+  closeModal();
+};
 
- const handleRemovePuesto = () => {
+  const handleAddPuesto = () => {
+  if (newPuesto && !puestos.includes(newPuesto)) {
+    const updatedPuestos = [...puestos, newPuesto];
+    setPuestos(updatedPuestos);
+    localStorage.setItem('puestos', JSON.stringify(updatedPuestos)); // Guardar puestos en localStorage
+    setNewPuesto('');
+    alert('Puesto agregado con éxito.');
+  }
+};
+
+  const handleRemovePuesto = () => {
   if (selectedPuestoToRemove) {
-    const updatedPuestos = puestos.filter((p) => p.nombre !== selectedPuestoToRemove);
+    const updatedPuestos = puestos.filter((p) => p !== selectedPuestoToRemove);
     setPuestos(updatedPuestos);
     localStorage.setItem('puestos', JSON.stringify(updatedPuestos)); // Actualizar puestos en localStorage
     alert('Puesto eliminado con éxito.');
@@ -427,16 +458,17 @@ const RiskTable = () => {
             </td>
 
             <th className="red">Área:</th>
-<td colSpan="10">
-  <select
-    value=""
-    onChange={(e) => {}}
-    className="area-dropdown-clean"
-    style={{ width: '100%' }}
-  >
-    <option value="">Seleccione un área</option> {/* Opción predeterminada en blanco */}
-  </select>
-</td>
+            <td colSpan="10">
+            <select
+              value=""
+              onChange={(e) => {}}
+              className="area-dropdown-clean"
+              style={{ width: '100%' }}
+            >
+              <option value="">Seleccione un área</option> {/* Opción predeterminada en blanco */}
+            </select>
+
+            </td>
 
             <th className="red">POE:</th>
             <td colSpan="20">
