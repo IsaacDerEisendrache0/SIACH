@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './MaquinariaYequipo.css';
 import html2canvas from 'html2canvas';
 import { addDoc, updateDoc, doc, collection, getDoc, setDoc} from 'firebase/firestore';
+import { getAuth } from "firebase/auth";
 import { db } from '../firebase';
 import logo from '../logos/logo.png';
 
@@ -146,38 +147,59 @@ const RiskTable = () => {
   const { color, accion, clasificacion } = obtenerClasificacionRiesgo(magnitudRiesgo);
 
   const handleAddPuesto = () => {
-    if (newPuesto && !puestos.includes(newPuesto)) {
-      const updatedPuestos = [...puestos, newPuesto];
+    if (newPuesto.trim() && !puestos.some((p) => p.nombre === newPuesto.trim())) {
+      const updatedPuestos = [...puestos, { nombre: newPuesto.trim() }];
       setPuestos(updatedPuestos);
       localStorage.setItem('puestos', JSON.stringify(updatedPuestos));
       setNewPuesto('');
       alert('Puesto agregado con éxito.');
+    } else {
+      alert('El puesto ya existe o es inválido.');
     }
   };
 
+
   const handleAddArea = () => {
-    if (newArea && !areas.includes(newArea)) {
-      const updatedAreas = [...areas, newArea];
+    if (newArea.trim() && !areas.some((a) => a.nombre === newArea.trim())) {
+      const updatedAreas = [...areas, { nombre: newArea.trim(), puestos: [] }];
       setAreas(updatedAreas);
       localStorage.setItem('areas', JSON.stringify(updatedAreas));
       setNewArea('');
       alert('Área agregada con éxito.');
+    } else {
+      alert('El área ya existe o es inválida.');
     }
   };
 
-  useEffect(() => {
-    const savedAreas = JSON.parse(localStorage.getItem('areas')) || [];
-    setAreas(savedAreas);
-    
-    const savedPuestos = JSON.parse(localStorage.getItem('puestos')) || [];
-    setPuestos(savedPuestos);
-  }, []);
+
+useEffect(() => {
+  const savedAreas = JSON.parse(localStorage.getItem('areas')) || [];
+  setAreas(savedAreas.filter((area) => area && area.nombre)); // Filtra valores inválidos
+
+  const savedPuestos = JSON.parse(localStorage.getItem('puestos')) || [];
+  setPuestos(savedPuestos.filter((puesto) => puesto && puesto.nombre)); // Filtra valores inválidos
+}, []);
+
+
+
+
+  
 
   const saveTableData = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+  
+    if (!user) {
+      alert("No estás autenticado.");
+      return;
+    }
+  
+    const uid = user.uid; // UID del usuario autenticado
     const magnitud = calcularMagnitudRiesgo();
     const { clasificacion } = obtenerClasificacionRiesgo(magnitud);
   
     const tableData = {
+      uid,
       nombreMaquinaria,
       poe,
       tiempoExposicion,
@@ -205,9 +227,9 @@ const RiskTable = () => {
         alert('Tabla guardada exitosamente.');
       }
   
-      // Solo llamar a updateResumenData si el área está seleccionada
+      // Llamar a updateResumenData para actualizar la colección resumen
       if (area) {
-        await updateResumenData(area, magnitud, clasificacion);
+        await updateResumenData(area, magnitud, clasificacion, uid);
       }
     } catch (error) {
       console.error('Error al guardar datos:', error);
@@ -215,49 +237,81 @@ const RiskTable = () => {
     }
   };
   
-
-  const updateResumenData = async (area, magnitud, clasificacion) => {
-    if (!area) return;
-  
-    const resumenRef = doc(db, 'resumen', area);
-    const resumenSnapshot = await getDoc(resumenRef);
-  
-    let resumenData = resumenSnapshot.exists()
-      ? resumenSnapshot.data()
-      : { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0, puestos: [] };
-  
-    // Si el puesto ya existía, restar sus valores anteriores
-    const puestoExistente = resumenData.puestos.find((p) => p.nombre === nombreMaquinaria);
-    if (puestoExistente) {
-      resumenData.tolerable -= puestoExistente.tolerable;
-      resumenData.moderado -= puestoExistente.moderado;
-      resumenData.notable -= puestoExistente.notable;
-      resumenData.elevado -= puestoExistente.elevado;
-      resumenData.grave -= puestoExistente.grave;
+  const updateResumenData = async (area, magnitud, clasificacion, uid) => {
+    if (!area) {
+      console.error("El área no está definida. No se puede actualizar el resumen.");
+      return;
     }
   
-    const puestoRiesgo = {
-      nombre: nombreMaquinaria,
-      tolerable: magnitud <= 20 ? 1 : 0,
-      moderado: magnitud > 20 && magnitud <= 70 ? 1 : 0,
-      notable: magnitud > 70 && magnitud <= 200 ? 1 : 0,
-      elevado: magnitud > 200 && magnitud <= 400 ? 1 : 0,
-      grave: magnitud > 400 ? 1 : 0,
-    };
+    try {
+      // Referencia al documento en la colección 'resumen' usando el área como ID
+      const resumenRef = doc(db, 'resumen', area);
   
-    resumenData.puestos = [
-      ...resumenData.puestos.filter((p) => p.nombre !== nombreMaquinaria),
-      puestoRiesgo,
-    ];
+      // Intenta obtener el documento existente
+      const resumenSnapshot = await getDoc(resumenRef);
   
-    resumenData.tolerable += puestoRiesgo.tolerable;
-    resumenData.moderado += puestoRiesgo.moderado;
-    resumenData.notable += puestoRiesgo.notable;
-    resumenData.elevado += puestoRiesgo.elevado;
-    resumenData.grave += puestoRiesgo.grave;
+      // Datos iniciales si el documento no existe
+      let resumenData = resumenSnapshot.exists()
+        ? resumenSnapshot.data()
+        : {
+            uid,
+            tolerable: 0,
+            moderado: 0,
+            notable: 0,
+            elevado: 0,
+            grave: 0,
+            puestos: [],
+          };
   
-    await setDoc(resumenRef, resumenData);
+      // Encuentra si el puesto ya existe en los datos del resumen
+      const puestoExistenteIndex = resumenData.puestos.findIndex(
+        (p) => p.nombre === newPuesto
+      );
+  
+      if (puestoExistenteIndex !== -1) {
+        // Si el puesto ya existe, resta los valores previos de los totales
+        const puestoExistente = resumenData.puestos[puestoExistenteIndex];
+        resumenData.tolerable -= puestoExistente.tolerable;
+        resumenData.moderado -= puestoExistente.moderado;
+        resumenData.notable -= puestoExistente.notable;
+        resumenData.elevado -= puestoExistente.elevado;
+        resumenData.grave -= puestoExistente.grave;
+  
+        // Elimina el puesto existente
+        resumenData.puestos.splice(puestoExistenteIndex, 1);
+      }
+  
+      // Calcular los valores de riesgo basados en la magnitud
+      const puestoRiesgo = {
+        nombre: newPuesto,
+        tolerable: magnitud <= 20 ? 1 : 0,
+        moderado: magnitud > 20 && magnitud <= 70 ? 1 : 0,
+        notable: magnitud > 70 && magnitud <= 200 ? 1 : 0,
+        elevado: magnitud > 200 && magnitud <= 400 ? 1 : 0,
+        grave: magnitud > 400 ? 1 : 0,
+      };
+  
+      // Agrega el nuevo puesto con sus valores actualizados
+      resumenData.puestos.push(puestoRiesgo);
+  
+      // Actualiza los totales con los nuevos valores del puesto
+      resumenData.tolerable += puestoRiesgo.tolerable;
+      resumenData.moderado += puestoRiesgo.moderado;
+      resumenData.notable += puestoRiesgo.notable;
+      resumenData.elevado += puestoRiesgo.elevado;
+      resumenData.grave += puestoRiesgo.grave;
+  
+      // Guarda los datos actualizados en Firestore
+      await setDoc(resumenRef, resumenData);
+  
+      console.log('Resumen actualizado exitosamente:', resumenData);
+    } catch (error) {
+      console.error('Error al actualizar los datos del resumen:', error);
+    }
   };
+  
+  
+  
   
   return (
     <div className="risk-table-container">
@@ -297,12 +351,17 @@ const RiskTable = () => {
             </td>
             <th className='red' colSpan="10">ÁREAS</th>
             <th colSpan="20"> 
-              <select name="areas" value={area} onChange={(e) => setArea(e.target.value)}>
-                <option value="">Seleccione un área</option>
-                {areas.map((area, index) => (
-                  <option key={index} value={area.nombre}>{area.nombre}</option>
-                ))}
-              </select>
+            <select name="areas" value={area} onChange={(e) => setArea(e.target.value)}>
+            <option value="">Seleccione un área</option>
+            {areas
+              .filter((area) => area && area.nombre) // Filtra valores inválidos
+              .map((area, index) => (
+                <option key={index} value={area.nombre}>
+                  {area.nombre}
+                </option>
+              ))}
+          </select>
+
             </th>
           </tr>
           <tr>
@@ -324,12 +383,18 @@ const RiskTable = () => {
               />
             </td>
             <th className='red' colSpan="20"> PUESTOS
-              <select name="puestos" value={newPuesto} onChange={(e) => setNewPuesto(e.target.value)}>
-                <option value="">Seleccione un puesto</option>
-                {puestos.map((puesto, index) => (
-                  <option key={index} value={newPuesto.nombre}>{newPuesto.nombre}</option>
+            <select name="puestos" value={newPuesto} onChange={(e) => setNewPuesto(e.target.value)}>
+              <option value="">Seleccione un puesto</option>
+              {puestos
+                .filter((puesto) => puesto && puesto.nombre) // Filtra valores inválidos
+                .map((puesto, index) => (
+                  <option key={index} value={puesto.nombre}>
+                    {puesto.nombre}
+                  </option>
                 ))}
-              </select>
+            </select>
+
+
             </th>
           </tr>
         </thead>
@@ -358,14 +423,15 @@ const RiskTable = () => {
                 <tbody>
                   <tr>
                     <td>
-                      <select onChange={handleSelectImage}>
-                        <option value="">Selecciona una imagen</option>
-                        {[...Array(24)].map((_, index) => (
-                          <option key={index} value={`/images/Imagen${index + 1}.png`}>
-                            Imagen {index + 1}
-                          </option>
-                        ))}
-                      </select>
+                    <select onChange={handleSelectImage}>
+                    <option value="">Selecciona una imagen</option>
+                    {[...Array(24)].map((_, index) => (
+                      <option key={index} value={`/images/Imagen${index + 1}.png`}>
+                        Imagen {index + 1}
+                      </option>
+                    ))}
+                  </select>
+
                     </td>
                   </tr>
                   <tr>

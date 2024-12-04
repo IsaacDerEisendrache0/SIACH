@@ -12,34 +12,49 @@ const TablaResumen = () => {
   useEffect(() => {
     const auth = getAuth();
     const user = auth.currentUser;
-
+  
     if (!user) {
       console.error("No se encontró un usuario autenticado.");
       return;
     }
-
-    const uid = user.uid; // UID del usuario actual
-
-    // Obtener datos en tiempo real desde la colección `resumen_17`, filtrando por UID
-    const unsubscribe = onSnapshot(
-      query(collection(db, "resumen_17"), where("uid", "==", uid)), // Filtrar por UID
+  
+    const uid = user.uid;
+  
+    const unsubscribe17 = onSnapshot(
+      query(collection(db, "resumen_17"), where("uid", "==", uid)),
       (snapshot) => {
-        const areasData = snapshot.docs.map((doc) => ({
+        const areasData17 = snapshot.docs.map((doc) => ({
           area: doc.id,
+          collectionName: "resumen_17", // Identificador de la colección
           ...doc.data(),
         }));
-        setData(areasData);
+        setData((prevData) => [...prevData, ...areasData17]);
       }
     );
-
-    // Limpiar suscripción cuando el componente se desmonte
-    return () => unsubscribe();
+  
+    const unsubscribe04 = onSnapshot(
+      query(collection(db, "resumen"), where("uid", "==", uid)),
+      (snapshot) => {
+        const areasData04 = snapshot.docs.map((doc) => ({
+          area: doc.id,
+          collectionName: "resumen", // Identificador de la colección
+          ...doc.data(),
+        }));
+        setData((prevData) => [...prevData, ...areasData04]);
+      }
+    );
+  
+    return () => {
+      unsubscribe17();
+      unsubscribe04();
+    };
   }, []);
+  
 
   // Función para eliminar un registro
-  const deleteArea = async (id) => {
+  const deleteArea = async (id, collectionName) => {
     try {
-      await deleteDoc(doc(db, "resumen_17", id));
+      await deleteDoc(doc(db, collectionName, id));
       alert("Registro eliminado con éxito.");
     } catch (error) {
       console.error("Error al eliminar el registro:", error);
@@ -58,15 +73,13 @@ const TablaResumen = () => {
 
   // Calcular los totales acumulados
   const total = data.reduce(
-    (acc, row) => {
-      return {
-        tolerable: acc.tolerable + (row.tolerable || 0),
-        moderado: acc.moderado + (row.moderado || 0),
-        notable: acc.notable + (row.notable || 0),
-        elevado: acc.elevado + (row.elevado || 0),
-        grave: acc.grave + (row.grave || 0),
-      };
-    },
+    (acc, row) => ({
+      tolerable: acc.tolerable + (row.tolerable || 0),
+      moderado: acc.moderado + (row.moderado || 0),
+      notable: acc.notable + (row.notable || 0),
+      elevado: acc.elevado + (row.elevado || 0),
+      grave: acc.grave + (row.grave || 0),
+    }),
     { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 }
   );
 
@@ -107,7 +120,9 @@ const TablaResumen = () => {
                 <td>{row.grave || 0}</td>
                 <td>
                   <FaTrash
-                    onClick={() => deleteArea(row.area)}
+                    onClick={() =>
+                      deleteArea(row.area, row.collectionName || "resumen")
+                    }
                     className="boton-eliminar"
                   />
                 </td>
