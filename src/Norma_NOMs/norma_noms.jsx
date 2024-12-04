@@ -7,6 +7,8 @@ import categoriasImage from './images/categorias_presion.png';
 import criogenicosImage from './images/criogenicos.png';
 import generadoresImage from './images/generadores_vapor.png';
 import riesgoImage from './images/riesgo-incendio.png';
+import obraImage from './images/obra-construccion.png';
+
 
 // Continuación del array normas con más normas y sus condiciones
 const normas = [
@@ -19,8 +21,10 @@ const normas = [
       { numero: '7.3 c)', descripcion: 'Medidas contra incendios en áreas críticas.' },
       { numero: '8.3', descripcion: 'Sistema de ventilación y control de gases.' }
     ],
-    condition: (values) => values.area === 'centro'
+    condition: (values) => values.areaTrabajo === 'centro'|| values.areaTrabajo === 'sí' 
   },
+
+ 
   {
     id: 'NOM-002', 
     tipo: 'Seguridad',
@@ -39,7 +43,7 @@ const normas = [
       { numero: '7.4', descripcion: 'Programa anual de revisión y pruebas a los equipos contra incendio, a los medios de detección y, en su caso, a las alarmas de incendio y sistemas fijos contra incendio.' },
       { numero: '7.5', descripcion: 'Programa anual de revisión a las instalaciones eléctricas de las áreas del centro de trabajo.' }
     ],
-    condition: (values) => values.recipientesPresion === 'sí'
+    condition: (values) => values.materialesPiroforicos === 'sí'
   }
   ,
   { 
@@ -93,10 +97,10 @@ const normas = [
     ],
     condition: (values) => values.trabajosAltura === 'sí'
   },
-  { 
-    id: 'NOM-020', 
+  {
+    id: 'NOM-020',
     tipo: 'Seguridad',
-    title: 'Recipientes sujetos a presión', 
+    title: 'Recipientes sujetos a presión',
     puntos: [
       { numero: '5.2', descripcion: 'Listado actualizado de los equipos instalados en el centro de trabajo.' },
       { numero: '5.3', descripcion: 'Expediente de cada equipo instalado en el centro de trabajo.' },
@@ -104,7 +108,8 @@ const normas = [
       { numero: '5.6', descripcion: 'Procedimientos de operación y mantenimiento en idioma español.' },
       { numero: '5.14', descripcion: 'Difusión sobre los peligros inherentes a los equipos y fluidos.' }
     ],
-    condition: (values) => values.recipientesPresion === 'sí'
+    condition: (values) =>
+      values.recipientesPresion === 'sí' || values.recipientesCriogenicos === 'sí' // Relación múltiple
   },
   { 
     id: 'NOM-022', 
@@ -481,6 +486,8 @@ const NormaNoms = () => {
   const [showModal14, setShowModal14] = useState(false);
   const [showTable, setShowTable] = useState(false);
   const [showModal2, setShowModal2] = useState(false); // Estado para el nuevo modal
+  const [showModal3, setShowModal3] = useState(false); // Estado para el nuevo modal
+  
   const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
@@ -545,8 +552,14 @@ const NormaNoms = () => {
   const handleNext = () => {
     setHistory([...history, step]); // Guardar el paso actual en el historial
   
-    if (step === 5 && formValues.maquinariaMateriales === "no") {
-      setStep(7);
+    if (step === 5) {
+      if (formValues.manejoMateriales === "no") {
+        setStep(7); // Ir al paso 7 si selecciona "no"
+      } else if (formValues.manejoMateriales === "sí") {
+        setStep(6); // Ir al paso 6 si selecciona "sí"
+      }
+    
+    
     } else if (step === 7) {
       setStep(formValues.trabajosAltura === "no" ? 9 : 8);
     } else if (step === 9) {
@@ -661,7 +674,7 @@ const NormaNoms = () => {
       case 4:
         return formValues.maquinaria !== '';
       case 5:
-        return formValues.maquinariaMateriales !== '';
+        return formValues.manejoMateriales !== '';
       case 6:
         return formValues.tiposMaquinaria.length > 0;
       case 7:
@@ -1004,21 +1017,21 @@ const NormaNoms = () => {
     <h3>Uso de maquinaria para manejo de materiales</h3>
     <label>¿En su centro de trabajo se utiliza maquinaria para el manejo de materiales, como materias primas, subproductos, productos, residuos entre otros?</label>
     <label>
-      <input type="radio" name="maquinariaMateriales" value="sí" onChange={handleInputChange} />
+      <input type="radio" name="manejoMateriales" value="sí" onChange={handleInputChange} />
       Sí
     </label>
     <label>
-      <input type="radio" name="maquinariaMateriales" value="no" onChange={handleInputChange} />
+      <input type="radio" name="manejoMateriales" value="no" onChange={handleInputChange} />
       No
     </label>
     <div className="buttons">
       <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext} disabled={!formValues.maquinariaMateriales}>Continuar</button>
+      <button onClick={handleNext} disabled={!formValues.manejoMateriales}>Continuar</button>
     </div>
   </div>
 )}
 
-{step === 6 && formValues.maquinariaMateriales === "sí" && (
+{step === 6 && formValues.manejoMateriales === "sí" && (
   <div className="step6">
     <h3>Tipos de maquinaria para manejo de materiales</h3>
     <label>Seleccione la maquinaria que se utiliza en el centro de trabajo para el manejo de materiales:</label>
@@ -2387,42 +2400,60 @@ const NormaNoms = () => {
 
        {/* Paso 36 - Clasificación del tamaño de la obra de construcción */}
        {step === 36 && (
-          <div className="step36">
-            <h3>Clasificación del tamaño de la obra de construcción</h3>
-            <p>Proporcione la siguiente información:</p>
-
-            <label>
-              Superficie por construir o demoler:
-              <input
-                type="number"
-                name="superficieConstruir"
-                value={formValues.superficieConstruir}
-                onChange={handleInputChange}
-                required
-              />
-              metros cuadrados
-            </label>
-
-            <label>
-              Altura de la construcción:
-              <input
-                type="number"
-                name="alturaConstruccion"
-                value={formValues.alturaConstruccion}
-                onChange={handleInputChange}
-                required
-              />
-              metros
-            </label>
-
-            <div className="buttons">
-              <button onClick={handleBack}>Regresar</button>
-              <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
-            </div>
+        <div className="step36">
+          <h3>Clasificación del tamaño de la obra de construcción</h3>
+          <p>Proporcione la siguiente información:</p>
+          <img
+            src={iconImage} 
+            alt="Tabla de clasificación de riesgo de incendio"
+            style={{ cursor: 'pointer', width: '50px' }}
+            onClick={() => setShowModal3(true)} // Abre el modal específico para este paso
+          />
+          <label>
+            Superficie por construir o demoler:
+            <input
+              type="number"
+              name="superficieConstruir"
+              value={formValues.superficieConstruir}
+              onChange={handleInputChange}
+              required
+            />
+            metros cuadrados
+          </label>
+          <label>
+            Altura de la construcción:
+            <input
+              type="number"
+              name="alturaConstruccion"
+              value={formValues.alturaConstruccion}
+              onChange={handleInputChange}
+              required
+            />
+            metros
+          </label>
+          <div className="buttons">
+            <button onClick={handleBack}>Regresar</button>
+            <button onClick={handleNext} disabled={!isStepCompleted()}>
+              Continuar
+            </button>
           </div>
-        )}
+        </div>
+      )}
 
-
+      {showModal3 && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={() => setShowModal3(false)}>
+              &times;
+            </span>
+            <img
+              src={obraImage} 
+              alt="Tabla de clasificación de riesgo de incendio"
+              style={{ width: '100%' }}
+            />
+          </div>
+        </div>
+      )}
 
 {step === 42 && (
   <div>
@@ -2458,6 +2489,8 @@ const NormaNoms = () => {
     </div>
   </div>
 )}
+
+
 
 
 {step === 37 && (
