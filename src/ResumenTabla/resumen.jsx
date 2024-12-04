@@ -53,14 +53,25 @@ const TablaResumen = () => {
 
   // Función para eliminar un registro
   const deleteArea = async (id, collectionName) => {
+    if (!collectionName) {
+      alert("Error: No se especificó la colección para eliminar el registro.");
+      return;
+    }
+  
     try {
+      // Eliminar el documento de Firestore
       await deleteDoc(doc(db, collectionName, id));
+  
+      // Actualizar el estado local eliminando el registro
+      setData((prevData) => prevData.filter((row) => row.area !== id));
+  
       alert("Registro eliminado con éxito.");
     } catch (error) {
       console.error("Error al eliminar el registro:", error);
       alert("Error al eliminar el registro.");
     }
   };
+  
 
   // Función para expandir o contraer los puestos de un área
   const toggleExpandArea = (areaId) => {

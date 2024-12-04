@@ -145,7 +145,7 @@ const RiskTable = () => {
 
   const magnitudRiesgo = calcularMagnitudRiesgo();
   const { color, accion, clasificacion } = obtenerClasificacionRiesgo(magnitudRiesgo);
-
+  
   const handleAddPuesto = () => {
     if (newPuesto.trim() && !puestos.some((p) => p.nombre === newPuesto.trim())) {
       const updatedPuestos = [...puestos, { nombre: newPuesto.trim() }];
