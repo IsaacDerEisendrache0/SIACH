@@ -760,6 +760,17 @@ const NormaNoms = () => {
         {/* Paso 1: Selección del Área */}
         {step === 1 && (
           <div className="step1">
+            <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
             <h3>Estructura del centro de trabajo</h3>
             <em>Indique la forma en la cual requiere identificar las NOMs aplicables</em>
             <div className="options">
@@ -781,6 +792,17 @@ const NormaNoms = () => {
 
 {step === 2 && (
   <div className="step2">
+   <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
     <h3>Determinación del grado de riesgo de incendio</h3>
     <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
     <img
@@ -902,6 +924,17 @@ const NormaNoms = () => {
         {/* Paso 3 */}
         {step === 3 && (
   <div className="step3">
+    <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
     <h3>Área de trabajo</h3>
     <label>¿Desarrolla sus actividades de producción, comercialización, transporte y almacenamiento o prestación de servicios en: edificios, locales, instalaciones y/o áreas exteriores, tales como pasillos, patios, techos, estacionamientos, áreas de circulación de vehículos, áreas de carga y descarga de materiales?</label>
     <label>
@@ -992,6 +1025,17 @@ const NormaNoms = () => {
 
 {step === 4 && (
   <div className="step4">
+    <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
     <h3>Uso de maquinaria o equipo</h3>
     <label>¿En su centro de trabajo se utiliza maquinaria o equipo?</label>
     <label>
@@ -1014,6 +1058,17 @@ const NormaNoms = () => {
 {/* Paso 5 */}
 {step === 5 && (
   <div className="step5">
+    <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
     <h3>Uso de maquinaria para manejo de materiales</h3>
     <label>¿En su centro de trabajo se utiliza maquinaria para el manejo de materiales, como materias primas, subproductos, productos, residuos entre otros?</label>
     <label>
@@ -1033,6 +1088,17 @@ const NormaNoms = () => {
 
 {step === 6 && formValues.manejoMateriales === "sí" && (
   <div className="step6">
+    <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
     <h3>Tipos de maquinaria para manejo de materiales</h3>
     <label>Seleccione la maquinaria que se utiliza en el centro de trabajo para el manejo de materiales:</label>
     <label>
@@ -1107,6 +1173,17 @@ const NormaNoms = () => {
 
 {step === 7 && (
   <div className="step7">
+    <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
     <h3>Actividades en alturas</h3>
     <label>¿En su centro de trabajo se realizan actividades de mantenimiento, instalación, demolición, operación, reparación, limpieza, entre otras, a alturas mayores a 1.80 metros sobre el nivel de referencia, o existe el riesgo de caída en aberturas en las superficies de trabajo, tales como perforaciones, pozos, cubos y túneles verticales?</label>
     <label>
@@ -1127,6 +1204,17 @@ const NormaNoms = () => {
 {/* Paso 8 */}
 {step === 8 && (
   <div className="step8">
+    <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
     <h3>Sistemas o equipos para trabajos en altura</h3>
     <label>Seleccione los sistemas o equipos con que se realizan los trabajos en altura:</label>
     <label>
@@ -1201,6 +1289,17 @@ const NormaNoms = () => {
 
 {step === 9 && (
   <div className="step9">
+    <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
     <h3>Recipientes Sujetos a Presión</h3>
     <label>
       ¿En su centro de trabajo se cuenta con recipientes sujetos a presión -interna o externa- como compresores,
@@ -1246,6 +1345,17 @@ const NormaNoms = () => {
 {/* Paso 10 - Categorías de Recipientes Sujetos a Presión */}
 {step === 10 && (
   <div className="step10">
+    <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
     <h3>Categorías de Recipientes Sujetos a Presión</h3>
     <label>
       Indique la(s) categoría(s) en la(s) se clasifica(n) el (los) recipiente(s) sujeto(s) a presión instalado(s) en su
@@ -1315,6 +1425,17 @@ const NormaNoms = () => {
 
 {step === 11 && (
   <div className="step11">
+    <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
     <h3>Recipientes Criogénicos</h3>
     <label>¿En su centro de trabajo se utilizan recipientes criogénicos?</label>
     <label>
@@ -1348,6 +1469,17 @@ const NormaNoms = () => {
     {/* Paso 12 - Recipientes criogénicos */}
     {step === 12 && (
       <div className="step12">
+        <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
         <h3>Recipientes Criogénicos</h3>
         <label>Indique la(s) categoría(s) en la(s) se clasifica(n) el (los) recipiente(s) criogénico(s) instalado(s) en su centro de trabajo.</label>
         <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
@@ -1403,6 +1535,17 @@ const NormaNoms = () => {
         {/* Paso 13 - Generadores de vapor o calderas */}
         {step === 13 && (
           <div className="step13">
+            <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
            <h3>Generadores de Vapor y Calderas</h3>
             <label>
             ¿En su centro de trabajo están instalados generadores de vapor o calderas?
@@ -1440,6 +1583,17 @@ const NormaNoms = () => {
         {/* Paso 14 - Categorías de generadores de vapor */}
         {step === 14 && (
           <div className="step14">
+            <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
             <h3>Categorías de Generadores de Vapor o Calderas</h3>
             <label>
               Indique la(s) categoría(s) en la(s) se clasifica(n) el (los) generador(es) de vapor o caldera(s) instalado(s) en su centro de trabajo.
@@ -1494,6 +1648,17 @@ const NormaNoms = () => {
         )}
         {step === 15 && (
           <div className="step15">
+            <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
             <h3>Cargas Eléctricas Estáticas</h3>
             <label>
               ¿En los procesos que se realizan en el centro de trabajo se emplean materiales, sustancias o equipos capaces de almacenar o generar cargas eléctricas estáticas?
@@ -1527,6 +1692,17 @@ const NormaNoms = () => {
 
 {step === 16 && (
           <div className="step16">
+            <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
             <h3>Materiales en Fricción</h3>
             <label>
               ¿En su centro de trabajo se tiene maquinaria, equipos o procesos en los que existan materiales en fricción?
@@ -1561,6 +1737,17 @@ const NormaNoms = () => {
 
 {step === 17 && (
           <div className="step17">
+            <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
             <h3>Actividades de Soldadura y Corte</h3>
             <label>
               ¿En el centro de trabajo se realizan actividades de soldadura y corte?
@@ -1594,6 +1781,17 @@ const NormaNoms = () => {
 
 {step === 18 && (
           <div className="step18">
+            <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
             <h3>Actividades de Soldadura en Alturas y Espacios Confinados</h3>
             <label>
               ¿Las actividades de soldadura y corte se realizan en: alturas, sótanos, subterráneos, 
@@ -1629,6 +1827,17 @@ const NormaNoms = () => {
          {/* Paso 19 - Instalaciones eléctricas */}
          {step === 19 && (
           <div className="step19">
+            <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
             <h3>Instalaciones Eléctricas</h3>
             <label>¿En su centro de trabajo existen instalaciones eléctricas permanentes o provisionales?</label>
             <label>
@@ -1658,6 +1867,17 @@ const NormaNoms = () => {
 
 {step === 20 && (
           <div className="step20">
+            <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
             <h3>Actividades de mantenimiento en líneas eléctricas</h3>
             <label>¿En su centro de trabajo se desarrollan actividades de mantenimiento en las líneas eléctricas aéreas o subterráneas o energizadas?</label>
             <label>
@@ -1689,6 +1909,17 @@ const NormaNoms = () => {
 
 {step === 21 && (
           <div className="step21">
+            <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
             <h3>Trabajos de Mantenimiento con Líneas Energizadas</h3>
             <label>
               ¿Los trabajos de mantenimiento a las instalaciones eléctricas se realizan con las líneas energizadas?
@@ -1722,6 +1953,17 @@ const NormaNoms = () => {
 
 {step === 22 && (
           <div className="step22">
+            <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
             <h3>Trabajos en Espacios Confinados</h3>
             <label>
               ¿En su centro laboral se realizan trabajos en espacios confinados?
@@ -1755,6 +1997,17 @@ const NormaNoms = () => {
 
 {step === 23 && (
           <div className="step23">
+            <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
             <h3>Tipos de Espacios Confinados</h3>
             <label>
               Seleccione el tipo de espacio confinado en las cuales se desarrollarán las actividades en el centro de trabajo:
@@ -1792,6 +2045,17 @@ const NormaNoms = () => {
 
 {step === 24 && (
   <div className="step24">
+    <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
    <h3>Inclusión de Trabajadores con Discapacidad</h3>
     <label>
     ¿En su centro de trabajo laboran trabajadores con discapacidad?
@@ -1827,6 +2091,17 @@ const NormaNoms = () => {
   
 {step === 25 && (
   <div>
+    <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
     <h3>Tipos de Discapacidad del Personal</h3>
     <label>
       Seleccione el tipo de discapacidad que presenta el personal que labora en su centro de trabajo:
@@ -1878,6 +2153,17 @@ const NormaNoms = () => {
 
 {step === 26 && (
         <div>
+          <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
         <h3>Exposición a Ruido en el Centro de Trabajo</h3>
          <label >¿En su centro de trabajo, existe algún área donde los trabajadores estén expuestos a niveles de ruido superiores a 80 decibeles?</label>
           <label>
@@ -1918,6 +2204,17 @@ const NormaNoms = () => {
       )}
 {step === 39 && (
   <div className="step38">
+    <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
    <h3>Inclusión de Trabajadores con Discapacidad</h3>
     <label>
     ¿En su centro de trabajo, los trabajadores en condiciones normales de operación necesitan levantar la voz para comunicarse cuando se encuentran a una distancia de aproximadamente un metro?
@@ -1952,6 +2249,17 @@ const NormaNoms = () => {
 
 {step === 27 && (
         <div>
+          <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
           <h3>Exposición a Temperaturas Bajas en el Centro de Trabajo</h3>
           <label> ¿En su centro de trabajo, los trabajadores están expuestos a instalaciones, equipos, productos o materiales que ocasionen que su temperatura corporal descienda a menos de 36 grados centígrados?</label>
           <label>
@@ -1984,6 +2292,17 @@ const NormaNoms = () => {
 
       {step === 28 && (
         <div>
+          <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
           <h3>Exposición a Temperaturas Altas en el Centro de Trabajo</h3>
           <label> ¿Los trabajadores realizan actividades o están expuestos a instalaciones, equipos, productos o materiales que ocasionen que su temperatura corporal sea mayor a 38 grados centígrados?
           </label>
@@ -2019,6 +2338,17 @@ const NormaNoms = () => {
 
 {step === 40 && (
         <div>
+          <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
           <h3>Exposición a Temperaturas Altas en el Centro de Trabajo</h3>
           <label> ¿En su centro de trabajo existen condiciones climáticas que pueden provocar que la temperatura corporal de los trabajadores sea inferior a 36 grados centígrados o mayor a 38 grados centígrados?
           </label>
@@ -2052,6 +2382,17 @@ const NormaNoms = () => {
       
 {step === 29 && (
         <div>
+          <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
           <h3>Exposición a Vibraciones en el Centro de Trabajo</h3>
           <label> ¿Los trabajadores están expuestos a vibraciones producidas por la operación de maquinaria, equipos o herramientas?
 
@@ -2085,6 +2426,17 @@ const NormaNoms = () => {
 
 {step === 30 && (
           <div className="step30">
+            <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
             <h3>Identificación de partes del cuerpo expuestas a vibraciones</h3>
             <label>
             Seleccione qué partes del cuerpo están expuestas a las vibraciones:
@@ -2133,6 +2485,17 @@ const NormaNoms = () => {
               
 {step === 31 && (
         <div>
+          <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
          <h3>Manejo Manual de Cargas en el Centro de Trabajo</h3>
           <label> ¿En su centro de trabajo se realizan actividades que impliquen el manejo manual de cargas mayores a 3kg de forma cotidiana (más de una vez al día)?
 
@@ -2167,6 +2530,17 @@ const NormaNoms = () => {
 
 {step === 32 && (
           <div className="step32">
+            <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
             <h3>Actividades relacionadas con el manejo manual de cargas</h3>
             <label>
               Seleccione la actividad a la que el personal se encuentra expuesto en el manejo manual de cargas:
@@ -2217,6 +2591,17 @@ const NormaNoms = () => {
 
 {step === 33 && (
   <div className="step33">
+    <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
     <h3>Actividades Agrícolas con Insumos Fitosanitarios</h3>
     <label>
       Seleccione el tipo de actividades agrícolas que desarrollan los trabajadores con insumos fitosanitarios o plaguicidas e insumos de nutrición vegetal o fertilizantes:
@@ -2263,6 +2648,17 @@ const NormaNoms = () => {
 
 {step === 34 && (
           <div className="step34">
+            <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
             <h3>Infraestructura para Actividades Agrícolas</h3>
             <label>
             Indique el tipo de infraestructura (elementos de producción) que se utiliza en el centro de trabajo para el desarrollo de actividades agrícolas:            </label>
@@ -2329,6 +2725,17 @@ const NormaNoms = () => {
 
 {step === 35 && (
         <div>
+          <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
          <h3>Trabajos de Construcción en el Centro de Trabajo</h3>
           <label> ¿El centro de trabajo realiza trabajos de construcción?
 
@@ -2365,6 +2772,17 @@ const NormaNoms = () => {
 
 {step === 41 && (
         <div>
+          <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
          <h3>Modalidad de Teletrabajo</h3>
           <label> ¿El centro de trabajo cuenta con personas trabajadoras realizando actividades bajo la modalidad de Teletrabajo en domicilios particulares?
 
@@ -2401,6 +2819,17 @@ const NormaNoms = () => {
        {/* Paso 36 - Clasificación del tamaño de la obra de construcción */}
        {step === 36 && (
         <div className="step36">
+          <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
           <h3>Clasificación del tamaño de la obra de construcción</h3>
           <p>Proporcione la siguiente información:</p>
           <img
@@ -2457,6 +2886,17 @@ const NormaNoms = () => {
 
 {step === 42 && (
   <div>
+    <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
     <h3>Procesos Relacionados con Petróleo y Gas</h3>
     <label>
       ¿El centro de trabajo cuenta con procesos de: extracción de petróleo o gas natural; 
@@ -2495,6 +2935,17 @@ const NormaNoms = () => {
 
 {step === 37 && (
         <div>
+          <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
          <h3>Manejo y Exposición a Sustancias Químicas Peligrosas</h3>
           <label> ¿En el centro de trabajo se manejan, transportan, procesan o almacenan sustancias químicas que por sus propiedades, niveles de concentración y tiempo de exposición sean capaces de contaminar el medio ambiente laboral, alterar la salud de los trabajadores y/o dañar el centro de trabajo?
 
@@ -2530,6 +2981,7 @@ const NormaNoms = () => {
 
 {step === 38 && (
   <div className="step38">
+    
     <h3 style={{ color: 'blue' }}>Normas Aplicables</h3>
     <div>
       <button 
@@ -2551,10 +3003,21 @@ const NormaNoms = () => {
           margin: '10px 0'
         }}
       >
-        Reiniciar
+        Limpiar
       </button>
     </div>
     <div className="normas-table">
+    <img
+      src={require('../logos/logo.png')} // Ruta a tu logo
+      alt="Logo de la empresa"
+      style={{
+        display: 'block',
+        margin: '0 auto',
+        width: '150px',
+        height: 'auto',
+        marginBottom: '20px'
+      }}
+    />
       <table border="1" align="center" cellPadding="5" cellSpacing="0">
         <thead>
           <tr>
