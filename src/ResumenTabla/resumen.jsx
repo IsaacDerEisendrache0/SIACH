@@ -25,10 +25,10 @@ const TablaResumen = () => {
       (snapshot) => {
         const areasData17 = snapshot.docs.map((doc) => ({
           area: doc.id,
-          collectionName: "resumen_17", // Identificador de la colección
+          collectionName: "resumen_17",
           ...doc.data(),
         }));
-        setData((prevData) => [...prevData, ...areasData17]);
+        setData((prevData) => [...prevData.filter(row => row.collectionName !== "resumen_17"), ...areasData17]);
       }
     );
   
@@ -37,10 +37,10 @@ const TablaResumen = () => {
       (snapshot) => {
         const areasData04 = snapshot.docs.map((doc) => ({
           area: doc.id,
-          collectionName: "resumen", // Identificador de la colección
+          collectionName: "resumen",
           ...doc.data(),
         }));
-        setData((prevData) => [...prevData, ...areasData04]);
+        setData((prevData) => [...prevData.filter(row => row.collectionName !== "resumen"), ...areasData04]);
       }
     );
   
@@ -49,6 +49,7 @@ const TablaResumen = () => {
       unsubscribe04();
     };
   }, []);
+  
   
 
   // Función para eliminar un registro
