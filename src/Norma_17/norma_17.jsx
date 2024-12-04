@@ -1238,7 +1238,7 @@ useEffect(() => {
         <tr>
           <th className="apple-header">Consecuencia</th>
           <th className="apple-header" style={{ backgroundColor: 'red' }}>Exposición</th>
-          <th className="apple-header">Probabilidad</th>
+          <th className="apple-header" colSpan="4" style={{ width: '45%' }}>Probabilidad</th>
           <th className="apple-header">Magnitud del Riesgo</th>
         </tr>
       </thead>
@@ -1266,17 +1266,18 @@ useEffect(() => {
             </select>
             <div className="grape-value">Valor: {exposure}</div>
           </td>
-          <td>
-            <select value={probability} onChange={handleProbabilityChange} className="cherry-select">
-              <option value={10}>Es el resultado más probable y esperado</option>
-              <option value={6}>Es completamente posible, no será nada extraño</option>
-              <option value={3}>Sería una secuencia o coincidencia rara pero posible, ha ocurrido</option>
-              <option value={1}>Coincidencia muy rara, pero se sabe que ha ocurrido</option>
-              <option value={0.5}>Coincidencia extremadamente remota pero concebible</option>
-              <option value={0.1}>Coincidencia prácticamente imposible, jamás ha ocurrido</option>
+          <td colSpan="4" style={{ width: '45%' }}>
+            <select value={probability} onChange={handleProbabilityChange} className="cherry-select" style={{ width: '100%', whiteSpace: 'normal' }}>
+              <option value={10} style={{ whiteSpace: 'normal' }}>Es el resultado más probable y esperado</option>
+              <option value={6} style={{ whiteSpace: 'normal' }}>Es completamente posible, no será nada extraño</option>
+              <option value={3} style={{ whiteSpace: 'normal' }}>Sería una secuencia o coincidencia rara pero posible, ha ocurrido</option>
+              <option value={1} style={{ whiteSpace: 'normal' }}>Coincidencia muy rara, pero se sabe que ha ocurrido</option>
+              <option value={0.5} style={{ whiteSpace: 'normal' }}>Coincidencia extremadamente remota pero concebible</option>
+              <option value={0.1} style={{ whiteSpace: 'normal' }}>Coincidencia prácticamente imposible, jamás ocurrio</option>
             </select>
             <div className="grape-value">Valor: {probability}</div>
           </td>
+
           <td className="blueberry-risk" style={{ backgroundColor: getRiskColor(calculateRisk()) }}>
             {calculateRisk().toFixed(2)}
           </td>

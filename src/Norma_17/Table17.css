@@ -1019,7 +1019,7 @@ button {
 .grape-value {
   font-size: 18px; /* Tamaño más grande para los valores */
   font-weight: bold; /* Resalta los valores */
-  margin-top: 5px; /* Separación superior */
+  margin-top: -10px; /* Separación superior */
   text-align: center;
 }
 
@@ -1031,11 +1031,7 @@ button {
   font-weight: bold; /* Hace que el texto sea prominente */
   text-align: center; /* Centra el contenido en la celda */
   color: white !important; /* Texto blanco para contraste */
-  padding: 15px !important; /* Agrega espacio interno adicional */
-  border: 2px solid #ccc; /* Borde visible para separación */
   background-color: inherit; /* El color de fondo dinámico se mantiene */
-  visibility: visible !important; /* Asegura que no esté oculto */
-  display: table-cell !important; /* Evita desapariciones */
 }
 
 
