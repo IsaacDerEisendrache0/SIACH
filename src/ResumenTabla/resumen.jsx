@@ -20,6 +20,23 @@ const TablaResumen = () => {
 
     const uid = user.uid;
 
+    // Suscribirse a cambios en la colección "resumen_17"
+    const unsubscribe17 = onSnapshot(
+      query(collection(db, "resumen_17"), where("uid", "==", uid)),
+      (snapshot) => {
+        const areasData17 = snapshot.docs.map((doc) => ({
+          area: doc.id,
+          collectionName: "resumen_17",
+          ...doc.data(),
+        }));
+        setData((prevData) => [
+          ...prevData.filter((row) => row.collectionName !== "resumen_17"),
+          ...areasData17,
+        ]);
+      }
+    );
+
+    // Suscribirse a cambios en la colección "resumen"
     const unsubscribe04 = onSnapshot(
       query(collection(db, "resumen"), where("uid", "==", uid)),
       (snapshot) => {
@@ -28,16 +45,33 @@ const TablaResumen = () => {
           collectionName: "resumen",
           ...doc.data(),
         }));
-        setData(areasData04);
+        setData((prevData) => [
+          ...prevData.filter((row) => row.collectionName !== "resumen"),
+          ...areasData04,
+        ]);
+      }
+    );
+    const unsubscribe = onSnapshot(
+      query(collection(db, "resumen"), where("uid", "==", uid)),
+      (snapshot) => {
+        const areasData = snapshot.docs.map((doc) => ({
+          area: doc.id,
+          collectionName: "resumen",
+          ...doc.data(),
+        }));
+        setData(areasData); // Asegúrate de que setData recibe datos con los campos esperados
       }
     );
 
     // Cleanup al desmontar el componente
     return () => {
+      unsubscribe17();
       unsubscribe04();
+      unsubscribe();
     };
   }, []);
 
+  // Función para eliminar un registro
   const deleteArea = async (id, collectionName) => {
     if (!collectionName) {
       alert("Error: No se especificó la colección para eliminar el registro.");
@@ -45,8 +79,12 @@ const TablaResumen = () => {
     }
 
     try {
+      // Eliminar el documento de Firestore
       await deleteDoc(doc(db, collectionName, id));
+
+      // Actualizar el estado local eliminando el registro
       setData((prevData) => prevData.filter((row) => row.area !== id));
+
       alert("Registro eliminado con éxito.");
     } catch (error) {
       console.error("Error al eliminar el registro:", error);
@@ -54,6 +92,7 @@ const TablaResumen = () => {
     }
   };
 
+  // Función para expandir o contraer los puestos de un área
   const toggleExpandArea = (areaId) => {
     setExpandedAreas((prevExpandedAreas) =>
       prevExpandedAreas.includes(areaId)
@@ -62,6 +101,7 @@ const TablaResumen = () => {
     );
   };
 
+  // Calcular los totales acumulados
   const total = data.reduce(
     (acc, row) => ({
       tolerable: acc.tolerable + (row.tolerable || 0),
@@ -75,97 +115,93 @@ const TablaResumen = () => {
 
   return (
     <div className="tabla-container">
-      {/* Contenedor de la tabla principal */}
-      <div className="tabla-principal-container">
-        <table className="tabla-principal">
-          <thead>
-            <tr>
-              <th rowSpan="2" className="tabla-header">Área</th>
-              <th colSpan="5" className="tabla-header">Magnitud de riesgo</th>
-              <th rowSpan="2" className="tabla-header">Acción</th>
-            </tr>
-            <tr>
-              <th className="tabla-riesgo tolerable">Tolerable</th>
-              <th className="tabla-riesgo moderado">Moderado</th>
-              <th className="tabla-riesgo notable">Notable</th>
-              <th className="tabla-riesgo elevado">Elevado</th>
-              <th className="tabla-riesgo grave">Grave</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row, index) => (
-              <React.Fragment key={index}>
+      <table className="tabla-principal">
+        <thead>
+          <tr>
+            <th rowSpan="2" className="tabla-header">Área</th>
+            <th colSpan="5" className="tabla-header">Magnitud de riesgo</th>
+            <th rowSpan="2" className="tabla-header">Acción</th>
+          </tr>
+          <tr>
+            <th className="tabla-riesgo tolerable">Tolerable</th>
+            <th className="tabla-riesgo moderado">Moderado</th>
+            <th className="tabla-riesgo notable">Notable</th>
+            <th className="tabla-riesgo elevado">Elevado</th>
+            <th className="tabla-riesgo grave">Grave</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, index) => (
+            <React.Fragment key={index}>
+              <tr>
+                <td className="tabla-area">
+                  <button
+                    onClick={() => toggleExpandArea(row.area)}
+                    className="boton-expandir"
+                  >
+                    {expandedAreas.includes(row.area) ? "▼" : "▶"}
+                  </button>
+                  {row.area}
+                </td>
+                <td>{row.tolerable || 0}</td>
+                <td>{row.moderado || 0}</td>
+                <td>{row.notable || 0}</td>
+                <td>{row.elevado || 0}</td>
+                <td>{row.grave || 0}</td>
+                <td>
+                  <FaTrash
+                    onClick={() =>
+                      deleteArea(row.area, row.collectionName || "resumen")
+                    }
+                    className="boton-eliminar"
+                  />
+                </td>
+              </tr>
+              {expandedAreas.includes(row.area) && row.puestos && (
                 <tr>
-                  <td className="tabla-area">
-                    <button
-                      onClick={() => toggleExpandArea(row.area)}
-                      className="boton-expandir"
-                    >
-                      {expandedAreas.includes(row.area) ? "▼" : "▶"}
-                    </button>
-                    {row.area}
-                  </td>
-                  <td>{row.tolerable || 0}</td>
-                  <td>{row.moderado || 0}</td>
-                  <td>{row.notable || 0}</td>
-                  <td>{row.elevado || 0}</td>
-                  <td>{row.grave || 0}</td>
-                  <td>
-                    <FaTrash
-                      onClick={() =>
-                        deleteArea(row.area, row.collectionName || "resumen")
-                      }
-                      className="boton-eliminar"
-                    />
+                  <td colSpan="7" className="tabla-subtabla">
+                    <table className="tabla-interna">
+                      <thead>
+                        <tr>
+                          <th className="tabla-header">Puesto</th>
+                          <th className="tolerable">Tolerable</th>
+                          <th className="moderado">Moderado</th>
+                          <th className="notable">Notable</th>
+                          <th className="elevado">Elevado</th>
+                          <th className="grave">Grave</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {row.puestos.map((puesto, idx) => (
+                          <tr key={idx}>
+                            <td>{puesto.nombre}</td>
+                            <td>{puesto.tolerable || 0}</td>
+                            <td>{puesto.moderado || 0}</td>
+                            <td>{puesto.notable || 0}</td>
+                            <td>{puesto.elevado || 0}</td>
+                            <td>{puesto.grave || 0}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </td>
                 </tr>
-                {expandedAreas.includes(row.area) && row.puestos && (
-                  <tr>
-                    <td colSpan="7" className="tabla-subtabla">
-                      <table className="tabla-interna">
-                        <thead>
-                          <tr>
-                            <th className="tabla-header">Puesto</th>
-                            <th className="tolerable">Tolerable</th>
-                            <th className="moderado">Moderado</th>
-                            <th className="notable">Notable</th>
-                            <th className="elevado">Elevado</th>
-                            <th className="grave">Grave</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {row.puestos.map((puesto, idx) => (
-                            <tr key={idx}>
-                              <td>{puesto.nombre}</td>
-                              <td>{puesto.tolerable || 0}</td>
-                              <td>{puesto.moderado || 0}</td>
-                              <td>{puesto.notable || 0}</td>
-                              <td>{puesto.elevado || 0}</td>
-                              <td>{puesto.grave || 0}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                )}
-              </React.Fragment>
-            ))}
-            <tr>
-              <th>TOTAL</th>
-              <th>{total.tolerable}</th>
-              <th>{total.moderado}</th>
-              <th>{total.notable}</th>
-              <th>{total.elevado}</th>
-              <th>{total.grave}</th>
-              <th></th>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      {/* Contenedor de la tabla resumen */}
-      <div className="tabla-resumen-container" style={{ marginTop: "30px" }}>
+              )}
+            </React.Fragment>
+          ))}
+          <tr>
+            <th>TOTAL</th>
+            <th>{total.tolerable}</th>
+            <th>{total.moderado}</th>
+            <th>{total.notable}</th>
+            <th>{total.elevado}</th>
+            <th>{total.grave}</th>
+            <th></th>
+          </tr>
+        </tbody>
+      </table>
+            {/* Contenedor de la tabla resumen */}
+            <div className="tabla-resumen-container" style={{ marginTop: "30px" }}>
         <table className="risk-summary-table" style={{ margin: "0 auto" }}>
           <thead>
             <tr>
@@ -201,4 +237,4 @@ const TablaResumen = () => {
   );
 };
 
-export default TablaResumen;
+export default TablaResumen; 
