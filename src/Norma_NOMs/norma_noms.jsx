@@ -109,8 +109,12 @@ const normas = [
       { numero: '5.14', descripcion: 'Difusión sobre los peligros inherentes a los equipos y fluidos.' }
     ],
     condition: (values) =>
-      values.recipientesPresion === 'sí' || values.recipientesCriogenicos === 'sí' // Relación múltiple
-  },
+      values.recipientesPresion === 'sí' ||
+      values.recipientesCriogenicos === 'sí' ||
+      values.generadoresVapor === 'sí' 
+},
+
+
   { 
     id: 'NOM-022', 
     tipo: 'Seguridad',
@@ -121,8 +125,11 @@ const normas = [
       { numero: '5.4', descripcion: 'Documento que informe a trabajadores sobre los riesgos de electricidad estática.' },
       { numero: '5.5', descripcion: 'Capacitación en técnicas para evitar generación de electricidad estática.' }
     ],
-    condition: (values) => values.cargasEstaticas === 'sí'
+    condition: (values) => 
+       values.cargasEstaticas ==='sí' ||  values.materialesFriccion === 'sí' 
+      
   },
+
   {
     id: 'NOM-027',
     tipo: 'Seguridad',
@@ -157,7 +164,7 @@ const normas = [
       { numero: '5.17', descripcion: 'Capacitar y adiestrar a los trabajadores que realicen actividades de mantenimiento de las instalaciones eléctricas. D Preventiva Anual.' },
       { numero: '5.19', descripcion: 'Registros de los resultados de mantenimiento en instalaciones eléctricas.' }
     ],
-    condition: (values) => values.mantenimientoLineasElectricas === 'sí'
+    condition: (values) => values.mantenimientoLineasElectricas === 'sí'  || values.instalacionesElectricas === 'sí' || values.mantenimientoEnergizadas === 'sí'
   },
   { 
     id: 'NOM-034', 
@@ -170,7 +177,7 @@ const normas = [
       { numero: '5.5', descripcion: 'Plan de atención a emergencias que incluya a trabajadores con discapacidad.' },
       { numero: '5.7', descripcion: 'Capacitación para trabajadores con discapacidad en su desarrollo y actuación en emergencias.' }
     ],
-    condition: (values) => values.trabajadoresDiscapacidad === 'sí'
+    condition: (values) => values.trabajadoresDiscapacidad === 'sí' 
   },
   { 
     id: 'NOM-010',
@@ -329,7 +336,7 @@ const normas = [
       { numero: '6.2', descripcion: 'Planificación y autorización para realizar trabajos en espacios confinados.' },
       { numero: '6.3', descripcion: 'Entrenamiento específico para trabajadores que realicen trabajos en espacios confinados.' }
     ],
-    condition: (values) => values.trabajosEspaciosConfinados === 'sí'
+    condition: (values) => values.trabajosEspaciosConfinados === 'sí' ||  values.soldaduraAltura === 'sí'
   },
   // Normas de Salud
   { 
@@ -360,7 +367,7 @@ const normas = [
       { numero: '6.1', descripcion: 'Medición y control de las condiciones térmicas en el lugar de trabajo.' },
       { numero: '6.2', descripcion: 'Implementación de medidas para prevenir riesgos por condiciones térmicas extremas.' }
     ],
-    condition: (values) => values.exposicioncalor === 'sí' || values.exposicionFrio === 'sí'
+    condition: (values) => values.exposicioncalor === 'sí' || values.exposicionFrio === 'sí' || values.condicionesClimaticas
   },
   { 
     id: 'NOM-028', 
@@ -381,7 +388,7 @@ const normas = [
       { numero: '4.1', descripcion: 'Evaluación de los riesgos asociados al manejo de plaguicidas y fertilizantes.' },
       { numero: '4.2', descripcion: 'Implementación de medidas de seguridad para el manejo adecuado de plaguicidas y fertilizantes.' }
     ],
-    condition: (values) => values.invSolidos === 'sí'
+    condition: (values) => values.procesosPetroleoGas === 'sí' || values.actagricolas === 'sí'  || values.infrestructura === 'sí'
   },
   { 
     id: 'NOM-007', 
@@ -401,7 +408,7 @@ const normas = [
       { numero: '4.1', descripcion: 'Normas de seguridad en la operación del aprovechamiento forestal maderable.' },
       { numero: '4.2', descripcion: 'Medidas para la protección del medio ambiente durante el aprovechamiento forestal.' }
     ],
-    condition: (values) => values.areaTrabajo === 'sí'
+    condition: (values) => values.tut === 'sí'
   },
   { 
     id: 'NOM-016', 
@@ -431,7 +438,7 @@ const normas = [
       { numero: '7.1', descripcion: 'Condiciones de seguridad en la construcción de obras.' },
       { numero: '7.2', descripcion: 'Capacitación en seguridad para los trabajadores de la construcción.' }
     ],
-    condition: (values) => values.superficieConstruir === 'sí'
+    condition: (values) => values.superficieConstruir === 'sí'  || values.materialc === 'sí'
   },
   { 
     id: 'NOM-032', 
@@ -539,6 +546,7 @@ const NormaNoms = () => {
     condicionesClimaticas: '',
     teletrabajo: '',
     procesosPetroleoGas: '',
+    tut: '',
   });
 
   const handleInputChange = (e) => {
@@ -792,7 +800,7 @@ const NormaNoms = () => {
 
 {step === 2 && (
   <div className="step2">
-   <img
+    <img
       src={require('../logos/logo.png')} // Ruta a tu logo
       alt="Logo de la empresa"
       style={{
@@ -800,7 +808,7 @@ const NormaNoms = () => {
         margin: '0 auto',
         width: '150px',
         height: 'auto',
-        marginBottom: '20px'
+        marginBottom: '20px',
       }}
     />
     <h3>Determinación del grado de riesgo de incendio</h3>
@@ -818,7 +826,10 @@ const NormaNoms = () => {
           type="number"
           name="superficie"
           value={formValues.superficie}
-          onChange={handleInputChange}
+          onChange={(e) => {
+            const value = Math.max(0, Number(e.target.value)); // Asegúrate de que no sea negativo
+            handleInputChange({ target: { name: 'superficie', value } });
+          }}
           required
         />
         metros cuadrados
@@ -830,7 +841,10 @@ const NormaNoms = () => {
           type="number"
           name="invGases"
           value={formValues.invGases}
-          onChange={handleInputChange}
+          onChange={(e) => {
+            const value = Math.max(0, Number(e.target.value));
+            handleInputChange({ target: { name: 'invGases', value } });
+          }}
           required
         />
         litros
@@ -842,7 +856,10 @@ const NormaNoms = () => {
           type="number"
           name="invLiquidosi"
           value={formValues.invLiquidosi}
-          onChange={handleInputChange}
+          onChange={(e) => {
+            const value = Math.max(0, Number(e.target.value));
+            handleInputChange({ target: { name: 'invLiquidosi', value } });
+          }}
           required
         />
         litros
@@ -854,7 +871,10 @@ const NormaNoms = () => {
           type="number"
           name="invLiquidosc"
           value={formValues.invLiquidosc}
-          onChange={handleInputChange}
+          onChange={(e) => {
+            const value = Math.max(0, Number(e.target.value));
+            handleInputChange({ target: { name: 'invLiquidosc', value } });
+          }}
           required
         />
         litros
@@ -866,7 +886,10 @@ const NormaNoms = () => {
           type="number"
           name="invSolidos"
           value={formValues.invSolidos}
-          onChange={handleInputChange}
+          onChange={(e) => {
+            const value = Math.max(0, Number(e.target.value));
+            handleInputChange({ target: { name: 'invSolidos', value } });
+          }}
           required
         />
         kilogramos
