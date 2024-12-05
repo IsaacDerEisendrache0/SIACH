@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Moviles.css';
 import html2canvas from 'html2canvas';
 import { getDoc, setDoc, doc, addDoc, collection, updateDoc } from 'firebase/firestore';
-
+import { getAuth } from "firebase/auth";
 import { db } from '../firebase';
 import logo from '../logos/logo.png';
 import Maxion from '../logos/maxion.jpeg';
@@ -244,93 +244,124 @@ const RiskTable = () => {
   const { color, accion, clasificacion } = obtenerClasificacionRiesgo(magnitudRiesgo);
 
   const saveTableData = async () => {
-    const risk = calcularMagnitudRiesgo(); // Calcular el riesgo actual
-    const { clasificacion } = obtenerClasificacionRiesgo(risk); // Obtener clasificación
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    const uid = user.uid; // UID del usuario autenticado
+    const magnitud = calcularMagnitudRiesgo();
+    const { clasificacion } = obtenerClasificacionRiesgo(magnitud);
   
     const tableData = {
-      nombreTabla: "Tabla Móviles",
-      areaSeleccionada: area || "Sin área",
-      puestoSeleccionado: newPuesto || "Sin puesto",
-      hazards: [], // Definir adecuadamente los hazards si es necesario
+      uid,
+      nombreMaquinaria,
+      poe,
+      tiempoExposicion,
+      descripcion,
+      fechaInspeccion: fechaInspeccion || new Date().toLocaleDateString(),
       consequence,
       exposure,
       probability,
-      risk,
-      classification: clasificacion,
-      selectedImages: selectedEPPImages,
-      descripcionActividad: descripcion,
-      selectedOptionEquipoUtilizado: poe,
-      selectedOptionProteccionSugerida: selectedBodyImage,
-      tiempoExposicion,
-      norma: "N-004",
-      fecha: fechaInspeccion || new Date().toLocaleDateString(),
-      hora: new Date().toLocaleTimeString(),
+      magnitud,
+      clasificacion,
+      selectedEPPImages,
+      selectedBodyImage,
+      area,
+      puestos,
     };
-  
+
     try {
-      // Guardar la tabla en Firestore
       if (isEditing && tableId) {
-        await updateDoc(doc(db, "tablas", tableId), tableData);
-        alert("Tabla actualizada con éxito.");
+        const tableRef = doc(db, 'tablas', tableId);
+        await updateDoc(tableRef, tableData);
+        alert('Tabla actualizada exitosamente.');
       } else {
-        await addDoc(collection(db, "tablas"), tableData);
-        alert("Tabla guardada con éxito.");
+        const tableRef = await addDoc(collection(db, 'tablas'), tableData);
+        setTableId(tableRef.id);
+        alert('Tabla guardada exitosamente.');
       }
-  
-      // Actualizar el resumen por área
+
       if (area) {
-        await updateResumenData(area, risk);
-      } else {
-        console.warn("Área no definida. No se actualizó el resumen.");
+        await updateResumenData(area, magnitud, clasificacion, uid);
       }
     } catch (error) {
-      console.error("Error al guardar en Firestore:", error);
-      alert("Error al guardar los datos.");
+      console.error('Error al guardar datos:', error);
+      alert('Hubo un problema al guardar la tabla.');
     }
   };
   
   
   
 
-  const updateResumenData = async (area, risk) => {
-    const resumenRef = doc(db, 'resumen', area);
-    const resumenSnapshot = await getDoc(resumenRef);
-  
-    let resumenData = resumenSnapshot.exists()
-      ? resumenSnapshot.data()
-      : { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0, puestos: [] };
-  
-    const puestoRiesgo = {
-      nombre: newPuesto || "Sin puesto",
-      tolerable: 0,
-      moderado: 0,
-      notable: 0,
-      elevado: 0,
-      grave: 0,
-    };
-  
-    if (risk <= 20) puestoRiesgo.tolerable = 1;
-    else if (risk <= 70) puestoRiesgo.moderado = 1;
-    else if (risk <= 200) puestoRiesgo.notable = 1;
-    else if (risk <= 400) puestoRiesgo.elevado = 1;
-    else puestoRiesgo.grave = 1;
-  
-    resumenData.puestos = [
-      ...resumenData.puestos.filter((p) => p.nombre !== puestoRiesgo.nombre),
-      puestoRiesgo,
-    ];
-  
-    resumenData.tolerable = resumenData.puestos.reduce((acc, p) => acc + p.tolerable, 0);
-    resumenData.moderado = resumenData.puestos.reduce((acc, p) => acc + p.moderado, 0);
-    resumenData.notable = resumenData.puestos.reduce((acc, p) => acc + p.notable, 0);
-    resumenData.elevado = resumenData.puestos.reduce((acc, p) => acc + p.elevado, 0);
-    resumenData.grave = resumenData.puestos.reduce((acc, p) => acc + p.grave, 0);
+  const updateResumenData = async (area, magnitud, clasificacion, uid) => {
+    if (!area) {
+      console.error("El área no está definida. No se puede actualizar el resumen.");
+      return;
+    }
   
     try {
+      // Referencia al documento en la colección 'resumen' usando el área como ID
+      const resumenRef = doc(db, 'resumen', area);
+  
+      // Intenta obtener el documento existente
+      const resumenSnapshot = await getDoc(resumenRef);
+  
+      // Datos iniciales si el documento no existe
+      let resumenData = resumenSnapshot.exists()
+        ? resumenSnapshot.data()
+        : {
+            uid,
+            tolerable: 0,
+            moderado: 0,
+            notable: 0,
+            elevado: 0,
+            grave: 0,
+            puestos: [],
+          };
+  
+      // Encuentra si el puesto ya existe en los datos del resumen
+      const puestoExistenteIndex = resumenData.puestos.findIndex(
+        (p) => p.nombre === newPuesto
+      );
+  
+      if (puestoExistenteIndex !== -1) {
+        // Si el puesto ya existe, resta los valores previos de los totales
+        const puestoExistente = resumenData.puestos[puestoExistenteIndex];
+        resumenData.tolerable -= puestoExistente.tolerable;
+        resumenData.moderado -= puestoExistente.moderado;
+        resumenData.notable -= puestoExistente.notable;
+        resumenData.elevado -= puestoExistente.elevado;
+        resumenData.grave -= puestoExistente.grave;
+  
+        // Elimina el puesto existente
+        resumenData.puestos.splice(puestoExistenteIndex, 1);
+      }
+  
+      // Calcular los valores de riesgo basados en la magnitud
+      const puestoRiesgo = {
+        nombre: newPuesto,
+        tolerable: magnitud <= 20 ? 1 : 0,
+        moderado: magnitud > 20 && magnitud <= 70 ? 1 : 0,
+        notable: magnitud > 70 && magnitud <= 200 ? 1 : 0,
+        elevado: magnitud > 200 && magnitud <= 400 ? 1 : 0,
+        grave: magnitud > 400 ? 1 : 0,
+      };
+  
+      // Agrega el nuevo puesto con sus valores actualizados
+      resumenData.puestos.push(puestoRiesgo);
+  
+      // Actualiza los totales con los nuevos valores del puesto
+      resumenData.tolerable += puestoRiesgo.tolerable;
+      resumenData.moderado += puestoRiesgo.moderado;
+      resumenData.notable += puestoRiesgo.notable;
+      resumenData.elevado += puestoRiesgo.elevado;
+      resumenData.grave += puestoRiesgo.grave;
+  
+      // Guarda los datos actualizados en Firestore
       await setDoc(resumenRef, resumenData);
-      console.log("Resumen actualizado:", resumenData);
+  
+      console.log('Resumen actualizado exitosamente:', resumenData);
     } catch (error) {
-      console.error("Error al actualizar resumen:", error);
+      console.error('Error al actualizar los datos del resumen:', error);
     }
   };
   
@@ -388,13 +419,15 @@ const handleAddArea = () => {
   closeModal();
 };
 
-  const handleRemoveArea = () => {
-  if (selectedAreaToRemove && areas.includes(selectedAreaToRemove)) {
-    const updatedAreas = areas.filter((a) => a !== selectedAreaToRemove);
+const handleRemoveArea = () => {
+  if (selectedAreaToRemove) {
+    const updatedAreas = areas.filter((area) => area.nombre !== selectedAreaToRemove.nombre);
     setAreas(updatedAreas);
-    localStorage.setItem('areas', JSON.stringify(updatedAreas)); // Actualizar áreas en localStorage
+    localStorage.setItem('areas', JSON.stringify(updatedAreas));
     setArea('');
     alert('Área eliminada con éxito.');
+  } else {
+    alert('Por favor selecciona un área para eliminar.');
   }
   closeModal();
 };
@@ -411,15 +444,18 @@ const handleAddPuesto = () => {
   }
 };
 
-  const handleRemovePuesto = () => {
+const handleRemovePuesto = () => {
   if (selectedPuestoToRemove) {
-    const updatedPuestos = puestos.filter((p) => p !== selectedPuestoToRemove);
+    const updatedPuestos = puestos.filter((puesto) => puesto.nombre !== selectedPuestoToRemove.nombre);
     setPuestos(updatedPuestos);
-    localStorage.setItem('puestos', JSON.stringify(updatedPuestos)); // Actualizar puestos en localStorage
+    localStorage.setItem('puestos', JSON.stringify(updatedPuestos));
     alert('Puesto eliminado con éxito.');
-    setSelectedPuestoToRemove(''); // Limpia el valor seleccionado
+    setSelectedPuestoToRemove(null); // Limpia el valor seleccionado
+  } else {
+    alert('Por favor selecciona un puesto para eliminar.');
   }
 };
+
 
 
   return (
@@ -668,78 +704,97 @@ const handleAddPuesto = () => {
           </button>
         </div>
       )}
-
       <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="Área Modal"
-        ariaHideApp={false}
-        style={{
-          content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight:'-50%',
-            transform: 'translate(-50%, -50%)',
-          },
-        }}
-      >
-        <h2>{modalAction} Área</h2>
-        <div>
-          {modalAction === 'Agregar' && (
-            <div>
-              <input
-                type="text"
-                placeholder="Nombre del área"
-                value={newArea}
-                onChange={(e) => setNewArea(e.target.value)}
-                style={{ marginBottom: '10px', width: '100%' }}
-              />
-              <button onClick={handleAddArea}>Confirmar Agregar Área</button>
-            </div>
-          )}
-          {modalAction === 'Eliminar' && (
-            <div>
-              <select
-                value={selectedAreaToRemove}
-                onChange={(e) => setSelectedAreaToRemove(e.target.value)}
-                style={{ marginBottom: '10px', width: '100%' }}
-              >
-                <option value="">Seleccione un área para eliminar</option>
-                {areas.map((area, idx) => (
-                  <option key={idx} value={area}>{area}</option>
-                ))}
-              </select>
-              <button onClick={handleRemoveArea}>Confirmar Eliminar Área</button>
-            </div>
-          )}
-          <div style={{ marginTop: '20px' }}>
-            <h2>Puestos</h2>
-            <input
-              type="text"
-              placeholder="Nombre del puesto"
-              value={newPuesto}
-              onChange={(e) => setNewPuesto(e.target.value)}
-              style={{ marginBottom: '10px', width: '100%' }}
-            />
-            <button onClick={handleAddPuesto} style={{ marginRight: '10px' }}>Agregar Puesto</button>
-                      <select
-            value={selectedPuestoToRemove}
-            onChange={(e) => setSelectedPuestoToRemove(e.target.value)}
-            style={{ marginBottom: '10px', width: '100%' }}
-          >
-            <option value="">Seleccione un puesto para eliminar</option>
-            {puestos.map((puesto, idx) => (
-              <option key={idx} value={puesto.nombre}>{puesto.nombre}</option>
-            ))}
-          </select>
+  isOpen={modalIsOpen}
+  onRequestClose={closeModal}
+  contentLabel="Área Modal"
+  ariaHideApp={false}
+  style={{
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  }}
+>
+  <h2>{modalAction} Área</h2>
+  <div>
+    {/* Modal para agregar áreas */}
+    {modalAction === 'Agregar' && (
+      <div>
+        <input
+          type="text"
+          placeholder="Nombre del área"
+          value={newArea}
+          onChange={(e) => setNewArea(e.target.value)}
+          style={{ marginBottom: '10px', width: '100%' }}
+        />
+        <button onClick={handleAddArea}>Confirmar Agregar Área</button>
+      </div>
+    )}
 
-            <button onClick={handleRemovePuesto}>Eliminar Puesto</button>
-          </div>
-          <button onClick={closeModal} style={{ marginTop: '20px' }}>Cancelar</button>
-        </div>
-      </Modal>
+    {/* Modal para eliminar áreas */}
+    {modalAction === 'Eliminar' && (
+      <div>
+        <select
+          value={selectedAreaToRemove?.nombre || ''}
+          onChange={(e) =>
+            setSelectedAreaToRemove(areas.find((area) => area.nombre === e.target.value))
+          }
+          style={{ marginBottom: '10px', width: '100%' }}
+        >
+          <option value="">Seleccione un área para eliminar</option>
+          {areas.map((area, idx) => (
+            <option key={idx} value={area.nombre}>
+              {area.nombre}
+            </option>
+          ))}
+        </select>
+        <button onClick={handleRemoveArea}>Confirmar Eliminar Área</button>
+      </div>
+    )}
+
+    {/* Opciones de gestión de puestos */}
+    <div style={{ marginTop: '20px' }}>
+      <h2>Puestos</h2>
+      {/* Agregar puesto */}
+      <input
+        type="text"
+        placeholder="Nombre del puesto"
+        value={newPuesto}
+        onChange={(e) => setNewPuesto(e.target.value)}
+        style={{ marginBottom: '10px', width: '100%' }}
+      />
+      <button onClick={handleAddPuesto} style={{ marginRight: '10px' }}>
+        Agregar Puesto
+      </button>
+
+      {/* Eliminar puesto */}
+      <select
+        value={selectedPuestoToRemove?.nombre || ''}
+        onChange={(e) =>
+          setSelectedPuestoToRemove(puestos.find((puesto) => puesto.nombre === e.target.value))
+        }
+        style={{ marginBottom: '10px', width: '100%' }}
+      >
+        <option value="">Seleccione un puesto para eliminar</option>
+        {puestos.map((puesto, idx) => (
+          <option key={idx} value={puesto.nombre}>
+            {puesto.nombre}
+          </option>
+        ))}
+      </select>
+      <button onClick={handleRemovePuesto}>Eliminar Puesto</button>
+    </div>
+    <button onClick={closeModal} style={{ marginTop: '20px' }}>
+      Cancelar
+    </button>
+  </div>
+</Modal>
+
       {!isCapturing && (
         <div className="button-group" style={{ display: 'flex', gap: '0' }}>
           <button className='button-area' onClick={() => openModal('Agregar')}>Agregar área</button>

@@ -194,7 +194,7 @@ const RiskTable = () => {
           <div className="logo-container" style={{ textAlign: 'center', marginBottom: '20px' }}>
             <img src={logo} alt="SIACH Logo" style={{ width: '150px' }} />
           </div>
-          <table className="main-table" style={{ width: '100%' }}>
+          <table className="main-table" style={{ width: '50%' }}>
             <thead>
               <tr>
                 <th colSpan="2" className="nombre-maquinaria">Nombre de la maquinaria o equipo:</th>
@@ -207,8 +207,8 @@ const RiskTable = () => {
                     {renderOptions(opciones.energia)}
                   </select>
                 </th>
-                <th colSpan="2" className="tiempo-exposicion">Tiempo de exposición:</th>
-                <th colSpan="3">
+                <th colSpan="" className="tiempo-exposicion">Tiempo de exposición:</th>
+                <th colSpan="1">
                   <select className="tiempo-exposicion" value={state.tiempoExposicion} onChange={(e) => handleChange('tiempoExposicion', e.target.value)} style={{ width: '100%' }}>
                     {renderOptions(opciones.tiempoExposicion)}
                   </select>
@@ -227,7 +227,7 @@ const RiskTable = () => {
                 <th colSpan="1" className="area">Área:</th>
                 <th colSpan="1">
                   <input className="area" type="text" placeholder="Escriba el área" style={{ width: '100%' }} /></th>
-                <th colSpan="3" className="poe">POE </th>
+                <th colSpan="1" className="poe">POE </th>
                 <th colSpan="3">
                   <input className="poe" type="text" placeholder="Escriba el POE" style={{ width: '100%' }} /></th>
               </tr>
@@ -239,7 +239,7 @@ const RiskTable = () => {
             </thead>
             <tbody>
               <tr>
-                <td colSpan="3" rowSpan="2">
+                <td colSpan="2" rowSpan="2">
                   <div className="image-section">
                     <table className="image-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                       <tbody>
