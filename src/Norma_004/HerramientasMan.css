@@ -1,272 +1,148 @@
-/* Moviles.css (adaptado para el componente React RiskTable) */
-
-:root {
-  --strong-red: #e60000; /* Rojo más fuerte */
-  --border-color: #ccc;
-  --button-bg: #e60000;
-  --button-text: #fff;
-  --button-hover-bg: #cc0000;
-  --border-radius: 8px;
-  --font-family: 'Arial', sans-serif;
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .risk-table-container {
   padding: 20px;
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  max-width: 1600px; /* Ajusta el ancho máximo según sea necesario */
-  width: 100%;
-  margin: auto;
-  background-color: white !important;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  margin: 20px auto;
+}
+
+.risk-table-wrapper {
+  overflow: hidden;
 }
 
 .risk-table {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  font-size: 10px; /* Ajusta el tamaño de fuente para hacer la tabla más pequeña */
   border-collapse: collapse;
-  box-sizing: border-box; /* Asegura que padding y border no cambien el tamaño */
-  background-color: white !important;
+  text-align: center;
+  table-layout: fixed;
 }
 
-.risk-table th,
-.risk-table td {
-  border: 1px solid var(--border-color);
-  padding: 10px;
-  text-align: left;
-}
-
-.risk-table th.red {
-  background-color: var(--strong-red);
-  color: var(--button-text);
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.risk-selects select,
-.safety-selects select {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: var(--border-radius);
-  border: 1px solid var(--border-color);
-  font-family: var(--font-family);
-}
-
-.epp-suggested .red {
-  color: var(--strong-red);
-  font-weight: bold;
-}
-
-.epp-images-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 5px;
-  margin-top: 10px;
-}
-
-.epp-images-grid img {
-  width: 60px;
-  height: 60px;
-  border-radius: var(--border-radius);
-  padding: 2px;
-  transition: transform 0.2s, border-color 0.2s;
-}
-
-.epp-images-grid img:hover {
-  transform: scale(1.1);
-  border-color: var(--button-hover-bg);
-}
-
-.body-part-image img {
-  border: 2px solid var(--strong-red);
-  border-radius: var(--border-radius);
-}
-
-h4.red {
-  color: var(--strong-red);
-  font-weight: bold;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-
-.risk-classification {
-  margin-top: 20px;
-}
-
-.risk-classification th {
-  background-color: var(--strong-red);
-  color: var(--button-text);
-  padding: 10px;
-  text-transform: uppercase;
-}
-
-.uploaded-image {
-  border: 2px solid var(--strong-red);
-  border-radius: var(--border-radius);
-  margin-top: 10px;
-  width: 100%; /* Ajustar imagen para que ocupe todo el ancho del contenedor */
-  height: 100%; /* Hacer la imagen que ocupe todo el alto del contenedor */
-  object-fit: cover; /* Asegurar que la imagen ocupe todo el espacio sin distorsionarse */
-}
-
-.risk-info h4,
-.safety-info h4 {
-  color: var(--strong-red);
-  font-weight: bold;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-
-.epp-suggested select {
-  width: 160px;
-  height: 35px;
+/* Compact Table Design */
+.main-table th, .main-table td {
   padding: 5px;
-  border-radius: var(--border-radius);
-  border: 1px solid var(--border-color);
+  line-height: 1.2;
+ font-size: 0.9em;
+  border: 1px solid #ddd;
 }
 
-.button {
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  padding: 10px 15px;
-  border: none;
-  border-radius: var(--border-radius);
-  cursor: pointer;
+/* Highlighted Titles */
+.main-table th.nombre-maquinaria, 
+.main-table th.descripcion-maquinaria, 
+.main-table th.energia-utilizada, 
+.main-table th.area, 
+.main-table th.poe, 
+.main-table th.tiempo-exposicion, 
+.main-table th.localizacion-esquematica {
+  background-color: #ff0000;
+  color: #fff;
   font-weight: bold;
-  font-size: 14px;
-  margin-top: 15px;
-  transition: background-color 0.3s, transform 0.2s;
+  border: 1px solid #000000;
 }
 
-.button:hover {
-  background-color: var(--button-hover-bg);
-  transform: translateY(-2px);
+/* General Cell Styles */
+.main-table td {
+  background-color: #fff;
 }
 
-.button-area1 {
-  width: 20%;
-  height: 35px;
-  margin-left: 2px;
-  padding: 8px 12px;
-  font-size: 16px;
-  border-radius: var(--border-radius);
-  border: 1px solid var(--border-color);
-  background-color: #f9f9f9;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  font-family: var(--font-family);
-}
-
-.button:active {
-  transform: translateY(1px);
-}
-
-.risk-selects,
-.safety-selects {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.risk-selects .button,
-.safety-selects .button {
-  align-self: flex-start;
-}
-
-.risk-selects select,
-.safety-selects select {
-  font-family: var(--font-family);
-  font-size: 14px;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-.button-group {
-  display: flex;
-  justify-content: space-around;
-  gap: 10px;
-}
-
-.button-group .button {
-  flex: 1;
-}
-
-.button-area {
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  padding: 0px 1px; /* Tamaño más pequeño */
-  border: none;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 12px; /* Tamaño de fuente más pequeño */
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-.button-area:hover {
-  background-color: var(--button-hover-bg);
-  transform: translateY(-2px);
-}
-
-.uploaded {
+.image-sectionn {
+  width: 340px; /* Ancho fijo del cuadro */
+  height: 200px; /* Alto fijo del cuadro */
+  
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 300px; /* Ajustar la altura para que la imagen se muestre grande */
-  border-radius: var(--border-radius);
-  overflow: hidden;
+  overflow: hidden; /* Esconde desbordamientos */
+  background-color: #f9f9f9; /* Fondo claro */
+  position: relative; /* Para posicionar el input */
 }
 
-.uploaded img {
+.image-preview {
+  width: 100%; /* Ancho ajustado al cuadro */
+  height: 100%; /* Alto ajustado al cuadro */
+  object-fit: contain; /* Mantiene las proporciones de la imagen */
+}
+
+.image-placeholder {
+  color: #999;
+  font-size: 14px;
+  text-align: center;
+}
+
+.image-input {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  opacity: 0; /* Oculta el input */
+  cursor: pointer; /* Cambia el cursor para indicar interactividad */
 }
 
-select:hover {
-  border-color: #888;
-  background-color: #f1f1f1;
+
+.image-preview {
+  display: block;
 }
 
-select:focus {
-  border-color: #007bff;
-  outline: none;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-select option {
-  padding: 8px;
-  font-size: 16px;
-  font-family: var(--font-family);
-}
-.main-table th, .main-table td {
-  padding: 5px; /* Reduce el espacio interno de las celdas */
-  line-height: 1.2; /* Reduce la altura de las líneas */
-  font-size: 0.9em; /* Ajusta el tamaño de fuente para compactar texto */
-}
-
-.main-table {
-  border-collapse: collapse; /* Elimina los espacios entre los bordes de celdas */
-  width: 100%; /* Asegura que ocupe todo el ancho disponible */
+/* Observations */
+textarea#observaciones {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
   font-size: 0.9em;
 }
 
-.inner-table th, .inner-table td, .risk-body-table th, .risk-body-table td, .epp-table th, .epp-table td {
-  padding: 3px; /* Reduce espacio interno en tablas internas */ 
-  line-height: 3.3;
-  font-size: 0.8em;
+/* EPP Table */
+.epp-table th {
+  background-color: #4caf50;
+  color: #fff;
+  font-weight: bold;
 }
 
-textarea, select, input[type="text"] {
-  font-size: 0.9em; /* Reduce el tamaño de texto en campos de entrada */
-  padding: 3px; /* Reduce el espacio interno en los campos */
+.epp-table td {
+  border: 1px solid #ddd;
+  padding: 5px;
+}
+
+/* Download Button */
+.download-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.download-button:hover {
+  background-color: #0056b3;
+}
+/* Ajusta el tamaño de fuente para los apartados específicos */
+.nombre-maquinaria,
+.descripcion-maquinaria,
+.energia-utilizada,
+.area,
+.poe,
+.tiempo-exposicion {
+  font-size: 0.10em; /* Reduce el tamaño de la letra */
+}
+
+textarea.nombre-maquinaria,
+textarea.descripcion-maquinaria,
+select.energia-utilizada,
+input.area,
+input.poe,
+select.tiempo-exposicion {
+  font-size: 0.7em; /* Ajusta también el tamaño del texto en los inputs y selects */
 }

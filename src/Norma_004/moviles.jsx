@@ -574,13 +574,30 @@ const handleRemovePuesto = () => {
         </thead>
         <tbody>
           <tr>
-            <td className="image-section" colSpan="3">
-              <div>
-                <button className="upload-button" onClick={() => document.getElementById('upload-image').click()}>Subir Imagen o Tomar Foto</button>
-                <input id="upload-image" type="file" accept="image/*" onChange={handleImageUpload} capture="environment" style={{ display: 'none' }} />
-                {image && <img src={image} alt="Uploaded" className="uploaded" />}
-              </div>
-            </td>
+          <tr>
+  <td className="image-section" colSpan="3">
+    <div
+      className="uploaded"
+      onClick={() => document.getElementById('upload-image').click()}
+    >
+      {image ? (
+        <img src={image} alt="Uploaded" />
+      ) : (
+        <p className="image-placeholder">Haz clic para cargar una imagen</p>
+      )}
+    </div>
+    <input
+      id="upload-image"
+      type="file"
+      accept="image/*"
+      onChange={handleImageUpload}
+      style={{ display: 'none' }}
+    />
+  </td>
+</tr>
+
+
+
             <td className="risk-info" colSpan="5">
               <h4 className="red" style={{ fontSize: '14px' }}>Identificación de riesgos</h4>
               {[...Array(7)].map((_, index) => (

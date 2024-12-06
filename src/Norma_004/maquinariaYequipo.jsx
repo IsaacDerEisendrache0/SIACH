@@ -349,7 +349,7 @@ useEffect(() => {
                 onChange={(e) => setTiempoExposicion(e.target.value)}
               />
             </td>
-            <th className='red' colSpan="10">ÁREAS</th>
+            <th className='red' colSpan="10">ÁREA:</th>
             <th colSpan="20"> 
             <select name="areas" value={area} onChange={(e) => setArea(e.target.value)}>
             <option value="">Seleccione un área</option>

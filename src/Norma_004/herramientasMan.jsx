@@ -71,10 +71,10 @@ const RiskTable = () => {
 
   const handlePeligroChange = (peligro) => {
     const isSelected = selectedPeligros.includes(peligro);
-
+  
     let newSelectedPeligros = [];
     let newAffectedParts = [];
-
+  
     if (isSelected) {
       // Deseleccionar peligro y eliminar partes del cuerpo asociadas
       newSelectedPeligros = selectedPeligros.filter(item => item !== peligro);
@@ -84,10 +84,11 @@ const RiskTable = () => {
       newSelectedPeligros = [...selectedPeligros, peligro];
       newAffectedParts = [...new Set([...affectedBodyParts, ...partesPorPeligro[peligro]])];
     }
-
+  
     setSelectedPeligros(newSelectedPeligros);
     setAffectedBodyParts(newAffectedParts);
   };
+  
 
   
   const [state, setState] = useState({
@@ -197,17 +198,17 @@ const RiskTable = () => {
           <table className="main-table" style={{ width: '50%' }}>
             <thead>
               <tr>
-                <th colSpan="2" className="nombre-maquinaria">Nombre de la maquinaria o equipo:</th>
+                <th colSpan="2" className="nombre-maquinaria">NOMBRE DE LA MAQUINARIA O EQUIPO:</th>
                 <th colSpan="3">
-                  <textarea className="nombre-maquinaria" placeholder="Nombre de la maquinaria" name='textarea' rows="1" cols={30}></textarea>
+                  <textarea className="nombre-maquinaria" placeholder="Nombre de la maquinaria" name='textarea' rows="1" cols={40}></textarea>
                 </th>
-                <th colSpan="1" className="energia-utilizada">Energía utilizada:</th>
+                <th colSpan="1" className="energia-utilizada">ENERGIA UTILIZADA:</th>
                 <th colSpan="2">
                   <select className="energia-utilizada" value={state.energiaUtilizada} onChange={(e) => handleChange('energiaUtilizada', e.target.value)} style={{ width: '100%' }}>
                     {renderOptions(opciones.energia)}
                   </select>
                 </th>
-                <th colSpan="" className="tiempo-exposicion">Tiempo de exposición:</th>
+                <th colSpan="" className="tiempo-exposicion">TIEMPO DE EXPOSICIÓN:</th>
                 <th colSpan="1">
                   <select className="tiempo-exposicion" value={state.tiempoExposicion} onChange={(e) => handleChange('tiempoExposicion', e.target.value)} style={{ width: '100%' }}>
                     {renderOptions(opciones.tiempoExposicion)}
@@ -215,16 +216,16 @@ const RiskTable = () => {
                 </th>
               </tr>
               <tr>
-                <th colSpan="2" className="descripcion-maquinaria">Descripción de la maquinaria o equipo:</th>
+                <th colSpan="2" className="descripcion-maquinaria">DESCRIPCIÓN DE LA MAQUINARIA O EQUIPO:</th>
                 <th colSpan="3">
                   <textarea className="descripcion-maquinaria"
                     value={state.maquinariaDescripcion}
                     onChange={(e) => handleChange('maquinariaDescripcion', e.target.value)}
                     placeholder="Describa la maquinaria o equipo"
-                    cols={30}
+                    cols={40}
                   />
                 </th>
-                <th colSpan="1" className="area">Área:</th>
+                <th colSpan="1" className="area">ÁREA:</th>
                 <th colSpan="1">
                   <input className="area" type="text" placeholder="Escriba el área" style={{ width: '100%' }} /></th>
                 <th colSpan="1" className="poe">POE </th>
@@ -232,32 +233,31 @@ const RiskTable = () => {
                   <input className="poe" type="text" placeholder="Escriba el POE" style={{ width: '100%' }} /></th>
               </tr>
               <tr>
-                <th colSpan="3">Localización esquemática de los riesgos en la maquinaria y/o equipo:</th>
+                <th colSpan="3">LOCALIZACIÓN ESQUEMÁTICA DE LOS RIESGOS EN LA MAQUINARIA Y/O EQUIPO:</th>
                 
 
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td colSpan="2" rowSpan="2">
-                  <div className="image-section">
-                    <table className="image-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
-                      <tbody>
-                        <tr>
-                          <td style={{ border: '1px solid #ccc', padding: '10px', textAlign: 'center' }}>
-                            <input type="file" accept="image/*" onChange={handleImageChange} />
-                            {state.errorMessage && <p style={{ color: 'red' }}>{state.errorMessage}</p>}
-                            {state.imagePreview ? (
-                              <img src={state.imagePreview} alt="Maquinaria" className="image-preview" style={{ width: '100%', height: 'auto' }} />
-                            ) : (
-                              <p>No hay imagen seleccionada</p>
-                            )}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </td>
+              <tr><td colSpan="2" rowSpan="2">
+                <div className="image-sectionn">
+                  {!state.imagePreview && (
+                    <p className="image-placeholder">No hay imagen seleccionada</p>
+                  )}
+                  {state.imagePreview && (
+                    <img src={state.imagePreview} alt="Vista previa" className="image-preview" />
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="image-input"
+                    title="Haz clic para cargar una imagen"
+                  />
+                </div>
+              </td>
+
+
                 <td colSpan="8" className="right-aligned">
                   <div className="text1">Evaluación de riesgo de trabajo</div>
                     <table className="inner-table" style={{ width: '100%' }}>
@@ -315,14 +315,14 @@ const RiskTable = () => {
                  
               </tr>
               
-  <td colSpan="8" style={{ backgroundColor: color, color: 'black', textAlign: 'center', padding: '1px' }}>
-    <div style={{ fontSize: '14px' }}>Clasificación de magnitud de riesgo</div>
-    <div style={{ display: 'flex', justifyContent: 'space-around', padding: '1px', fontSize: '12px' }}>
-      <div>Magnitud del Riesgo: {magnitudRiesgo}</div>
-      <div>Clasificación: {clasificacion}</div>
-      <div>Acción: {accion}</div>
-    </div>
-  </td>
+                <td colSpan="8" style={{ backgroundColor: color, color: 'black', textAlign: 'center', padding: '1px' }}>
+                  <div style={{ fontSize: '14px' }}>Clasificación de magnitud de riesgo</div>
+                  <div style={{ display: 'flex', justifyContent: 'space-around', padding: '1px', fontSize: '12px' }}>
+                    <div>Magnitud del Riesgo: {magnitudRiesgo}</div>
+                    <div>Clasificación: {clasificacion}</div>
+                    <div>Acción: {accion}</div>
+                  </div>
+                </td>
 
               
               <tr>
@@ -330,24 +330,26 @@ const RiskTable = () => {
                   <table className="main-table" style={{ width: '100%' }}>
                     <thead>
                       <tr>
-                        <th colSpan="6">Identificaciones de Riesgos:</th>
+                        <th>Identificación del Riesgo</th>
                       </tr>
                     </thead>
                     <tbody>
-                    {Object.keys(partesPorPeligro).map((peligro, index) => (
-                      <div key={index} style={{ display: "flex", alignItems: "center" }}>
-                        <input 
-                          type="checkbox" 
-                          checked={selectedPeligros.includes(peligro)} 
-                          onChange={() => handlePeligroChange(peligro)}
-                        />
-                        <span style={{ marginLeft: "1px" }}>{peligro}</span>
-                      </div>
-                    ))}
-                  
+                      {Object.entries(partesPorPeligro).map(([peligro, partes], index) => (
+                        <tr key={index}>
+                          <td>
+                            <input 
+                              type="checkbox" 
+                              checked={selectedPeligros.includes(peligro)} 
+                              onChange={() => handlePeligroChange(peligro)}
+                            />
+                          </td>
+                          <td>{peligro}</td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </td>
+
                 <td colSpan="4">
                   <table className="risk-body-table" style={{ width: '100%' }}>
                     <thead>
@@ -407,7 +409,7 @@ const RiskTable = () => {
                       value={state.observacionesGenerales}
                       onChange={(e) => handleChange('observacionesGenerales', e.target.value)}
                       placeholder="Agregar observaciones generales aquí"
-                      rows="2" cols={150}
+                      rows="2" cols={80}
                       style={{ width: '100%' }}
                     />
                   </div>
@@ -421,6 +423,7 @@ const RiskTable = () => {
       <button onClick={downloadImage} className="download-button">
         Descargar Imagen
       </button>
+      <button className='download-button'>Guardar tabla</button>
     </div>
   );
 };
