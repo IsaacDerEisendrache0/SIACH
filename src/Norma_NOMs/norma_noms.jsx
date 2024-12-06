@@ -46,26 +46,49 @@ const normas = [
     condition: (values) => values.materialesPiroforicos === 'sí'
   }
   ,
-  { 
-    id: 'NOM-004', 
+  {
+    id: 'NOM-004',
     tipo: 'Seguridad',
-    title: 'Uso de maquinaria y equipo', 
+    title: 'Uso de maquinaria y equipo',
     puntos: [
       { numero: '5.2', descripcion: 'Estudio para analizar el riesgo en maquinaria.' },
       { numero: '5.3 a)', descripcion: 'Elaborar el Programa Específico de Seguridad e Higiene para Operación y Mantenimiento.' },
-      { numero: '5.4', descripcion: 'Capacitación para operación segura de la maquinaria y equipo.' }
+      { numero: '5.3 b)', descripcion: 'Manual de primeros auxilios en el que se definan los procedimientos para la atención de emergencias.' },
+      { numero: '5.4', descripcion: 'Capacitar a los trabajadores para la operación segura de la maquinaria y equipo.' },
+      { numero: '7', descripcion: 'Procedimientos de seguridad para la revisión, operación y mantenimiento de la maquinaria y equipo.' },
     ],
     condition: (values) => values.maquinaria === 'sí'
   },
+  
   { 
     id: 'NOM-005', 
     tipo: 'Seguridad',
     title: 'Manejo de sustancias químicas peligrosas', 
     puntos: [
-      { numero: '5.2', descripcion: 'Estudio de riesgos de sustancias químicas peligrosas.' },
-      { numero: '5.3', descripcion: 'Manuales y procedimientos para manejo seguro de sustancias.' },
-      { numero: '5.12', descripcion: 'Programa Específico de Seguridad e Higiene para el Manejo de Sustancias Químicas Peligrosas.' },
-      { numero: '5.13', descripcion: 'Constancias de competencias o habilidades laborales sobre el programa de manejo seguro.' }
+      { 
+        numero: '5.2', 
+        descripcion: 'Estudio para analizar los riesgos potenciales de sustancias químicas peligrosas presentes en el centro de trabajo. D Preventiva Único (Actualizar cuando aplique)' 
+      },
+      { 
+        numero: '5.3', 
+        descripcion: 'Manuales y procedimientos de seguridad para el manejo, transporte y almacenamiento seguro de sustancias químicas peligrosas. D Preventiva Único, mantener actualizado' 
+      },
+      { 
+        numero: '5.6', 
+        descripcion: 'Manual de primeros auxilios para la atención de emergencias médicas, elaborado de los resultados de estudio del riesgo potencial en las sustancias químicas peligrosas. D/F Preventiva Único, mantener' 
+      },
+      { 
+        numero: '5.12', 
+        descripcion: 'Programa Específico de Seguridad e Higiene para el Manejo, Transporte y Almacenamiento de Sustancias Químicas Peligrosas. D Preventiva Anual' 
+      },
+      { 
+        numero: '5.13', 
+        descripcion: 'Constancias de competencias o de habilidades laborales de la capacitación continua a los trabajadores sobre el programa específico de seguridad e higiene para el manejo, transporte y almacenamiento de sustancias químicas peligrosas.' 
+      },
+      { 
+        numero: '5.16', 
+        descripcion: 'Comprobación de que se comunica a los trabajadores, los riesgos a los que están expuestos' 
+      }
     ],
     condition: (values) => values.sustanciasPeligrosas === 'sí'
   },
@@ -74,46 +97,105 @@ const normas = [
     tipo: 'Seguridad',
     title: 'Manejo y almacenamiento de materiales', 
     puntos: [
-      { numero: '5.1', descripcion: 'Programa específico de revisión y mantenimiento de equipos de manejo de materiales.' },
-      { numero: '5.3', descripcion: 'Procedimientos de seguridad en el manejo de materiales.' },
-      { numero: '5.7', descripcion: 'Manual de primeros auxilios basado en riesgos de manejo de materiales.' },
-      { numero: '5.9', descripcion: 'Constancias de competencias o habilidades laborales para almacenamiento y manejo de materiales.' }
+      { 
+        numero: '5.1', 
+        descripcion: 'Programa específico para la revisión y mantenimiento de la maquinaria y equipos empleados para el manejo y almacenamiento de materiales. D Preventiva Conforme a las recomendaciones del fabricante.' 
+      },
+      { 
+        numero: '5.3', 
+        descripcion: 'Procedimientos de seguridad para realizar las actividades de manejo de materiales, a través del uso de maquinaria. D Preventiva Único, mantener.' 
+      },
+      { 
+        numero: '5.7', 
+        descripcion: 'Manual de primeros auxilios para la atención a emergencias, con base en el tipo de riesgos a que están expuestos los trabajadores que realizan el almacenamiento y manejo de materiales a través del uso de maquinaria. F/E Preventiva Único, mantener.' 
+      },
+      { 
+        numero: '5.8', 
+        descripcion: 'Comprobación de que se informa a los trabajadores sobre los riesgos a los que están expuestos en el almacenamiento y manejo de materiales por medio del uso de maquinaria. D/F Preventiva Anual.' 
+      },
+      { 
+        numero: '5.9', 
+        descripcion: 'Constancias de competencias o habilidades laborales que acrediten que se capacita y adiestra el patrón a los trabajadores involucrados en el almacenamiento y manejo de materiales a través del uso de maquinaria. D Preventiva/Correctiva Único.' 
+      },
+      { 
+        numero: '9.6', 
+        descripcion: 'Programa de mantenimiento para los elementos estructurales, estantes o plataformas que se utilicen para el almacenamiento de materiales y sus registros.' 
+      }
     ],
     condition: (values) => values.manejoMateriales === 'sí'
   },
   // Aquí puedes agregar más normas con su estructura similar
 
 
-  { 
-    id: 'NOM-009', 
+  {
+    id: 'NOM-009',
     tipo: 'Seguridad',
-    title: 'Trabajos en altura', 
+    title: 'Trabajos en altura',
     puntos: [
-      { numero: '5.1', descripcion: 'Análisis de condiciones de riesgo en áreas de trabajo en altura.' },
-      { numero: '5.2', descripcion: 'Instructivos y procedimientos de seguridad para sistemas de trabajos en altura.' },
-      { numero: '5.3', descripcion: 'Autorización escrita para trabajos en alturas.' },
-      { numero: '5.11', descripcion: 'Plan de atención a emergencias en trabajos en altura.' },
-      { numero: '5.13', descripcion: 'Constancias de capacitación en trabajos en altura y atención a emergencias.' }
+      {
+        numero: '5.1',
+        descripcion: 'Análisis de las condiciones prevalecientes en las áreas en las que se llevarán a cabo los trabajos en altura, en forma previa a su realización, a fin de identificar los factores de riesgo existentes. D Preventiva Permanente.'
+      },
+      {
+        numero: '5.2',
+        descripcion: 'Instructivos, manuales o procedimientos de seguridad para la instalación, operación y mantenimiento de los sistemas o equipos utilizados en los trabajos en altura, redactados en idioma español, con base en las instrucciones del fabricante. D Preventiva Único, mantener.'
+      },
+      {
+        numero: '5.3',
+        descripcion: 'Autorización por escrito a trabajadores que realicen trabajos en alturas. D Preventiva Permanente.'
+      },
+      {
+        numero: '5.11',
+        descripcion: 'Plan de atención a emergencias derivado de la ejecución de trabajos en alturas, conforme a lo establecido en la norma. D Preventiva/Correctiva Único, mantener.'
+      },
+      {
+        numero: '5.13',
+        descripcion: 'Constancias de competencias o habilidades laborales que acrediten que se capacita y adiestra el patrón a los trabajadores involucrados en la realización de trabajos en alturas, así como en lo relativo a la aplicación del plan de atención a emergencias.'
+      }
     ],
     condition: (values) => values.trabajosAltura === 'sí'
   },
+  
   {
     id: 'NOM-020',
     tipo: 'Seguridad',
     title: 'Recipientes sujetos a presión',
     puntos: [
-      { numero: '5.2', descripcion: 'Listado actualizado de los equipos instalados en el centro de trabajo.' },
-      { numero: '5.3', descripcion: 'Expediente de cada equipo instalado en el centro de trabajo.' },
-      { numero: '5.5', descripcion: 'Programas de revisión y calibración de equipos de presión.' },
-      { numero: '5.6', descripcion: 'Procedimientos de operación y mantenimiento en idioma español.' },
-      { numero: '5.14', descripcion: 'Difusión sobre los peligros inherentes a los equipos y fluidos.' }
+      {
+        numero: '5.2',
+        descripcion: 'Listado actualizado de los equipos que se encuentren instalados en el centro de trabajo. D Preventiva Actualizar.'
+      },
+      {
+        numero: '5.3',
+        descripcion: 'Expediente de cada equipo que esté instalado en el centro de trabajo. D Preventiva Cada 5 años.'
+      },
+      {
+        numero: '5.5',
+        descripcion: 'Programas de revisión y calibración a los instrumentos de control y dispositivos de relevo de presión de los equipos, así como el registro de calibración de los mismos. D Preventiva Anual.'
+      },
+      {
+        numero: '5.6',
+        descripcion: 'Procedimientos de operación, revisión y mantenimiento de los equipos, en idioma español. D Preventiva Único, mantener actualizado.'
+      },
+      {
+        numero: '5.14',
+        descripcion: 'Difusión a los trabajadores y a la comisión de seguridad e higiene sobre los peligros y riesgos inherentes a los equipos y a los fluidos que contienen. D Preventiva Permanente.'
+      },
+      {
+        numero: '10',
+        descripcion: 'Programa específico de revisión y mantenimiento para los equipos y sus registros de ejecución. D Correctiva Anual.'
+      },
+      {
+        numero: '17.1',
+        descripcion: 'Capacitación al personal que realiza actividades de operación, mantenimiento, reparación y pruebas de presión o exámenes no destructivos.'
+      }
     ],
     condition: (values) =>
       values.recipientesPresion === 'sí' ||
       values.recipientesCriogenicos === 'sí' ||
-      values.generadoresVapor === 'sí' 
-},
-
+      values.generadoresVapor === 'sí'
+  },
+  
 
   { 
     id: 'NOM-022', 
@@ -166,52 +248,109 @@ const normas = [
     ],
     condition: (values) => values.mantenimientoLineasElectricas === 'sí'  || values.instalacionesElectricas === 'sí' || values.mantenimientoEnergizadas === 'sí'
   },
-  { 
-    id: 'NOM-034', 
+  {
+    id: 'NOM-034',
     tipo: 'Seguridad',
-    title: 'Accesibilidad para trabajadores con discapacidad', 
+    title: 'Accesibilidad para trabajadores con discapacidad',
     puntos: [
-      { numero: '5.1', descripcion: 'Análisis de compatibilidad del puesto con la discapacidad de cada trabajador.' },
-      { numero: '5.2', descripcion: 'Instalaciones accesibles y señalización para desplazamiento y emergencia.' },
-      { numero: '5.3', descripcion: 'Acciones preventivas y correctivas para prevenir riesgos a trabajadores con discapacidad.' },
-      { numero: '5.5', descripcion: 'Plan de atención a emergencias que incluya a trabajadores con discapacidad.' },
-      { numero: '5.7', descripcion: 'Capacitación para trabajadores con discapacidad en su desarrollo y actuación en emergencias.' }
+      {
+        numero: '5.1',
+        descripcion: 'Análisis para determinar la compatibilidad del puesto de trabajo con la discapacidad que presenta cada uno de los trabajadores. D Preventiva Actualizar cuando existan modificaciones.'
+      },
+      {
+        numero: '5.2',
+        descripcion: 'Contar con instalaciones que permitan la accesibilidad al centro de trabajo y contar con señalizaciones para el desplazamiento, la estadía y emergencia, según corresponda, de acuerdo a la discapacidad de los trabajadores. F Preventiva Permanente.'
+      },
+      {
+        numero: '5.3',
+        descripcion: 'Documento que contenga las acciones preventivas y correctivas instrumentadas para prevenir riesgos a los trabajadores con discapacidad, considerando, además, para cada puesto de trabajo. D Preventiva/Correctiva Único, mantener actualizado.'
+      },
+      {
+        numero: '5.5',
+        descripcion: 'Plan de Atención a Emergencias donde considere a los trabajadores con discapacidad. D Preventiva Único, mantener actualizado.'
+      },
+      {
+        numero: '5.6',
+        descripcion: 'Constar que se difunda a los trabajadores con discapacidad sobre los riesgos, las medidas de seguridad y las acciones a seguir en caso de emergencia. D/E Preventiva Permanente.'
+      },
+      {
+        numero: '5.7',
+        descripcion: 'Constancia de competencias o habilidades laborales que acrediten que se capacita a los trabajadores con discapacidad para su desarrollo en el puesto de trabajo y actuación en caso de emergencia.'
+      }
     ],
-    condition: (values) => values.trabajadoresDiscapacidad === 'sí' 
+    condition: (values) => values.trabajadoresDiscapacidad === 'sí'
   },
-  { 
+
+  {
     id: 'NOM-010',
-    tipo: 'Salud', 
-    title: 'Agentes químicos contaminantes en el ambiente laboral', 
+    tipo: 'Salud',
+    title: 'Agentes químicos contaminantes en el ambiente laboral',
     puntos: [
-      { numero: '6.1', descripcion: 'Estudio actualizado de agentes químicos contaminantes del ambiente laboral.' },
-      { numero: '6.2', descripcion: 'Reconocimiento de agentes químicos contaminantes en el ambiente laboral.' },
-      { numero: '6.6', descripcion: 'Programa de control para evitar exposición a agentes químicos contaminantes.' },
-      { numero: '6.9', descripcion: 'Documento informativo sobre riesgos a la salud por exposición a agentes químicos.' }
+      {
+        numero: '6.1',
+        descripcion: 'Estudio actualizado de los agentes químicos contaminantes del ambiente laboral, con base en el capítulo 8 de la norma. D Preventiva De acuerdo a resultados, hasta 2 años.'
+      },
+      {
+        numero: '6.2',
+        descripcion: 'Reconocimiento de los agentes químicos contaminantes del ambiente laboral, conforme al capítulo 9 de la norma. D Preventiva De acuerdo a resultados, hasta 2 años.'
+      },
+      {
+        numero: '6.6',
+        descripcion: 'Programa de control para no exponer al personal ocupacionalmente expuesto por encima de los valores límites de exposición de los agentes contaminantes del ambiente laboral. D Preventiva Anual.'
+      },
+      {
+        numero: '6.9',
+        descripcion: 'Documento que acredite que se informa a los trabajadores y a la comisión de seguridad e higiene sobre los riesgos a la salud por la exposición a los agentes químicos contaminantes del ambiente laboral. D/F Preventiva Permanente.'
+      },
+      {
+        numero: '12.2',
+        descripcion: 'Programa para la vigilancia a la salud del personal ocupacionalmente expuesto.'
+      }
     ],
     condition: (values) => values.materialp === 'sí'
   },
-  { 
-    id: 'NOM-011', 
+  {
+    id: 'NOM-011',
     tipo: 'Salud',
-    title: 'Ruido en los centros de trabajo', 
+    title: 'Ruido en los centros de trabajo',
     puntos: [
-      { numero: '5.2', descripcion: 'Evaluación de ruido en áreas donde trabajadores estén expuestos a niveles superiores a 80 dB(A).' },
-      { numero: '5.5', descripcion: 'Programa de conservación de la audición para trabajadores expuestos a ruido.' },
-      { numero: '5.8', descripcion: 'Orientación sobre alteraciones a la salud por exposición a ruido.' }
+      {
+        numero: '5.2',
+        descripcion: 'Reconocimiento y evaluación del ruido en todas las áreas del centro de trabajo donde haya trabajadores expuestos a niveles sonoros iguales o superiores a 80 dB(A), incluyendo sus características y componentes de frecuencia; efectuado a través de los laboratorios acreditados y aprobados. D Correctiva De acuerdo a resultados, hasta 2 años.'
+      },
+      {
+        numero: '5.5',
+        descripcion: 'Programa específico de conservación de la audición del personal ocupacionalmente expuesto a ruido. D Preventiva Anual.'
+      },
+      {
+        numero: '5.8',
+        descripcion: 'Informar y orientar a los trabajadores, y a la comisión de seguridad e higiene sobre las posibles alteraciones a la salud por la exposición a ruido, y sobre la forma de evitarlas o atenuarlas.'
+      }
     ],
-    condition: (values) => values.exposicionRuido === 'sí'
+    condition: (values) => values.exposicionRuido === 'Sí'
   },
 
-  { 
-    id: 'NOM-013', 
+  {
+    id: 'NOM-013',
     tipo: 'Salud',
-    title: 'Radiaciones no ionizantes', 
+    title: 'Radiaciones no ionizantes',
     puntos: [
-      { numero: '3.1.2', descripcion: 'Reconocimiento, evaluación y control de áreas con radiaciones no ionizantes para prevenir riesgos.' },
-      { numero: '3.1.3', descripcion: 'Documento informativo sobre los riesgos de exposición a radiaciones no ionizantes.' },
-      { numero: '3.1.4', descripcion: 'Capacitación en seguridad e higiene para el manejo de fuentes generadoras de radiaciones no ionizantes.' },
-      { numero: '3.1.5', descripcion: 'Medidas de control para prevenir riesgos de exposición a radiaciones electromagnéticas.' }
+      {
+        numero: '3.1.2',
+        descripcion: 'Reconocimiento, evaluación y control de las áreas donde existan fuentes que generen radiaciones no ionizantes, con el fin de prevenir riesgos a la salud de los trabajadores. D Preventiva Permanente.'
+      },
+      {
+        numero: '3.1.3',
+        descripcion: 'Documento que informe a los trabajadores y a la comisión de seguridad e higiene sobre los riesgos que representan las radiaciones no ionizantes y las medidas para prevenirlos. D Preventiva Permanente.'
+      },
+      {
+        numero: '3.1.4',
+        descripcion: 'Capacitación en seguridad e higiene ocupacional para el manejo y uso adecuado de las fuentes generadoras de radiaciones no ionizantes, con constancias de competencias laborales. D Preventiva Anual.'
+      },
+      {
+        numero: '3.1.5',
+        descripcion: 'Implementación de medidas de control para prevenir riesgos derivados de la exposición a campos electromagnéticos u otras radiaciones no ionizantes en el centro de trabajo. D Preventiva Permanente.'
+      }
     ],
     condition: (values) => values.exposicionRadiaciones === 'sí'
   },
@@ -220,10 +359,22 @@ const normas = [
     tipo: 'Salud',
     title: 'Vibraciones en el ambiente laboral', 
     puntos: [
-      { numero: '5.2', descripcion: 'Documento informativo sobre los riesgos a la salud por exposición a vibraciones.' },
-      { numero: '5.4', descripcion: 'Programa de prevención de alteraciones a la salud por exposición a vibraciones.' },
-      { numero: '5.5', descripcion: 'Capacitación al personal expuesto a vibraciones en el programa de prevención de alteraciones a la salud.' },
-      { numero: '8.7.2 a)', descripcion: 'Evaluación de niveles de exposición a vibraciones en áreas potencialmente expuestas.' }
+      { 
+        numero: '5.2', 
+        descripcion: 'Documento que acredite que se informa a todos los trabajadores sobre las posibles alteraciones a la salud por la exposición a vibraciones. D Preventiva Permanente.' 
+      },
+      { 
+        numero: '5.4', 
+        descripcion: 'Programa específico para la Prevención de Alteraciones a la Salud del personal ocupacionalmente expuesto a vibraciones. D Preventiva Cada 2 años.' 
+      },
+      { 
+        numero: '5.5', 
+        descripcion: 'Capacitación y adiestramiento al personal ocupacionalmente expuesto (POE) en el Programa para la Prevención de Alteraciones a la Salud del POE. D Preventiva Anual.' 
+      },
+      { 
+        numero: '8.7.2 a)', 
+        descripcion: 'Reconocimiento y evaluación de los niveles de exposición a las vibraciones en todas las áreas donde hayan trabajadores potencialmente expuestos.' 
+      }
     ],
     condition: (values) => values.vibraciones === 'sí'
   },
@@ -232,112 +383,259 @@ const normas = [
     tipo: 'Salud',
     title: 'Iluminación en los centros de trabajo', 
     puntos: [
-      { numero: '5.2', descripcion: 'Evaluación de la iluminación en áreas de trabajo comparada con los valores establecidos.' },
-      { numero: '5.8', descripcion: 'Documento informativo sobre riesgos de deslumbramiento o deficiente iluminación.' },
-      { numero: '5.10', descripcion: 'Programa de mantenimiento a luminarias y sistemas de iluminación de emergencia.' },
-      { numero: '5.11', descripcion: 'Sistemas de iluminación eléctrica de emergencia en áreas de riesgo.' }
+      { 
+        numero: '5.2', 
+        descripcion: 'Reconocimiento y evaluación de la iluminación de las tareas visuales del puesto de trabajo o áreas de trabajo comparadas con la Tabla 1 del capítulo 7. F Correctiva Cada 2 años.' 
+      },
+      { 
+        numero: '5.8', 
+        descripcion: 'Documento que acredite que se informa a los trabajadores sobre los riesgos que puede provocar el deslumbramiento o un deficiente nivel de iluminación en sus áreas o puestos de trabajo. D/E Preventiva Permanente.' 
+      },
+      { 
+        numero: '5.10', 
+        descripcion: 'Programa específico de mantenimiento a luminarias y, en su caso, a los sistemas de iluminación de emergencia. D Correctiva Anual.' 
+      },
+      { 
+        numero: '5.11', 
+        descripcion: 'Contar con sistemas de iluminación eléctrica de emergencia, en áreas donde la interrupción de la fuente de luz artificial represente un riesgo en la tarea visual del puesto de trabajo.' 
+      }
     ],
     condition: (values) => values.iluminacion === 'deficiente'
-  },
-  { 
-    id: 'NOM-035', 
-    tipo: 'Salud',
-    title: 'Factores de riesgo psicosocial en el trabajo', 
-    puntos: [
-      { numero: '5.1', descripcion: 'Política de prevención de riesgos psicosociales en el trabajo.' },
-      { numero: '5.5', descripcion: 'Identificación y canalización de trabajadores expuestos a acontecimientos traumáticos.' },
-      { numero: '7.1 b)', descripcion: 'Identificación y análisis de factores de riesgo psicosocial en el centro de trabajo.' },
-      { numero: '8.2 a) 5)', descripcion: 'Capacitación de directivos y supervisores en prevención de riesgos psicosociales.' }
-    ],
-    condition: (values) => values.factoresPsicosociales === 'sí'
-  },
-  { 
-    id: 'NOM-036-1', 
-    tipo: 'Salud',
-    title: 'Factores de riesgo ergonómico por manejo manual de cargas', 
-    puntos: [
-      { numero: '5.1', descripcion: 'Análisis de los factores de riesgo ergonómico debido al manejo manual de cargas.' },
-      { numero: '5.3', descripcion: 'Programa de ergonomía para la vigilancia de la salud de los trabajadores expuestos.' },
-      { numero: '5.4', descripcion: 'Documento informativo sobre los riesgos del manejo manual de cargas.' },
-      { numero: '5.5', descripcion: 'Capacitación en procedimientos de seguridad para manejo manual de cargas.' }
-    ],
-    condition: (values) => values.manejocargas === 'sí'
-  },
-  { 
-    id: 'NOM-017', 
-    tipo: 'Organización',
-    title: 'Equipo de protección personal', 
-    puntos: [
-      { numero: '5.2', descripcion: 'Análisis de riesgos por puesto de trabajo y determinación del equipo de protección necesario.' },
-      { numero: '5.5', descripcion: 'Documento informativo sobre los riesgos a los que se exponen los trabajadores.' },
-      { numero: '5.6', descripcion: 'Capacitación para el uso adecuado del equipo de protección personal.' },
-      { numero: '5.8', descripcion: 'Identificación y señalización de áreas donde es obligatorio el uso de equipo de protección.' }
-    ],
-    condition: (values) => values.equipoProteccion === 'sí'
-  },
-  { 
-    id: 'NOM-018', 
-    tipo: 'Organización',
-    title: 'Identificación y comunicación de peligros por sustancias químicas peligrosas', 
-    puntos: [
-      { numero: '6.1', descripcion: 'Listado actualizado de sustancias químicas peligrosas en el centro de trabajo.' },
-      { numero: '6.3', descripcion: 'Hojas de datos de seguridad para todas las sustancias químicas peligrosas.' },
-      { numero: '6.5', descripcion: 'Identificación y señalización de recipientes y áreas que contienen sustancias químicas peligrosas.' },
-      { numero: '6.7', descripcion: 'Capacitación para el manejo seguro de sustancias químicas peligrosas.' }
-    ],
-    condition: (values) => values.materialp === 'sí'
-  },
-  { 
-    id: 'NOM-019', 
-    tipo: 'Organizacion',
-    title: 'Constitución y funcionamiento de las comisiones de seguridad e higiene', 
-    puntos: [
-      { numero: '5.4', descripcion: 'Acta de constitución de la comisión de seguridad e higiene.' },
-      { numero: '5.5', descripcion: 'Programa de recorridos de verificación de la comisión de seguridad e higiene.' },
-      { numero: '5.6', descripcion: 'Actas de los recorridos de verificación realizados por la comisión.' },
-      { numero: '5.13', descripcion: 'Capacitación a los integrantes de la comisión de seguridad e higiene.' }
-    ],
-    condition: (values) => values.comisionSeguridadHigiene === 'sí'
-  },
+  }
+,  
+{
+  id: 'NOM-035',
+  tipo: 'Salud',
+  title: 'Factores de riesgo psicosocial en el trabajo',
+  puntos: [
+    {
+      numero: '5.1',
+      descripcion: 'Establece, implanta y mantiene una política de prevención de riesgos psicosociales que contempla: La prevención de los factores de riesgo psicosocial, la prevención de la violencia laboral y la promoción de un entorno organizacional favorable. Difunde en el centro del trabajo la política de prevención de riesgos psicosociales. D Preventiva Modificar cuando aplique.'
+    },
+    {
+      numero: '5.5',
+      descripcion: 'Identifica a los trabajadores que fueron sujetos a acontecimientos traumáticos severos durante o con motivo del trabajo y canaliza a los trabajadores identificados para su atención a la institución de seguridad social o privada, o con el médico del centro de trabajo o de la empresa. D Correctiva Anual.'
+    },
+    {
+      numero: '7.1 b)',
+      descripcion: 'Identificación y análisis de los factores de riesgo psicosocial, el cual comprende a todos los trabajadores del centro de trabajo. D Preventiva Anual.'
+    },
+    {
+      numero: '8.2 a) 5)',
+      descripcion: 'Capacitación y sensibilización de los directivos, gerentes y supervisores para la prevención de los factores de riesgo psicosocial y la promoción de entornos organizacionales favorables. D/E Preventiva Anual.'
+    }
+  ],
+  condition: (values) => values.factoresPsicosociales === 'sí'
+}
+,
+{
+  id: 'NOM-036-1',
+  tipo: 'Salud',
+  title: 'Factores de riesgo ergonómico por manejo manual de cargas',
+  puntos: [
+    {
+      numero: '5.1',
+      descripcion: 'Análisis de los factores de riesgo ergonómico debido al manejo manual de cargas. D Preventiva Único, actualizar si hay cambios.'
+    },
+    {
+      numero: '5.3',
+      descripcion: 'Programa de ergonomía para realizar la vigilancia a la salud de los trabajadores ocupacionalmente expuestos. D Preventiva Anual.'
+    },
+    {
+      numero: '5.4',
+      descripcion: 'Documento que informa a los trabajadores sobre las posibles alteraciones a la salud por el manejo manual de cargas. D/F Preventiva Permanente.'
+    },
+    {
+      numero: '5.5',
+      descripcion: 'Capacitación y adiestramiento al personal ocupacionalmente expuesto sobre los procedimientos de seguridad y las prácticas de trabajo seguro, y en su caso, en las medidas de prevención y/o control.'
+    }
+  ],
+  condition: (values) => values.manejocargas === 'Sí'
+},
+{
+  id: 'NOM-017',
+  tipo: 'Organización',
+  title: 'Equipo de protección personal',
+  puntos: [
+    {
+      numero: '5.2',
+      descripcion: 'Análisis de los riesgos, por cada puesto de trabajo y determinación de equipo de protección personal. D Preventiva Único, actualizar si hay cambios.'
+    },
+    {
+      numero: '5.5',
+      descripcion: 'Comprobación que se informa a los trabajadores y a la comisión de seguridad e higiene, de manera particular o de forma general sobre los riesgos a los que se exponen. Las evidencias pueden ser videos, cartelones, trípticos, boletines, entre otros. D Preventiva Permanente.'
+    },
+    {
+      numero: '5.6',
+      descripcion: 'Capacitación y adiestramiento para que usen el equipo de protección personal de forma adecuada y con las limitaciones que el fabricante les establezca, y revisen el equipo de protección personal. D Preventiva Único.'
+    },
+    {
+      numero: '5.8',
+      descripcion: 'Identificar y señalar las áreas de trabajo en donde se requiera el uso obligatorio de equipo de protección personal.'
+    }
+  ],
+  condition: (values) => values.equipoProteccion === 'sí'
+},
+{
+  id: 'NOM-018',
+  tipo: 'Organización',
+  title: 'Identificación y comunicación de peligros por sustancias químicas peligrosas',
+  puntos: [
+    {
+      numero: '6.1',
+      descripcion: 'Listado actualizado de las sustancias químicas peligrosas y mezclas que se manejan en el centro de trabajo. D Único, actualizar si hay cambios.'
+    },
+    {
+      numero: '6.1',
+      descripcion: 'Documento de implementación del sistema armonizado de identificación y comunicación de peligros y riesgos por sustancias químicas peligrosas y mezclas. D Preventiva Anual.'
+    },
+    {
+      numero: '6.3',
+      descripcion: 'Contar con las hojas de datos de seguridad de todas las sustancias químicas peligrosas y mezclas que se manejen en el centro de trabajo y mantener a disposición permanentemente para su consulta. D Preventiva Permanente.'
+    },
+    {
+      numero: '6.5',
+      descripcion: 'Identificar y señalizar recipientes y áreas que contengan sustancias químicas peligrosas o sus residuos, de acuerdo con el SGA. F Correctiva Permanente.'
+    },
+    {
+      numero: '6.6',
+      descripcion: 'Acreditación que se informa a todos los trabajadores, contratistas y a la comisión de seguridad e higiene que manejan sustancias químicas peligrosas y mezclas, sobre los elementos de la hoja de datos de seguridad y de la señalización. D/E Preventiva Permanente.'
+    },
+    {
+      numero: '6.7',
+      descripcion: 'Capacitación y adiestramiento a los trabajadores que manejen sustancias químicas peligrosas y mezclas, sobre el contenido de las hojas de datos de seguridad y de la señalización. D Preventiva Anual.'
+    },
+    {
+      numero: '8.1 c)',
+      descripcion: 'Contar con señalización o etiquetado las sustancias químicas peligrosas y mezclas que se manejen en el centro de trabajo.'
+    }
+  ],
+  condition: (values) => values.materialp === 'Sí'
+}
+,
+{
+  id: 'NOM-019',
+  tipo: 'Organización',
+  title: 'Constitución y funcionamiento de las comisiones de seguridad e higiene',
+  puntos: [
+    {
+      numero: '5.4',
+      descripcion: 'Acta de constitución de la comisión del centro de trabajo y de sus actualizaciones, cuando se modifique su integración, de conformidad con lo previsto en el numeral 7.4 de la presente norma. D Preventiva Único, actualizar si hay cambios.'
+    },
+    {
+      numero: '5.5',
+      descripcion: 'Programa de los recorridos de verificación de la comisión de seguridad e higiene. D Preventiva/Correctiva Anual.'
+    },
+    {
+      numero: '5.6',
+      descripcion: 'Actas de los recorridos de verificación realizados por la comisión del centro de trabajo. D Correctiva Mínimo cada 3 meses.'
+    },
+    {
+      numero: '5.9',
+      descripcion: 'Comprobación documental de que se apoya la investigación de los accidentes y enfermedades de trabajo que lleve a cabo la comisión. D Preventiva/Correctiva Cuando aplique.'
+    },
+    {
+      numero: '5.13',
+      descripcion: 'Capacitación a los integrantes de la comisión de seguridad e higiene para el adecuado ejercicio de sus funciones, con base en el programa que para tal efecto se elabore. D Preventiva Anual.'
+    },
+    {
+      numero: '10.3',
+      descripcion: 'Documento que acredite que se proporciona un curso de inducción cuando se incorpora un nuevo integrante o integrantes a la comisión.'
+    }
+  ],
+  condition: (values) => values.comisionSeguridadHigiene === 'sí'
+},
   
   
-  { 
-    id: 'NOM-026', 
-    tipo: 'Organización',
-    title: 'Colores y señales de seguridad e higiene, e identificación de riesgos por fluidos conducidos en tuberías', 
-    puntos: [
-      { numero: '5.2', descripcion: 'Constancias de competencias o habilidades laborales sobre la interpretación de elementos de señalización en el centro de trabajo.' },
-      { numero: '5.3', descripcion: 'Mantenimiento de la aplicación del color, señalización e identificación de tuberías para asegurar visibilidad y legibilidad.' },
-      { numero: '5.4', descripcion: 'Ubicación de señales de seguridad e higiene de manera que sean observadas e interpretadas correctamente por los trabajadores.' }
-    ],
-    condition: (values) => values.senalizacionSeguridad === 'sí' // Agregar este campo en formValues si aplica
-  },
+{
+  id: 'NOM-026',
+  tipo: 'Organización',
+  title: 'Colores y señales de seguridad e higiene, e identificación de riesgos por fluidos conducidos en tuberías',
+  puntos: [
+    {
+      numero: '5.2',
+      descripcion: 'Constancias de competencias o habilidades laborales de los trabajadores sobre la correcta interpretación de los elementos de señalización del centro de trabajo. D/F Preventiva Anual.'
+    },
+    {
+      numero: '5.3',
+      descripcion: 'Comprobación que la aplicación del color, la señalización y la identificación de la tubería estén sujetos a un mantenimiento que asegure en todo momento su visibilidad y legibilidad. F Correctiva Permanente.'
+    },
+    {
+      numero: '5.4',
+      descripcion: 'Ubicar las señales de seguridad e higiene de tal manera que puedan ser observadas e interpretadas por los trabajadores a los que están destinadas.'
+    }
+  ],
+  condition: (values) => values.senalizacionSeguridad === 'sí' // Agregar este campo en formValues si aplica
+}
+,
 
     
-  { 
-    id: 'NOM-030', 
-    tipo: 'Organización',
-    title: 'Servicios preventivos de seguridad y salud en el trabajo', 
-    puntos: [
-      { numero: '4.1', descripcion: 'Designación de un responsable de seguridad y salud en el trabajo para actividades preventivas en el centro de trabajo.' },
-      { numero: '4.3', descripcion: 'Diagnóstico integral o por áreas de las condiciones de seguridad y salud en el trabajo.' },
-      { numero: '4.4', descripcion: 'Programa de seguridad y salud en el trabajo basado en el diagnóstico de seguridad y salud.' },
-      { numero: '4.5', descripcion: 'Comunicación del diagnóstico y programa de seguridad a la comisión de seguridad e higiene o trabajadores.' }
-    ],
-    condition: (values) => values.seguridadSalud === 'sí' // Agregar este campo en formValues si aplica
-  },
+{
+  id: 'NOM-030',
+  tipo: 'Organización',
+  title: 'Servicios preventivos de seguridad y salud en el trabajo',
+  puntos: [
+    {
+      numero: '4.1',
+      descripcion: 'Designar a un responsable de seguridad y salud en el trabajo interno o externo, para llevar a cabo las funciones y actividades preventivas de seguridad y salud en el centro de trabajo a que se refiere el Capítulo 5. D Preventiva Anual, actualizar si hay cambios.'
+    },
+    {
+      numero: '4.3',
+      descripcion: 'Diagnóstico integral o por áreas de trabajo de las condiciones de seguridad y salud del centro laboral, elaborado de acuerdo con lo que establece el numeral 6.1. D Preventiva/Correctiva Anual.'
+    },
+    {
+      numero: '4.4',
+      descripcion: 'Programa de seguridad y salud en el trabajo, con base en el diagnóstico de seguridad y salud en el trabajo. D Preventiva/Correctiva Anual.'
+    },
+    {
+      numero: '4.5',
+      descripcion: 'Acreditar que se comunica a la comisión de seguridad e higiene y/o a los trabajadores, el diagnóstico integral o por área de trabajo de las condiciones de seguridad y salud y el contenido del programa de seguridad y salud en el trabajo o la relación de acciones preventivas y correctivas de seguridad y salud en el trabajo.'
+    }
+  ],
+  condition: (values) => values.seguridadSalud === 'sí' // Agregar este campo en formValues si aplica
+},
 
-  { 
-    id: 'NOM-033', 
-    tipo: 'Seguridad',
-    title: 'Trabajos en espacios confinados', 
-    puntos: [
-      { numero: '6.1', descripcion: 'Identificación y evaluación de los riesgos asociados a trabajos en espacios confinados.' },
-      { numero: '6.2', descripcion: 'Planificación y autorización para realizar trabajos en espacios confinados.' },
-      { numero: '6.3', descripcion: 'Entrenamiento específico para trabajadores que realicen trabajos en espacios confinados.' }
-    ],
-    condition: (values) => values.trabajosEspaciosConfinados === 'sí' ||  values.soldaduraAltura === 'sí'
-  },
+{
+  id: 'NOM-033',
+  tipo: 'Seguridad',
+  title: 'Trabajos en espacios confinados',
+  puntos: [
+    {
+      numero: '5.1',
+      descripcion: 'Identifica y señala los espacios confinados en donde se requiere el acceso del trabajador para realizar cualquier tipo de actividad. F Preventiva Actualizar cuando existan modificaciones.'
+    },
+    {
+      numero: '5.2',
+      descripcion: 'Clasificar los espacios confinados y contar con un análisis de riesgo para cada espacio confinado donde se desarrollan trabajos, aprobado y firmado por el patrón, y el responsable de los servicios preventivos de seguridad y salud en el trabajo. D Preventiva Permanente.'
+    },
+    {
+      numero: '5.3',
+      descripcion: 'Procedimientos de seguridad para las actividades a desarrollar, el uso de equipos y herramientas, el muestreo y monitoreo para detectar atmósferas peligrosas. D Preventiva Único, mantener actualizado.'
+    },
+    {
+      numero: '5.4',
+      descripcion: 'Plan de trabajo específico para realizar trabajos en espacios confinados. D Preventiva Único, mantener actualizado.'
+    },
+    {
+      numero: '5.6',
+      descripcion: 'Autorizaciones para desarrollar trabajos en espacios confinados. D Preventiva Permanente.'
+    },
+    {
+      numero: '5.10',
+      descripcion: 'Plan de atención a emergencias y rescate en espacios confinados. D Preventiva Anual.'
+    },
+    {
+      numero: '5.11',
+      descripcion: 'Capacitación a los trabajadores que realizan actividades en espacios confinados, de conformidad con el trabajo a desarrollar, su clasificación y el resultado del análisis de riesgo. D Preventiva Anual.'
+    },
+    {
+      numero: '5.13',
+      descripcion: 'Registros del personal autorizado para el desarrollo de los trabajos en espacios confinados, de su ingreso y salida de dichos espacios, de sus tiempos de permanencia, y del muestreo y/o monitoreo de su atmósfera.'
+    }
+  ],
+  condition: (values) => values.trabajosEspaciosConfinados === 'sí' || values.soldaduraAltura === 'sí'
+}
+,
   // Normas de Salud
   { 
     id: 'NOM-012', 
@@ -359,16 +657,30 @@ const normas = [
     ],
     condition: (values) => values.invLiquidosi === 'sí'
   },
-  { 
-    id: 'NOM-015', 
+  {
+    id: 'NOM-015',
     tipo: 'Salud',
-    title: 'Condiciones térmicas elevadas o abatidas', 
+    title: 'Condiciones térmicas elevadas o abatidas',
     puntos: [
-      { numero: '6.1', descripcion: 'Medición y control de las condiciones térmicas en el lugar de trabajo.' },
-      { numero: '6.2', descripcion: 'Implementación de medidas para prevenir riesgos por condiciones térmicas extremas.' }
+      {
+        numero: '5.2',
+        descripcion: 'Documento que acredite que se informó a los trabajadores sobre los riesgos por exposición a temperaturas extremas (constancias de habilidades laborales, circulares, folletos o carteles). D/F Preventiva Único, mantener.'
+      },
+      {
+        numero: '5.3',
+        descripcion: 'Reconocimiento y evaluación de las temperaturas extremas elevadas y/o abatidas a las que se encuentran expuestos los trabajadores, a través de laboratorios acreditados y aprobados. D Preventiva Actualizar si hay cambios.'
+      },
+      {
+        numero: '5.8',
+        descripcion: 'Capacitación y adiestramiento al personal ocupacionalmente expuesto (POE) en materia de seguridad e higiene, donde se incluyan los niveles máximos permisibles y las medidas de control establecidas. D Preventiva Anual.'
+      }
     ],
-    condition: (values) => values.exposicioncalor === 'sí' || values.exposicionFrio === 'sí' || values.condicionesClimaticas
-  },
+    condition: (values) => 
+      values.exposicioncalor === 'sí' || 
+      values.exposicionFrio === 'sí' || 
+      values.condicionesClimaticas === 'sí'
+  }
+  ,
   { 
     id: 'NOM-028', 
     tipo: 'Organización',
@@ -438,7 +750,7 @@ const normas = [
       { numero: '7.1', descripcion: 'Condiciones de seguridad en la construcción de obras.' },
       { numero: '7.2', descripcion: 'Capacitación en seguridad para los trabajadores de la construcción.' }
     ],
-    condition: (values) => values.superficieConstruir === 'sí'  || values.materialc === 'sí'
+    condition: (values) => values.superficieConstruir === 'sí'  || values.materialc === 'Sí'
   },
   { 
     id: 'NOM-032', 
