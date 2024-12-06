@@ -12,14 +12,14 @@ const TablaResumen = () => {
   useEffect(() => {
     const auth = getAuth();
     const user = auth.currentUser;
-
+  
     if (!user) {
       console.error("No se encontró un usuario autenticado.");
       return;
     }
-
+  
     const uid = user.uid;
-
+  
     // Suscribirse a cambios en la colección "resumen_17"
     const unsubscribe17 = onSnapshot(
       query(collection(db, "resumen_17"), where("uid", "==", uid)),
@@ -27,7 +27,12 @@ const TablaResumen = () => {
         const areasData17 = snapshot.docs.map((doc) => ({
           area: doc.id,
           collectionName: "resumen_17",
-          ...doc.data(),
+          puestos: doc.data().puestos || [], // Asegura que siempre haya un arreglo en "puestos"
+          tolerable: doc.data().tolerable || 0,
+          moderado: doc.data().moderado || 0,
+          notable: doc.data().notable || 0,
+          elevado: doc.data().elevado || 0,
+          grave: doc.data().grave || 0,
         }));
         setData((prevData) => [
           ...prevData.filter((row) => row.collectionName !== "resumen_17"),
@@ -35,7 +40,7 @@ const TablaResumen = () => {
         ]);
       }
     );
-
+  
     // Suscribirse a cambios en la colección "resumen"
     const unsubscribe04 = onSnapshot(
       query(collection(db, "resumen"), where("uid", "==", uid)),
@@ -43,7 +48,12 @@ const TablaResumen = () => {
         const areasData04 = snapshot.docs.map((doc) => ({
           area: doc.id,
           collectionName: "resumen",
-          ...doc.data(),
+          puestos: doc.data().puestos || [],
+          tolerable: doc.data().tolerable || 0,
+          moderado: doc.data().moderado || 0,
+          notable: doc.data().notable || 0,
+          elevado: doc.data().elevado || 0,
+          grave: doc.data().grave || 0,
         }));
         setData((prevData) => [
           ...prevData.filter((row) => row.collectionName !== "resumen"),
@@ -51,23 +61,9 @@ const TablaResumen = () => {
         ]);
       }
     );
-    const unsubscribe = onSnapshot(
-      query(collection(db, "resumen"), where("uid", "==", uid)),
-      (snapshot) => {
-        const areasData = snapshot.docs.map((doc) => ({
-          area: doc.id,
-          collectionName: "resumen",
-          ...doc.data(),
-        }));
-        setData(areasData); // Asegúrate de que setData recibe datos con los campos esperados
-      }
-    );
-
-    // Cleanup al desmontar el componente
     return () => {
       unsubscribe17();
       unsubscribe04();
-      unsubscribe();
     };
   }, []);
 
