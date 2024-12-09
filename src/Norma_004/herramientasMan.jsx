@@ -39,9 +39,9 @@ const RiskTable = () => {
     "Calzado contra impacto",
     "Calzado contra sustancias químicas",
     "Calzado dieléctrico",
-    "Calzado ocupacional",
+    "Calzado ocupacional", /*voy hacer como que estoy jalando alv por si las dudas  ya subi de nivel al 101  */
     "Careta para soldador",
-    "Capuchas",
+    "Capuchas", /** por si las dudas me pongo a escribir por que viene el inge  */
     "Casco contra impacto",
     "Casco dieléctrico",
     "Conchas acústicas",
@@ -191,16 +191,16 @@ const RiskTable = () => {
   return (
     <div className="risk-table-container">
       <div id="pdf-content" className="risk-table-wrapper">
-        <div className="risk-table" style={{ width: '100%', fontSize: '1.1em' }}>
-          <div className="logo-container" style={{ textAlign: 'center', marginBottom: '20px' }}>
-            <img src={logo} alt="SIACH Logo" style={{ width: '150px' }} />
+        <div className="risk-table" style={{ width: '100%', fontSize: '1em' }}>
+          <div className="logo-container" style={{ textAlign: 'center', marginBottom: '10px' }}>
+            <img src={logo} alt="SIACH Logo" style={{ width: '200px' }} />
           </div>
           <table className="main-table" style={{ width: '50%' }}>
             <thead>
               <tr>
                 <th colSpan="2" className="nombre-maquinaria">NOMBRE DE LA MAQUINARIA O EQUIPO:</th>
                 <th colSpan="3">
-                  <textarea className="nombre-maquinaria" placeholder="Nombre de la maquinaria" name='textarea' rows="1" cols={40}></textarea>
+                  <textarea className="nombre-maquinaria" placeholder="Nombre de la maquinaria" name='textarea' rows="1" cols={62}></textarea>
                 </th>
                 <th colSpan="1" className="energia-utilizada">ENERGIA UTILIZADA:</th>
                 <th colSpan="2">
@@ -222,7 +222,7 @@ const RiskTable = () => {
                     value={state.maquinariaDescripcion}
                     onChange={(e) => handleChange('maquinariaDescripcion', e.target.value)}
                     placeholder="Describa la maquinaria o equipo"
-                    cols={40}
+                    cols={62}
                   />
                 </th>
                 <th colSpan="1" className="area">ÁREA:</th>
@@ -234,8 +234,6 @@ const RiskTable = () => {
               </tr>
               <tr>
                 <th colSpan="3">LOCALIZACIÓN ESQUEMÁTICA DE LOS RIESGOS EN LA MAQUINARIA Y/O EQUIPO:</th>
-                
-
               </tr>
             </thead>
             <tbody>
@@ -256,15 +254,13 @@ const RiskTable = () => {
                   />
                 </div>
               </td>
-
-
-                <td colSpan="8" className="right-aligned">
+                <td colSpan="8" className="right-alignedd">
                   <div className="text1">Evaluación de riesgo de trabajo</div>
-                    <table className="inner-table" style={{ width: '100%' }}>
+                    <table className="" style={{ width: '100%' }}>
                       <thead>
                         <tr>
                           <th>Consecuencia</th>
-                          <th style={{ backgroundColor: 'red' }}>Exposición</th>
+                          <th style={{ backgroundColor: '' }}>Exposición</th>
                           <th>Probabilidad</th>
                           <th>Magnitud del Riesgo</th>
                         </tr>
@@ -323,8 +319,6 @@ const RiskTable = () => {
                     <div>Acción: {accion}</div>
                   </div>
                 </td>
-
-              
               <tr>
                 <td colSpan="2">
                   <table className="main-table" style={{ width: '100%' }}>
@@ -349,7 +343,6 @@ const RiskTable = () => {
                     </tbody>
                   </table>
                 </td>
-
                 <td colSpan="4">
                   <table className="risk-body-table" style={{ width: '100%' }}>
                     <thead>
@@ -397,7 +390,6 @@ const RiskTable = () => {
                       </tbody>
                     </table>
                   </td>
-
                 </tr>
 
               <tr>

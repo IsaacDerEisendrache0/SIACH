@@ -161,6 +161,24 @@ const RiskTable = () => {
   };
 
   // Opciones de evaluación de riesgo
+
+  const opcionesIdentificaciones = [
+'Riesgo de incendio','Riesgo de atrapamiento o volcadura','Riesgo de choque o atropello',
+'Riesgo de descarga eléctrica',
+'Exposición a temperaturas elevadas y abatidas','Vibración','Riesgo inundación',
+'Ventilación deficiente','Daños ergonómicos','Sustancia químicas','Poca iluminación','Particulas suspendidas en el ambiente',
+
+
+  ];
+
+  const opcionesSistemaseguridad = [
+  'Paro de emergencia','Sistema ANSUL','Extintores','freno de emergencia',
+'Bandas antiestática','Sistema de anclaje','Programa de mantenimiento',
+'Guardas, parachoques y protectores de calaveras','Calza de seguridad','Bloqueo de sistema hidráulico ',
+'Indicadores (torreta,luces,claxon,banderas, etc)','Bloqueo de sistema eléctrico','Cinturón de seguridad',
+'Barandales y escaleras','Indicadores agua,aceite aire,motor, presión,etc','Canopy','Mata chispas','Sistema loto',
+
+  ];
   const opcionesConsecuencia = [
     'Catástrofe', 'Varias muertes', 'Muerte',
     'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'
@@ -603,7 +621,7 @@ const handleRemovePuesto = () => {
               {[...Array(7)].map((_, index) => (
                 <select key={index} style={{ padding: '5px', fontSize: '12px', borderRadius: '5px', border: '1px solid #ccc', width: '100%', marginBottom: '5px' }}>
                   <option value="">Seleccione un riesgo</option>
-                  {opcionesConsecuencia.map((opt, idx) => (
+                  {opcionesIdentificaciones.map((opt, idx) => (
                     <option key={idx} value={opt}>{opt}</option>
                   ))}
                 </select>
@@ -614,7 +632,7 @@ const handleRemovePuesto = () => {
               {[...Array(7)].map((_, index) => (
                 <select key={index} style={{ padding: '5px', fontSize: '12px', borderRadius: '5px', border: '1px solid #ccc', width: '100%', marginBottom: '5px' }}>
                   <option value="">Seleccione un sistema de seguridad</option>
-                  {opcionesExposicion.map((opt, idx) => (
+                  {opcionesSistemaseguridad.map((opt, idx) => (
                     <option key={idx} value={opt}>{opt}</option>
                   ))}
                 </select>

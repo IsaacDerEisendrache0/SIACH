@@ -135,7 +135,7 @@ const TablaResumen = () => {
                     onClick={() => toggleExpandArea(row.area)}
                     className="boton-expandir"
                   >
-                    {expandedAreas.includes(row.area) ? "▼" : "▶"}
+                    {expandedAreas.includes(row.area) ? "▼  " : "▶"}
                   </button>
                   {row.area}
                 </td>

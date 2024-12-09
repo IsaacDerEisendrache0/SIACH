@@ -321,15 +321,6 @@ const RiskAssessmentTable = () => {
       });
   };
   
-  
-  
-  
-  
-
-
-
-
-
 const handleDeletePuestoClick = () => {
   setIsModalOpen(true); // Abrir el modal cuando se presiona "Borrar"
 };

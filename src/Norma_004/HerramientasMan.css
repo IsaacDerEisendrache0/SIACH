@@ -31,8 +31,10 @@ body {
   padding: 5px;
   line-height: 1.2;
  font-size: 0.9em;
-  border: 1px solid #ddd;
+  border: 1px solid
 }
+
+
 
 /* Highlighted Titles */
 .main-table th.nombre-maquinaria, 
@@ -56,7 +58,6 @@ body {
 .image-sectionn {
   width: 340px; /* Ancho fijo del cuadro */
   height: 200px; /* Alto fijo del cuadro */
-  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -123,7 +124,8 @@ textarea#observaciones {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
-}
+} /*disque estoy jalando pero ni de pedo, al rato que vean los comentarios pa q se caguen de risa xd*/
+/*Pinche jale mierda, ya quiero volver a la uni :not() */
 
 .download-button:hover {
   background-color: #0056b3;

@@ -105,6 +105,7 @@ function Dashboard() {
     "N-030": <Norma030 />,
     "Asistente NOMs": <NormaNOMs />,
     "Resumen": <Resumen />,
+    "Resumen acción": <resumenAccion />
   };
   
 
@@ -161,6 +162,10 @@ function Dashboard() {
           <li onClick={() => handleSelectNorma("Resumen")}>
             <FaRegFileAlt className="menu-icon" />
             {isSidebarExpanded && <span>Resumen</span>}
+          </li>
+          <li onClick={() => handleSelectNorma("Resumen de acción")}>
+            <FaRegFileAlt className="menu-icon" />
+            {isSidebarExpanded && <span>Resumen de acción</span>}
           </li>
         </ul>
       </aside>
