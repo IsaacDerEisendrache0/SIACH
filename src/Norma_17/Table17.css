@@ -67,7 +67,7 @@
 
 /* Estilos de encabezados */
 .inner-table th, .header, .sub-header {
-  background-color: #ff0000; /* Color de fondo para encabezados */
+  background-color: #ff0000 ; /* Color de fondo para encabezados */
   color: #ffffff;
   font-weight: bold;
   text-align: center;
@@ -112,9 +112,9 @@
 }
 
 .no-border-cell {
-  border: none;
-  background-color: #e63946;
-  color: white;
+  border: none !important;
+  background-color: #e63946 !important;
+  color: white !important;
 }
 
 /* Estilos de lista y elementos de riesgo */
@@ -675,7 +675,7 @@ button {
   text-align: right;
   width: 25%;
   color: white;
-  background-color: rgb(255, 0, 0);
+  background-color: rgb(255, 0, 0) !important;
   font-size: 16px !important; /* Forzar el tamaño */
 
 }
@@ -746,7 +746,7 @@ button {
 
 /* Fondo rojo del contenedor principal */
 .header-cell {
-  background-color: red;
+  background-color: red ;
   padding: 10px;
   text-align: center;
 }
@@ -778,7 +778,7 @@ button {
   border: 1px solid black;
   padding: 10px;
   width: 25%;
-  background-color: red;
+  background-color: red !important;
   color: white;
   font-weight: bold;
 }
@@ -1018,8 +1018,8 @@ button {
 /* Valores seleccionados */
 .grape-value {
   font-size: 18px; /* Tamaño más grande para los valores */
-  font-weight: bold; /* Resalta los valores */
-  margin-top: -10px; /* Separación superior */
+  font-weight: bold ; /* Resalta los valores */
+  margin-top: 10px; /* Separación superior */
   text-align: center;
 }
 
