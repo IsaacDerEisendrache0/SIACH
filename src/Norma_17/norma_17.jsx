@@ -109,19 +109,19 @@ const RiskAssessmentTable = () => {
   };
 
   const protectionImages = {
-    'Caídas de Altura': ['/images/10.png', '/images/34.png'], // Reemplaza con la ruta real de la imagen
-    'Exposición a Temperaturas': ['/images/6.png'],
-    'Exposición a Electricidad Estática': ['/images/6.png', '/images/4.png'],
+    'Caídas de Altura': ['/images/10.png', '/images/34.png', '/images/4.png'], // Reemplaza con la ruta real de la imagen
+    'Exposición a Temperaturas': ['/images/6.png', '/images/21.png', '/images/14.png'],
+    'Exposición a Electricidad Estática': ['/images/6.png', '/images/4.png' , '/images/9.png'],
     'Exposición a Sustancias Químicas': ['/images/7.png', '/images/13.png', '/images/6.png', '/images/17.png'],
     'Exposición a Radiaciones': ['/images/16.png'], 
     'Exposición agentes Biológicos': ['/images/18.png', '/images/16.png'], 
     'Exposición a Ruido': ['/images/19.png', '/images/5.png'],
-    'Exposición a Vibraciones': ['/images/14.png', '/images/4.png'],
+    'Exposición a Vibraciones': ['/images/19.png', '/images/6.png' , '/images/4.png'],
     'Superficies cortantes': ['/images/6.png', '/images/1.png', '/images/21.png'],
-    'Caídas a nivel o desnivel':  ['/images/4.png'],
+    'Caídas a nivel o desnivel':  ['/images/4.png', '/images/34.png'],
     'Daños Ergonómicos':  ['/images/15.png'],
-    'Calentamiento de materia prima, subproducto o producto':  ['/images/6.png', '/images/15.png'],
-    'Proyección de material o herramienta':  ['/images/7.png', '/images/12.png'],
+    'Calentamiento de materia prima, subproducto o producto':  ['/images/6.png', '/images/15.png' , '/images/9.png', '/images/4.png'],
+    'Proyección de material o herramienta':  ['/images/7.png', '/images/12.png', '/images/21.png'],
     'Mantenimiento preventivo, correctivo o predictivo':  ['/images/12.png', '/images/3.png'],
   };
 
@@ -204,7 +204,7 @@ const RiskAssessmentTable = () => {
         bodyParts[hazard].forEach(part => affectedParts.add(part));
       }
     }
-    return Array.from(affectedParts);
+    return Array.from(affectedParts); 
   };
 
   const affectedBodyParts = getAffectedBodyParts();
@@ -722,15 +722,16 @@ const [selectedMainOption, setSelectedMainOption] = useState(''); // Estado para
   const handleSubOptionChange = (e) => {
     const subOption = e.target.value;
     setSelectedSubOption(subOption);
-
+  
     // Agrega la selección actual a la lista acumulativa
     setSelectionList((prevList) => [
       ...prevList,
-      `${selectedMainOption} - ${subOption}`
+      `${selectedMainOption} - ${subOption}`,
     ]);
-
+  
     setShowSubDropdown(false); // Oculta el segundo menú tras seleccionar una subcategoría
   };
+  
 
 
   // Estado para manejar opciones seleccionadas automáticamente
@@ -759,12 +760,13 @@ useEffect(() => {
 }, [selectedImages]); // Ejecutar cada vez que cambian las imágenes seleccionadas
 
   
-  const handleMainOptionChange = (e) => {
-    const value = e.target.value;
-    setSelectedMainOption(value);
-    setSelectedSubOption(''); // Reinicia la subcategoría
-    setShowSubDropdown(true); // Muestra el segundo menú al seleccionar una opción principal
-  };
+const handleMainOptionChange = (e) => {
+  const value = e.target.value;
+  setSelectedMainOption(value);
+  setSelectedSubOption(""); // Reinicia la subcategoría al cambiar el principal
+  setShowSubDropdown(true); // Muestra el segundo menú al seleccionar una opción principal
+};
+
 
 
 
@@ -815,6 +817,18 @@ useEffect(() => {
       tableContainer.scrollLeft = scrollLeft - walk;
     });
   });
+  
+
+  const handleDeleteSelection = (indexToDelete) => {
+    setSelectionList((prevList) =>
+      prevList.filter((_, index) => index !== indexToDelete)
+    );
+  
+    // Reinicia las opciones seleccionadas
+    setSelectedMainOption("");
+    setSelectedSubOption("");
+  };
+  
   
   
 
@@ -1173,51 +1187,88 @@ useEffect(() => {
                     )}
                   </div>
 
-              <div>
-                {/* Contenedor del menú principal */}
-                <div className="epp-dropdown-container">
-                  {/* Menú desplegable principal */}
-                  <select
-                    value={selectedMainOption}
-                    onChange={handleMainOptionChange}
-                    className="epp-dropdown"
-                  >
-                    <option value="" disabled>Selecciona el equipo</option>
-                    {Object.keys(eppOptions)
-                      .filter((option) => autoSelectedOptions.includes(option)) // Mostrar solo las opciones detectadas
-                      .map((option, index) => (
-                        <option key={index} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                  </select>
-                </div>
+                  <div className="epp-container">
+  {/* Contenedor del menú principal */}
+  <div className="epp-dropdown-container">
+  <label htmlFor="main-epp-select" className="dropdown-label">
+    Selecciona el equipo principal:
+  </label>
+  <select
+    id="main-epp-select"
+    value={selectedMainOption}
+    onChange={handleMainOptionChange}
+    className="epp-dropdown"
+  >
+    <option value="" disabled>
+      Selecciona el equipo
+    </option>
+    {Object.keys(eppOptions)
+      .filter((option) => autoSelectedOptions.includes(option)) // Mostrar solo las opciones detectadas
+      .map((option, index) => (
+        <option key={index} value={option}>
+          {option}
+        </option>
+      ))}
+  </select>
+</div>
 
-                {/* Menú desplegable de subcategorías */}
-                {showSubDropdown && selectedMainOption && (
-                  <select
-                    value={selectedSubOption}
-                    onChange={handleSubOptionChange}
-                    className="epp-sub-dropdown"
-                  >
-                    <option value="" disabled>Selecciona el tipo de {selectedMainOption.toLowerCase()}</option>
-                    {eppOptions[selectedMainOption]?.map((subOption, index) => (
-                      <option key={index} value={subOption}>
-                        {subOption}
-                      </option>
-                    ))}
-                  </select>
-                )}
 
-                {/* Mostrar la lista de selecciones acumuladas */}
-                <div className="epp-selection-list">
-                  {selectionList.map((selection, index) => (
-                    <div key={index} className="epp-selection-item">
-                      {selection}
-                    </div>
-                  ))}
-                </div>
-              </div>
+{showSubDropdown && selectedMainOption && (
+  <div className="epp-sub-dropdown-container">
+    <label htmlFor="sub-epp-select" className="dropdown-label">
+      Selecciona el tipo de {selectedMainOption.toLowerCase()}:
+    </label>
+    <select
+      id="sub-epp-select"
+      value={selectedSubOption}
+      onChange={handleSubOptionChange}
+      className="epp-sub-dropdown"
+    >
+      <option value="" disabled>
+        Selecciona el tipo
+      </option>
+      {eppOptions[selectedMainOption]?.map((subOption, index) => (
+        <option key={index} value={subOption}>
+          {subOption}
+        </option>
+      ))}
+    </select>
+  </div>
+)}
+
+
+<div className="epp-selection-list-container">
+  {selectionList.length > 0 ? (
+    <ul className="epp-selection-list">
+      {selectionList.map((selection, index) => (
+        <li key={index} className="epp-selection-item">
+          {selection}
+          <button
+            className="delete-button"
+            onClick={() => handleDeleteSelection(index)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="white"
+              width="20px"
+              height="20px"
+              className="delete-icon"
+            >
+              <path d="M3 6h18v2H3V6zm2 2v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V8H5zm7 4v6h2v-6h-2zm-4 0v6h2v-6H8zm8 0v6h2v-6h-2zM7 4h10v2H7V4z" />
+            </svg>
+          </button>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p></p>
+  )}
+</div>
+
+</div>
+
+
             </td>  
           </tr>
           
