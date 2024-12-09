@@ -278,7 +278,7 @@ const normas = [
         descripcion: 'Constancia de competencias o habilidades laborales que acrediten que se capacita a los trabajadores con discapacidad para su desarrollo en el puesto de trabajo y actuación en caso de emergencia.'
       }
     ],
-    condition: (values) => values.trabajadoresDiscapacidad === 'sí'
+    condition: (values) => values.trabajadoresDiscapacidad === 'sí'   || values.iluminacion === 'Sí'
   },
 
   {
@@ -307,7 +307,7 @@ const normas = [
         descripcion: 'Programa para la vigilancia a la salud del personal ocupacionalmente expuesto.'
       }
     ],
-    condition: (values) => values.materialp === 'sí'
+    condition: (values) => values.materialp === 'sí'  || values.iluminacion === 'Sí' 
   },
   {
     id: 'NOM-011',
@@ -327,7 +327,7 @@ const normas = [
         descripcion: 'Informar y orientar a los trabajadores, y a la comisión de seguridad e higiene sobre las posibles alteraciones a la salud por la exposición a ruido, y sobre la forma de evitarlas o atenuarlas.'
       }
     ],
-    condition: (values) => values.exposicionRuido === 'Sí'
+    condition: (values) => values.exposicionRuido === 'Sí'   || values.iluminacion === 'Sí' 
   },
 
   {
@@ -376,33 +376,32 @@ const normas = [
         descripcion: 'Reconocimiento y evaluación de los niveles de exposición a las vibraciones en todas las áreas donde hayan trabajadores potencialmente expuestos.' 
       }
     ],
-    condition: (values) => values.vibraciones === 'sí'
+    condition: (values) => values.vibraciones === 'Sí'  || values.iluminacion === 'Sí'
   },
   { 
     id: 'NOM-025', 
     tipo: 'Salud',
-    title: 'Iluminación en los centros de trabajo', 
+    title: 'Iluminación',
     puntos: [
-      { 
-        numero: '5.2', 
-        descripcion: 'Reconocimiento y evaluación de la iluminación de las tareas visuales del puesto de trabajo o áreas de trabajo comparadas con la Tabla 1 del capítulo 7. F Correctiva Cada 2 años.' 
+      {
+        numero: '5.2',
+        descripcion: 'Reconocimiento y evaluación de la iluminación de las tareas visuales del puesto de trabajo o áreas de trabajo comparadas con la Tabla 1 del capítulo 7.',
       },
-      { 
-        numero: '5.8', 
-        descripcion: 'Documento que acredite que se informa a los trabajadores sobre los riesgos que puede provocar el deslumbramiento o un deficiente nivel de iluminación en sus áreas o puestos de trabajo. D/E Preventiva Permanente.' 
+      {
+        numero: '5.8',
+        descripcion: 'Documento que acredite que se informa a los trabajadores sobre los riesgos que puede provocar el deslumbramiento o un deficiente nivel de iluminación en sus áreas o puestos de trabajo.',
       },
-      { 
-        numero: '5.10', 
-        descripcion: 'Programa específico de mantenimiento a luminarias y, en su caso, a los sistemas de iluminación de emergencia. D Correctiva Anual.' 
+      {
+        numero: '5.10',
+        descripcion: 'Programa específico de mantenimiento a luminarias y, en su caso, a los sistemas de iluminación de emergencia.',
       },
-      { 
-        numero: '5.11', 
-        descripcion: 'Contar con sistemas de iluminación eléctrica de emergencia, en áreas donde la interrupción de la fuente de luz artificial represente un riesgo en la tarea visual del puesto de trabajo.' 
-      }
+      {
+        numero: '5.11',
+        descripcion: 'Contar con sistemas de iluminación eléctrica de emergencia, en áreas donde la interrupción de la fuente de luz artificial represente un riesgo en la tarea visual del puesto de trabajo.',
+      },
     ],
-    condition: (values) => values.iluminacion === 'deficiente'
-  }
-,  
+    condition: () => true, // Siempre se mostrará por defecto
+  },
 {
   id: 'NOM-035',
   tipo: 'Salud',
@@ -425,7 +424,7 @@ const normas = [
       descripcion: 'Capacitación y sensibilización de los directivos, gerentes y supervisores para la prevención de los factores de riesgo psicosocial y la promoción de entornos organizacionales favorables. D/E Preventiva Anual.'
     }
   ],
-  condition: (values) => values.factoresPsicosociales === 'sí'
+  condition: (values) => values.factoresPsicosociales === 'sí'   || values.iluminacion === 'Sí'
 }
 ,
 {
@@ -450,7 +449,7 @@ const normas = [
       descripcion: 'Capacitación y adiestramiento al personal ocupacionalmente expuesto sobre los procedimientos de seguridad y las prácticas de trabajo seguro, y en su caso, en las medidas de prevención y/o control.'
     }
   ],
-  condition: (values) => values.manejocargas === 'Sí'
+  condition: (values) => values.manejocargas === 'Sí'   || values.iluminacion === 'Sí'
 },
 {
   id: 'NOM-017',
@@ -515,86 +514,82 @@ const normas = [
 ,
 {
   id: 'NOM-019',
-  tipo: 'Organización',
-  title: 'Constitución y funcionamiento de las comisiones de seguridad e higiene',
-  puntos: [
-    {
-      numero: '5.4',
-      descripcion: 'Acta de constitución de la comisión del centro de trabajo y de sus actualizaciones, cuando se modifique su integración, de conformidad con lo previsto en el numeral 7.4 de la presente norma. D Preventiva Único, actualizar si hay cambios.'
-    },
-    {
-      numero: '5.5',
-      descripcion: 'Programa de los recorridos de verificación de la comisión de seguridad e higiene. D Preventiva/Correctiva Anual.'
-    },
-    {
-      numero: '5.6',
-      descripcion: 'Actas de los recorridos de verificación realizados por la comisión del centro de trabajo. D Correctiva Mínimo cada 3 meses.'
-    },
-    {
-      numero: '5.9',
-      descripcion: 'Comprobación documental de que se apoya la investigación de los accidentes y enfermedades de trabajo que lleve a cabo la comisión. D Preventiva/Correctiva Cuando aplique.'
-    },
-    {
-      numero: '5.13',
-      descripcion: 'Capacitación a los integrantes de la comisión de seguridad e higiene para el adecuado ejercicio de sus funciones, con base en el programa que para tal efecto se elabore. D Preventiva Anual.'
-    },
-    {
-      numero: '10.3',
-      descripcion: 'Documento que acredite que se proporciona un curso de inducción cuando se incorpora un nuevo integrante o integrantes a la comisión.'
-    }
-  ],
-  condition: (values) => values.comisionSeguridadHigiene === 'sí'
-},
-  
+  tipo: 'Salud',
+    title: 'Comisiones de seguridad e higiene',
+    puntos: [
+      {
+        numero: '5.4',
+        descripcion: 'Acta de constitución de la comisión del centro de trabajo y de sus actualizaciones, cuando se modifique su integración, de conformidad con lo previsto en el numeral 7.4 de la presente norma.',
+      },
+      {
+        numero: '5.5',
+        descripcion: 'Programa de los recorridos de verificación de la comisión de seguridad e higiene.',
+      },
+      {
+        numero: '5.6',
+        descripcion: 'Actas de los recorridos de verificación realizados por la comisión del centro de trabajo.',
+      },
+      {
+        numero: '5.9',
+        descripcion: 'Comprobación documental de que se apoya la investigación de los accidentes y enfermedades de trabajo que lleve a cabo la comisión.',
+      },
+      {
+        numero: '5.13',
+        descripcion: 'Capacitación a los integrantes de la comisión de seguridad e higiene para el adecuado ejercicio de sus funciones, con base en el programa que para tal efecto se elabore.',
+      },
+      {
+        numero: '10.3',
+        descripcion: 'Documento que acredite que se proporciona un curso de inducción cuando se incorpora un nuevo integrante o integrantes a la comisión.',
+      },
+    ],
+    condition: () => true, // Siempre se mostrará por defecto
+  },
   
 {
   id: 'NOM-026',
   tipo: 'Organización',
-  title: 'Colores y señales de seguridad e higiene, e identificación de riesgos por fluidos conducidos en tuberías',
-  puntos: [
-    {
-      numero: '5.2',
-      descripcion: 'Constancias de competencias o habilidades laborales de los trabajadores sobre la correcta interpretación de los elementos de señalización del centro de trabajo. D/F Preventiva Anual.'
-    },
-    {
-      numero: '5.3',
-      descripcion: 'Comprobación que la aplicación del color, la señalización y la identificación de la tubería estén sujetos a un mantenimiento que asegure en todo momento su visibilidad y legibilidad. F Correctiva Permanente.'
-    },
-    {
-      numero: '5.4',
-      descripcion: 'Ubicar las señales de seguridad e higiene de tal manera que puedan ser observadas e interpretadas por los trabajadores a los que están destinadas.'
-    }
-  ],
-  condition: (values) => values.senalizacionSeguridad === 'sí' // Agregar este campo en formValues si aplica
-}
-,
-
+    title: 'Colores y señales de seguridad',
+    puntos: [
+      {
+        numero: '5.2',
+        descripcion: 'Constancias de competencias o habilidades laborales de los trabajadores sobre la correcta interpretación de los elementos de señalización del centro de trabajo.',
+      },
+      {
+        numero: '5.3',
+        descripcion: 'Comprobación que la aplicación del color, la señalización y la identificación de la tubería estén sujetos a un mantenimiento que asegure en todo momento su visibilidad y legibilidad.',
+      },
+      {
+        numero: '5.4',
+        descripcion: 'Ubicar las señales de seguridad e higiene de tal manera que puedan ser observadas e interpretadas por los trabajadores a los que están destinadas.',
+      },
+    ],
+    condition: () => true, // Siempre se mostrará por defecto
+  },
     
 {
   id: 'NOM-030',
   tipo: 'Organización',
-  title: 'Servicios preventivos de seguridad y salud en el trabajo',
+  title: 'Servicios preventivos de seguridad y salud',
   puntos: [
     {
       numero: '4.1',
-      descripcion: 'Designar a un responsable de seguridad y salud en el trabajo interno o externo, para llevar a cabo las funciones y actividades preventivas de seguridad y salud en el centro de trabajo a que se refiere el Capítulo 5. D Preventiva Anual, actualizar si hay cambios.'
+      descripcion: 'Designar a un responsable de seguridad y salud en el trabajo interno o externo, para llevar a cabo las funciones y actividades preventivas de seguridad y salud en el centro de trabajo a que se refiere el Capítulo 5.',
     },
     {
       numero: '4.3',
-      descripcion: 'Diagnóstico integral o por áreas de trabajo de las condiciones de seguridad y salud del centro laboral, elaborado de acuerdo con lo que establece el numeral 6.1. D Preventiva/Correctiva Anual.'
+      descripcion: 'Diagnóstico integral o por áreas de trabajo de las condiciones de seguridad y salud del centro laboral, elaborado de acuerdo con lo que establece el numeral 6.1.',
     },
     {
       numero: '4.4',
-      descripcion: 'Programa de seguridad y salud en el trabajo, con base en el diagnóstico de seguridad y salud en el trabajo. D Preventiva/Correctiva Anual.'
+      descripcion: 'Programa de seguridad y salud en el trabajo, con base en el diagnóstico de seguridad y salud en el trabajo.',
     },
     {
       numero: '4.5',
-      descripcion: 'Acreditar que se comunica a la comisión de seguridad e higiene y/o a los trabajadores, el diagnóstico integral o por área de trabajo de las condiciones de seguridad y salud y el contenido del programa de seguridad y salud en el trabajo o la relación de acciones preventivas y correctivas de seguridad y salud en el trabajo.'
-    }
+      descripcion: 'Acreditar que se comunica a la comisión de seguridad e higiene y/o a los trabajadores, el diagnóstico integral o por área de trabajo de las condiciones de seguridad y salud y el contenido del programa de seguridad y salud en el trabajo o la relación de acciones preventivas y correctivas de seguridad y salud en el trabajo.',
+    },
   ],
-  condition: (values) => values.seguridadSalud === 'sí' // Agregar este campo en formValues si aplica
+  condition: () => true, // Siempre se mostrará por defecto
 },
-
 {
   id: 'NOM-033',
   tipo: 'Seguridad',
@@ -676,9 +671,9 @@ const normas = [
       }
     ],
     condition: (values) => 
-      values.exposicioncalor === 'sí' || 
-      values.exposicionFrio === 'sí' || 
-      values.condicionesClimaticas === 'sí'
+      values.exposicioncalor === 'Sí' || 
+      values.exposicionFrio === 'Sí' || 
+      values.condicionesClimaticas === 'Sí'
   }
   ,
   { 
@@ -692,15 +687,40 @@ const normas = [
     condition: (values) => values.materialesPiroforicos === 'sí'
   },
   // Normas Específicas
-  { 
-    id: 'NOM-003', 
+  {
+    id: 'NOM-003',
     tipo: 'Específica',
-    title: 'Plaguicidas y fertilizantes', 
+    title: 'Plaguicidas y fertilizantes',
     puntos: [
-      { numero: '4.1', descripcion: 'Evaluación de los riesgos asociados al manejo de plaguicidas y fertilizantes.' },
-      { numero: '4.2', descripcion: 'Implementación de medidas de seguridad para el manejo adecuado de plaguicidas y fertilizantes.' }
+      {
+        numero: '5.1',
+        descripcion: 'Identificación de los peligros derivados de las actividades agrícolas y lugares en que se llevan a cabo. D Preventiva Único, actualizar si hay cambios.'
+      },
+      {
+        numero: '5.2',
+        descripcion: 'Procedimientos, condiciones y medidas de seguridad y salud. D Preventiva Único, actualizar si hay cambios.'
+      },
+      {
+        numero: '5.14',
+        descripcion: 'Plan de atención a emergencias de acuerdo al Capítulo 11. D Preventiva Único, actualizar si hay cambios.'
+      },
+      {
+        numero: '5.15',
+        descripcion: 'Capacitación y adiestramiento a los trabajadores en materia de prevención de accidentes y enfermedades de trabajo a los que se encuentran expuestos. D Preventiva Anual.'
+      },
+      {
+        numero: '5.16',
+        descripcion: 'Botiquín de primeros auxilios de acuerdo a los peligros identificados. (Antídotos y medicamentos contra los efectos de los agroquímicos que se utilicen en el centro de trabajo con base en lo establecido en la etiqueta y los previstos para aplicarse en caso de mordedura o picadura de fauna peligrosa). F Preventiva Permanente.'
+      },
+      {
+        numero: '8.2',
+        descripcion: 'Listado de los agroquímicos con las características del producto. D Preventiva Permanente.'
+      }
     ],
-    condition: (values) => values.procesosPetroleoGas === 'sí' || values.actagricolas === 'sí'  || values.infrestructura === 'sí'
+    condition: (values) =>
+      values.procesosPetroleoGas === 'sí' ||
+      values.actagricolas === 'sí' ||
+      values.infrestructura === 'sí'
   },
   { 
     id: 'NOM-007', 
@@ -770,7 +790,7 @@ const normas = [
       { numero: '4.1', descripcion: 'Condiciones de seguridad y salud para el teletrabajo.' },
       { numero: '4.2', descripcion: 'Manejo de riesgos psicosociales en el teletrabajo.' }
     ],
-    condition: (values) => values.teletrabajo === 'sí'
+    condition: (values) => values.teletrabajo === 'Sí'
   }
   
 
@@ -1104,7 +1124,7 @@ const NormaNoms = () => {
               </label>
             </div>
             <div className="buttons">
-              <button onClick={handleBack}>Regresar</button>
+              
               <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
             </div>
           </div>
@@ -3151,10 +3171,9 @@ const NormaNoms = () => {
       )}
 
 
-       {/* Paso 36 - Clasificación del tamaño de la obra de construcción */}
-       {step === 36 && (
-        <div className="step36">
-          <img
+{step === 36 && (
+  <div className="step36">
+    <img
       src={require('../logos/logo.png')} // Ruta a tu logo
       alt="Logo de la empresa"
       style={{
@@ -3165,59 +3184,71 @@ const NormaNoms = () => {
         marginBottom: '20px'
       }}
     />
-          <h3>Clasificación del tamaño de la obra de construcción</h3>
-          <p>Proporcione la siguiente información:</p>
-          <img
-            src={iconImage} 
-            alt="Tabla de clasificación de riesgo de incendio"
-            style={{ cursor: 'pointer', width: '50px' }}
-            onClick={() => setShowModal3(true)} // Abre el modal específico para este paso
-          />
-          <label>
-            Superficie por construir o demoler:
-            <input
-              type="number"
-              name="superficieConstruir"
-              value={formValues.superficieConstruir}
-              onChange={handleInputChange}
-              required
-            />
-            metros cuadrados
-          </label>
-          <label>
-            Altura de la construcción:
-            <input
-              type="number"
-              name="alturaConstruccion"
-              value={formValues.alturaConstruccion}
-              onChange={handleInputChange}
-              required
-            />
-            metros
-          </label>
-          <div className="buttons">
-            <button onClick={handleBack}>Regresar</button>
-            <button onClick={handleNext} disabled={!isStepCompleted()}>
-              Continuar
-            </button>
-          </div>
-        </div>
-      )}
+    <h3>Clasificación del tamaño de la obra de construcción</h3>
+    <p>Proporcione la siguiente información:</p>
+    <img
+      src={iconImage}
+      alt="Tabla de clasificación de riesgo de incendio"
+      style={{ cursor: 'pointer', width: '50px' }}
+      onClick={() => setShowModal3(true)} // Abre el modal específico para este paso
+    />
+    <label>
+      Superficie por construir o demoler:
+      <input
+        type="number"
+        name="superficieConstruir"
+        value={formValues.superficieConstruir}
+        onChange={(e) => {
+          const value = e.target.value;
+          if (value >= 0 || value === '') { // Validar que el valor no sea negativo
+            handleInputChange(e);
+          }
+        }}
+        required
+        min="0" // Restricción para navegadores que soportan HTML5
+      />
+      metros cuadrados
+    </label>
+    <label>
+      Altura de la construcción:
+      <input
+        type="number"
+        name="alturaConstruccion"
+        value={formValues.alturaConstruccion}
+        onChange={(e) => {
+          const value = e.target.value;
+          if (value >= 0 || value === '') { // Validar que el valor no sea negativo
+            handleInputChange(e);
+          }
+        }}
+        required
+        min="0" // Restricción para navegadores que soportan HTML5
+      />
+      metros
+    </label>
+    <div className="buttons">
+      <button onClick={handleBack}>Regresar</button>
+      <button onClick={handleNext} disabled={!isStepCompleted()}>
+        Continuar
+      </button>
+    </div>
+  </div>
+)}
 
-      {showModal3 && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={() => setShowModal3(false)}>
-              &times;
-            </span>
-            <img
-              src={obraImage} 
-              alt="Tabla de clasificación de riesgo de incendio"
-              style={{ width: '100%' }}
-            />
-          </div>
-        </div>
-      )}
+{showModal3 && (
+  <div className="modal">
+    <div className="modal-content">
+      <span className="close" onClick={() => setShowModal3(false)}>
+        &times;
+      </span>
+      <img
+        src={obraImage}
+        alt="Tabla de clasificación de riesgo de incendio"
+        style={{ width: '100%' }}
+      />
+    </div>
+  </div>
+)}
 
 {step === 42 && (
   <div>
@@ -3313,17 +3344,15 @@ const NormaNoms = () => {
         </div>
       )}
 
-
 {step === 38 && (
   <div className="step38">
-    
-    <h3 style={{ color: 'blue' }}>Normas Aplicables</h3>
+    <h3 style={{ color: 'blue', textAlign: 'center' }}>Normas Aplicables</h3>
     <div>
-      <button 
+      <button
         onClick={() => {
           setStep(1);
           setFormValues({
-            // Reiniciar el formulario como lo tenías
+            // Reiniciar el formulario según corresponda
           });
           setSelectedNormas([]); // Reiniciar las normas seleccionadas
         }}
@@ -3335,66 +3364,94 @@ const NormaNoms = () => {
           borderRadius: '5px',
           cursor: 'pointer',
           fontSize: '16px',
-          margin: '10px 0'
+          margin: '10px 0',
         }}
       >
         Limpiar
       </button>
     </div>
     <div className="normas-table">
-    <img
-      src={require('../logos/logo.png')} // Ruta a tu logo
-      alt="Logo de la empresa"
-      style={{
-        display: 'block',
-        margin: '0 auto',
-        width: '150px',
-        height: 'auto',
-        marginBottom: '20px'
-      }}
-    />
-      <table border="1" align="center" cellPadding="5" cellSpacing="0">
-        <thead>
-          <tr>
-            <th>Número</th>
-            <th>Título de la norma</th>
-            <th>Tipo de norma</th> {/* Nueva columna para el tipo */}
-            <th>Puntos Específicos</th>
-            <th>Obtener archivo de la NOM</th>
-          </tr>
-        </thead>
-        <tbody>
-          {selectedNormas.length > 0 ? (
-            selectedNormas.map((id) => {
-              const norma = normas.find((n) => n.id === id);
-              return (
-                <tr key={norma.id}>
-                  <td>{norma.id}</td>
-                  <td>{norma.title}</td>
-                  <td>{norma.tipo}</td> {/* Mostrar el tipo de norma aquí */}
-                  <td>
-                    {norma.puntos.map((punto, index) => (
-                      <div key={index}>
-                        <strong>{punto.numero}:</strong> {punto.descripcion}
-                      </div>
-                    ))}
-                  </td>
-                  <td>
-                    <a href={`/noms/${norma.id}.pdf`} target="_blank" rel="noopener noreferrer">Descargar</a>
-                  </td>
+      <img
+        src={require('../logos/logo.png')} // Ruta a tu logo
+        alt="Logo de la empresa"
+        style={{
+          display: 'block',
+          margin: '0 auto',
+          width: '150px',
+          height: 'auto',
+          marginBottom: '20px',
+        }}
+      />
+      {selectedNormas.length > 0 ? (
+        // Agrupar normas por tipo
+        Object.entries(
+          selectedNormas.reduce((acc, id) => {
+            const norma = normas.find((n) => n.id === id);
+            if (!acc[norma.tipo]) acc[norma.tipo] = [];
+            acc[norma.tipo].push(norma);
+            return acc;
+          }, {})
+        ).map(([tipo, normasAgrupadas]) => (
+          <div key={tipo}>
+            <h4
+              style={{
+                backgroundColor: '#f4b084',
+                color: '#000',
+                textAlign: 'center',
+                padding: '10px',
+                marginBottom: '10px',
+                fontSize: '18px',
+                fontWeight: 'bold',
+              }}
+            >
+              {tipo}
+            </h4>
+            <table
+              border="1"
+              align="center"
+              cellPadding="5"
+              cellSpacing="0"
+              style={{
+                width: '100%',
+                marginBottom: '20px',
+                borderCollapse: 'collapse',
+              }}
+            >
+              <thead>
+                <tr>
+                  <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>NOM</th>
+                  <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>Descripción</th>
+                  <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>Puntos Específicos</th>
                 </tr>
-              );
-            })
-          ) : (
-            <tr>
-              <td colSpan="5">No se han encontrado normas aplicables</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+              </thead>
+              <tbody>
+                {normasAgrupadas.map((norma) => (
+                  <tr key={norma.id}>
+                    <td style={{ textAlign: 'center', verticalAlign: 'top' }}>{norma.id}</td>
+                    <td style={{ textAlign: 'center', verticalAlign: 'top' }}>{norma.title}</td>
+                    <td>
+                      {norma.puntos.map((punto, index) => (
+                        <div key={index}>
+                          <strong>{punto.numero}:</strong> {punto.descripcion}
+                        </div>
+                      ))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        )}
+        ))
+      ) : (
+        <p style={{ textAlign: 'center' }}>No se han encontrado normas aplicables</p>
+      )}
+    </div>
+  </div>
+)}
+
+
+
+
       </div>
     </div>
   );

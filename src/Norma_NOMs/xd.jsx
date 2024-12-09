@@ -218,12 +218,12 @@ const normas = [
   { 
     id: 'NOM-025', 
     tipo: 'Salud',
-    title: 'Iluminación en los centros de trabajo', 
+    title: ' en los centros de trabajo', 
     puntos: [
-      { numero: '5.2', descripcion: 'Evaluación de la iluminación en áreas de trabajo comparada con los valores establecidos.' },
-      { numero: '5.8', descripcion: 'Documento informativo sobre riesgos de deslumbramiento o deficiente iluminación.' },
-      { numero: '5.10', descripcion: 'Programa de mantenimiento a luminarias y sistemas de iluminación de emergencia.' },
-      { numero: '5.11', descripcion: 'Sistemas de iluminación eléctrica de emergencia en áreas de riesgo.' }
+      { numero: '5.2', descripcion: 'Evaluación de la  en áreas de trabajo comparada con los valores establecidos.' },
+      { numero: '5.8', descripcion: 'Documento informativo sobre riesgos de deslumbramiento o deficiente .' },
+      { numero: '5.10', descripcion: 'Programa de mantenimiento a luminarias y sistemas de  de emergencia.' },
+      { numero: '5.11', descripcion: 'Sistemas de  eléctrica de emergencia en áreas de riesgo.' }
     ],
     condition: (values) => values.iluminacion === 'deficiente'
   },
@@ -365,7 +365,7 @@ const normas = [
       { numero: '5.1', descripcion: 'Evaluación y control de riesgos en procesos con sustancias químicas.' },
       { numero: '5.2', descripcion: 'Implementación de procedimientos de seguridad en equipos que manejen sustancias químicas.' }
     ],
-    condition: (values) => values.materialesPiroforicos === 'sí'
+    condition: (values) => values.materialesPiroforicos === 'sí' || values.seguridadSalud === 'sí'  ||  values.senalizacionSeguridad === 'sí'     
   },
   // Normas Específicas
   { 
