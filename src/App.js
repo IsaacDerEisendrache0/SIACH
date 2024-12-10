@@ -17,6 +17,8 @@ import { FaTachometerAlt, FaRegFileAlt, FaRegChartBar, FaBars, FaChevronDown } f
 import Moviles from "./Norma_004/moviles";
 import Maquinaria from "./Norma_004/maquinariaYequipo";
 import HerramientasManuales from "./Norma_004/herramientasMan";
+import ResumenAccion from "./ResumenTabla/resumenAccion";
+
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -82,8 +84,10 @@ function Dashboard() {
   };
 
   const handleSelectNorma = (norma) => {
+    console.log("Norma seleccionada:", norma); // Esto debe mostrar "Resumen de acción"
     setSelectedNorma(norma);
   };
+  
 
   const toggleSidebar = () => {
     setIsSidebarExpanded((prevState) => !prevState);
@@ -105,8 +109,9 @@ function Dashboard() {
     "N-030": <Norma030 />,
     "Asistente NOMs": <NormaNOMs />,
     "Resumen": <Resumen />,
-    "Resumen acción": <resumenAccion />
+    "Resumen de acción": <ResumenAccion total={{ grave: 2, elevado: 3, notable: 4, moderado: 5, tolerable: 6 }} />
   };
+  
   
 
   return (
@@ -167,6 +172,8 @@ function Dashboard() {
             <FaRegFileAlt className="menu-icon" />
             {isSidebarExpanded && <span>Resumen de acción</span>}
           </li>
+
+
         </ul>
       </aside>
 
@@ -177,6 +184,8 @@ function Dashboard() {
 
       {/* Main Content */}
       <div className="main-content">
+
+        
         {/* Header */}
         <header className="header">
           <div className="header-right">
@@ -391,6 +400,8 @@ function Dashboard() {
             <div className="placeholder"></div>
           )}
         </main>
+
+
       </div>
     </div>
   );
