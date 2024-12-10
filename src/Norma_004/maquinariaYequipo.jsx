@@ -5,6 +5,8 @@ import { addDoc, updateDoc, doc, collection, getDoc, setDoc} from 'firebase/fire
 import { getAuth } from "firebase/auth";
 import { db } from '../firebase';
 import logo from '../logos/logo.png';
+import Maxion from '../logos/maxion.jpeg';
+import Safran from '../logos/safran.jpeg';
 
 const protectionImages = {
   'Caídas de Altura': ['/images/10.png', '/images/34.png'],
@@ -44,6 +46,22 @@ const RiskTable = () => {
   const [showAreaModal, setShowAreaModal] = useState(false);
   const [newPuesto, setNewPuesto] = useState('');
   const [newArea, setNewArea] = useState('');
+  const [selectedRightLogo, setSelectedRightLogo] = useState(null);
+
+
+  const logos = [
+    { nombre: 'Maxion', url: Maxion },
+    { nombre: 'Safran', url: Safran }
+  ];
+
+  const handleRightLogoChange = (e) => {
+    const selectedLogo = logos.find((logo) => logo.nombre === e.target.value);
+    setSelectedRightLogo(selectedLogo ? selectedLogo.url : null);
+  };
+
+  const handleRemoveRightLogo = () => {
+    setSelectedRightLogo(null);
+  };
   
 
   const downloadImage = () => {
@@ -58,6 +76,14 @@ const RiskTable = () => {
       document.body.removeChild(link);
     });
   };
+
+  useEffect(() => {
+    const savedAreas = JSON.parse(localStorage.getItem('areas')) || [];
+    setAreas(savedAreas);
+
+    const savedPuestos = JSON.parse(localStorage.getItem('puestos')) || [];
+    setPuestos(savedPuestos);
+  }, []);
 
   const handleCheckboxChange = (e, hazard) => {
     const checked = e.target.checked;
@@ -85,6 +111,7 @@ const RiskTable = () => {
   const handleRemoveEPPImage = (imageToRemove) => {
     setSelectedEPPImages((prevImages) => prevImages.filter((image) => image !== imageToRemove));
   };
+  
 
   const calcularValorConsecuencia = (consequence) => {
     const valoresConsecuencia = {
@@ -309,16 +336,47 @@ useEffect(() => {
       console.error('Error al actualizar los datos del resumen:', error);
     }
   };
-  
-  
-  
-  
-  return (
-    <div className="risk-table-container">
-      <div className="logo-container" style={{ textAlign: 'center', marginBottom: '20px' }}>
-        <img src={logo} alt="SIACH Logo" style={{ width: '200px', marginLeft: '-100px' }} />
-      </div>
-      <h6>NOM-004-STPS-1999 "ANALISIS DE RIESGO POTENCIAL POR MAQUINARIA Y EQUIPO"</h6>
+
+          return (
+            <div className="risk-table-container">
+            <div className="header-container">
+              {/* Logo izquierdo */}
+              <img src={logo} alt="Logo Izquierdo" className="logo-left" />
+      
+              {/* Título centrado */}
+              <h4 className="header-title">
+                NOM-004-STPS-1999 "ANÁLISIS DE RIESGO POTENCIAL POR MAQUINARIA Y EQUIPO"
+              </h4>
+      
+              {/* Logo derecho o selector */}
+              {/* Logo derecho o selector */}
+{!selectedRightLogo ? (
+    <div className="upload-logo-wrapper">
+        <input
+            type="file"
+            accept="image/*"
+            className="upload-logo-input"
+            onChange={(e) => {
+                if (e.target.files[0]) {
+                    const fileUrl = URL.createObjectURL(e.target.files[0]);
+                    setSelectedRightLogo(fileUrl);
+                }
+            }}
+        />
+    </div>
+) : (
+    <div className="logo-right-container">
+        <img src={selectedRightLogo} alt="Logo Derecho" className="logo-right" />
+        <button
+            onClick={handleRemoveRightLogo}
+            className="remove-logo-button"
+        >
+            ×
+        </button>
+    </div>
+)}
+
+            </div>
       <table className="risk-table">
         <thead>
           <tr>
@@ -436,7 +494,7 @@ useEffect(() => {
                   </tr>
                   <tr>
                     {/* Contenedor de imágenes seleccionadas desde el select */}
-                    <td className="triangle-images-container">
+                    <td className="triangle-images-container" colSpan="">
                       {selectedTriangleImages.map((img, index) => (
                         <img
                           key={index}
