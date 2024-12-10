@@ -836,7 +836,7 @@ const handleMainOptionChange = (e) => {
   return (
       <div class="main-table">
 
-        <table class="custom-table" className="table-container" style={{ backgroundColor: 'white' }}><thead>
+        <table class="custom-table" className="table-container" style={{ backgroundColor: 'white' }} ><thead>
         
       
         
