@@ -12,16 +12,29 @@ import obraImage from './images/obra-construccion.png';
 
 // Continuación del array normas con más normas y sus condiciones
 const normas = [
-  { 
+  {
     id: 'NOM-001', 
     tipo: 'Seguridad',
     title: 'Edificios, locales e instalaciones', 
     puntos: [
-      { numero: '5.6', descripcion: 'Constancia documental de que proporcionó información a todos los trabajadores para el uso y conservación de las áreas donde realizan sus actividades en el centro de trabajo, incluidas las destinadas para el servicio de los trabajadores' },
-      { numero: '7.3 c)', descripcion: 'Medidas contra incendios en áreas críticas.' },
-      { numero: '8.3', descripcion: 'Sistema de ventilación y control de gases.' }
+      { 
+        numero: '5.6', 
+        descripcion: 'Constancia documental de que proporcionó información a todos los trabajadores para el uso y conservación de las áreas donde realizan sus actividades en el centro de trabajo, incluidas las destinadas para el servicio de los trabajadores. D Preventiva Permanente' 
+      },
+      { 
+        numero: '7.3 c)', 
+        descripcion: 'Instalar señalamientos de identificación de áreas y de seguridad e higiene en las diferentes áreas de las empresas. F Preventiva Permanente' 
+      },
+      { 
+        numero: '8.3', 
+        descripcion: 'Programa anual de mantenimiento preventivo o correctivo del sistema de ventilación artificial, a fin de que esté en condiciones de uso, y su registro de ejecución. D Preventiva/Correctiva Anual' 
+      },
+      { 
+        numero: '8.3', 
+        descripcion: 'Programa específico de mantenimiento de las instalaciones del centro de trabajo y registros de ejecución.' 
+      }
     ],
-    condition: (values) => values.areaTrabajo === 'centro'|| values.areaTrabajo === 'sí' 
+    condition: (values) => values.areaTrabajo === 'centro' || values.areaTrabajo === 'sí'
   },
 
  
@@ -1129,11 +1142,11 @@ const NormaNoms = () => {
             </div>
           </div>
         )}
-
 {step === 2 && (
   <div className="step2">
+    {/* Logo de la empresa */}
     <img
-      src={require('../logos/logo.png')} // Ruta a tu logo
+      src={require('../logos/logo.png')} // Asegúrate de que la ruta sea correcta
       alt="Logo de la empresa"
       style={{
         display: 'block',
@@ -1145,12 +1158,23 @@ const NormaNoms = () => {
     />
     <h3>Determinación del grado de riesgo de incendio</h3>
     <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
+
+    {/* Ícono para abrir el modal */}
     <img
-      src={iconImage} // Asegúrate de que `iconImage` sea específico para este paso
+      src={require('./images/icon.png')} // Ruta relativa correcta al ícono
       alt="Tabla de clasificación de riesgo de incendio"
-      style={{ cursor: 'pointer', width: '50px' }}
-      onClick={() => setShowModal2(true)} // Abre el modal específico para este paso
+      style={{
+        cursor: 'pointer',
+        width: '50px',
+        display: 'block',
+        margin: '0 auto',
+      }}
+      onClick={() => {
+        console.log('Icon clicked!'); // Depuración del evento
+        setShowModal2(true); // Cambia el estado para abrir el modal
+      }}
     />
+
     <div className="inventory-fields">
       <label>
         Superficie construida:
@@ -1159,7 +1183,7 @@ const NormaNoms = () => {
           name="superficie"
           value={formValues.superficie}
           onChange={(e) => {
-            const value = Math.max(0, Number(e.target.value)); // Asegúrate de que no sea negativo
+            const value = Math.max(0, Number(e.target.value));
             handleInputChange({ target: { name: 'superficie', value } });
           }}
           required
@@ -1257,15 +1281,15 @@ const NormaNoms = () => {
       </button>
     </div>
 
+    {/* Modal para mostrar la tabla */}
     {showModal2 && (
       <div className="modal">
         <div className="modal-content">
           <span className="close" onClick={() => setShowModal2(false)}>
             &times;
           </span>
-          {/* Aquí colocamos la imagen específica de este paso */}
           <img
-            src={riesgoImage} // Reemplaza con la imagen específica para el paso 2
+            src={require('./images/riesgo-incendio.png')} // Ruta relativa correcta para la tabla
             alt="Tabla de clasificación de riesgo de incendio"
             style={{ width: '100%' }}
           />
@@ -1274,6 +1298,7 @@ const NormaNoms = () => {
     )}
   </div>
 )}
+
 
 
         {/* Paso 3 */}

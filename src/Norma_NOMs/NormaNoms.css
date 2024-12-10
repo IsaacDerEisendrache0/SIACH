@@ -1,139 +1,177 @@
-/* General */
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f7f7f7;
-    color: #333;
-}
-
-/* Contenedor principal para el asistente */
+/* Estilo general para el contenedor */
 .norma-noms-container {
-    max-width: 800px;
-    margin: 30px auto;
-    padding: 20px;
-    background: #ffffff;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
-
-/* Títulos generales */
-.norma-noms-container h3, .norma-noms-container h4 {
-    color: #4a90e2;
-    margin-bottom: 10px;
-}
-
-.norma-noms-container p, .norma-noms-container label {
-    font-size: 1rem;
-    margin-bottom: 8px;
-    line-height: 1.5;
-}
-
-/* Botones generales */
-.norma-noms-container .buttons button {
-    background-color: #4a90e2;
-    color: #ffffff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 1rem;
-}
-
-.norma-noms-container .buttons button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-.norma-noms-container .buttons button:hover:not(:disabled) {
-    background-color: #357ab7;
-}
-
-/* Encapsulación para la tabla del paso 38 */
-.step38 .normas-table table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px auto;
-    font-size: 16px;
-    background-color: #fff;
-}
-
-.step38 .normas-table th {
-    background-color: #2196F3;
-    color: #fff;
-    padding: 10px;
-    text-align: center;
-}
-
-.step38 .normas-table td {
-    padding: 10px;
-    text-align: left;
-    vertical-align: top;
-    border: 1px solid #ddd;
-}
-
-.step38 .normas-table a {
-    color: #2196F3;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.step38 .normas-table a:hover {
-    text-decoration: underline;
-}
-
-.step38 h3 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* Botón de limpiar */
-.step38 button {
-    display: block;
-    margin: 0 auto 20px;
-    background-color: #2196F3;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.step38 button:hover {
-    background-color: #1976D2;
-}
-
-/* Animaciones */
-.step1, .step2, .step3, .step4, .step5, .step6, .step7, .step8, .step9, .step10, .step11, .step12, .step13, .step14, .step15, .step16, .step17, .step18, .step19, .step20, .step21, .step22, .step23, .step24, .step25, .step26, .step27, .step28, .step29, .step30, .step31, .step32, .step33, .step34, .step35, .step36, .step39, .step40, .step38, .step41, .step42{
-    animation: fadeIn 0.3s ease-in-out;
+    font-family: 'Roboto', Arial, sans-serif;
+    margin: 0 auto;
+    padding: 30px;
+    max-width: 900px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
   
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
+  /* Encabezados y títulos */
+  .step2 h3 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #0056b3;
+    font-weight: 600;
+  }
+  
+  .step2 p {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #666666;
+    font-size: 18px;
+  }
+  
+  /* Campos de formulario */
+  .inventory-fields label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #333333;
+    font-weight: 500;
+  }
+  
+  .inventory-fields input[type="number"],
+  .inventory-fields input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .inventory-fields input[type="number"]:focus,
+  .inventory-fields input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  .inventory-fields input[type="radio"] {
+    margin-right: 8px;
+  }
+  
+  /* Botones */
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+  }
+  
+  .buttons button {
+    padding: 12px 25px;
+    font-size: 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #0056b3;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .buttons button:hover {
+    background-color: #004092;
+    transform: translateY(-2px);
+  }
+  
+  .buttons button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  /* Preguntas del cuestionario */
+  .questionnaire-item {
+    margin-bottom: 25px;
+    padding: 15px 20px;
+    background: #f5f5f5;
+    border-left: 4px solid #0056b3;
+    border-radius: 6px;
+    font-size: 18px;
+    color: #333333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Animaciones */
+  .questionnaire-item {
+    animation: fadeIn 0.4s ease-in-out;
+  }
+  
+  /* Estilo del modal ajustado */
+  .modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    padding: 0;
+  }
+  
+  .modal-content img {
+    max-width: 98%;
+    max-height: 98%;
+    border: none;
+    margin: 0;
+    object-fit: contain;
+  }
+  
+  /* Botón de cierre del modal */
+  .modal .close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    padding: 5px 10px;
+  }
+  
+  .modal .close:hover {
+    color: #ff0000;
+  }
+  
+  /* Logo */
+  .step2 img[alt="Logo de la empresa"] {
+    display: block;
+    margin: 0 auto;
+    width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilo para dispositivos pequeños */
+  @media (max-width: 768px) {
+    .inventory-fields label {
+      font-size: 14px;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+  
+    .inventory-fields input[type="number"],
+    .inventory-fields input[type="text"] {
+      font-size: 14px;
+      padding: 10px;
     }
-}
-
-/* Responsivo para móviles */
-@media (max-width: 768px) {
-    .norma-noms-container {
-        padding: 15px;
+  
+    .buttons button {
+      font-size: 16px;
+      padding: 10px 20px;
     }
-
-    .step38 .normas-table table {
-        font-size: 14px;
+  
+    .modal-content img {
+      max-width: 100%;
+      max-height: 100%;
     }
-
-    .step38 button {
-        font-size: 14px;
-        padding: 8px 16px;
-    }
-}
+  }
+  
