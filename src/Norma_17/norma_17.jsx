@@ -87,7 +87,7 @@ const RiskAssessmentTable = () => {
     'Caídas a nivel o desnivel': false,
     'Daños Ergonómicos': false,
     'Calentamiento de materia prima, subproducto o producto': false,
-    'Proyección de material o herramienta': false,
+    'Protección de material o herramienta': false,
     'Mantenimiento preventivo, correctivo o predictivo': false,
   });
 
@@ -104,25 +104,25 @@ const RiskAssessmentTable = () => {
     'Caídas a nivel o desnivel': ['Cabeza y Oídos', 'Ojos y Cara', 'Brazos y Manos', 'Tronco', 'Extremidades inferiores'],
     'Daños Ergonómicos': ['Brazos y Manos', 'Tronco', 'Extremidades inferiores'],
     'Calentamiento de materia prima, subproducto o producto': ['Ojos y Cara', 'Brazos y Manos', 'Tronco', 'Extremidades inferiores'],
-    'Proyección de material o herramienta': ['Ojos y Cara', 'Brazos y Manos', 'Tronco'],
+    'Protección de material o herramienta': ['Ojos y Cara', 'Brazos y Manos', 'Tronco'],
     'Mantenimiento preventivo, correctivo o predictivo': ['Ojos y Cara', 'Brazos y Manos', 'Tronco'],
   };
 
   const protectionImages = {
     'Caídas de Altura': ['/images/10.png', '/images/34.png', '/images/4.png'], // Reemplaza con la ruta real de la imagen
-    'Exposición a Temperaturas': ['/images/6.png', '/images/21.png', '/images/14.png'],
-    'Exposición a Electricidad Estática': ['/images/6.png', '/images/4.png' , '/images/9.png'],
+    'Exposición a Temperaturas': ['/images/6.png', '/images/21.png', '/images/14.png', '/images/1.png'],
+    'Exposición a Electricidad Estática': ['/images/6.png', '/images/4.png' , '/images/9.png', '/images/10.png'],
     'Exposición a Sustancias Químicas': ['/images/7.png', '/images/13.png', '/images/6.png', '/images/17.png'],
     'Exposición a Radiaciones': ['/images/16.png'], 
     'Exposición agentes Biológicos': ['/images/18.png', '/images/16.png'], 
     'Exposición a Ruido': ['/images/19.png', '/images/5.png'],
     'Exposición a Vibraciones': ['/images/19.png', '/images/6.png' , '/images/4.png'],
-    'Superficies cortantes': ['/images/6.png', '/images/1.png', '/images/21.png'],
+    'Superficies cortantes': ['/images/6.png', '/images/1.png', '/images/21.png', '/images/14.png'],
     'Caídas a nivel o desnivel':  ['/images/4.png', '/images/34.png'],
     'Daños Ergonómicos':  ['/images/15.png'],
     'Calentamiento de materia prima, subproducto o producto':  ['/images/6.png', '/images/15.png' , '/images/9.png', '/images/4.png'],
-    'Proyección de material o herramienta':  ['/images/7.png', '/images/12.png', '/images/21.png'],
-    'Mantenimiento preventivo, correctivo o predictivo':  ['/images/12.png', '/images/3.png'],
+    'Protección de material o herramienta':  ['/images/7.png', '/images/12.png', '/images/21.png'],
+    'Mantenimiento preventivo, correctivo o predictivo':  [],
   };
 
    // Coloca los hooks dentro del componente funcional
@@ -131,7 +131,6 @@ const RiskAssessmentTable = () => {
   const [puestos, setPuestos] = useState(areas[0].puestos);
   const [descripcionActividad, setDescripcionActividad] = useState(''); // Descripción de la actividad
   
-
   
   
 
@@ -164,7 +163,7 @@ const RiskAssessmentTable = () => {
         // Abre el modal solo si hay más de una imagen asociada a "Exposición a Ruido"
         setSelectedImagesForHazard(protectionImages[hazard]);
         setHazardWithImages(hazard);
-        setIsImageModalOpen(true);
+        setIsImageModalOpen(true); 
       } else if (isChecked && protectionImages[hazard].length === 1) {
         // Si solo hay una imagen, la selecciona directamente
         const image = protectionImages[hazard][0];
@@ -830,6 +829,18 @@ const handleMainOptionChange = (e) => {
   };
   
   
+
+  const handleCustomLogoUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setLogoSeleccionado(reader.result); // Establece la imagen cargada como el logo seleccionado
+      };
+      reader.readAsDataURL(file); // Lee el archivo como una URL de datos
+    }
+  };
+  
   
 
 
@@ -851,23 +862,65 @@ const handleMainOptionChange = (e) => {
             </h3>
           </td>
 
-            <td colSpan="3">
-              {logoSeleccionado ? (
-                <div className="logo-container">
-                  <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" />
-                  <button onClick={handleRemoveLogo} className="remove-logo-button">×</button>
-                </div>
-              ) : (
-                <select onChange={handleLogoChange} className="logo-dropdown">
-                  <option value="">Selecciona una empresa</option>
-                  {logos.map((logo, index) => (
-                    <option key={index} value={logo.url}>
-                      {logo.nombre}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </td>
+          <td colSpan="3">
+  {logoSeleccionado ? (
+    <div className="logo-container">
+      <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" />
+      <button onClick={handleRemoveLogo} className="remove-logo-button">×</button>
+    </div>
+  ) : (
+    <div className="logo-upload-container">
+      <select onChange={handleLogoChange} className="logo-dropdown">
+        <option value="">Selecciona una empresa</option>
+        {logos.map((logo, index) => (
+          <option key={index} value={logo.url}>
+            {logo.nombre}
+          </option>
+        ))}
+      </select>
+      <label htmlFor="upload-logo" className="upload-button">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="black"
+      className="upload-icon"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M3 16.5V19a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 19v-2.5M16.5 12l-4.5-4.5m0 0L7.5 12m4.5-4.5V19"
+      />
+    </svg>
+  </label>
+  <input
+    type="file"
+    id="upload-logo"
+    accept="image/*"
+    style={{ display: 'none' }}
+    onChange={handleCustomLogoUpload}
+  />
+
+<input
+  type="file"
+  id="upload-logo"
+  accept="image/*"
+  style={{ display: 'none' }}
+  onChange={handleCustomLogoUpload}
+/>
+
+      <input
+        type="file"
+        id="upload-logo"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handleCustomLogoUpload}
+      />
+    </div>
+  )}
+</td>
+
           </tr>
 
 

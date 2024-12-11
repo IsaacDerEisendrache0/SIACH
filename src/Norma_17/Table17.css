@@ -1191,3 +1191,35 @@ button {
   color: #666;
   margin-top: 10px;
 }
+
+
+
+/* ////////////////////////////////////////// */
+
+/* Prefijo único para asegurar que los estilos no sean sobrescritos */
+.upload-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white !important; /* Fondo blanco forzado */
+  border: 1px solid #ccc; /* Borde gris claro */
+  border-radius: 5px; /* Bordes redondeados */
+  padding: 5px; /* Espaciado interno */
+  cursor: pointer; /* Cursor pointer al pasar */
+  width: 40px; /* Ajusta el tamaño del botón */
+  height: 40px;
+}
+
+.upload-button:hover {
+  background-color: #f0f0f0 !important; /* Fondo gris claro al pasar el mouse */
+}
+
+.upload-icon {
+  width: 20px;
+  height: 20px;
+  stroke: black; /* Icono en color negro */
+}
+
+
+
+
