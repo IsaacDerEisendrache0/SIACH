@@ -484,21 +484,31 @@ const handleRemovePuesto = () => {
           ANÁLISIS DE RIESGO POTENCIAL GENERADO POR EQUIPOS MÓVILES
           NOM-004-STPS-1999
         </h4>
-        {logoSeleccionado ? (
-          <div className="logo-container" style={{ display: 'flex', alignItems: 'center' }}>
-            <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" style={{ marginLeft: '20px' }} />
-            <button onClick={handleRemoveLogo} className="remove-logo-button" style={{ marginLeft: '10px' }}>×</button>
-          </div>
-        ) : (
-          <select onChange={handleLogoChange} className="logo-dropdown" style={{ marginLeft: '20px' }}>
-            <option value="">Selecciona una empresa</option>
-            {logos.map((logo, index) => (
-              <option key={index} value={logo.url}>
-                {logo.nombre}
-              </option>
-            ))}
-          </select>
-        )}
+{logoSeleccionado ? (
+  <div className="logo-container" style={{ display: 'flex', alignItems: 'center' }}>
+    <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" style={{ marginLeft: '20px', width: '100px', height: 'auto' }} />
+    <button onClick={handleRemoveLogo} className="remove-logo-button" style={{ marginLeft: '10px' }}>×</button>
+  </div>
+) : (
+  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+    <input
+      type="file"
+      accept="image/*"
+      onChange={(event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const imageUrl = URL.createObjectURL(file);
+          setLogoSeleccionado(imageUrl);
+        }
+      }}
+      style={{ cursor: 'pointer', padding: '5px' }}
+    />
+   
+  </div>
+)}
+
+        
+
       </div>
     
       <table className="risk-table" style={{ backgroundColor: 'white' }}>
@@ -718,7 +728,7 @@ const handleRemovePuesto = () => {
                   {eppImages.map((eppImage, idx) => (
                     <option key={idx} value={eppImage}>{`EPP ${idx + 1}`}</option>
                   ))}
-                </select>
+                </select> 
                 <div className="epp-images-grid" style={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap', gap: '5px', justifyContent: 'flex-start' }}>
                   {selectedEPPImages.map((imgSrc, idx) => (
                     <img key={idx} src={imgSrc} alt={`EPP ${idx + 1}`} className="epp-image" style={{ width: '50px', height: '50px' }} onClick={() => handleRemoveEPPImage(imgSrc)} />
