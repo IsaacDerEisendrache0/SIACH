@@ -10,6 +10,10 @@ import riesgoImage from './images/riesgo-incendio.png';
 import obraImage from './images/obra-construccion.png';
 
 
+
+
+
+
 // Continuación del array normas con más normas y sus condiciones
 const normas = [
   {
@@ -828,6 +832,17 @@ const normas = [
 
 
 ];
+
+
+
+
+
+
+
+
+
+
+
 const NormaNoms = () => {
   const [selectedNormas, setSelectedNormas] = useState([]);
   const [step, setStep] = useState(1);
@@ -839,7 +854,7 @@ const NormaNoms = () => {
   const [showTable, setShowTable] = useState(false);
   const [showModal2, setShowModal2] = useState(false); // Estado para el nuevo modal
   const [showModal3, setShowModal3] = useState(false); // Estado para el nuevo modal
-  
+  const [step38Points, setStep38Points] = useState([]); 
   const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
@@ -988,8 +1003,47 @@ const NormaNoms = () => {
   };
   
 
-
-
+  const evaluateConditions = () => {
+    const { superficie, invGases, invLiquidosi, invLiquidosc, invSolidos, materialesPiroforicos } = formValues;
+    const points = [];
+  
+    if (superficie >= 3000) {
+      points.push('Riesgo alto: 5.11 Contar con alguno de los documentos establecidos, como actas, dictámenes o revisiones, según las normativas aplicables para riesgo alto.');
+    } else {
+      points.push('Riesgo ordinario: 5.7 Desarrollar simulacros de emergencias de incendio al menos una vez al año en centros de trabajo clasificados con riesgo ordinario.');
+    }
+  
+    if (invGases >= 3000) {
+      points.push('Riesgo alto: 7.5 Establecer y dar seguimiento a un programa anual de revisión de instalaciones eléctricas en áreas clasificadas como de riesgo alto.');
+    } else {
+      points.push('Riesgo ordinario: 5.10 Contar con medios de detección y equipos contra incendio adecuados al riesgo de incendio ordinario.');
+    }
+  
+    if (invLiquidosi >= 1400) {
+      points.push('Riesgo alto: 5.7 Desarrollar simulacros de emergencias de incendio al menos dos veces al año en áreas clasificadas con riesgo alto.');
+    } else {
+      points.push('Riesgo ordinario: 8.1 El plan de atención a emergencias debe contener identificación de áreas y procedimientos básicos para riesgo ordinario.');
+    }
+  
+    if (invLiquidosc >= 2000) {
+      points.push('Riesgo alto: 5.10 Contar con sistemas fijos de protección contra incendio y alarmas, además de los medios básicos, en áreas clasificadas como de riesgo alto.');
+    } else {
+      points.push('Riesgo ordinario: 11.2 Entrenamiento teórico-práctico en el manejo de extintores y prevención de incendios para riesgo ordinario.');
+    }
+  
+    if (invSolidos >= 15000) {
+      points.push('Riesgo alto: 7.4 Revisar y realizar pruebas anuales a los sistemas contra incendio en áreas de riesgo alto, incluyendo sistemas fijos y alarmas.');
+    } else {
+      points.push('Riesgo ordinario: 7.17 Instalar extintores en áreas del centro de trabajo de al menos un extintor por cada 300 m² para riesgo ordinario.');
+    }
+  
+    if (materialesPiroforicos === 'sí') {
+      points.push('Riesgo alto: 8.1 y 8.2 Implementar un plan de emergencias que incluya brigadas, procedimientos específicos y recursos adicionales para materiales inflamables o explosivos.');
+    } 
+  
+    setStep38Points(points); // Actualiza los puntos generados para el paso 38
+  };
+  
   const handleCheckboxChange = (e, field) => {
     const { value } = e.target;
     setFormValues((prevValues) => {
@@ -1142,159 +1196,147 @@ const NormaNoms = () => {
             </div>
           </div>
         )}
+
+
+
+
+
+        
 {step === 2 && (
-  <div className="step2">
-    {/* Logo de la empresa */}
-    <img
-      src={require('../logos/logo.png')} // Asegúrate de que la ruta sea correcta
-      alt="Logo de la empresa"
-      style={{
-        display: 'block',
-        margin: '0 auto',
-        width: '150px',
-        height: 'auto',
-        marginBottom: '20px',
-      }}
-    />
-    <h3>Determinación del grado de riesgo de incendio</h3>
-    <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
-
-    {/* Ícono para abrir el modal */}
-    <img
-      src={require('./images/icon.png')} // Ruta relativa correcta al ícono
-      alt="Tabla de clasificación de riesgo de incendio"
-      style={{
-        cursor: 'pointer',
-        width: '50px',
-        display: 'block',
-        margin: '0 auto',
-      }}
-      onClick={() => {
-        console.log('Icon clicked!'); // Depuración del evento
-        setShowModal2(true); // Cambia el estado para abrir el modal
-      }}
-    />
-
-    <div className="inventory-fields">
-      <label>
-        Superficie construida:
-        <input
-          type="number"
-          name="superficie"
-          value={formValues.superficie}
-          onChange={(e) => {
-            const value = Math.max(0, Number(e.target.value));
-            handleInputChange({ target: { name: 'superficie', value } });
-          }}
-          required
-        />
-        metros cuadrados
-      </label>
-
-      <label>
-        Inventario de gases inflamables:
-        <input
-          type="number"
-          name="invGases"
-          value={formValues.invGases}
-          onChange={(e) => {
-            const value = Math.max(0, Number(e.target.value));
-            handleInputChange({ target: { name: 'invGases', value } });
-          }}
-          required
-        />
-        litros
-      </label>
-
-      <label>
-        Inventario de líquidos inflamables:
-        <input
-          type="number"
-          name="invLiquidosi"
-          value={formValues.invLiquidosi}
-          onChange={(e) => {
-            const value = Math.max(0, Number(e.target.value));
-            handleInputChange({ target: { name: 'invLiquidosi', value } });
-          }}
-          required
-        />
-        litros
-      </label>
-
-      <label>
-        Inventario de líquidos combustibles:
-        <input
-          type="number"
-          name="invLiquidosc"
-          value={formValues.invLiquidosc}
-          onChange={(e) => {
-            const value = Math.max(0, Number(e.target.value));
-            handleInputChange({ target: { name: 'invLiquidosc', value } });
-          }}
-          required
-        />
-        litros
-      </label>
-
-      <label>
-        Inventario de sólidos combustibles, incluido el mobiliario del centro de trabajo:
-        <input
-          type="number"
-          name="invSolidos"
-          value={formValues.invSolidos}
-          onChange={(e) => {
-            const value = Math.max(0, Number(e.target.value));
-            handleInputChange({ target: { name: 'invSolidos', value } });
-          }}
-          required
-        />
-        kilogramos
-      </label>
-    </div>
-
-    <label>¿Tiene inventario de materiales pirofóricos o explosivos?</label>
-    <label>
-      <input
-        type="radio"
-        name="materialesPiroforicos"
-        value="sí"
-        onChange={handleInputChange}
-        checked={formValues.materialesPiroforicos === 'sí'}
-      />
-      Sí
-    </label>
-    <label>
-      <input
-        type="radio"
-        name="materialesPiroforicos"
-        value="no"
-        onChange={handleInputChange}
-        checked={formValues.materialesPiroforicos === 'no'}
-      />
-      No
-    </label>
-
-    <div className="buttons">
-      <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext} disabled={!isStepCompleted()}>
-        Continuar
-      </button>
-    </div>
-
-    {/* Modal para mostrar la tabla */}
-    {showModal2 && (
-      <div className="modal">
-        <div className="modal-content">
-          <span className="close" onClick={() => setShowModal2(false)}>
-            &times;
-          </span>
+        <div className="step2">
+          <h3>Determinación del grado de riesgo de incendio</h3>
+          <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
           <img
-            src={require('./images/riesgo-incendio.png')} // Ruta relativa correcta para la tabla
+            src={iconImage}
             alt="Tabla de clasificación de riesgo de incendio"
-            style={{ width: '100%' }}
+            style={{ cursor: 'pointer', width: '50px' }}
+            onClick={() => setShowModal2(true)}
           />
-        </div>
-      </div>
+
+          <div className="inventory-fields">
+            <label>
+              Superficie construida:
+              <input
+                type="number"
+                name="superficie"
+                value={formValues.superficie}
+                onChange={(e) => {
+                  const value = Math.max(0, Number(e.target.value));
+                  handleInputChange({ target: { name: 'superficie', value } });
+                  evaluateConditions();
+                }}
+                required
+              />
+              metros cuadrados
+            </label>
+
+            <label>
+              Inventario de gases inflamables:
+              <input
+                type="number"
+                name="invGases"
+                value={formValues.invGases}
+                onChange={(e) => {
+                  const value = Math.max(0, Number(e.target.value));
+                  handleInputChange({ target: { name: 'invGases', value } });
+                  evaluateConditions();
+                }}
+                required
+              />
+              litros
+            </label>
+
+            <label>
+              Inventario de líquidos inflamables:
+              <input
+                type="number"
+                name="invLiquidosi"
+                value={formValues.invLiquidosi}
+                onChange={(e) => {
+                  const value = Math.max(0, Number(e.target.value));
+                  handleInputChange({ target: { name: 'invLiquidosi', value } });
+                  evaluateConditions();
+                }}
+                required
+              />
+              litros
+            </label>
+
+            <label>
+              Inventario de líquidos combustibles:
+              <input
+                type="number"
+                name="invLiquidosc"
+                value={formValues.invLiquidosc}
+                onChange={(e) => {
+                  const value = Math.max(0, Number(e.target.value));
+                  handleInputChange({ target: { name: 'invLiquidosc', value } });
+                  evaluateConditions();
+                }}
+                required
+              />
+              litros
+            </label>
+
+            <label>
+              Inventario de sólidos combustibles, incluido el mobiliario del centro de trabajo:
+              <input
+                type="number"
+                name="invSolidos"
+                value={formValues.invSolidos}
+                onChange={(e) => {
+                  const value = Math.max(0, Number(e.target.value));
+                  handleInputChange({ target: { name: 'invSolidos', value } });
+                  evaluateConditions();
+                }}
+                required
+              />
+              kilogramos
+            </label>
+          </div>
+
+          <label>¿Tiene inventario de materiales pirofóricos o explosivos?</label>
+          <label>
+            <input
+              type="radio"
+              name="materialesPiroforicos"
+              value="sí"
+              onChange={(e) => {
+                handleInputChange(e);
+                evaluateConditions();
+              }}
+              checked={formValues.materialesPiroforicos === 'sí'}
+            />
+            Sí
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="materialesPiroforicos"
+              value="no"
+              onChange={(e) => {
+                handleInputChange(e);
+                evaluateConditions();
+              }}
+              checked={formValues.materialesPiroforicos === 'no'}
+            />
+            No
+          </label>
+
+          <button onClick={handleBack}>Regresar</button>
+          <button onClick={handleNext} disabled={!isStepCompleted()}>
+            Continuar
+          </button>
+
+          {showModal2 && (
+            <div className="modal">
+              <div className="modal-content">
+                <span className="close" onClick={() => setShowModal2(false)}>
+                  &times;
+                </span>
+                <img src={riesgoImage} alt="Tabla de clasificación de riesgo de incendio" style={{ width: '100%' }} />
+              </div>
+            </div>
     )}
   </div>
 )}
@@ -3370,109 +3412,117 @@ const NormaNoms = () => {
       )}
 
 {step === 38 && (
-  <div className="step38">
-    <h3 style={{ color: 'blue', textAlign: 'center' }}>Normas Aplicables</h3>
-    <div>
-      <button
-        onClick={() => {
-          setStep(1);
-          setFormValues({
-            // Reiniciar el formulario según corresponda
-          });
-          setSelectedNormas([]); // Reiniciar las normas seleccionadas
-        }}
-        style={{
-          backgroundColor: '#2196F3',
-          color: 'white',
-          padding: '10px 20px',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
-          fontSize: '16px',
-          margin: '10px 0',
-        }}
-      >
-        Limpiar
-      </button>
-    </div>
-    <div className="normas-table">
-      <img
-        src={require('../logos/logo.png')} // Ruta a tu logo
-        alt="Logo de la empresa"
-        style={{
-          display: 'block',
-          margin: '0 auto',
-          width: '150px',
-          height: 'auto',
-          marginBottom: '20px',
-        }}
-      />
-      {selectedNormas.length > 0 ? (
-        // Agrupar normas por tipo
-        Object.entries(
-          selectedNormas.reduce((acc, id) => {
-            const norma = normas.find((n) => n.id === id);
-            if (!acc[norma.tipo]) acc[norma.tipo] = [];
-            acc[norma.tipo].push(norma);
-            return acc;
-          }, {})
-        ).map(([tipo, normasAgrupadas]) => (
-          <div key={tipo}>
-            <h4
+        <div className="step38">
+          <h3 style={{ color: 'blue', textAlign: 'center' }}>Normas Aplicables</h3>
+          <div>
+            <button
+              onClick={() => {
+                setStep(1);
+                setFormValues({});
+                setSelectedNormas([]);
+                setStep38Points([]);
+              }}
               style={{
-                backgroundColor: '#f4b084',
-                color: '#000',
-                textAlign: 'center',
-                padding: '10px',
-                marginBottom: '10px',
-                fontSize: '18px',
-                fontWeight: 'bold',
+                backgroundColor: '#2196F3',
+                color: 'white',
+                padding: '10px 20px',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                fontSize: '16px',
+                margin: '10px 0',
               }}
             >
-              {tipo}
-            </h4>
-            <table
-              border="1"
-              align="center"
-              cellPadding="5"
-              cellSpacing="0"
-              style={{
-                width: '100%',
-                marginBottom: '20px',
-                borderCollapse: 'collapse',
-              }}
-            >
-              <thead>
-                <tr>
-                  <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>NOM</th>
-                  <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>Descripción</th>
-                  <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>Puntos Específicos</th>
-                </tr>
-              </thead>
-              <tbody>
-                {normasAgrupadas.map((norma) => (
-                  <tr key={norma.id}>
-                    <td style={{ textAlign: 'center', verticalAlign: 'top' }}>{norma.id}</td>
-                    <td style={{ textAlign: 'center', verticalAlign: 'top' }}>{norma.title}</td>
-                    <td>
-                      {norma.puntos.map((punto, index) => (
-                        <div key={index}>
-                          <strong>{punto.numero}:</strong> {punto.descripcion}
-                        </div>
-                      ))}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+              Limpiar
+            </button>
           </div>
-        ))
-      ) : (
-        <p style={{ textAlign: 'center' }}>No se han encontrado normas aplicables</p>
+          <div className="normas-table">
+            <img
+              src={require('../logos/logo.png')}
+              alt="Logo de la empresa"
+              style={{
+                display: 'block',
+                margin: '0 auto',
+                width: '150px',
+                height: 'auto',
+                marginBottom: '20px',
+              }}
+            />
+            {selectedNormas.length > 0 ? (
+              Object.entries(
+                selectedNormas.reduce((acc, id) => {
+                  const norma = normas.find((n) => n.id === id);
+                  if (!acc[norma.tipo]) acc[norma.tipo] = [];
+                  acc[norma.tipo].push(norma);
+                  return acc;
+                }, {})
+              ).map(([tipo, normasAgrupadas]) => (
+                <div key={tipo}>
+                  <h4
+                    style={{
+                      backgroundColor: '#f4b084',
+                      color: '#000',
+                      textAlign: 'center',
+                      padding: '10px',
+                      marginBottom: '10px',
+                      fontSize: '18px',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {tipo}
+                  </h4>
+                  <table
+                    border="1"
+                    align="center"
+                    cellPadding="5"
+                    cellSpacing="0"
+                    style={{
+                      width: '100%',
+                      marginBottom: '20px',
+                      borderCollapse: 'collapse',
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>NOM</th>
+                        <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>Descripción</th>
+                        <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>Puntos Específicos</th>
+                        <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>Otros puntos especificos</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {normasAgrupadas.map((norma) => (
+                        <tr key={norma.id}>
+                          <td style={{ textAlign: 'center', verticalAlign: 'top' }}>{norma.id}</td>
+                          <td style={{ textAlign: 'center', verticalAlign: 'top' }}>{norma.title}</td>
+                          <td>
+                            {norma.puntos.map((punto, index) => (
+                              <div key={index}>
+                                <strong>{punto.numero}:</strong> {punto.descripcion}
+                              </div>
+                            ))}
+                          </td>
+                          <td style={{ textAlign: 'center', verticalAlign: 'top' }}>
+                            {norma.id === 'NOM-002' && step38Points.length > 0 ? (
+                              <ul>
+                                {step38Points.map((point, index) => (
+                                  <li key={index}>{point}</li>
+                                ))}
+                              </ul>
+                            ) : null}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ))
+            ) : (
+              <p style={{ textAlign: 'center' }}>No se han encontrado normas aplicables</p>
+            )}
+          </div>
+        </div>
       )}
-    </div>
-  </div>
-)}
 
 
 
