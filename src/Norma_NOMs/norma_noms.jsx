@@ -38,9 +38,8 @@ const normas = [
         descripcion: 'Programa específico de mantenimiento de las instalaciones del centro de trabajo y registros de ejecución.' 
       }
     ],
-    condition: (values) => values.areaTrabajo === 'centro' || values.areaTrabajo === 'sí'
+    condition: () => true, // Siempre se mostrará por defecto
   },
-
  
   {
     id: 'NOM-002', 
@@ -60,9 +59,8 @@ const normas = [
       { numero: '7.4', descripcion: 'Programa anual de revisión y pruebas a los equipos contra incendio, a los medios de detección y, en su caso, a las alarmas de incendio y sistemas fijos contra incendio.' },
       { numero: '7.5', descripcion: 'Programa anual de revisión a las instalaciones eléctricas de las áreas del centro de trabajo.' }
     ],
-    condition: (values) => values.materialesPiroforicos === 'sí'
-  }
-  ,
+    condition: () => true, 
+  },
   {
     id: 'NOM-004',
     tipo: 'Seguridad',
@@ -107,7 +105,7 @@ const normas = [
         descripcion: 'Comprobación de que se comunica a los trabajadores, los riesgos a los que están expuestos' 
       }
     ],
-    condition: (values) => values.sustanciasPeligrosas === 'sí'
+    condition: (values) => values.materialp === 'Sí'
   },
   { 
     id: 'NOM-006', 
@@ -441,9 +439,8 @@ const normas = [
       descripcion: 'Capacitación y sensibilización de los directivos, gerentes y supervisores para la prevención de los factores de riesgo psicosocial y la promoción de entornos organizacionales favorables. D/E Preventiva Anual.'
     }
   ],
-  condition: (values) => values.factoresPsicosociales === 'sí'   || values.iluminacion === 'Sí'
-}
-,
+  condition: () => true, // Siempre se mostrará por defecto
+  },
 {
   id: 'NOM-036-1',
   tipo: 'Salud',
@@ -836,6 +833,64 @@ const normas = [
 
 
 
+const informacionCategorias = {
+  categoriaI: `
+    9.1 El expediente de cada uno de los equipos clasificados en la Categoría I deberá contener lo siguiente:
+    a) El nombre genérico del equipo;
+    b) El número de serie o único de identificación, la clave del equipo o número de TAG;
+    c) La ficha técnica del equipo, que al menos considere:
+       1) El(los) fluido(s) manejado(s) y su tipo de riesgo, en su caso;
+       2) La(s) presión(es) de diseño;
+       3) La(s) presión(es) de operación;
+       4) La(s) presión(es) de calibración, en su caso;
+       5) La(s) presión(es) de trabajo máxima(s) permitida(s);
+       6) La capacidad volumétrica;
+       7) La(s) temperatura(s) de diseño, y
+       8) La(s) temperatura(s) de operación;
+    d) La descripción breve de su operación;
+    e) El registro de los resultados de las revisiones y mantenimientos efectuados, y
+    f) La ubicación del equipo.
+  `,
+  categoriaII: `
+    9.2 El expediente de cada uno de los equipos clasificados en la Categoría II deberá contener lo siguiente:
+    a) El nombre genérico del equipo;
+    b) El número de serie o único de identificación, la clave del equipo o número de TAG;
+    c) El año de fabricación;
+    d) El código o norma de construcción aplicable;
+    e) El certificado de fabricación, cuando exista;
+    f) La ficha técnica del equipo, que al menos considere:
+       1) El(los) fluido(s) manejado(s) y su tipo de riesgo, en su caso;
+       2) La(s) presión(es) de diseño;
+       3) La(s) presión(es) de operación;
+       4) La(s) presión(es) de calibración, en su caso;
+       5) La(s) presión(es) de trabajo máxima(s) permitida(s);
+       6) La(s) presión(es) de prueba hidrostática;
+       7) La capacidad volumétrica;
+       8) La capacidad térmica;
+       9) La(s) temperatura(s) de diseño, y
+       10) La(s) temperatura(s) de operación;
+    g) La descripción breve de su operación;
+    h) El registro de los resultados de las revisiones y mantenimientos efectuados;
+    i) El registro de la última prueba de presión o exámenes no destructivos;
+    j) El registro de las modificaciones y alteraciones efectuadas;
+    k) El registro de las reparaciones que implicaron soldadura;
+    l) El dibujo, plano simple o documento del equipo, y
+    m) El croquis de localización del equipo dentro del centro de trabajo.
+  `,
+  categoriaIII: `
+    8.1 El listado de los equipos clasificados en la Categoría III deberá contener lo siguiente:
+    a) El nombre genérico del equipo;
+    b) El número de serie o único de identificación, la clave del equipo o número de TAG;
+    c) La clasificación que corresponde a cada equipo, conforme al Capítulo 7 de esta Norma;
+    d) El(los) fluido(s) manejado(s);
+    e) La presión de calibración;
+    f) La capacidad volumétrica;
+    g) La capacidad térmica;
+    h) El área de ubicación del equipo;
+    i) El número de dictamen o dictamen con reporte de servicios emitido por una unidad de verificación;
+    j) El número de control asignado por la Secretaría.
+  `
+};
 
 
 
@@ -1006,44 +1061,67 @@ const NormaNoms = () => {
   const evaluateConditions = () => {
     const { superficie, invGases, invLiquidosi, invLiquidosc, invSolidos, materialesPiroforicos } = formValues;
     const points = [];
+    let isHighRisk = false; // Bandera para determinar si hay algún riesgo alto
   
     if (superficie >= 3000) {
       points.push('Riesgo alto: 5.11 Contar con alguno de los documentos establecidos, como actas, dictámenes o revisiones, según las normativas aplicables para riesgo alto.');
+      isHighRisk = true;
     } else {
       points.push('Riesgo ordinario: 5.7 Desarrollar simulacros de emergencias de incendio al menos una vez al año en centros de trabajo clasificados con riesgo ordinario.');
     }
   
     if (invGases >= 3000) {
       points.push('Riesgo alto: 7.5 Establecer y dar seguimiento a un programa anual de revisión de instalaciones eléctricas en áreas clasificadas como de riesgo alto.');
+      isHighRisk = true;
     } else {
       points.push('Riesgo ordinario: 5.10 Contar con medios de detección y equipos contra incendio adecuados al riesgo de incendio ordinario.');
     }
   
     if (invLiquidosi >= 1400) {
       points.push('Riesgo alto: 5.7 Desarrollar simulacros de emergencias de incendio al menos dos veces al año en áreas clasificadas con riesgo alto.');
+      isHighRisk = true;
     } else {
       points.push('Riesgo ordinario: 8.1 El plan de atención a emergencias debe contener identificación de áreas y procedimientos básicos para riesgo ordinario.');
     }
   
     if (invLiquidosc >= 2000) {
       points.push('Riesgo alto: 5.10 Contar con sistemas fijos de protección contra incendio y alarmas, además de los medios básicos, en áreas clasificadas como de riesgo alto.');
+      isHighRisk = true;
     } else {
       points.push('Riesgo ordinario: 11.2 Entrenamiento teórico-práctico en el manejo de extintores y prevención de incendios para riesgo ordinario.');
     }
   
     if (invSolidos >= 15000) {
       points.push('Riesgo alto: 7.4 Revisar y realizar pruebas anuales a los sistemas contra incendio en áreas de riesgo alto, incluyendo sistemas fijos y alarmas.');
+      isHighRisk = true;
     } else {
       points.push('Riesgo ordinario: 7.17 Instalar extintores en áreas del centro de trabajo de al menos un extintor por cada 300 m² para riesgo ordinario.');
     }
   
     if (materialesPiroforicos === 'sí') {
       points.push('Riesgo alto: 8.1 y 8.2 Implementar un plan de emergencias que incluya brigadas, procedimientos específicos y recursos adicionales para materiales inflamables o explosivos.');
-    } 
+      isHighRisk = true;
+    } else {
+      points.push('Riesgo ordinario: 11.3 Capacitar a los trabajadores en el manejo de materiales inflamables y en medidas preventivas básicas.');
+    }
+  
+    // Si existe algún grado de riesgo alto, reemplazar los puntos por los de riesgo alto
+    if (isHighRisk) {
+      points.length = 0; // Limpiar puntos ordinarios
+      points.push(
+        '5.11 Contar con alguno de los documentos establecidos para riesgo alto.',
+        '7.5 Establecer un programa anual de revisión de instalaciones eléctricas para riesgo alto.',
+        '5.7 Desarrollar simulacros de emergencia al menos dos veces al año para riesgo alto.',
+        '5.10 Contar con sistemas fijos de protección contra incendio y alarmas en áreas de riesgo alto.',
+        '7.4 Realizar pruebas anuales a sistemas contra incendio en riesgo alto.',
+        '7.16(d) Instalar puertas resistentes al fuego en áreas de riesgo alto.',
+        '8.1 y 8.2 Implementar un plan de emergencias que incluya brigadas y procedimientos adicionales.',
+        '11.3 Capacitar a brigadistas en técnicas avanzadas para atender emergencias de incendio en riesgo alto.'
+      );
+    }
   
     setStep38Points(points); // Actualiza los puntos generados para el paso 38
   };
-  
   const handleCheckboxChange = (e, field) => {
     const { value } = e.target;
     setFormValues((prevValues) => {
@@ -3410,119 +3488,145 @@ const NormaNoms = () => {
           </div>
         </div>
       )}
-
 {step === 38 && (
-        <div className="step38">
-          <h3 style={{ color: 'blue', textAlign: 'center' }}>Normas Aplicables</h3>
-          <div>
-            <button
-              onClick={() => {
-                setStep(1);
-                setFormValues({});
-                setSelectedNormas([]);
-                setStep38Points([]);
-              }}
+  <div className="step38">
+    <h3 style={{ color: 'blue', textAlign: 'center' }}>Normas Aplicables</h3>
+    <div>
+      <button
+        onClick={() => {
+          setStep(1);
+          setFormValues({});
+          setSelectedNormas([]);
+          setStep38Points([]);
+        }}
+        style={{
+          backgroundColor: '#2196F3',
+          color: 'white',
+          padding: '10px 20px',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          fontSize: '16px',
+          margin: '10px 0',
+        }}
+      >
+        Limpiar
+      </button>
+    </div>
+    <div className="normas-table">
+      <img
+        src={require('../logos/logo.png')}
+        alt="Logo de la empresa"
+        style={{
+          display: 'block',
+          margin: '0 auto',
+          width: '150px',
+          height: 'auto',
+          marginBottom: '20px',
+        }}
+      />
+      {selectedNormas.length > 0 ? (
+        Object.entries(
+          selectedNormas.reduce((acc, id) => {
+            const norma = normas.find((n) => n.id === id);
+            if (!acc[norma.tipo]) acc[norma.tipo] = [];
+            acc[norma.tipo].push(norma);
+            return acc;
+          }, {})
+        ).map(([tipo, normasAgrupadas]) => (
+          <div key={tipo}>
+            <h4
               style={{
-                backgroundColor: '#2196F3',
-                color: 'white',
-                padding: '10px 20px',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                fontSize: '16px',
-                margin: '10px 0',
+                backgroundColor: '#f4b084',
+                color: '#000',
+                textAlign: 'center',
+                padding: '10px',
+                marginBottom: '10px',
+                fontSize: '18px',
+                fontWeight: 'bold',
               }}
             >
-              Limpiar
-            </button>
-          </div>
-          <div className="normas-table">
-            <img
-              src={require('../logos/logo.png')}
-              alt="Logo de la empresa"
+              {tipo}
+            </h4>
+            <table
+              border="1"
+              align="center"
+              cellPadding="5"
+              cellSpacing="0"
               style={{
-                display: 'block',
-                margin: '0 auto',
-                width: '150px',
-                height: 'auto',
+                width: '100%',
                 marginBottom: '20px',
+                borderCollapse: 'collapse',
               }}
-            />
-            {selectedNormas.length > 0 ? (
-              Object.entries(
-                selectedNormas.reduce((acc, id) => {
-                  const norma = normas.find((n) => n.id === id);
-                  if (!acc[norma.tipo]) acc[norma.tipo] = [];
-                  acc[norma.tipo].push(norma);
-                  return acc;
-                }, {})
-              ).map(([tipo, normasAgrupadas]) => (
-                <div key={tipo}>
-                  <h4
-                    style={{
-                      backgroundColor: '#f4b084',
-                      color: '#000',
-                      textAlign: 'center',
-                      padding: '10px',
-                      marginBottom: '10px',
-                      fontSize: '18px',
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    {tipo}
-                  </h4>
-                  <table
-                    border="1"
-                    align="center"
-                    cellPadding="5"
-                    cellSpacing="0"
-                    style={{
-                      width: '100%',
-                      marginBottom: '20px',
-                      borderCollapse: 'collapse',
-                    }}
-                  >
-                    <thead>
-                      <tr>
-                        <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>NOM</th>
-                        <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>Descripción</th>
-                        <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>Puntos Específicos</th>
-                        <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>Otros puntos especificos</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {normasAgrupadas.map((norma) => (
-                        <tr key={norma.id}>
-                          <td style={{ textAlign: 'center', verticalAlign: 'top' }}>{norma.id}</td>
-                          <td style={{ textAlign: 'center', verticalAlign: 'top' }}>{norma.title}</td>
-                          <td>
-                            {norma.puntos.map((punto, index) => (
-                              <div key={index}>
-                                <strong>{punto.numero}:</strong> {punto.descripcion}
-                              </div>
-                            ))}
-                          </td>
-                          <td style={{ textAlign: 'center', verticalAlign: 'top' }}>
-                            {norma.id === 'NOM-002' && step38Points.length > 0 ? (
-                              <ul>
-                                {step38Points.map((point, index) => (
-                                  <li key={index}>{point}</li>
-                                ))}
-                              </ul>
-                            ) : null}
-                          </td>
-                        </tr>
+            >
+              <thead>
+                <tr>
+                  <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>NOM</th>
+                  <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>Descripción</th>
+                  <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>Puntos Específicos</th>
+                  <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>Otros Puntos Específicos</th>
+                </tr>
+              </thead>
+              <tbody>
+                {normasAgrupadas.map((norma) => (
+                  <tr key={norma.id}>
+                    <td style={{ textAlign: 'center', verticalAlign: 'top' }}>{norma.id}</td>
+                    <td style={{ textAlign: 'center', verticalAlign: 'top' }}>{norma.title}</td>
+                    <td>
+                      {norma.puntos.map((punto, index) => (
+                        <div key={index}>
+                          <strong>{punto.numero}:</strong> {punto.descripcion}
+                        </div>
                       ))}
-                    </tbody>
-                  </table>
-                </div>
-              ))
-            ) : (
-              <p style={{ textAlign: 'center' }}>No se han encontrado normas aplicables</p>
-            )}
+                    </td>
+                    <td style={{ textAlign: 'center', verticalAlign: 'top' }}>
+                      {/* Lógica para NOM-002 */}
+                      {norma.id === 'NOM-002' ? (
+                        step38Points.some((point) =>
+                          point.toLowerCase().includes('riesgo alto')
+                        ) ? (
+                          <ul>
+                            <li>
+                              <strong>Grado de Riesgo Alto:</strong> Contar con:
+                            </li>
+                            <li>5.11 Documentos establecidos para riesgos altos.</li>
+                            <li>7.5 Programa anual de revisión de instalaciones eléctricas.</li>
+                            <li>5.7 Simulacros de emergencia al menos dos veces al año.</li>
+                            <li>5.10 Sistemas fijos de protección contra incendios.</li>
+                            <li>7.4 Pruebas anuales a sistemas contra incendio.</li>
+                            <li>8.1 y 8.2 Plan de emergencias para materiales inflamables.</li>
+                          </ul>
+                        ) : (
+                          <ul>
+                            {step38Points.map((point, index) => (
+                              <li key={index}>{point}</li>
+                            ))}
+                          </ul>
+                        )
+                      ) : null}
+
+                      {/* Lógica para categorías sujetas a presión en NOM-020 */}
+                      {norma.id === 'NOM-020' && formValues.categoriasRecipientes.length > 0 ? (
+                        formValues.categoriasRecipientes.map((categoria) => (
+                          <div key={categoria}>
+                            <h5>{`Información para ${categoria}`}</h5>
+                            <p>{informacionCategorias[categoria]}</p>
+                          </div>
+                        ))
+                      ) : null}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div>
+        ))
+      ) : (
+        <p style={{ textAlign: 'center' }}>No se han encontrado normas aplicables</p>
       )}
+    </div>
+  </div>
+)}
 
 
 
