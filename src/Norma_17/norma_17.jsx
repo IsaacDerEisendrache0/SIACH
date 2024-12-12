@@ -110,18 +110,18 @@ const RiskAssessmentTable = () => {
 
   const protectionImages = {
     'Caídas de Altura': ['/images/10.png', '/images/34.png', '/images/4.png'], // Reemplaza con la ruta real de la imagen
-    'Exposición a Temperaturas': ['/images/6.png', '/images/21.png', '/images/14.png', '/images/1.png'],
+    'Exposición a Temperaturas': ['/images/6.png', '/images/21.png', '/images/14.png', '/images/1.png', '/images/36.png'],
     'Exposición a Electricidad Estática': ['/images/6.png', '/images/4.png' , '/images/9.png', '/images/10.png'],
     'Exposición a Sustancias Químicas': ['/images/7.png', '/images/13.png', '/images/6.png', '/images/17.png'],
     'Exposición a Radiaciones': ['/images/16.png'], 
-    'Exposición agentes Biológicos': ['/images/18.png', '/images/16.png'], 
+    'Exposición agentes Biológicos': ['/images/18.png', '/images/16.png', '/images/35.png'], 
     'Exposición a Ruido': ['/images/19.png', '/images/5.png'],
     'Exposición a Vibraciones': ['/images/19.png', '/images/6.png' , '/images/4.png'],
     'Superficies cortantes': ['/images/6.png', '/images/1.png', '/images/21.png', '/images/14.png'],
     'Caídas a nivel o desnivel':  ['/images/4.png', '/images/34.png'],
     'Daños Ergonómicos':  ['/images/15.png'],
-    'Calentamiento de materia prima, subproducto o producto':  ['/images/6.png', '/images/15.png' , '/images/9.png', '/images/4.png'],
-    'Protección de material o herramienta':  ['/images/7.png', '/images/12.png', '/images/21.png'],
+    'Calentamiento de materia prima, subproducto o producto':  ['/images/6.png', '/images/15.png' , '/images/9.png', '/images/4.png', '/images/21.png'],
+    'Protección de material o herramienta':  ['/images/7.png', '/images/1.png', '/images/21.png', '/images/14.png', '/images/6.png', '/images/4.png', '/images/35.png'],
     'Mantenimiento preventivo, correctivo o predictivo':  [],
   };
 
@@ -710,11 +710,78 @@ const [selectedMainOption, setSelectedMainOption] = useState(''); // Estado para
 
   // Opciones principales y sus subcategorías
   const eppOptions = {
-    'Casco': ['Casco Dielectrico', 'Casco de Seguridad', 'Casco con Visera'],
-    'Guantes': ['Guantes de Látex', 'Guantes de Nitrilo', 'Guantes de Cuero'],
-    'Gafas de Protección': ['Gafas con Filtro UV', 'Gafas Antiempañantes', 'Gafas de Impacto'],
-    'Botas': ['Botas de Seguridad', 'Botas Impermeables', 'Botas Aislantes'],
+    'Casco': [
+      'Casco Dielectrico',
+      'Casco de Seguridad',
+      'Casco con Visera',
+      'Casco contra Impacto'
+    ],
+    'Guantes': [
+      'Guantes de Látex',
+      'Guantes de Nitrilo',
+      'Guantes de Cuero',
+      'Guantes contra Sustancias Químicas',
+      'Guantes contra Temperaturas Extremas',
+      'Guantes Dieléctricos'
+    ],
+    'Gafas de Protección': [
+      'Goggles',
+      'Gafas con Filtro UV',
+      'Gafas Antiempañantes',
+      'Gafas de Impacto'
+    ],
+    'Botas': [
+      'Botas de Seguridad',
+      'Botas Impermeables',
+      'Botas Aislantes',
+      'Calzado Conductivo',
+      'Calzado contra Impacto',
+      'Calzado contra Sustancias Químicas',
+      'Calzado Dieléctrico',
+      'Calzado Ocupacional'
+    ],
+    'Mandil': [
+      'Mandil contra Altas Temperaturas',
+      'Mandil contra Sustancias Químicas',
+      'Oberol',
+      'Bata'
+    ],
+    // Nuevas clasificaciones
+    'Equipo de Audición': [
+      'Conchas Acústicas',
+      'tapones Auditivos'
+    ],
+    'Respiradores': [
+      'Respirador contra Gases y Vapores',
+      'Respirador contra Partículas'
+    ],
+    'Protección Facial': [
+      'Careta para Soldador',
+      'Pantalla Facial',
+      'Capuchas',
+      'Anteojos de Protección'
+    ],
+    'Ropa de Protección': [
+      'Overol',
+      'Bata',
+      'Ropa contra Sustancias Peligrosas',
+      'Polainas'
+    ],
+    'Equipos Especiales': [
+      'Equipo de Protección contra Caídas de Altura',
+      'Equipo de Respiración Autónomo',
+      'Equipo para Brigadista contra Incendio'
+    ],
+    'Mangas': [
+      'Mangas'
+    ],
+    'Arnés': [
+      'Arnés'
+    ]
   };
+  
+  
+  
 
 
   // Maneja la selección de subcategoría, agrega a la lista y oculta el menú
@@ -750,9 +817,53 @@ useEffect(() => {
   if (selectedImages.includes('/images/6.png') || selectedImages.includes('/images/6.jpg')) {
     newAutoSelectedOptions.push('Guantes');
   }
-  if (selectedImages.includes('/images/3.png') || selectedImages.includes('/images/3.jpg')) {
+  if (selectedImages.includes('/images/3.png') || selectedImages.includes('/images/3.jpg')|| 
+      selectedImages.includes('/images/7.png') || selectedImages.includes('/images/7.jpg')
+) {
     newAutoSelectedOptions.push('Gafas de Protección');
   }
+  if (
+    selectedImages.includes('/images/1.png') || selectedImages.includes('/images/1.jpg') || 
+    selectedImages.includes('/images/9.png') || selectedImages.includes('/images/9.jpg')
+  ) {
+    newAutoSelectedOptions.push('Mandil');
+  }
+  if (selectedImages.includes('/images/34.png') || selectedImages.includes('/images/34.jpg')) {
+    newAutoSelectedOptions.push('Arnés');
+  } 
+  if (selectedImages.includes('/images/21.png') || selectedImages.includes('/images/21.jpg')) {
+    newAutoSelectedOptions.push('Mangas');
+  } 
+  
+  if (
+    selectedImages.includes('/images/14.png') || selectedImages.includes('/images/14.jpg')||
+    selectedImages.includes('/images/15.png') || selectedImages.includes('/images/15.jpg')
+  ) {
+    newAutoSelectedOptions.push('Protección Facial');
+  } 
+
+  if (
+    selectedImages.includes('/images/19.png') || selectedImages.includes('/images/19.jpg')||
+    selectedImages.includes('/images/5.png') || selectedImages.includes('/images/5.jpg')
+  ) {
+    newAutoSelectedOptions.push('Equipo de Audición');
+  } 
+
+  if (
+    selectedImages.includes('/images/35.png') || selectedImages.includes('/images/35.jpg')||
+    selectedImages.includes('/images/17.png') || selectedImages.includes('/images/17.jpg')
+  ) {
+    newAutoSelectedOptions.push('Respiradores');
+  } 
+
+  if (
+    selectedImages.includes('/images/16.png') || selectedImages.includes('/images/16.jpg')||
+    selectedImages.includes('/images/13.png') || selectedImages.includes('/images/13.jpg')||
+    selectedImages.includes('/images/36.png') || selectedImages.includes('/images/36.jpg')
+  ) {
+    newAutoSelectedOptions.push('Ropa de Protección');
+  } 
+
 
   console.log("Opciones automáticas detectadas:", newAutoSelectedOptions); // Verificar opciones detectadas
   setAutoSelectedOptions(newAutoSelectedOptions); // Actualizar opciones automáticas
@@ -1119,24 +1230,25 @@ const handleMainOptionChange = (e) => {
         
         <tbody>
           <tr>
-            <td colSpan="3" className="left-section"> 
-              <tb className="text1">Identificación de peligros</tb>
-              <ul className="hazard-list">
-                {Object.keys(hazards).map(hazard => (
-                  <li key={hazard} className="hazard-item">
-                    {hazard}
-                    <label className="hazard-checkbox">
-                      <input
-                        type="checkbox"
-                        name={hazard}
-                        checked={hazards[hazard]}
-                        onChange={handleCheckboxChange}
-                      />
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </td>
+          <td colSpan="3" className="left-section">
+  <div className="text1">Identificación de peligros</div>
+  <ul className="hazard-list">
+    {Object.keys(hazards).map((hazard) => (
+      <li key={hazard} className="hazard-item">
+        <span>{hazard}</span> {/* Texto del peligro */}
+        <label className="hazard-checkbox">
+          <input
+            type="checkbox"
+            name={hazard}
+            checked={hazards[hazard]}
+            onChange={handleCheckboxChange}
+          />
+        </label>
+      </li>
+    ))}
+  </ul>
+</td>
+
 
 
 
@@ -1292,32 +1404,40 @@ const handleMainOptionChange = (e) => {
 
 <div className="epp-selection-list-container">
   {selectionList.length > 0 ? (
-    <ul className="epp-selection-list">
-      {selectionList.map((selection, index) => (
-        <li key={index} className="epp-selection-item">
-          {selection}
-          <button
-            className="delete-button"
-            onClick={() => handleDeleteSelection(index)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="white"
-              width="20px"
-              height="20px"
-              className="delete-icon"
+    selectionList.reduce((rows, key, index) => {
+      // Agrupa los elementos en pares
+      if (index % 2 === 0) rows.push([selectionList[index]]);
+      else rows[rows.length - 1].push(selectionList[index]);
+      return rows;
+    }, []).map((row, rowIndex) => (
+      <div key={rowIndex} className="epp-selection-row">
+        {row.map((selection, index) => (
+          <div key={index} className="epp-selection-item">
+            {selection.slice(selection.indexOf('-') + 2)} {/* Elimina el prefijo */}
+            <button
+              className="delete-button"
+              onClick={() => handleDeleteSelection(selectionList.indexOf(selection))}
             >
-              <path d="M3 6h18v2H3V6zm2 2v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V8H5zm7 4v6h2v-6h-2zm-4 0v6h2v-6H8zm8 0v6h2v-6h-2zM7 4h10v2H7V4z" />
-            </svg>
-          </button>
-        </li>
-      ))}
-    </ul>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="white"
+                width="20px"
+                height="20px"
+                className="delete-icon"
+              >
+                <path d="M3 6h18v2H3V6zm2 2v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V8H5zm7 4v6h2v-6h-2zm-4 0v6h2v-6H8zm8 0v6h2v-6h-2zM7 4h10v2H7V4z" />
+              </svg>
+            </button>
+          </div>
+        ))}
+      </div>
+    ))
   ) : (
-    <p></p>
+    <p className="no-selection-message">No hay selecciones</p>
   )}
 </div>
+
 
 </div>
 
