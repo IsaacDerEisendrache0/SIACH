@@ -1208,7 +1208,7 @@ const handleMainOptionChange = (e) => {
                 <td colSpan="2" className="input-cell">
                   <select
                     id="tiempoExposicion"
-                    className="select-tiempo"
+                    className="select-area"                    
                     value={tiempoExposicion}
                     onChange={(e) => setTiempoExposicion(e.target.value)}
                   >

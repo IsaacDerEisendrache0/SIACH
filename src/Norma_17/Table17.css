@@ -1238,3 +1238,26 @@ button {
 
 
 
+
+
+.select-area {
+  width: 150px; /* Ancho del select */
+  padding: 8px; /* Espaciado interno */
+  font-size: 14px; /* Tamaño de texto */
+  border: 1px solid #ccc; /* Borde del select */
+  border-radius: 4px; /* Esquinas redondeadas */
+  background-color: #fff; /* Color de fondo */
+}
+
+.select-area option {
+  font-size: 14px; /* Tamaño de texto de las opciones */
+}
+
+/* Cambiar tamaño del menú desplegable */
+.select-area {
+  appearance: none; /* Elimina estilo predeterminado */
+}
+
+.select-area::-ms-expand {
+  display: none; /* Oculta el ícono de desplegable en IE/Edge */
+}
