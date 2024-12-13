@@ -332,6 +332,7 @@ table, th, td {
 }
 
 .header-td {
+  padding: 10px;
   background-color: red !important;
 }
 
@@ -673,7 +674,6 @@ button {
   background-color: yellow;
   color: black;
   padding: 5px;
-  border-bottom: 0px solid #ff0; /* Subrayado en amarillo */
   margin-bottom: 18px;
 }
 
@@ -687,19 +687,19 @@ button {
 .label-cell {
   font-weight: bold;
   padding: 8px;
-  text-align: right;
+  text-align: left; /* Alinea a la izquierda */
+  padding-left: 15px; /* Agrega espacio a la izquierda */
   width: 25%;
   color: white;
   background-color: rgb(255, 0, 0) !important;
-  font-size: 16px !important; /* Forzar el tamaño */
-
+  font-size: 16px !important;
 }
 
 /* Celdas de entrada */
 .input-cell {
   padding: 8px;
   text-align: left;
-  width: 50%;
+  width: 75%; /* Ocupa el espacio restante */
 }
 
 /* Celdas de botones */
@@ -959,7 +959,7 @@ button {
 .remove-logo-button {
   position: absolute;
   top: 5px;
-  right: 0px;
+  left: 9px;
   padding: 3px 6px;
   font-size: 0.7em;
   background-color:  black;
@@ -979,7 +979,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 320px; /* Ajusta el ancho máximo del contenedor según tu preferencia */
+  width: 350px; /* Ajusta el ancho máximo del contenedor según tu preferencia */
   height: auto;
 }
 
@@ -1240,24 +1240,97 @@ button {
 
 
 
+.cell-container {
+  display: flex;
+  align-items: center; /* Alinea verticalmente */
+  justify-content: space-between; /* Espaciado entre elementos */
+  gap: 10px; /* Espacio entre el menú y los botones */
+}
+
 .select-area {
-  width: 150px; /* Ancho del select */
-  padding: 8px; /* Espaciado interno */
-  font-size: 14px; /* Tamaño de texto */
-  border: 1px solid #ccc; /* Borde del select */
-  border-radius: 4px; /* Esquinas redondeadas */
-  background-color: #fff; /* Color de fondo */
+  flex: 1;
+  padding: 5px;
+  font-size: 14px;
 }
 
-.select-area option {
-  font-size: 14px; /* Tamaño de texto de las opciones */
+.button-group {
+  display: flex;
+  gap: 5px; /* Espacio entre los botones */
 }
 
-/* Cambiar tamaño del menú desplegable */
+.btn-agregar,
+.btn-borrar {
+  padding: 5px 10px;
+  font-size: 12px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+.btn-agregar:hover,
+.btn-borrar:hover {
+  background-color: #0056b3;
+}
+
+.date-input {
+  width: 100%; /* Ancho completo */
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+
+
+
+
+
+
+/* Contenedor del menú y los botones */
+.cell-container {
+  display: flex;
+  align-items: center; /* Alinea verticalmente */
+  gap: 10px; /* Espacio entre el menú desplegable y los botones */
+}
+
+/* Menú desplegable */
 .select-area {
-  appearance: none; /* Elimina estilo predeterminado */
+  flex: 1; /* El select ocupa todo el espacio disponible */
+  padding: 5px;
+  font-size: 14px;
 }
 
-.select-area::-ms-expand {
-  display: none; /* Oculta el ícono de desplegable en IE/Edge */
+/* Grupo de botones */
+.button-group {
+  display: flex;
+  gap: 5px; /* Espacio entre los botones */
 }
+
+/* Botones con iconos */
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; /* Asegúrate de que haya espacio suficiente */
+  height: 36px; /* Asegúrate de que haya espacio suficiente */
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+.btn-icon:hover {
+  background-color: #f0f0f0; /* Fondo más claro al pasar el mouse */
+}
+
+/* Iconos dentro de los botones */
+.button-icon {
+  width: 84px; /* Tamaño actualizado */
+  height: 84px; /* Tamaño actualizado */
+}
+

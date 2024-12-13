@@ -263,19 +263,23 @@ const RiskAssessmentTable = () => {
 
 
   const optionImages = {
-    option1: '/body/lvl1_head.png',
-    option2: '/body/lvl1_mid.png',
-    option3: '/body/lvl1_foot.png',
-    option4: '/body/lvl1_hand.png',
-    option5: '/body/lvl2_headmid.png',
-    option6: '/body/lvl2_handfoot.png',
-    option7: '/body/lvl2_headfoot.png',
-    option8: '/body/lvl2_headhand.png',
-    option9: '/body/lvl2_headmid.png',
-    option10: '/body/lvl2_midhand.png',
-    option11: '/body/lvl3_all.png',
-
+    option1: '/body/lvl1_head.png',         // Cabeza
+    option2: '/body/lvl1_mid.png',          // Tronco
+    option3: '/body/lvl1_foot.png',         // Pies
+    option4: '/body/lvl1_hand.png',         // Brazos
+    option5: '/body/lvl2_headmid.png',      // Cabeza y Tronco
+    option6: '/body/lvl2_handfoot.png',     // Brazos y Pies
+    option7: '/body/lvl2_headfoot.png',     // Cabeza y Pies
+    option8: '/body/lvl2_headhand.png',     // Cabeza y Brazos
+    option9: '/body/lvl2_midhand.png',      // Tronco y Brazos
+    option10: '/body/lvl2_midfoot.png',     // Tronco y Pies
+    option11: '/body/lvl3_headmidhand.png', // Cabeza, Tronco y Brazos
+    option12: '/body/lvl3_headmidfoot.png', // Cabeza, Tronco y Pies
+    option13: '/body/lvl3_headhandfoot.png',// Cabeza, Brazos y Pies
+    option14: '/body/lvl3_midhandfoot.png', // Tronco, Brazos y Pies
+    option15: '/body/lvl3_all.png',         // Todas las Extremidades
   };
+
 
   const downloadImage = () => {
     // Selecciona todos los botones que deben ocultarse
@@ -288,6 +292,16 @@ const RiskAssessmentTable = () => {
   
     // Selecciona la tabla principal para capturar
     const tableElement = document.querySelector('.main-table');
+    
+    // Almacena los estilos originales para restaurarlos después
+    const originalWidth = tableElement.style.width;
+    const originalTransform = tableElement.style.transform;
+    const originalMargin = tableElement.style.margin;
+  
+    // Ajusta temporalmente el tamaño de la tabla para capturarla más amplia
+    tableElement.style.width = '1500px'; // Cambia a un tamaño más grande para estirar
+    tableElement.style.transform = 'scale(1)'; // Asegura que no esté encogida
+    tableElement.style.margin = 'auto'; // Centra la tabla
   
     html2canvas(tableElement, {
       scrollX: -window.scrollX,
@@ -309,16 +323,27 @@ const RiskAssessmentTable = () => {
         link.click();
         document.body.removeChild(link);
   
+        // Restaurar los estilos originales
+        tableElement.style.width = originalWidth;
+        tableElement.style.transform = originalTransform;
+        tableElement.style.margin = originalMargin;
+  
         // Restaurar los botones después de la captura
         buttons.forEach(button => button.classList.remove('hidden-buttons'));
       })
       .catch((error) => {
         console.error('Error al capturar la tabla:', error);
   
+        // Restaurar los estilos originales en caso de error
+        tableElement.style.width = originalWidth;
+        tableElement.style.transform = originalTransform;
+        tableElement.style.margin = originalMargin;
+  
         // Asegurarse de restaurar los botones incluso si ocurre un error
         buttons.forEach(button => button.classList.remove('hidden-buttons'));
       });
   };
+  
   
 const handleDeletePuestoClick = () => {
   setIsModalOpen(true); // Abrir el modal cuando se presiona "Borrar"
@@ -973,64 +998,64 @@ const handleMainOptionChange = (e) => {
             </h3>
           </td>
 
-          <td colSpan="3">
-  {logoSeleccionado ? (
-    <div className="logo-container">
-      <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" />
-      <button onClick={handleRemoveLogo} className="remove-logo-button">×</button>
-    </div>
-  ) : (
-    <div className="logo-upload-container">
-      <select onChange={handleLogoChange} className="logo-dropdown">
-        <option value="">Selecciona una empresa</option>
-        {logos.map((logo, index) => (
-          <option key={index} value={logo.url}>
-            {logo.nombre}
-          </option>
-        ))}
-      </select>
-      <label htmlFor="upload-logo" className="upload-button">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="black"
-      className="upload-icon"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M3 16.5V19a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 19v-2.5M16.5 12l-4.5-4.5m0 0L7.5 12m4.5-4.5V19"
-      />
-    </svg>
-  </label>
-  <input
-    type="file"
-    id="upload-logo"
-    accept="image/*"
-    style={{ display: 'none' }}
-    onChange={handleCustomLogoUpload}
-  />
+              <td colSpan="3">
+                {logoSeleccionado ? (
+                  <div className="logo-container">
+                    <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" />
+                    <button onClick={handleRemoveLogo} className="remove-logo-button">×</button>
+                  </div>
+                ) : (
+                  <div className="logo-upload-container">
+                    <select onChange={handleLogoChange} className="logo-dropdown">
+                      <option value="">Selecciona una empresa</option>
+                      {logos.map((logo, index) => (
+                        <option key={index} value={logo.url}>
+                          {logo.nombre}
+                        </option>
+                      ))}
+                    </select>
+                    <label htmlFor="upload-logo" className="upload-button">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="black"
+                    className="upload-icon"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 16.5V19a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 19v-2.5M16.5 12l-4.5-4.5m0 0L7.5 12m4.5-4.5V19"
+                    />
+                  </svg>
+                </label>
+                <input
+                  type="file"
+                  id="upload-logo"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={handleCustomLogoUpload}
+                />
 
-<input
-  type="file"
-  id="upload-logo"
-  accept="image/*"
-  style={{ display: 'none' }}
-  onChange={handleCustomLogoUpload}
-/>
+              <input
+                type="file"
+                id="upload-logo"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={handleCustomLogoUpload}
+              />
 
-      <input
-        type="file"
-        id="upload-logo"
-        accept="image/*"
-        style={{ display: 'none' }}
-        onChange={handleCustomLogoUpload}
-      />
-    </div>
-  )}
-</td>
+                    <input
+                      type="file"
+                      id="upload-logo"
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={handleCustomLogoUpload}
+                    />
+                  </div>
+                )}
+              </td>
 
           </tr>
 
@@ -1149,22 +1174,31 @@ const handleMainOptionChange = (e) => {
             <tbody>
               {/* Fila de Área */}
               <tr>
-                <td className="label-cell">Área:</td>
-                <td className="input-cell">
-                  <select id="area" value={areaSeleccionada} onChange={handleAreaChange} className="select-area">
-                    {areas.map((area, index) => (
-                      <option key={index} value={area.nombre}>
-                        {area.nombre}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td className="button-cell">
-                  <button className="btn-agregar" onClick={handleAddAreaClick}>Agregar</button>
-                  <button className="btn-borrar" onClick={handleDeleteAreaClick}>Borrar</button>
-                </td>
-
-              </tr>
+  <td className="label-cell">Área:</td>
+  <td className="input-cell">
+    <div className="cell-container">
+      <select id="area" value={areaSeleccionada} onChange={handleAreaChange} className="select-area">
+        {areas.map((area, index) => (
+          <option key={index} value={area.nombre}>
+            {area.nombre}
+          </option>
+        ))}
+      </select>
+      <div className="button-group">
+        <button className="btn-icon" onClick={handleAddAreaClick} title="Agregar">
+          <svg className="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+        </button>
+        <button className="btn-icon" onClick={handleDeleteAreaClick} title="Borrar">
+          <svg className="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 6h18M9 6v12M15 6v12M19 6l-1 14H6L5 6" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </td>
+</tr>
 
               {/* Modal para borrar áreas */}
               <Modal isOpen={isAreaModalOpen} onRequestClose={handleAreaModalClose} className="overlay">
@@ -1272,64 +1306,73 @@ const handleMainOptionChange = (e) => {
                 </Modal>
 
                 <td colSpan="2" className="right-section right-aligned" style={{ backgroundColor: 'white' }}>
-                  <div className="text1">Equipo utilizado<br></br></div>
-                  <div className="section-content">
-                    <select value={selectedOptionEquipoUtilizado} onChange={handleOptionChangeEquipoUtilizado}>
-                      <option value="">Selecciona la extremidad afectada</option>
-                      <option value="option1">Cabeza</option>
-                      <option value="option2">Tronco</option>
-                      <option value="option3">Pies</option>
-                      <option value="option4">Brazos</option>
-                      <option value="option5">Cabeza y Tronco</option>
-                      <option value="option6">Brazos y Pies</option>
-                      <option value="option7">Cabeza y Pies</option>
-                      <option value="option8">Cabeza y Brazos</option>
-                      <option value="option9">Cabeza y Tronco</option>
-                      <option value="option10">Tronco y Brazos</option>
-                      <option value="option11">Todas las Extremidades</option>
-                    </select>
-                    {selectedOptionEquipoUtilizado && optionImages[selectedOptionEquipoUtilizado] && (
-                      <div className="protection-image-container">
-                        <img
-                          src={optionImages[selectedOptionEquipoUtilizado]}
-                          alt={`Equipo utilizado para ${selectedOptionEquipoUtilizado}`}
-                          className="protection-image2"
-                        />
-                      </div>
-                    )}
-                  </div>
-                </td>
-                  <td colSpan="2" className="right-section right-aligned">
-                    <div className="text1">Equipo de protección personal sugerido</div>
-                    <div className="body-and-hazards-container">
-                      <select value={selectedOptionProteccionSugerida} onChange={handleOptionChangeProteccionSugerida}>
-                        <option value="">Selecciona la extremidad afectada</option>
-                        <option value="option1">Cabeza</option>
-                        <option value="option2">Tronco</option>
-                        <option value="option3">Pies</option>
-                        <option value="option4">Brazos</option>
-                        <option value="option5">Cabeza y Tronco</option>
-                        <option value="option6">Brazos y Pies</option>
-                        <option value="option7">Cabeza y Pies</option>
-                        <option value="option8">Cabeza y Brazos</option>
-                        <option value="option9">Cabeza y Tronco</option>
-                        <option value="option10">Tronco y Brazos</option>
-                        <option value="option11">Todas las Extremidades</option>
-                      </select>
-                      <div className="images-in-row">  {/* Nueva clase para alinear en fila */}
-                        {selectedOptionProteccionSugerida && optionImages[selectedOptionProteccionSugerida] && (
-                          <div className="body-image-left">
-                            <img
-                              src={optionImages[selectedOptionProteccionSugerida]}
-                              alt={`Equipo de protección sugerido para ${selectedOptionProteccionSugerida}`}
-                              className="protection-image3"
-                            />
-                          </div>
-                        )}
-                        
-                      </div>
-                    </div>
-                  </td>
+      <div className="text1">Equipo utilizado<br></br></div>
+      <div className="section-content">
+        <select value={selectedOptionEquipoUtilizado} onChange={handleOptionChangeEquipoUtilizado}>
+          <option value="">Selecciona la extremidad afectada</option>
+          <option value="option1">Cabeza</option>
+          <option value="option2">Tronco</option>
+          <option value="option3">Pies</option>
+          <option value="option4">Brazos</option>
+          <option value="option5">Cabeza y Tronco</option>
+          <option value="option6">Brazos y Pies</option>
+          <option value="option7">Cabeza y Pies</option>
+          <option value="option8">Cabeza y Brazos</option>
+          <option value="option9">Tronco y Brazos</option>
+          <option value="option10">Tronco y Pies</option>
+          <option value="option11">Cabeza, Tronco y Brazos</option>
+          <option value="option12">Cabeza, Tronco y Pies</option>
+          <option value="option13">Cabeza, Brazos y Pies</option>
+          <option value="option14">Tronco, Brazos y Pies</option>
+          <option value="option15">Todas las Extremidades</option>
+        </select>
+
+        {selectedOptionEquipoUtilizado && optionImages[selectedOptionEquipoUtilizado] && (
+          <div className="protection-image-container">
+            <img
+              src={optionImages[selectedOptionEquipoUtilizado]}
+              alt={`Equipo utilizado para ${selectedOptionEquipoUtilizado}`}
+              className="protection-image2"
+            />
+          </div>
+        )}
+      </div>
+    </td>
+    <td colSpan="2" className="right-section right-aligned">
+      <div className="text1">Equipo de protección personal sugerido</div>
+      <div className="body-and-hazards-container">
+        <select value={selectedOptionProteccionSugerida} onChange={handleOptionChangeProteccionSugerida}>
+          <option value="">Selecciona la extremidad afectada</option>
+          <option value="option1">Cabeza</option>
+          <option value="option2">Tronco</option>
+          <option value="option3">Pies</option>
+          <option value="option4">Brazos</option>
+          <option value="option5">Cabeza y Tronco</option>
+          <option value="option6">Brazos y Pies</option>
+          <option value="option7">Cabeza y Pies</option>
+          <option value="option8">Cabeza y Brazos</option>
+          <option value="option9">Tronco y Brazos</option>
+          <option value="option10">Tronco y Pies</option>
+          <option value="option11">Cabeza, Tronco y Brazos</option>
+          <option value="option12">Cabeza, Tronco y Pies</option>
+          <option value="option13">Cabeza, Brazos y Pies</option>
+          <option value="option14">Tronco, Brazos y Pies</option>
+          <option value="option15">Todas las Extremidades</option>
+        </select>
+        <div className="images-in-row"> {/* Nueva clase para alinear en fila */}
+          {selectedOptionProteccionSugerida && optionImages[selectedOptionProteccionSugerida] && (
+            <div className="body-image-left">
+              <img
+                src={optionImages[selectedOptionProteccionSugerida]}
+                alt={`Equipo de protección sugerido para ${selectedOptionProteccionSugerida}`}
+                className="protection-image3"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </td>
+
 
                 <td colSpan="2" className="epp-component-right-section">
                   {/* Título de EPP Recomendado */}
