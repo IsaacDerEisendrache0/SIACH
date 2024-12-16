@@ -1,152 +1,145 @@
-    .risk-table-container {
-        margin-top: 20px;
-    }
-    
+
+
     .logo-container {
         text-align: center;
         margin-bottom: 20px;
     }
-    
+
     .logo {
-        width: 00px;
+        width: 200px;
         margin-left: -900px;
     }
-    
+
     .table-flex-container {
         display: flex;
         justify-content: space-between;
     }
-    
-    .image-insert-table {
-        flex: 1;
-        margin: 10px 5px;
-    }
-    
+
+
+
     /* Ajuste para hacer más corta la tabla de identificación de peligros */
     .identification-table {
         flex: 1.5; /* Reducido el valor flex para ocupar menos espacio */
         margin: 10px 5px;
     }
-    
+
     /* Ajuste para hacer más grande la tabla de evaluación de riesgo de trabajo */
     .evaluation-table {
         flex: 2; /* Incrementado el valor flex para ocupar más espacio */
         margin: 10px 5px;
     }
-    
-    .identification-table .risk-table td,
-    .identification-table .risk-table th {
-        width: 100%; /* Hace que las celdas ocupen el ancho completo */
-        padding: 10px; /* Añade un poco de padding para mayor tamaño */
-    }
-    
+
+
+
     .image-insert-table .selected-image {
         width: 100%;
         height: 100%;
         margin-top: 5px;
     }
-    
+
     .risk-table,
     .risk-classification {
         width: 100%;
         background-color: white;
     }
-    
-    .risk-table input,
-    .risk-table select {
-        width: 100%;
-    }
-    
+
+  
+
+    /* Ajustar la letra que escribe el usuario */
+ 
+
     .red {
-        color: red;
+        color: rgb(194, 53, 53);
     }
-    
+
     .download-button,
     .save-button {
         margin-top: 20px;
     }
-    
+
     .button-container {
         margin-top: 20px;
     }
-    
+
     /* Estilo para las imágenes del EPP en Información Adicional con tamaño reducido */
-    /* Estilo para la tabla de Información Adicional con ancho fijo */
     .additional-table {
         display: flex;
         flex-wrap: wrap;
-        justify-content: flex-start; /* Alinear las imágenes al inicio */
-        width: 100%; /* Ajusta el ancho al 100% del contenedor principal o especifica un ancho fijo */
-        max-width: 800px; /* O define un ancho específico, por ejemplo, 800px */
+        justify-content: flex-start;
+        width: 100%;
+        max-width: 1000px;
         padding: 16px;
         border: 1px solid white;
         border-radius: 8px;
         background-color: white;
-        margin: 0 auto; /* Centrar la tabla dentro de su contenedor principal */
+        margin: 0 auto;
     }
 
-    /* Estilo para las imágenes de EPP en Información Adicional */
     .additional-table .selected-image {
-        width: 70px; /* Tamaño reducido para las imágenes */
-        height: 60px; /* Mantener la altura para que sean cuadradas */
+        width: 80px; /* Tamaño ligeramente mayor */
+        height: 70px;
         margin: 8px;
         object-fit: contain;
-        border-radius: 8px; /* Bordes redondeados */
-        padding: 3px; /* Espacio interno para un efecto de margen interior */
-        background-color: white; /* Fondo blanco para que destaque */
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0); /* Sombra para darle profundidad */
+        border-radius: 8px;
+        padding: 4px;
+        background-color: white;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         cursor: pointer;
         display: inline-block;
     }
 
-    /* Contenedor de la tabla con tamaño fijo */
     .additional-info-table {
         width: 100%;
-        max-width: 1000px; /* Ancho máximo más grande */
-        height: 700px; /* Altura fija */
-        min-height: 700px; /* Altura mínima para mantener tamaño constante */
+        max-width: 100px;
+        height: 100px;
+        min-height: 100px;
         padding: 0px;
         border: 1px solid #ffffff;
         border-radius: 8px;
         background-color: white;
-        margin: 0 auto;
+
         display: block;
         box-sizing: border-box;
     }
 
     .triangle-images-container {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start; /* Alinear las imágenes al inicio */
-        align-items: flex-start; /* Alinear imágenes en la parte superior */
-        gap: 10px; /* Espacio entre imágenes */
-        width: 100%; /* Asegura que ocupe todo el ancho disponible */
-        height: 200px; /* Altura fija del cuadro */
-        background-color: #f9f9f9; /* Fondo claro para que sea visible */
-        border: 1px solid #ccc; /* Borde gris claro */
-        border-radius: 5px; /* Bordes redondeados */
-        padding: 10px; /* Espacio interno */
-        box-sizing: border-box; /* Incluye padding y borde en el tamaño */
+        flex-wrap: wrap; /* Las imágenes pasan a la siguiente fila si no caben */
+        justify-content: space-between; /* Espaciado uniforme entre imágenes */
+        align-items: center; /* Centra las imágenes verticalmente */
+        gap: 5px; /* Espaciado entre las imágenes */
+        width: 320px; /* Ancho fijo del cuadro */
+        height: 400px; /* Alto fijo del cuadro */
+        background-color: #ffffff;
+        border: 1px solid #ffffff; /* Borde sutil para distinguir el cuadro */
+       
+        padding: 10px; /* Espaciado interno */
+        box-sizing: border-box; /* Incluye padding en las dimensiones totales */
+        overflow: hidden; /* Oculta contenido que exceda el cuadro */
+        margin: 0 auto; /* Centra el cuadro horizontalmente */
     }
     
-    /* Estilo para las imágenes */
+    /* Ajuste para las imágenes dentro del contenedor */
     .triangle-images-container .selected-image {
-        width: 80px; /* Tamaño fijo para las imágenes */
-        height: 80px;
-        object-fit: contain; /* Mantiene las proporciones de la imagen */
-        border-radius: 5px; /* Bordes redondeados */
-        padding: 5px; /* Espaciado interno */
-        background-color: white; /* Fondo blanco para destacar las imágenes */
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para resaltar */
+        width: 90px; /* Tamaño fijo de las imágenes */
+        height: 90px;
+        object-fit: contain; /* Asegura que las imágenes mantengan su proporción */
+      
+        padding: 6px;
+        background-color: white;
+      
         cursor: pointer;
+        margin-top: 20px; /* Baja las imágenes dentro del cuadro */
+        transition: transform 0.2s ease, margin-top 0.2s ease;
     }
     
     /* Hover para las imágenes */
     .triangle-images-container .selected-image:hover {
         transform: scale(1.1); /* Efecto de zoom al pasar el ratón */
-        transition: transform 0.2s ease;
     }
     
+    
+
     .modal-overlay {
         position: fixed;
         top: 0;
@@ -159,7 +152,7 @@
         align-items: center;
         z-index: 1000;
     }
-    
+
     .modal-content {
         background: white;
         padding: 20px;
@@ -168,13 +161,13 @@
         width: 400px;
         max-width: 90%;
     }
-    
+
     .modal-actions {
         display: flex;
         justify-content: flex-end;
         gap: 10px;
     }
-    
+
     .submit-button {
         background-color: #4caf50;
         color: white;
@@ -183,62 +176,57 @@
         cursor: pointer;
         border-radius: 4px;
     }
-    
+
     .cancel-button {
-        background-color: #f44336;
+        background-color: #ce3f35;
         color: white;
         border: none;
         padding: 10px 15px;
         cursor: pointer;
         border-radius: 4px;
     }
-    .risk-table-container {
-        width: 100%;
-        padding: 20px;
-        background-color: #f9f9f9;
-      }
-      
-      .header-container {
+
+    .header-container {
         display: flex;
         align-items: center;
         justify-content: space-between;
         margin-bottom: 20px;
         background-color: #fff;
         padding: 10px 20px;
-        border: 1px solid #ddd;
+        border: 1px solid #ffffff;
         border-radius: 8px;
-      }
-      
-      .logo-left {
+    }
+
+    .logo-left {
         width: 200px;
-      }
-      
-      .header-title {
+    }
+
+    .header-title {
         flex: 1;
         text-align: center;
         font-size: 18px;
         font-weight: bold;
         color: #333;
         margin: 0;
-      }
-      
-      .logo-select {
+    }
+
+    .logo-select {
         padding: 5px;
         font-size: 14px;
         border: 1px solid #ccc;
         border-radius: 5px;
-      }
-      
-      .logo-right-container {
+    }
+
+    .logo-right-container {
         position: relative;
         display: inline-block;
-      }
-      
-      .logo-right {
+    }
+
+    .logo-right {
         width: 150px;
-      }
-      
-      .remove-logo-button {
+    }
+
+    .remove-logo-button {
         position: absolute;
         top: -5px;
         right: -5px;
@@ -250,4 +238,47 @@
         color: white;
         font-size: 14px;
         cursor: pointer;
-      }
+    }
+
+    .risk-table {
+    width: 100%; /* Asegura que la tabla ocupe todo el ancho del contenedor */
+    table-layout: fixed; /* Controla que las celdas se ajusten dentro del ancho fijo */
+    border-collapse: collapse; /* Para que los bordes se vean limpios */
+    border: 1px solid #ccc; /* Bordes visibles y alineados */
+    margin: 0; /* Elimina cualquier margen adicional */
+    padding: 0; /* Elimina cualquier padding adicional */
+    box-sizing: border-box; /* Incluye bordes y padding en el ancho total */
+}
+
+.risk-table-container {
+    width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
+    padding: 30px; /* Mantiene un espaciado uniforme */
+    margin-top: 50px; /* Espaciado superior */
+    background-color: #f9f9f9;
+    box-sizing: border-box; /* Incluye padding en el ancho total */
+}
+
+.risk-table th, 
+.risk-table td {
+    text-align: left; /* Alinea el texto en las celdas */
+    padding: 12px; /* Espaciado uniforme en las celdas */
+    font-size: 14px; /* Tamaño de fuente consistente */
+    border: 1px solid #ddd; /* Bordes de las celdas */
+}
+
+.risk-table input, 
+.risk-table select, 
+.risk-table textarea {
+    width: 100%; /* Los campos ocupan el ancho completo de las celdas */
+    padding: 10px; /* Espaciado interno */
+    font-size: 14px; /* Ajuste del tamaño de fuente */
+    box-sizing: border-box; /* Incluye padding en el ancho total */
+}
+
+.selected-image {
+    max-width: 100%; /* Asegura que no exceda el contenedor */
+    max-height: 300px; /* Limita la altura si es necesario */
+    display: block; /* Garantiza que sea visible */
+    margin: 10px auto;
+  }
+  

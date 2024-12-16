@@ -83,6 +83,28 @@
 
       const savedPuestos = JSON.parse(localStorage.getItem('puestos')) || [];
       setPuestos(savedPuestos);
+
+      const table = document.getElementById("body-parts-table");
+    const cells = table.querySelectorAll('td[data-check="true"]');
+
+    cells.forEach((cell) => {
+      cell.addEventListener("click", () => {
+        if (cell.textContent.trim() === "X") {
+          cell.textContent = "";
+        } else {
+          cell.textContent = "X";
+        }
+      });
+    });
+
+    // Limpieza de eventos para evitar duplicación
+    return () => {
+      cells.forEach((cell) => {
+        cell.removeEventListener("click", () => {});
+      });
+    };
+
+
     }, []);
 
     const handleCheckboxChange = (e, hazard) => {
@@ -347,8 +369,6 @@
                 <h4 className="header-title">
                   NOM-004-STPS-1999 "ANÁLISIS DE RIESGO POTENCIAL POR MAQUINARIA Y EQUIPO"
                 </h4>
-        
-
                 {/* Logo derecho o selector */}
                 {!selectedRightLogo ? (
                     <div className="upload-logo-wrapper">
@@ -477,7 +497,7 @@
                 </table>
 
                 {/* Tabla de triángulos con select */}
-                <table className="additional-info-table">
+                <table className="risk-table">
                   <tbody>
                     <tr>
                       <td>
@@ -535,6 +555,7 @@
               </div>
 
               <div className="evaluation-table">
+                <table>
                 <table>
                   <thead>
                     <tr className="red">
@@ -605,11 +626,41 @@
                       ))}
                     </tr>
                   </tbody>
+                              <textarea name="textarea" rows="3" cols="212" id="observaciones" placeholder='Observaciones'></textarea>
                 </table>
                 
+                </table>
+                <table id="body-parts-table" style={{ width: "90%", margin: "20px auto", borderCollapse: "collapse" }}>
+      <thead>
+        <tr>
+          <th colSpan="6" style={{ backgroundColor: "#f9f9f9", fontWeight: "bold", padding: "6px" }}>
+            Principales partes del cuerpo expuestas al riesgo:
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cabeza y Oídos</td>
+          <td data-check="true" style={{ border: "1px solid #ccc", cursor: "pointer" }}></td>
+          <td>Ojos y Cara</td>
+          <td data-check="true" style={{ border: "1px solid #ccc", cursor: "pointer" }}></td>
+          <td>Sistema respiratorio</td>
+          <td data-check="true" style={{ border: "1px solid #ccc", cursor: "pointer" }}></td>
+        </tr>
+        <tr>
+          <td>Brazos y Manos</td>
+          <td data-check="true" style={{ border: "1px solid #ccc", cursor: "pointer" }}></td>
+          <td>Tronco</td>
+          <td data-check="true" style={{ border: "1px solid #ccc", cursor: "pointer" }}></td>
+          <td>Extremidades inferiores</td>
+          <td data-check="true" style={{ border: "1px solid #ccc", cursor: "pointer" }}></td>
+        </tr>
+      </tbody>
+    </table>
+  
               </div>
             </div>
-            <textarea name="textarea" rows="3" cols="212" id="observaciones" placeholder='Observaciones'></textarea>
+
           </tbody>
         </table>
         {/* Modal para Agregar Puesto */}
