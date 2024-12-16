@@ -1281,149 +1281,204 @@ const NormaNoms = () => {
 
         
 {step === 2 && (
-        <div className="step2">
-          <h3>Determinación del grado de riesgo de incendio</h3>
-          <p>Para consultar la tabla de clasificación, dé clic en el ícono.</p>
-          <img
-            src={iconImage}
-            alt="Tabla de clasificación de riesgo de incendio"
-            style={{ cursor: 'pointer', width: '50px' }}
-            onClick={() => setShowModal2(true)}
-          />
+  <div className="step2" style={{ textAlign: 'center', padding: '20px' }}>
+    <h3 style={{ marginBottom: '20px' }}>Determinación del grado de riesgo de incendio</h3>
+    <p style={{ marginBottom: '20px' }}>
+      Para consultar la tabla de clasificación, dé clic en el ícono.
+    </p>
+    <img
+      src={iconImage}
+      alt="Tabla de clasificación de riesgo de incendio"
+      style={{ cursor: 'pointer', width: '50px', marginBottom: '30px' }}
+      onClick={() => setShowModal2(true)}
+    />
 
-          <div className="inventory-fields">
-            <label>
-              Superficie construida:
-              <input
-                type="number"
-                name="superficie"
-                value={formValues.superficie}
-                onChange={(e) => {
-                  const value = Math.max(0, Number(e.target.value));
-                  handleInputChange({ target: { name: 'superficie', value } });
-                  evaluateConditions();
-                }}
-                required
-              />
-              metros cuadrados
-            </label>
+    <div className="inventory-fields" style={{ textAlign: 'left', marginBottom: '30px' }}>
+      <label style={{ display: 'block', marginBottom: '15px' }}>
+        Superficie construida:
+        <input
+          type="number"
+          name="superficie"
+          value={formValues.superficie}
+          onChange={(e) => {
+            const value = Math.max(0, Number(e.target.value));
+            handleInputChange({ target: { name: 'superficie', value } });
+            evaluateConditions();
+          }}
+          required
+          style={{ marginLeft: '10px', padding: '5px', width: '100px' }}
+        />
+        metros cuadrados
+      </label>
 
-            <label>
-              Inventario de gases inflamables:
-              <input
-                type="number"
-                name="invGases"
-                value={formValues.invGases}
-                onChange={(e) => {
-                  const value = Math.max(0, Number(e.target.value));
-                  handleInputChange({ target: { name: 'invGases', value } });
-                  evaluateConditions();
-                }}
-                required
-              />
-              litros
-            </label>
+      <label style={{ display: 'block', marginBottom: '15px' }}>
+        Inventario de gases inflamables:
+        <input
+          type="number"
+          name="invGases"
+          value={formValues.invGases}
+          onChange={(e) => {
+            const value = Math.max(0, Number(e.target.value));
+            handleInputChange({ target: { name: 'invGases', value } });
+            evaluateConditions();
+          }}
+          required
+          style={{ marginLeft: '10px', padding: '5px', width: '100px' }}
+        />
+        litros
+      </label>
 
-            <label>
-              Inventario de líquidos inflamables:
-              <input
-                type="number"
-                name="invLiquidosi"
-                value={formValues.invLiquidosi}
-                onChange={(e) => {
-                  const value = Math.max(0, Number(e.target.value));
-                  handleInputChange({ target: { name: 'invLiquidosi', value } });
-                  evaluateConditions();
-                }}
-                required
-              />
-              litros
-            </label>
+      <label style={{ display: 'block', marginBottom: '15px' }}>
+        Inventario de líquidos inflamables:
+        <input
+          type="number"
+          name="invLiquidosi"
+          value={formValues.invLiquidosi}
+          onChange={(e) => {
+            const value = Math.max(0, Number(e.target.value));
+            handleInputChange({ target: { name: 'invLiquidosi', value } });
+            evaluateConditions();
+          }}
+          required
+          style={{ marginLeft: '10px', padding: '5px', width: '100px' }}
+        />
+        litros
+      </label>
 
-            <label>
-              Inventario de líquidos combustibles:
-              <input
-                type="number"
-                name="invLiquidosc"
-                value={formValues.invLiquidosc}
-                onChange={(e) => {
-                  const value = Math.max(0, Number(e.target.value));
-                  handleInputChange({ target: { name: 'invLiquidosc', value } });
-                  evaluateConditions();
-                }}
-                required
-              />
-              litros
-            </label>
+      <label style={{ display: 'block', marginBottom: '15px' }}>
+        Inventario de líquidos combustibles:
+        <input
+          type="number"
+          name="invLiquidosc"
+          value={formValues.invLiquidosc}
+          onChange={(e) => {
+            const value = Math.max(0, Number(e.target.value));
+            handleInputChange({ target: { name: 'invLiquidosc', value } });
+            evaluateConditions();
+          }}
+          required
+          style={{ marginLeft: '10px', padding: '5px', width: '100px' }}
+        />
+        litros
+      </label>
 
-            <label>
-              Inventario de sólidos combustibles, incluido el mobiliario del centro de trabajo:
-              <input
-                type="number"
-                name="invSolidos"
-                value={formValues.invSolidos}
-                onChange={(e) => {
-                  const value = Math.max(0, Number(e.target.value));
-                  handleInputChange({ target: { name: 'invSolidos', value } });
-                  evaluateConditions();
-                }}
-                required
-              />
-              kilogramos
-            </label>
-          </div>
+      <label style={{ display: 'block', marginBottom: '15px' }}>
+        Inventario de sólidos combustibles, incluido el mobiliario del centro de trabajo:
+        <input
+          type="number"
+          name="invSolidos"
+          value={formValues.invSolidos}
+          onChange={(e) => {
+            const value = Math.max(0, Number(e.target.value));
+            handleInputChange({ target: { name: 'invSolidos', value } });
+            evaluateConditions();
+          }}
+          required
+          style={{ marginLeft: '10px', padding: '5px', width: '100px' }}
+        />
+        kilogramos
+      </label>
+    </div>
 
-          <label>¿Tiene inventario de materiales pirofóricos o explosivos?</label>
-          <label>
-            <input
-              type="radio"
-              name="materialesPiroforicos"
-              value="sí"
-              onChange={(e) => {
-                handleInputChange(e);
-                evaluateConditions();
-              }}
-              checked={formValues.materialesPiroforicos === 'sí'}
-            />
-            Sí
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="materialesPiroforicos"
-              value="no"
-              onChange={(e) => {
-                handleInputChange(e);
-                evaluateConditions();
-              }}
-              checked={formValues.materialesPiroforicos === 'no'}
-            />
-            No
-          </label>
+    <label style={{ display: 'block', marginBottom: '20px', fontWeight: 'bold' }}>
+      ¿Tiene inventario de materiales pirofóricos o explosivos?
+    </label>
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '30px' }}>
+      <label style={{ fontSize: '16px' }}>
+        <input
+          type="radio"
+          name="materialesPiroforicos"
+          value="sí"
+          onChange={(e) => {
+            handleInputChange(e);
+            evaluateConditions();
+          }}
+          checked={formValues.materialesPiroforicos === 'sí'}
+          style={{ marginRight: '10px' }}
+        />
+        Sí
+      </label>
+      <label style={{ fontSize: '16px' }}>
+        <input
+          type="radio"
+          name="materialesPiroforicos"
+          value="no"
+          onChange={(e) => {
+            handleInputChange(e);
+            evaluateConditions();
+          }}
+          checked={formValues.materialesPiroforicos === 'no'}
+          style={{ marginRight: '10px' }}
+        />
+        No
+      </label>
+    </div>
 
-          <button onClick={handleBack}>Regresar</button>
-          <button onClick={handleNext} disabled={!isStepCompleted()}>
-            Continuar
-          </button>
+    <div className="buttons" style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+      <button
+        onClick={handleBack}
+        style={{
+          padding: '10px 20px',
+          fontSize: '14px',
+          border: 'none',
+          borderRadius: '5px',
+          backgroundColor: '#007BFF', // Azul
+          color: '#fff',
+          cursor: 'pointer',
+          transition: 'background-color 0.3s ease',
+        }}
+        onMouseOver={(e) => (e.target.style.backgroundColor = '#0056b3')}
+        onMouseOut={(e) => (e.target.style.backgroundColor = '#007BFF')}
+      >
+        Regresar
+      </button>
+      <button
+        onClick={handleNext}
+        disabled={!isStepCompleted()}
+        style={{
+          padding: '10px 20px',
+          fontSize: '14px',
+          border: 'none',
+          borderRadius: '5px',
+          backgroundColor: isStepCompleted() ? '#007BFF' : '#ccc', // Azul cuando habilitado
+          color: isStepCompleted() ? '#fff' : '#666',
+          cursor: isStepCompleted() ? 'pointer' : 'not-allowed',
+          transition: 'background-color 0.3s ease',
+        }}
+        onMouseOver={(e) => {
+          if (isStepCompleted()) e.target.style.backgroundColor = '#0056b3';
+        }}
+        onMouseOut={(e) => {
+          if (isStepCompleted()) e.target.style.backgroundColor = '#007BFF';
+        }}
+      >
+        Continuar
+      </button>
+    </div>
 
-          {showModal2 && (
-            <div className="modal">
-              <div className="modal-content">
-                <span className="close" onClick={() => setShowModal2(false)}>
-                  &times;
-                </span>
-                <img src={riesgoImage} alt="Tabla de clasificación de riesgo de incendio" style={{ width: '100%' }} />
-              </div>
-            </div>
+    {showModal2 && (
+      <div className="modal" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div className="modal-content" style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '5px', position: 'relative', width: '90%', maxWidth: '600px' }}>
+          <span
+            className="close"
+            onClick={() => setShowModal2(false)}
+            style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer', fontSize: '24px', fontWeight: 'bold' }}
+          >
+            &times;
+          </span>
+          <img src={riesgoImage} alt="Tabla de clasificación de riesgo de incendio" style={{ width: '100%', borderRadius: '5px' }} />
+        </div>
+      </div>
     )}
   </div>
 )}
+
 
 
 
         {/* Paso 3 */}
         {step === 3 && (
-  <div className="step3">
+  <div className="step3" style={{ textAlign: 'center', padding: '20px' }}>
     <img
       src={require('../logos/logo.png')} // Ruta a tu logo
       alt="Logo de la empresa"
@@ -1432,99 +1487,128 @@ const NormaNoms = () => {
         margin: '0 auto',
         width: '150px',
         height: 'auto',
-        marginBottom: '20px'
+        marginBottom: '20px',
       }}
     />
-    <h3>Área de trabajo</h3>
-    <label>¿Desarrolla sus actividades de producción, comercialización, transporte y almacenamiento o prestación de servicios en: edificios, locales, instalaciones y/o áreas exteriores, tales como pasillos, patios, techos, estacionamientos, áreas de circulación de vehículos, áreas de carga y descarga de materiales?</label>
-    <label>
-      <input type="radio" name="areaTrabajo" value="sí" onChange={handleInputChange} />
-      Sí
-    </label>
-    <label>
-      <input type="radio" name="areaTrabajo" value="no" onChange={handleInputChange} />
-      No
+    <h3 style={{ marginBottom: '20px' }}>Área de trabajo</h3>
+    <label style={{ display: 'block', marginBottom: '20px', fontSize: '16px' }}>
+      ¿Desarrolla sus actividades de producción, comercialización, transporte y almacenamiento o prestación de servicios en: edificios, locales, instalaciones y/o áreas exteriores, tales como pasillos, patios, techos, estacionamientos, áreas de circulación de vehículos, áreas de carga y descarga de materiales?
     </label>
 
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '30px' }}>
+      <label style={{ fontSize: '16px' }}>
+        <input
+          type="radio"
+          name="areaTrabajo"
+          value="sí"
+          onChange={handleInputChange}
+          style={{ marginRight: '10px' }}
+        />
+        Sí
+      </label>
+      <label style={{ fontSize: '16px' }}>
+        <input
+          type="radio"
+          name="areaTrabajo"
+          value="no"
+          onChange={handleInputChange}
+          style={{ marginRight: '10px' }}
+        />
+        No
+      </label>
+    </div>
+
     {/* Nueva sección de elementos del centro de trabajo, solo si "areaTrabajo" es "sí" */}
-    {formValues.areaTrabajo === "sí" && (
+    {formValues.areaTrabajo === 'sí' && (
       <>
-        <h4>Seleccione los elementos con que cuenta su centro de trabajo:</h4>
-        <label>
-          <input
-            type="checkbox"
-            value="escaleras"
-            onChange={(e) => handleCheckboxChange(e, 'elementos')}
-            checked={formValues.elementos.includes('escaleras')}
-          />
-          Escaleras
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="rampas"
-            onChange={(e) => handleCheckboxChange(e, 'elementos')}
-            checked={formValues.elementos.includes('rampas')}
-          />
-          Rampas
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="escalas"
-            onChange={(e) => handleCheckboxChange(e, 'elementos')}
-            checked={formValues.elementos.includes('escalas')}
-          />
-          Escalas
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="puentesPlataformasElevadas"
-            onChange={(e) => handleCheckboxChange(e, 'elementos')}
-            checked={formValues.elementos.includes('puentesPlataformasElevadas')}
-          />
-          Puentes y plataformas elevadas
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="transitoVehiculos"
-            onChange={(e) => handleCheckboxChange(e, 'elementos')}
-            checked={formValues.elementos.includes('transitoVehiculos')}
-          />
-          Áreas de tránsito de vehículos
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="espuelasFerrocarril"
-            onChange={(e) => handleCheckboxChange(e, 'elementos')}
-            checked={formValues.elementos.includes('espuelasFerrocarril')}
-          />
-          Espuelas de ferrocarril activas
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="ventilacionArtificial"
-            onChange={(e) => handleCheckboxChange(e, 'elementos')}
-            checked={formValues.elementos.includes('ventilacionArtificial')}
-          />
-          Sistemas de ventilación artificial
-        </label>
+        <h4 style={{ marginBottom: '20px' }}>Seleccione los elementos con que cuenta su centro de trabajo:</h4>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: '20px',
+            marginBottom: '30px',
+          }}
+        >
+          {[
+            { value: 'escaleras', label: 'Escaleras' },
+            { value: 'rampas', label: 'Rampas' },
+            { value: 'escalas', label: 'Escalas' },
+            { value: 'puentesPlataformasElevadas', label: 'Puentes y plataformas elevadas' },
+            { value: 'transitoVehiculos', label: 'Áreas de tránsito de vehículos' },
+            { value: 'espuelasFerrocarril', label: 'Espuelas de ferrocarril activas' },
+            { value: 'ventilacionArtificial', label: 'Sistemas de ventilación artificial' },
+          ].map((item) => (
+            <label
+              key={item.value}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                fontSize: '16px',
+                width: '250px',
+              }}
+            >
+              <input
+                type="checkbox"
+                value={item.value}
+                onChange={(e) => handleCheckboxChange(e, 'elementos')}
+                checked={formValues.elementos.includes(item.value)}
+                style={{ marginRight: '10px' }}
+              />
+              {item.label}
+            </label>
+          ))}
+        </div>
       </>
     )}
 
-    <div className="buttons">
-      <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+    <div className="buttons" style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+      <button
+        onClick={handleBack}
+        style={{
+          padding: '10px 20px',
+          fontSize: '14px',
+          border: 'none',
+          borderRadius: '5px',
+          backgroundColor: '#007BFF', // Azul
+          color: '#fff',
+          cursor: 'pointer',
+          transition: 'background-color 0.3s ease',
+        }}
+        onMouseOver={(e) => (e.target.style.backgroundColor = '#0056b3')}
+        onMouseOut={(e) => (e.target.style.backgroundColor = '#007BFF')}
+      >
+        Regresar
+      </button>
+      <button
+        onClick={handleNext}
+        disabled={!isStepCompleted()}
+        style={{
+          padding: '10px 20px',
+          fontSize: '14px',
+          border: 'none',
+          borderRadius: '5px',
+          backgroundColor: isStepCompleted() ? '#007BFF' : '#ccc', // Azul cuando habilitado
+          color: isStepCompleted() ? '#fff' : '#666',
+          cursor: isStepCompleted() ? 'pointer' : 'not-allowed',
+          transition: 'background-color 0.3s ease',
+        }}
+        onMouseOver={(e) => {
+          if (isStepCompleted()) e.target.style.backgroundColor = '#0056b3';
+        }}
+        onMouseOut={(e) => {
+          if (isStepCompleted()) e.target.style.backgroundColor = '#007BFF';
+        }}
+      >
+        Continuar
+      </button>
     </div>
   </div>
 )}
 
 {step === 4 && (
-  <div className="step4">
+  <div className="step4" style={{ textAlign: 'center', padding: '20px' }}>
     <img
       src={require('../logos/logo.png')} // Ruta a tu logo
       alt="Logo de la empresa"
@@ -1533,23 +1617,77 @@ const NormaNoms = () => {
         margin: '0 auto',
         width: '150px',
         height: 'auto',
-        marginBottom: '20px'
+        marginBottom: '20px',
       }}
     />
-    <h3>Uso de maquinaria o equipo</h3>
-    <label>¿En su centro de trabajo se utiliza maquinaria o equipo?</label>
-    <label>
-      <input type="radio" name="maquinaria" value="sí" onChange={handleInputChange} />
-      Sí
-    </label>
-    <label>
-      <input type="radio" name="maquinaria" value="no" onChange={handleInputChange} />
-      No
+    <h3 style={{ marginBottom: '20px' }}>Uso de maquinaria o equipo</h3>
+    <label style={{ display: 'block', marginBottom: '20px', fontSize: '16px' }}>
+      ¿En su centro de trabajo se utiliza maquinaria o equipo?
     </label>
 
-    <div className="buttons">
-      <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '30px' }}>
+      <label style={{ fontSize: '16px' }}>
+        <input
+          type="radio"
+          name="maquinaria"
+          value="sí"
+          onChange={handleInputChange}
+          style={{ marginRight: '10px' }}
+        />
+        Sí
+      </label>
+      <label style={{ fontSize: '16px' }}>
+        <input
+          type="radio"
+          name="maquinaria"
+          value="no"
+          onChange={handleInputChange}
+          style={{ marginRight: '10px' }}
+        />
+        No
+      </label>
+    </div>
+
+    <div className="buttons" style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+      <button
+        onClick={handleBack}
+        style={{
+          padding: '10px 20px',
+          fontSize: '14px',
+          border: 'none',
+          borderRadius: '5px',
+          backgroundColor: '#007BFF', // Azul
+          color: '#fff',
+          cursor: 'pointer',
+          transition: 'background-color 0.3s ease',
+        }}
+        onMouseOver={(e) => (e.target.style.backgroundColor = '#0056b3')}
+        onMouseOut={(e) => (e.target.style.backgroundColor = '#007BFF')}
+      >
+        Regresar
+      </button>
+      <button
+        onClick={handleNext}
+        disabled={!isStepCompleted()}
+        style={{
+          padding: '10px 20px',
+          fontSize: '14px',
+          border: 'none',
+          borderRadius: '5px',
+          backgroundColor: isStepCompleted() ? '#007BFF' : '#ccc', // Azul cuando habilitado
+          color: isStepCompleted() ? '#fff' : '#666',
+          cursor: isStepCompleted() ? 'pointer' : 'not-allowed',
+          transition: 'background-color 0.3s ease',
+        }}
+        onMouseOver={(e) => {
+          if (isStepCompleted()) e.target.style.backgroundColor = '#0056b3';
+        }}
+        onMouseOut={(e) => {
+          if (isStepCompleted()) e.target.style.backgroundColor = '#007BFF';
+        }}
+      >
+        Continuar
+      </button>
     </div>
   </div>
 )}
@@ -1557,7 +1695,7 @@ const NormaNoms = () => {
 
 {/* Paso 5 */}
 {step === 5 && (
-  <div className="step5">
+  <div className="step5" style={{ textAlign: 'center', padding: '20px' }}>
     <img
       src={require('../logos/logo.png')} // Ruta a tu logo
       alt="Logo de la empresa"
@@ -1566,25 +1704,79 @@ const NormaNoms = () => {
         margin: '0 auto',
         width: '150px',
         height: 'auto',
-        marginBottom: '20px'
+        marginBottom: '20px',
       }}
     />
-    <h3>Uso de maquinaria para manejo de materiales</h3>
-    <label>¿En su centro de trabajo se utiliza maquinaria para el manejo de materiales, como materias primas, subproductos, productos, residuos entre otros?</label>
-    <label>
-      <input type="radio" name="manejoMateriales" value="sí" onChange={handleInputChange} />
-      Sí
+    <h3 style={{ marginBottom: '20px' }}>Uso de maquinaria para manejo de materiales</h3>
+    <label style={{ display: 'block', marginBottom: '20px', fontSize: '16px' }}>
+      ¿En su centro de trabajo se utiliza maquinaria para el manejo de materiales, como materias primas, subproductos, productos, residuos entre otros?
     </label>
-    <label>
-      <input type="radio" name="manejoMateriales" value="no" onChange={handleInputChange} />
-      No
-    </label>
-    <div className="buttons">
-      <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext} disabled={!formValues.manejoMateriales}>Continuar</button>
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '30px' }}>
+      <label style={{ fontSize: '16px' }}>
+        <input
+          type="radio"
+          name="manejoMateriales"
+          value="sí"
+          onChange={handleInputChange}
+          style={{ marginRight: '10px' }}
+        />
+        Sí
+      </label>
+      <label style={{ fontSize: '16px' }}>
+        <input
+          type="radio"
+          name="manejoMateriales"
+          value="no"
+          onChange={handleInputChange}
+          style={{ marginRight: '10px' }}
+        />
+        No
+      </label>
+    </div>
+    <div className="buttons" style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+      <button
+        onClick={handleBack}
+        style={{
+          padding: '10px 20px',
+          fontSize: '14px',
+          border: 'none',
+          borderRadius: '5px',
+          backgroundColor: '#007BFF', // Azul
+          color: '#fff',
+          cursor: 'pointer',
+          transition: 'background-color 0.3s ease',
+        }}
+        onMouseOver={(e) => (e.target.style.backgroundColor = '#0056b3')}
+        onMouseOut={(e) => (e.target.style.backgroundColor = '#007BFF')}
+      >
+        Regresar
+      </button>
+      <button
+        onClick={handleNext}
+        disabled={!formValues.manejoMateriales}
+        style={{
+          padding: '10px 20px',
+          fontSize: '14px',
+          border: 'none',
+          borderRadius: '5px',
+          backgroundColor: formValues.manejoMateriales ? '#007BFF' : '#ccc', // Azul cuando habilitado
+          color: formValues.manejoMateriales ? '#fff' : '#666',
+          cursor: formValues.manejoMateriales ? 'pointer' : 'not-allowed',
+          transition: 'background-color 0.3s ease',
+        }}
+        onMouseOver={(e) => {
+          if (formValues.manejoMateriales) e.target.style.backgroundColor = '#0056b3';
+        }}
+        onMouseOut={(e) => {
+          if (formValues.manejoMateriales) e.target.style.backgroundColor = '#007BFF';
+        }}
+      >
+        Continuar
+      </button>
     </div>
   </div>
 )}
+
 
 {step === 6 && formValues.manejoMateriales === "sí" && (
   <div className="step6">
@@ -1672,7 +1864,7 @@ const NormaNoms = () => {
 )}
 
 {step === 7 && (
-  <div className="step7">
+  <div className="step7" style={{ textAlign: 'center', padding: '20px' }}>
     <img
       src={require('../logos/logo.png')} // Ruta a tu logo
       alt="Logo de la empresa"
@@ -1681,22 +1873,79 @@ const NormaNoms = () => {
         margin: '0 auto',
         width: '150px',
         height: 'auto',
-        marginBottom: '20px'
+        marginBottom: '20px',
       }}
     />
-    <h3>Actividades en alturas</h3>
-    <label>¿En su centro de trabajo se realizan actividades de mantenimiento, instalación, demolición, operación, reparación, limpieza, entre otras, a alturas mayores a 1.80 metros sobre el nivel de referencia, o existe el riesgo de caída en aberturas en las superficies de trabajo, tales como perforaciones, pozos, cubos y túneles verticales?</label>
-    <label>
-      <input type="radio" name="trabajosAltura" value="sí" onChange={handleInputChange} />
-      Sí
+    <h3 style={{ marginBottom: '20px' }}>Actividades en alturas</h3>
+    <label style={{ display: 'block', marginBottom: '20px', fontSize: '16px' }}>
+      ¿En su centro de trabajo se realizan actividades de mantenimiento, instalación, demolición, operación,
+      reparación, limpieza, entre otras, a alturas mayores a 1.80 metros sobre el nivel de referencia, o existe el riesgo
+      de caída en aberturas en las superficies de trabajo, tales como perforaciones, pozos, cubos y túneles verticales?
     </label>
-    <label>
-      <input type="radio" name="trabajosAltura" value="no" onChange={handleInputChange} />
-      No
-    </label>
-    <div className="buttons">
-      <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext} disabled={!isStepCompleted()}>Continuar</button>
+
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '30px' }}>
+      <label style={{ fontSize: '16px' }}>
+        <input
+          type="radio"
+          name="trabajosAltura"
+          value="sí"
+          onChange={handleInputChange}
+          style={{ marginRight: '10px' }}
+        />
+        Sí
+      </label>
+      <label style={{ fontSize: '16px' }}>
+        <input
+          type="radio"
+          name="trabajosAltura"
+          value="no"
+          onChange={handleInputChange}
+          style={{ marginRight: '10px' }}
+        />
+        No
+      </label>
+    </div>
+
+    <div className="buttons" style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+      <button
+        onClick={handleBack}
+        style={{
+          padding: '10px 20px',
+          fontSize: '14px',
+          border: 'none',
+          borderRadius: '5px',
+          backgroundColor: '#007BFF', // Azul
+          color: '#fff',
+          cursor: 'pointer',
+          transition: 'background-color 0.3s ease',
+        }}
+        onMouseOver={(e) => (e.target.style.backgroundColor = '#0056b3')}
+        onMouseOut={(e) => (e.target.style.backgroundColor = '#007BFF')}
+      >
+        Regresar
+      </button>
+      <button
+        onClick={handleNext}
+        disabled={!isStepCompleted()}
+        style={{
+          padding: '10px 20px',
+          fontSize: '14px',
+          border: 'none',
+          borderRadius: '5px',
+          backgroundColor: isStepCompleted() ? '#007BFF' : '#ccc', // Azul cuando habilitado
+          color: isStepCompleted() ? '#fff' : '#666',
+          cursor: isStepCompleted() ? 'pointer' : 'not-allowed',
+          transition: 'background-color 0.3s ease',
+        }}
+        onMouseOver={(e) => {
+          if (isStepCompleted()) e.target.style.backgroundColor = '#0056b3';
+        }}
+        onMouseOut={(e) => {
+          if (isStepCompleted()) e.target.style.backgroundColor = '#007BFF';
+        }}
+      >
+        Continuar
+      </button>
     </div>
   </div>
 )}
@@ -1788,7 +2037,7 @@ const NormaNoms = () => {
 )}
 
 {step === 9 && (
-  <div className="step9">
+  <div className="step9" style={{ textAlign: 'center', padding: '20px' }}>
     <img
       src={require('../logos/logo.png')} // Ruta a tu logo
       alt="Logo de la empresa"
@@ -1797,47 +2046,134 @@ const NormaNoms = () => {
         margin: '0 auto',
         width: '150px',
         height: 'auto',
-        marginBottom: '20px'
+        marginBottom: '20px',
       }}
     />
-    <h3>Recipientes Sujetos a Presión</h3>
-    <label>
+    <h3 style={{ marginBottom: '20px' }}>Recipientes Sujetos a Presión</h3>
+    <label style={{ display: 'block', marginBottom: '20px', fontSize: '16px' }}>
       ¿En su centro de trabajo se cuenta con recipientes sujetos a presión -interna o externa- como compresores,
       intercambiadores de calor, torres de enfriamiento, marmitas, tanques suavizadores, filtros, reactores,
       autoclaves, colchones de aire, entre otros?
     </label>
-    <p>
+    <p style={{ marginBottom: '20px', fontSize: '14px' }}>
       Para consultar los recipientes que quedan exceptuados del cumplimiento de la NOM-020-STPS-2011, dé clic en el ícono.
     </p>
 
     <img
       src={iconImage}
       alt="Consultar recipientes exceptuados"
-      style={{ cursor: 'pointer', width: '50px' }}
+      style={{ cursor: 'pointer', width: '50px', marginBottom: '30px' }}
       onClick={() => setShowModal9(true)}
     />
 
-    <label>
-      <input type="radio" name="recipientesPresion" value="sí" onChange={handleInputChange} />
-      Sí
-    </label>
-    <label>
-      <input type="radio" name="recipientesPresion" value="no" onChange={handleInputChange} />
-      No
-    </label>
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '30px' }}>
+      <label style={{ fontSize: '16px' }}>
+        <input
+          type="radio"
+          name="recipientesPresion"
+          value="sí"
+          onChange={handleInputChange}
+          style={{ marginRight: '10px' }}
+        />
+        Sí
+      </label>
+      <label style={{ fontSize: '16px' }}>
+        <input
+          type="radio"
+          name="recipientesPresion"
+          value="no"
+          onChange={handleInputChange}
+          style={{ marginRight: '10px' }}
+        />
+        No
+      </label>
+    </div>
 
-    <div className="buttons">
-      <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext} disabled={!formValues.recipientesPresion}>Continuar</button>
+    <div className="buttons" style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+      <button
+        onClick={handleBack}
+        style={{
+          padding: '10px 20px',
+          fontSize: '14px',
+          border: 'none',
+          borderRadius: '5px',
+          backgroundColor: '#007BFF', // Azul
+          color: '#fff',
+          cursor: 'pointer',
+          transition: 'background-color 0.3s ease',
+        }}
+        onMouseOver={(e) => (e.target.style.backgroundColor = '#0056b3')}
+        onMouseOut={(e) => (e.target.style.backgroundColor = '#007BFF')}
+      >
+        Regresar
+      </button>
+      <button
+        onClick={handleNext}
+        disabled={!formValues.recipientesPresion}
+        style={{
+          padding: '10px 20px',
+          fontSize: '14px',
+          border: 'none',
+          borderRadius: '5px',
+          backgroundColor: formValues.recipientesPresion ? '#007BFF' : '#ccc', // Azul cuando habilitado
+          color: formValues.recipientesPresion ? '#fff' : '#666',
+          cursor: formValues.recipientesPresion ? 'pointer' : 'not-allowed',
+          transition: 'background-color 0.3s ease',
+        }}
+        onMouseOver={(e) => {
+          if (formValues.recipientesPresion) e.target.style.backgroundColor = '#0056b3';
+        }}
+        onMouseOut={(e) => {
+          if (formValues.recipientesPresion) e.target.style.backgroundColor = '#007BFF';
+        }}
+      >
+        Continuar
+      </button>
     </div>
   </div>
 )}
 
 {showModal9 && (
-  <div className="modal">
-    <div className="modal-content">
-      <span className="close" onClick={() => setShowModal9(false)}>&times;</span>
-      <img src={exceptImage} alt="Recipientes exceptuados" style={{ width: '100%' }} />
+  <div
+    className="modal"
+    style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}
+  >
+    <div
+      className="modal-content"
+      style={{
+        backgroundColor: '#fff',
+        padding: '20px',
+        borderRadius: '5px',
+        position: 'relative',
+        width: '90%',
+        maxWidth: '600px',
+      }}
+    >
+      <span
+        className="close"
+        onClick={() => setShowModal9(false)}
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          cursor: 'pointer',
+          fontSize: '24px',
+          fontWeight: 'bold',
+        }}
+      >
+        &times;
+      </span>
+      <img src={exceptImage} alt="Recipientes exceptuados" style={{ width: '100%', borderRadius: '5px' }} />
     </div>
   </div>
 )}
@@ -1924,7 +2260,7 @@ const NormaNoms = () => {
 
 
 {step === 11 && (
-  <div className="step11">
+  <div className="step11" style={{ textAlign: 'center', padding: '20px' }}>
     <img
       src={require('../logos/logo.png')} // Ruta a tu logo
       alt="Logo de la empresa"
@@ -1933,39 +2269,83 @@ const NormaNoms = () => {
         margin: '0 auto',
         width: '150px',
         height: 'auto',
-        marginBottom: '20px'
+        marginBottom: '20px',
       }}
     />
-    <h3>Recipientes Criogénicos</h3>
-    <label>¿En su centro de trabajo se utilizan recipientes criogénicos?</label>
-    <label>
-      <input
-        type="radio"
-        name="recipientesCriogenicos"
-        value="sí"
-        onChange={handleInputChange}
-        checked={formValues.recipientesCriogenicos === 'sí'}
-      />
-      Sí
+    <h3 style={{ marginBottom: '20px' }}>Recipientes Criogénicos</h3>
+    <label style={{ display: 'block', marginBottom: '20px', fontSize: '16px' }}>
+      ¿En su centro de trabajo se utilizan recipientes criogénicos?
     </label>
-    <label>
-      <input
-        type="radio"
-        name="recipientesCriogenicos"
-        value="no"
-        onChange={handleInputChange}
-        checked={formValues.recipientesCriogenicos === 'no'}
-      />
-      No
-    </label>
-    <div className="buttons">
-      <button onClick={handleBack}>Regresar</button>
-      <button onClick={handleNext} disabled={!formValues.recipientesCriogenicos}>
+
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '30px' }}>
+      <label style={{ fontSize: '16px' }}>
+        <input
+          type="radio"
+          name="recipientesCriogenicos"
+          value="sí"
+          onChange={handleInputChange}
+          checked={formValues.recipientesCriogenicos === 'sí'}
+          style={{ marginRight: '10px' }}
+        />
+        Sí
+      </label>
+      <label style={{ fontSize: '16px' }}>
+        <input
+          type="radio"
+          name="recipientesCriogenicos"
+          value="no"
+          onChange={handleInputChange}
+          checked={formValues.recipientesCriogenicos === 'no'}
+          style={{ marginRight: '10px' }}
+        />
+        No
+      </label>
+    </div>
+
+    <div className="buttons" style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+      <button
+        onClick={handleBack}
+        style={{
+          padding: '10px 20px',
+          fontSize: '14px',
+          border: 'none',
+          borderRadius: '5px',
+          backgroundColor: '#007BFF', // Azul
+          color: '#fff',
+          cursor: 'pointer',
+          transition: 'background-color 0.3s ease',
+        }}
+        onMouseOver={(e) => (e.target.style.backgroundColor = '#0056b3')}
+        onMouseOut={(e) => (e.target.style.backgroundColor = '#007BFF')}
+      >
+        Regresar
+      </button>
+      <button
+        onClick={handleNext}
+        disabled={!formValues.recipientesCriogenicos}
+        style={{
+          padding: '10px 20px',
+          fontSize: '14px',
+          border: 'none',
+          borderRadius: '5px',
+          backgroundColor: formValues.recipientesCriogenicos ? '#007BFF' : '#ccc', // Azul cuando habilitado
+          color: formValues.recipientesCriogenicos ? '#fff' : '#666',
+          cursor: formValues.recipientesCriogenicos ? 'pointer' : 'not-allowed',
+          transition: 'background-color 0.3s ease',
+        }}
+        onMouseOver={(e) => {
+          if (formValues.recipientesCriogenicos) e.target.style.backgroundColor = '#0056b3';
+        }}
+        onMouseOut={(e) => {
+          if (formValues.recipientesCriogenicos) e.target.style.backgroundColor = '#007BFF';
+        }}
+      >
         Continuar
       </button>
     </div>
   </div>
 )}
+
     {/* Paso 12 - Recipientes criogénicos */}
     {step === 12 && (
       <div className="step12">
@@ -3488,10 +3868,21 @@ const NormaNoms = () => {
           </div>
         </div>
       )}
+
 {step === 38 && (
-  <div className="step38">
+  <div
+    className="step38"
+    style={{
+      width: '105%', // Ajuste correcto del ancho
+      margin: '0 auto', // Centrado del contenedor
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      padding: '20px',
+      borderRadius: '10px',
+      boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+    }}
+  >
     <h3 style={{ color: 'blue', textAlign: 'center' }}>Normas Aplicables</h3>
-    <div>
+    <div style={{ textAlign: 'center', marginBottom: '20px' }}>
       <button
         onClick={() => {
           setStep(1);
@@ -3507,24 +3898,31 @@ const NormaNoms = () => {
           borderRadius: '5px',
           cursor: 'pointer',
           fontSize: '16px',
-          margin: '10px 0',
         }}
       >
         Limpiar
       </button>
     </div>
-    <div className="normas-table">
+
+    {/* Tabla con scroll horizontal */}
+    <div
+      style={{
+        width: '100%',
+        overflowX: 'auto', // Scroll horizontal si la tabla excede el contenedor
+      }}
+    >
       <img
         src={require('../logos/logo.png')}
         alt="Logo de la empresa"
         style={{
           display: 'block',
           margin: '0 auto',
-          width: '150px',
+          width: '80px',
           height: 'auto',
           marginBottom: '20px',
         }}
       />
+
       {selectedNormas.length > 0 ? (
         Object.entries(
           selectedNormas.reduce((acc, id) => {
@@ -3534,7 +3932,7 @@ const NormaNoms = () => {
             return acc;
           }, {})
         ).map(([tipo, normasAgrupadas]) => (
-          <div key={tipo}>
+          <div key={tipo} style={{ width: '100%', margin: '0 auto' }}>
             <h4
               style={{
                 backgroundColor: '#f4b084',
@@ -3551,69 +3949,98 @@ const NormaNoms = () => {
             <table
               border="1"
               align="center"
-              cellPadding="5"
+              cellPadding="10"
               cellSpacing="0"
               style={{
                 width: '100%',
                 marginBottom: '20px',
                 borderCollapse: 'collapse',
+                lineHeight: '1.8',
+                fontSize: '16px',
               }}
             >
               <thead>
                 <tr>
-                  <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>NOM</th>
-                  <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>Descripción</th>
-                  <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>Puntos Específicos</th>
-                  <th style={{ padding: '10px', backgroundColor: '#ddd', textAlign: 'center' }}>Otros Puntos Específicos</th>
+                  <th
+                    style={{
+                      padding: '20px',
+                      backgroundColor: '#ddd',
+                      textAlign: 'center',
+                      width: '8%',
+                    }}
+                  >
+                    NOM
+                  </th>
+                  <th
+                    style={{
+                      padding: '20px',
+                      backgroundColor: '#ddd',
+                      textAlign: 'center',
+                      width: '50%',
+                    }}
+                  >
+                    Descripción y Puntos Específicos
+                  </th>
+                  <th
+                    style={{
+                      padding: '20px',
+                      backgroundColor: '#ddd',
+                      textAlign: 'center',
+                      width: '35%',
+                    }}
+                  >
+                    Otros Puntos Específicos
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {normasAgrupadas.map((norma) => (
-                  <tr key={norma.id}>
-                    <td style={{ textAlign: 'center', verticalAlign: 'top' }}>{norma.id}</td>
-                    <td style={{ textAlign: 'center', verticalAlign: 'top' }}>{norma.title}</td>
-                    <td>
-                      {norma.puntos.map((punto, index) => (
-                        <div key={index}>
-                          <strong>{punto.numero}:</strong> {punto.descripcion}
-                        </div>
-                      ))}
+                  <tr key={norma.id} style={{ borderBottom: '2px solid #ccc' }}>
+                    <td
+                      style={{
+                        textAlign: 'center',
+                        verticalAlign: 'top',
+                        padding: '20px',
+                      }}
+                    >
+                      {norma.id}
                     </td>
-                    <td style={{ textAlign: 'center', verticalAlign: 'top' }}>
-                      {/* Lógica para NOM-002 */}
-                      {norma.id === 'NOM-002' ? (
-                        step38Points.some((point) =>
-                          point.toLowerCase().includes('riesgo alto')
-                        ) ? (
-                          <ul>
-                            <li>
-                              <strong>Grado de Riesgo Alto:</strong> Contar con:
-                            </li>
-                            <li>5.11 Documentos establecidos para riesgos altos.</li>
-                            <li>7.5 Programa anual de revisión de instalaciones eléctricas.</li>
-                            <li>5.7 Simulacros de emergencia al menos dos veces al año.</li>
-                            <li>5.10 Sistemas fijos de protección contra incendios.</li>
-                            <li>7.4 Pruebas anuales a sistemas contra incendio.</li>
-                            <li>8.1 y 8.2 Plan de emergencias para materiales inflamables.</li>
-                          </ul>
-                        ) : (
-                          <ul>
-                            {step38Points.map((point, index) => (
-                              <li key={index}>{point}</li>
-                            ))}
-                          </ul>
-                        )
-                      ) : null}
-
-                      {/* Lógica para categorías sujetas a presión en NOM-020 */}
-                      {norma.id === 'NOM-020' && formValues.categoriasRecipientes.length > 0 ? (
-                        formValues.categoriasRecipientes.map((categoria) => (
-                          <div key={categoria}>
-                            <h5>{`Información para ${categoria}`}</h5>
-                            <p>{informacionCategorias[categoria]}</p>
-                          </div>
-                        ))
-                      ) : null}
+                    <td
+                      style={{
+                        textAlign: 'justify',
+                        verticalAlign: 'top',
+                        padding: '20px',
+                      }}
+                    >
+                      <strong>{norma.title}</strong>
+                      <ul style={{ marginTop: '10px', paddingLeft: '20px' }}>
+                        {norma.puntos.map((punto, index) => (
+                          <li key={index} style={{ marginBottom: '5px' }}>
+                            <strong>{punto.numero}:</strong> {punto.descripcion}
+                          </li>
+                        ))}
+                      </ul>
+                    </td>
+                    <td
+                      style={{
+                        textAlign: 'justify',
+                        verticalAlign: 'top',
+                        padding: '20px',
+                      }}
+                    >
+                      {norma.id === 'NOM-002' && (
+                        <ul style={{ paddingLeft: '20px', marginBottom: '10px' }}>
+                          <li>
+                            <strong>Grado de Riesgo Alto:</strong>
+                          </li>
+                          <li>5.11 Documentos establecidos para riesgos altos.</li>
+                          <li>7.5 Programa anual de revisión de instalaciones eléctricas.</li>
+                          <li>5.7 Simulacros de emergencia al menos dos veces al año.</li>
+                          <li>5.10 Sistemas fijos de protección contra incendios.</li>
+                          <li>7.4 Pruebas anuales a sistemas contra incendio.</li>
+                          <li>8.1 y 8.2 Plan de emergencias para materiales inflamables.</li>
+                        </ul>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -3627,7 +4054,6 @@ const NormaNoms = () => {
     </div>
   </div>
 )}
-
 
 
 
