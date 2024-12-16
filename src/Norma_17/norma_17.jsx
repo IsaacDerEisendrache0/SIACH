@@ -200,13 +200,13 @@ const RiskAssessmentTable = () => {
     const affectedParts = new Set();
     for (const [hazard, isChecked] of Object.entries(hazards)) {
       if (isChecked) {
-        bodyParts[hazard].forEach(part => affectedParts.add(part));
+        bodyParts[hazard].forEach((part) => affectedParts.add(part));
       }
     }
-    return Array.from(affectedParts); 
+    return Array.from(affectedParts);
   };
 
-  const affectedBodyParts = getAffectedBodyParts();
+  const affectedBodyParts = getAffectedBodyParts(); // Generar dinámicamente
 
   // Estados para los valores de Consecuencia, Exposición y Probabilidad
   const [consequence, setConsequence] = useState(1);
@@ -978,8 +978,21 @@ const handleMainOptionChange = (e) => {
   };
   
   
+    // Estado para las partes desmarcadas manualmente
+    const [removedParts, setRemovedParts] = useState([]); // Partes desmarcadas manualmente
+  
+    // Función para alternar la selección de una parte del cuerpo
+    const toggleBodyPart = (part) => {
+      setRemovedParts((prev) =>
+        prev.includes(part) ? prev.filter((p) => p !== part) : [...prev, part]
+      );
+    };
+  
+    // Determinar si mostrar "X" (si está en affectedBodyParts y no en removedParts)
+    const shouldShowX = (part) =>
+      affectedBodyParts.includes(part) && !removedParts.includes(part);
 
-
+  
   return (
       <div class="main-table">
 
@@ -1140,32 +1153,67 @@ const handleMainOptionChange = (e) => {
 
 
         <td className="header-cell" colSpan="3" style={{ backgroundColor: 'red', padding: '10px' }}>
-          <div className="body-parts-title">Principales partes del cuerpo expuestas al riesgo:</div>
-          
-          <table className="body-parts-table">
-            <tbody>
-              <tr>
-                <td className="risk-label-cell">Cabeza y Oídos</td>
-                <td className="risk-mark-cell">{affectedBodyParts.includes('Cabeza y Oídos') ? 'X' : ''}</td>
-                <td className="risk-label-cell">Tronco</td>
-                <td className="risk-mark-cell">{affectedBodyParts.includes('Tronco') ? 'X' : ''}</td>
-              </tr>
-              <tr>
-                <td className="risk-label-cell">Ojos y Cara</td>
-                <td className="risk-mark-cell">{affectedBodyParts.includes('Ojos y Cara') ? 'X' : ''}</td>
-                <td className="risk-label-cell">Sistema respiratorio</td>
-                <td className="risk-mark-cell">{affectedBodyParts.includes('Sistema respiratorio') ? 'X' : ''}</td>
-              </tr>
-              <tr>
-                <td className="risk-label-cell">Brazos y Manos</td>
-                <td className="risk-mark-cell">{affectedBodyParts.includes('Brazos y Manos') ? 'X' : ''}</td>
-                <td className="risk-label-cell">Extremidades inferiores</td>
-                <td className="risk-mark-cell">{affectedBodyParts.includes('Extremidades inferiores') ? 'X' : ''}</td>
-              </tr>
-            </tbody>
-          </table>
-        </td>
-
+      <div className="body-parts-title">Principales partes del cuerpo expuestas al riesgo:</div>
+      
+      <table className="body-parts-table">
+        <tbody>
+          <tr>
+            <td className="risk-label-cell">Cabeza y Oídos</td>
+            <td
+              className="risk-mark-cell"
+              onClick={() => toggleBodyPart('Cabeza y Oídos')}
+              style={{ cursor: 'pointer', textAlign: 'center' }}
+            >
+              {shouldShowX('Cabeza y Oídos') ? 'X' : ''}
+            </td>
+            <td className="risk-label-cell">Tronco</td>
+            <td
+              className="risk-mark-cell"
+              onClick={() => toggleBodyPart('Tronco')}
+              style={{ cursor: 'pointer', textAlign: 'center' }}
+            >
+              {shouldShowX('Tronco') ? 'X' : ''}
+            </td>
+          </tr>
+          <tr>
+            <td className="risk-label-cell">Ojos y Cara</td>
+            <td
+              className="risk-mark-cell"
+              onClick={() => toggleBodyPart('Ojos y Cara')}
+              style={{ cursor: 'pointer', textAlign: 'center' }}
+            >
+              {shouldShowX('Ojos y Cara') ? 'X' : ''}
+            </td>
+            <td className="risk-label-cell">Sistema respiratorio</td>
+            <td
+              className="risk-mark-cell"
+              onClick={() => toggleBodyPart('Sistema respiratorio')}
+              style={{ cursor: 'pointer', textAlign: 'center' }}
+            >
+              {shouldShowX('Sistema respiratorio') ? 'X' : ''}
+            </td>
+          </tr>
+          <tr>
+            <td className="risk-label-cell">Brazos y Manos</td>
+            <td
+              className="risk-mark-cell"
+              onClick={() => toggleBodyPart('Brazos y Manos')}
+              style={{ cursor: 'pointer', textAlign: 'center' }}
+            >
+              {shouldShowX('Brazos y Manos') ? 'X' : ''}
+            </td>
+            <td className="risk-label-cell">Extremidades inferiores</td>
+            <td
+              className="risk-mark-cell"
+              onClick={() => toggleBodyPart('Extremidades inferiores')}
+              style={{ cursor: 'pointer', textAlign: 'center' }}
+            >
+              {shouldShowX('Extremidades inferiores') ? 'X' : ''}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
   
         <td className="header-td" colSpan="3">
           <div className="additional-data-title">Datos adicionales</div>
