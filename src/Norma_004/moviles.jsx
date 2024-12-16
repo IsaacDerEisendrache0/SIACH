@@ -420,6 +420,26 @@ const RiskTable = () => {
     setTableId(tableToEdit.id); // Establece el ID de la tabla al entrar en modo edición
     setIsEditing(true);
   }
+
+  const table = document.getElementById("body-parts-table");
+  const cells = table.querySelectorAll('td[data-check="true"]');
+
+  cells.forEach((cell) => {
+    cell.addEventListener("click", () => {
+      if (cell.textContent.trim() === "X") {
+        cell.textContent = "";
+      } else {
+        cell.textContent = "X";
+      }
+    });
+  });
+
+  // Limpieza de eventos para evitar duplicación
+  return () => {
+    cells.forEach((cell) => {
+      cell.removeEventListener("click", () => {});
+    });
+  };
 }, []);
 
 
@@ -474,6 +494,10 @@ const handleRemovePuesto = () => {
   }
 };
 
+// Selecciona todas las celdas que son clicables
+
+
+
 
 
   return (
@@ -516,7 +540,7 @@ const handleRemovePuesto = () => {
           <tr>
             <th className="red">Nombre de la maquinaria</th>
             <td colSpan="25">
-              <input 
+              <textarea
                 placeholder='Introduzca un nombre' 
                 type="text" 
                 value={nombreMaquinaria}
@@ -552,7 +576,7 @@ const handleRemovePuesto = () => {
             </td>
             <th className="red">Tiempo de exposición:</th>
             <td colSpan="15">
-              <input 
+              <textarea 
                 placeholder='Introduzca el tiempo' 
                 type="text"
                 value={tiempoExposicion}
@@ -560,25 +584,13 @@ const handleRemovePuesto = () => {
                 style={{ width: '100%' }}
               />
             </td>
-            <th className="red">PUESTOS</th>
-            <td colSpan="10">
-            <select name="puestos" value={newPuesto} onChange={(e) => setNewPuesto(e.target.value)}>
-            <option value="">Seleccione un puesto</option>
-            {puestos
-              .filter((puesto) => puesto && puesto.nombre) // Filtra valores inválidos
-              .map((puesto, index) => (
-                <option key={index} value={puesto.nombre}>
-                  {puesto.nombre}
-                </option>
-              ))}
-            </select>
-            </td>
+ 
 
           </tr>
           <tr>
             <th className="red">Descripción de la maquinaria o equipo:</th>
             <td colSpan="56">
-              <input 
+              <textarea
                 placeholder='Introduzca una descripción' 
                 type="text"
                 value={descripcion}
@@ -595,8 +607,18 @@ const handleRemovePuesto = () => {
                 style={{ width: '100%' }}
               />
             </td>
-            <td colSpan="55">
-              <select name="" id=""></select>
+            <th className="red">PUESTOS</th>
+            <td colSpan="10">
+            <select name="puestos" value={newPuesto} onChange={(e) => setNewPuesto(e.target.value)}>
+            <option value="">Seleccione un puesto</option>
+            {puestos
+              .filter((puesto) => puesto && puesto.nombre) // Filtra valores inválidos
+              .map((puesto, index) => (
+                <option key={index} value={puesto.nombre}>
+                  {puesto.nombre}
+                </option>
+              ))}
+            </select>
             </td>
           </tr>
         </thead>
@@ -649,6 +671,27 @@ const handleRemovePuesto = () => {
               ))}
             </td>
           </tr>
+          <table id="body-parts-table">
+        <tr>
+            <th colspan="6">Principales partes del cuerpo expuestas al riesgo:</th>
+        </tr>
+        <tr>
+            <td data-part="Cabeza y Oídos">Cabeza y Oídos</td>
+            <td data-check="true"></td>
+            <td data-part="Ojos y Cara">Ojos y Cara</td>
+            <td data-check="true"></td>
+            <td data-part="Sistema respiratorio">Sistema respiratorio</td>
+            <td data-check="true"></td>
+        </tr>
+        <tr>
+            <td data-part="Brazos y Manos">Brazos y Manos</td>
+            <td data-check="true"></td>
+            <td data-part="Tronco">Tronco</td>
+            <td data-check="true"></td>
+            <td data-part="Extremidades inferiores">Extremidades inferiores</td>
+            <td data-check="true"></td>
+        </tr>
+    </table>
           <tr>
             <td colSpan="4" className="risk-evaluation-section">
               <table style={{ width: '100%' }}>

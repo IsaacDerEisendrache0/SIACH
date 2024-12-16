@@ -333,12 +333,11 @@ const RiskTable = () => {
     }
   };
   
-  const [areas, setAreas] = useState([]);
-  const [puestos, setPuestos] = useState([]);
-  const [newArea, setNewArea] = useState('');
-  const [newPuesto, setNewPuesto] = useState('');
-  const [area, setArea] = useState('');
-  const [showAreaModal, setShowAreaModal] = useState(false);
+const [areas, setAreas] = useState([]);
+const [puestos, setPuestos] = useState([]);
+const [newArea, setNewArea] = useState('');const [newPuesto, setNewPuesto] = useState('');
+const [area, setArea] = useState('');
+const [showAreaModal, setShowAreaModal] = useState(false);
 const [showPuestoModal, setShowPuestoModal] = useState(false);
 const [isEditing] = useState(false); // Controla si estás en modo edición
 const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Firestore
@@ -363,14 +362,14 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
           <div className="logo-container" style={{ textAlign: 'center', marginBottom: '10px' }}>
             <img src={logo} alt="SIACH Logo" style={{ width: '200px' }} />
           </div>
-          <table className="main-table" style={{ width: '50%' }}>
+          <table className="main-table" style={{ width: '100%' }}>
             <thead>
               <tr>
                 <th colSpan="2" className="nombre-maquinaria">NOMBRE DE LA MAQUINARIA O EQUIPO:</th>
                 <th colSpan="3">
                   <textarea className="nombre-maquinaria" placeholder="Nombre de la maquinaria" name='textarea' rows="1" cols={53}></textarea>
                 </th>
-                <th colSpan="1" className="energia-utilizada">ENERGIA UTILIZADA:</th>
+                <th colSpan="2" className="energia-utilizada">ENERGIA UTILIZADA:</th>
                 <th colSpan="2">  
                   <select className="energia-utilizada" value={state.energiaUtilizada} onChange={(e) => handleChange('energiaUtilizada', e.target.value)} style={{ width: '100%' }}>
                     {renderOptions(opciones.energia)}
@@ -380,16 +379,16 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
               </tr>
               <tr>
                 <th colSpan="2" className="descripcion-maquinaria">DESCRIPCIÓN DE LA MAQUINARIA O EQUIPO:</th>
-                <th colSpan="2">
+                <th colSpan="4">
                   <textarea className="descripcion-maquinaria"
                     value={state.maquinariaDescripcion}
                     onChange={(e) => handleChange('maquinariaDescripcion', e.target.value)}
                     placeholder="Describa la maquinaria o equipo"
-                    cols={33}
+                    cols={1}
                   />
                 </th>
                 <th colSpan="1" className="area">ÁREA:</th>
-                <th colSpan="1">
+                <th colSpan="2">
                 <select name="areas" value={area} onChange={(e) => setArea(e.target.value)}>
                 <option value="">Seleccione un área</option>
                 {areas
@@ -400,19 +399,11 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
                     </option>
                   ))}
               </select>
-
-                </th>
-
-                <th colSpan="" className="tiempo-exposicion">TIEMPO DE EXPOSICIÓN:</th>
-                <th colSpan="1">
-                  <select className="tiempo-exposicion" value={state.tiempoExposicion} onChange={(e) => handleChange('tiempoExposicion', e.target.value)} style={{ width: '100%' }}>
-                    {renderOptions(opciones.tiempoExposicion)}
-                  </select>
                 </th>
 
               </tr>
               <tr>
-                <th colSpan="2" className='area'>LOCALIZACIÓN ESQUEMÁTICA DE LOS RIESGOS EN LA MAQUINARIA Y/O EQUIPO:</th>
+                <th colSpan="3" className='area'>LOCALIZACIÓN ESQUEMÁTICA DE LOS RIESGOS EN LA MAQUINARIA Y/O EQUIPO:</th>
                 <th className='area'>PUESTO</th>
                 <th>
                 <select name="puestos" value={newPuesto} onChange={(e) => setNewPuesto(e.target.value)}>
@@ -428,11 +419,17 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
 
                 </th>
                 <th colSpan="1" className="poe">POE </th>
-                <th colSpan="3">
+                <th colSpan="1">
                   <input className="poe" type="text" placeholder="Escriba el POE" style={{ width: '100%' }} /></th>
+                  <th colSpan="" className="tiempo-exposicion">TIEMPO DE EXPOSICIÓN:</th>
+                <th colSpan="1">
+                  <select className="tiempo-exposicion" value={state.tiempoExposicion} onChange={(e) => handleChange('tiempoExposicion', e.target.value)} style={{ width: '100%' }}>
+                    {renderOptions(opciones.tiempoExposicion)}
+                  </select>
+                </th>
               </tr>
             </thead>
-            <tbody>
+            
               <tr><td colSpan="2" rowSpan="2">
                 <div className="image-sectionn">
                   {!state.imagePreview && (
@@ -450,20 +447,20 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
                   />
                 </div>
               </td>
-                <td colSpan="8" className="right-alignedd">
+                <td colSpan="7" className="right-alignedd">
                   <div className="text1">Evaluación de riesgo de trabajo</div>
                   <table className="" style={{ width: '100%' }}>
                     <thead>
                       <tr>
                         <th>Consecuencia</th>
-                        <th style={{ backgroundColor: 'white' }}>Exposición</th>
+                        <th>Exposición</th>
                         <th>Probabilidad</th>
                         <th>Magnitud del Riesgo</th>
                       </tr>
                     </thead>
 
                     <tbody>
-                      <tr>
+                      <tr colspan="1">
                         <td colSpan="1">
                           <select value={consequence} onChange={handleConsequenceChange} style={{ width: '100%' }}>
                             <option value={100}>Catástrofe</option>
@@ -507,7 +504,7 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
 
               </tr>
 
-              <td colSpan="8" style={{ backgroundColor: color, color: 'black', textAlign: 'center', padding: '1px' }}>
+              <td colSpan="7" style={{ backgroundColor: color, color: 'black', textAlign: 'center', padding: '1px' }}>
                 <div style={{ fontSize: '14px' }}>Clasificación de magnitud de riesgo</div>
                 <div style={{ display: 'flex', justifyContent: 'space-around', padding: '1px', fontSize: '12px' }}>
                   <div>Magnitud del Riesgo: {magnitudRiesgo}</div>
@@ -515,34 +512,64 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
                   <div>Acción: {accion}</div>
                 </div>
               </td>
+              
               <tr>
-                <td colSpan="2">
+                <td colSpan="5" rowSpan="5">
                   <table className="main-table">
-                    <thead>
+                        <th rowSpan="">Identificación del Riesgo</th>
+                    <tbody>
                       <tr>
-                        <th>Identificación del Riesgo</th>
+                        <td>
+                          
+                          <div
+                            style={{
+                              maxHeight: '300px',
+                              overflowY: 'auto',
+                              border: '1px solid #ccc',
+                              padding: '10px',
+                              fontSize: '1.1em',
+                            }}
+                          >
+                            
+                            {Object.entries(partesPorPeligro).map(([peligro], index) => (
+                              <div
+                                key={index}
+                                style={{
+                                  marginBottom: '5px',
+                                  whiteSpace: 'normal',
+                                }}
+                              >
+                              <input
+                                type="checkbox"
+                                checked={selectedPeligros.includes(peligro)}
+                                onChange={() => handlePeligroChange(peligro)}
+                                style={{ marginRight: '8px' }}
+                              />
+                              {peligro}
+                              </div>
+                            ))}
+                          </div>
+                          <br />
+                          <br />  
+                          <div>
+                    <label >Observaciones:</label>
+                    <textarea
+                      id="observaciones"
+                      value={state.observacionesGenerales}
+                      onChange={(e) => handleChange('observacionesGenerales', e.target.value)}
+                      placeholder="Agregar observaciones generales aquí"
+                      row="15"
+                 
+                    />
+                  </div>
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody colSpan="">
-                      {Object.entries(partesPorPeligro).map(([peligro], index) => (
-                        <tr key={index}>
-                          <td>
-                            <input
-                              type="checkbox"
-                              checked={selectedPeligros.includes(peligro)}
-                              onChange={() => handlePeligroChange(peligro)}
-                            />
-
-                            {peligro}
-                          </td>
-
-                        </tr>
-                      ))}
                     </tbody>
                   </table>
                 </td>
-                <td colSpan="3">
-                  <table className="risk-body-table" style={{ width: '101%' }}>
+
+                <td colSpan="2">
+                  <table className="risk-body-table" style={{ width: '105%' }}>
                     <thead>
                       <tr>
                         <th>Principales partes del cuerpo expuestas al riesgo:</th>
@@ -571,7 +598,7 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
                       </tr>
                     </thead>
                     <tbody>
-                      {[...Array(6)].map((_, index) => ( // 4 filas con select vacíos inicialmente
+                      {[...Array(7)].map((_, index) => ( // 4 filas con select vacíos inicialmente
                         <tr key={index}>
                           <td>
                             <select defaultValue="" style={{ width: '100%' }}>
@@ -589,24 +616,8 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
                   </table>
                 </td>
               </tr>
-
               <tr>
-                <td colSpan="11">
-                  <div>
-                    <label htmlFor="observaciones">Observaciones:</label>
-                    <textarea
-                      id="observaciones"
-                      value={state.observacionesGenerales}
-                      onChange={(e) => handleChange('observacionesGenerales', e.target.value)}
-                      placeholder="Agregar observaciones generales aquí"
-                      rows="2" cols={80}
-                      style={{ width: '100%' }}
-                    />
-                  </div>
-                </td>
               </tr>
-
-            </tbody>
           </table>
         </div>
       </div>
@@ -616,8 +627,6 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
       <button onClick={saveTableData} className="download-button">
   Guardar tabla
 </button>
-
-
       {showAreaModal && (
           <div className="modal">
             <div className="modal-content">
