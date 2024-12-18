@@ -16,7 +16,7 @@ const TablaResumen = () => {
     if (!user) {
       console.error("No se encontró un usuario autenticado.");
       return;
-    }
+    }     
   
     const uid = user.uid;
   
@@ -27,7 +27,7 @@ const TablaResumen = () => {
         const areasData17 = snapshot.docs.map((doc) => ({
           area: doc.id,
           collectionName: "resumen_17",
-          puestos: doc.data().puestos || [], // Asegura que siempre haya un arreglo en "puestos"
+          puestos: doc.data().puestos || [],
           tolerable: doc.data().tolerable || 0,
           moderado: doc.data().moderado || 0,
           notable: doc.data().notable || 0,
@@ -40,6 +40,7 @@ const TablaResumen = () => {
         ]);
       }
     );
+    
   
     // Suscribirse a cambios en la colección "resumen"
     const unsubscribe04 = onSnapshot(

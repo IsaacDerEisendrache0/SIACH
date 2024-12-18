@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../firebase"; // Configuración de Firebase
 import { getAuth } from "firebase/auth"; // Para obtener el usuario autenticado
+import "./resumenAccion.css"; // Importa el nuevo archivo CSS
 
 const ResumenAccion = () => {
   const [data, setData] = useState([]);
@@ -17,7 +18,7 @@ const ResumenAccion = () => {
 
     const uid = user.uid;
 
-    // Suscripción a la colección "resumen_17" exclusiva del usuario
+    // Suscripción a las colecciones
     const unsubscribe17 = onSnapshot(
       query(collection(db, "resumen_17"), where("uid", "==", uid)),
       (snapshot) => {
@@ -32,7 +33,6 @@ const ResumenAccion = () => {
       }
     );
 
-    // Suscripción a la colección "resumen" exclusiva del usuario
     const unsubscribe04 = onSnapshot(
       query(collection(db, "resumen"), where("uid", "==", uid)),
       (snapshot) => {
@@ -47,7 +47,6 @@ const ResumenAccion = () => {
       }
     );
 
-    // Limpieza de suscripciones
     return () => {
       unsubscribe17();
       unsubscribe04();
@@ -67,8 +66,8 @@ const ResumenAccion = () => {
   );
 
   return (
-    <div className="tabla-resumen-container" style={{ marginTop: "30px" }}>
-      <table className="risk-summary-table" style={{ margin: "0 auto", borderCollapse: "collapse" }}>
+    <div className="tabla-resumen-container">
+      <table className="risk-summary-table">
         <thead>
           <tr>
             <th rowSpan="6" className="left-header">RESUMEN DE ACCIÓN</th>
@@ -76,23 +75,23 @@ const ResumenAccion = () => {
           </tr>
         </thead>
         <tbody>
-          <tr style={{ backgroundColor: "#ff6600" }}>
+          <tr className="grave-row">
             <td>N° de riesgos clasificados como GRAVE=</td>
             <td>{total.grave}</td>
           </tr>
-          <tr style={{ backgroundColor: "#ffcc00" }}>
+          <tr className="elevado-row">
             <td>N° de riesgos clasificados como ELEVADO=</td>
             <td>{total.elevado}</td>
           </tr>
-          <tr style={{ backgroundColor: "#ffff66" }}>
+          <tr className="notable-row">
             <td>N° de riesgos clasificados como NOTABLE=</td>
             <td>{total.notable}</td>
           </tr>
-          <tr style={{ backgroundColor: "#99cc00" }}>
+          <tr className="moderado-row">
             <td>N° de riesgos clasificados como MODERADO=</td>
             <td>{total.moderado}</td>
           </tr>
-          <tr style={{ backgroundColor: "#66ccff" }}>
+          <tr className="tolerable-row">
             <td>N° de riesgos clasificados como TOLERABLE=</td>
             <td>{total.tolerable}</td>
           </tr>

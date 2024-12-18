@@ -52,3 +52,29 @@
     background-color: #c82333;
   }
   
+
+
+  /* Contenedor del botón regresar */
+.back-to-home {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+/* Estilo del botón regresar */
+.btn-back-home {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-back-home:hover {
+  background-color: #0056b3;
+}
+
+
+

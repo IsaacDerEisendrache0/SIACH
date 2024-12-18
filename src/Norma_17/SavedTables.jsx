@@ -49,8 +49,19 @@ const SavedTables = () => {
     }
   };
 
+  const handleGoHome = () => {
+    navigate('/'); // Regresar al inicio
+  };
+
   return (
     <div className="saved-tables-container">
+      {/* Botón para regresar al inicio */}
+      <div className="back-to-home">
+        <button onClick={handleGoHome} className="btn-back-home">
+          ← Regresar al Inicio
+        </button>
+      </div>
+
       <h2>Tablas Guardadas</h2>
       {savedTables.length > 0 ? (
         savedTables.map((table) => (

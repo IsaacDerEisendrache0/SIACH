@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { auth, db } from "./firebase/firebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore"; // Firestore para manejo de documentos
@@ -11,9 +11,9 @@ import NormaNOMs from "./Norma_NOMs/norma_noms";
 import Login from "./componentes/Loginlogin";
 import SavedTables from "./Norma_17/SavedTables";
 import Resumen from "./ResumenTabla/resumen";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import "./dashboard.css";
-import { FaTachometerAlt, FaRegFileAlt, FaRegChartBar, FaBars, FaChevronDown } from "react-icons/fa";
+import { FaRegFileAlt, FaRegChartBar, FaBars, FaChevronDown } from "react-icons/fa";
 import Moviles from "./Norma_004/moviles";
 import Maquinaria from "./Norma_004/maquinariaYequipo";
 import HerramientasManuales from "./Norma_004/herramientasMan";
@@ -95,9 +95,7 @@ function Dashboard() {
     setIsSidebarExpanded((prevState) => !prevState);
   };
 
-  const handleHome = () => {
-    navigate("/");
-  };
+  
 
   const toggleNorma004Menu = () => {
     setIsNorma004Expanded((prevState) => !prevState);
@@ -457,26 +455,67 @@ function Dashboard() {
   );
 }
 
+
+
+
 function App() {
   const [loading, setLoading] = useState(true);
+  const [showInactivityMessage, setShowInactivityMessage] = useState(false); // Nuevo estado
   const navigate = useNavigate();
+  const INACTIVITY_LIMIT = 480000; // 8 minutos
+
+  // Función para cerrar sesión por inactividad
+  const handleLogout = useCallback(async () => {
+    try {
+      setShowInactivityMessage(true); // Mostrar el mensaje de aviso
+      await signOut(auth); // Cierra la sesión
+      setTimeout(() => {
+        setShowInactivityMessage(false); // Ocultar el mensaje después de 5 segundos
+        navigate("/login", { replace: true });
+      }, 5000);
+    } catch (err) {
+      console.error("Error al cerrar sesión por inactividad:", err);
+    }
+  }, [navigate]);
+
+  // Función para reiniciar el temporizador de inactividad
+  const resetInactivityTimer = useCallback(() => {
+    if (window.inactivityTimeout) {
+      clearTimeout(window.inactivityTimeout);
+    }
+    window.inactivityTimeout = setTimeout(handleLogout, INACTIVITY_LIMIT);
+  }, [handleLogout]);
 
   useEffect(() => {
+    // Monitorea eventos de actividad
+    const events = ["mousemove", "keydown", "click"];
+    events.forEach((event) =>
+      window.addEventListener(event, resetInactivityTimer)
+    );
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         if (window.location.pathname === "/login") {
           navigate("/");
         }
+        resetInactivityTimer(); // Inicia el temporizador al autenticarse
       } else {
-        if (window.location.pathname !== "/login") {
-          navigate("/login");
-        }
+        navigate("/login");
       }
       setLoading(false);
     });
 
-    return () => unsubscribe();
-  }, [navigate]);
+    return () => {
+      // Limpia eventos y temporizadores al desmontar
+      events.forEach((event) =>
+        window.removeEventListener(event, resetInactivityTimer)
+      );
+      if (window.inactivityTimeout) {
+        clearTimeout(window.inactivityTimeout);
+      }
+      unsubscribe();
+    };
+  }, [navigate, resetInactivityTimer]);
 
   if (loading) {
     return <div className="text-center mt-5">Cargando...</div>;
@@ -487,6 +526,26 @@ function App() {
       className="app-container"
       style={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}
     >
+      {/* Aviso de inactividad */}
+      {showInactivityMessage && (
+        <div
+          className="inactivity-message"
+          style={{
+            position: "fixed",
+            top: "20px",
+            right: "20px",
+            backgroundColor: "#f8d7da",
+            color: "#721c24",
+            padding: "15px",
+            borderRadius: "5px",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+            zIndex: 1000,
+          }}
+        >
+          Tu sesión se ha cerrado por inactividad.
+        </div>
+      )}
+
       <header className="App-header">
         <Routes>
           <Route path="/norma_17" element={<Norma17 />} />
@@ -500,5 +559,9 @@ function App() {
     </div>
   );
 }
+
+
+
+
 
 export default App;
