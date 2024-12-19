@@ -37,7 +37,7 @@
     const [selectedBodyImage, setSelectedBodyImage] = useState(null);
     const [selectedEPPImages, setSelectedEPPImages] = useState([]);
     const [selectedTriangleImages, setSelectedTriangleImages] = useState([]);
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing] = useState(false);
     const [tableId, setTableId] = useState(null);
     const [area, setArea] = useState('');
     const [puestos, setPuestos] = useState([]);
@@ -482,16 +482,31 @@
                 <table>
                   <tbody>
                     <tr>
-                      <td>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => setSelectedBodyImage(URL.createObjectURL(e.target.files[0]))}
-                        />
-                        {selectedBodyImage && (
-                          <img src={selectedBodyImage} alt="Seleccionada" className="selected-image" />
-                        )}
-                      </td>
+                    <td>
+  <input
+    type="file"
+    accept="image/*"
+    onChange={(e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const imageUrl = URL.createObjectURL(file);
+        setSelectedBodyImage(imageUrl);
+      } else {
+        console.error("No se seleccionó un archivo válido.");
+      }
+    }}
+  />
+  {selectedBodyImage && (
+    <img 
+      src={selectedBodyImage} 
+      alt="Seleccionada" 
+      className="selected-image" 
+      style={{ maxWidth: "100%", height: "auto" }} // Asegúrate de que se renderice correctamente
+    />
+  )}
+</td>
+
+
                     </tr>
                   </tbody>
                 </table>

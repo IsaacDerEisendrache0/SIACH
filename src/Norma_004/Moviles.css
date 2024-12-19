@@ -117,18 +117,7 @@ h4.red {
   margin-bottom: 10px;
 }
 
-.button {
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  padding: 10px 15px;
-  border: none;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 14px;
-  margin-top: 15px;
-  transition: background-color 0.3s, transform 0.2s;
-}
+
 
 .button:hover {
   background-color: var(--button-hover-bg);
@@ -159,11 +148,7 @@ h4.red {
   gap: 20px;
 }
 
-.button-group {
-  display: flex;
-  justify-content: space-around;
-  gap: 10px;
-}
+
 
 .button-group .button {
   flex: 1;

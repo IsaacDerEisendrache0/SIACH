@@ -17,7 +17,14 @@ const RiskTable = () => {
     setPuestos(savedPuestos.filter((puesto) => puesto && puesto.nombre));
   }, []);
   
-  
+  /**ome pongo a escribir para que piensen que estoy trabajando alv, por que is no m eregañan a la chingada 
+   * 
+   * 
+   * jajajajaja vale verga este pedo, nomas pa verme interesante
+   *    * 
+   * 
+   */
+
 
 
   const opciones = {
@@ -43,39 +50,13 @@ const RiskTable = () => {
   };
 
   const listaEPP = [
-    "Anteojos de protección",
-    "Bata",
-    "Botas impermeables",
-    "Calzado conductivo",
-    "Calzado contra impacto",
-    "Calzado contra sustancias químicas",
-    "Calzado dieléctrico",
-    "Calzado ocupacional", /*voy hacer como que estoy jalando alv por si las dudas  ya subi de nivel al 101  */
-    "Careta para soldador",
-    "Capuchas", /** por si las dudas me pongo a escribir por que viene el inge  */
-    "Casco contra impacto",
-    "Casco dieléctrico",
-    "Conchas acústicas",
-    "Equipo de protección contra caídas de altura",
-    "Equipo de respiración autónomo",
-    "Equipo para brigadista contra incendio",
-    "Goggles",
-    "Guantes",
-    "Guantes contra sustancias químicas",
-    "Guantes contra temperaturas extremas",
-    "Guantes dieléctricos",
-    "Mandil contra altas temperaturas",
-    "Mandil contra sustancias químicas",
-    "Mangas",
-    "Mascarilla desechable",
-    "Overol",
-    "Pantalla facial",
-    "Polainas",
-    "Ropa contra sustancias peligrosas",
-    "Respirador contra gases y vapores",
-    "Respirador contra partículas"
+    "Anteojos de protección","Bata","Botas impermeables","Calzado conductivo","Calzado contra impacto","Calzado contra sustancias químicas",
+    "Calzado dieléctrico","Calzado ocupacional","Careta para soldador","Capuchas","Casco contra impacto","Casco dieléctrico",
+    "Conchas acústicas","Equipo de protección contra caídas de altura","Equipo de respiración autónomo","Equipo para brigadista contra incendio",
+    "Goggles","Guantes","Guantes contra sustancias químicas","Guantes contra temperaturas extremas","Guantes dieléctricos","Mandil contra altas temperaturas",
+    "Mandil contra sustancias químicas","Mangas","Mascarilla desechable","Overol","Pantalla facial","Polainas",
+    "Ropa contra sustancias peligrosas","Respirador contra gases y vapores","Respirador contra partículas"
   ];
-
 
   const [selectedPeligros, setSelectedPeligros] = useState([]);
   const [affectedBodyParts, setAffectedBodyParts] = useState([]);
@@ -342,13 +323,6 @@ const [showPuestoModal, setShowPuestoModal] = useState(false);
 const [isEditing] = useState(false); // Controla si estás en modo edición
 const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Firestore
 
-
-  
-
-  
-  
-
-
   const renderOptions = (options) => {
     return options.map((option) => (
       <option key={option} value={option}>{option}</option>
@@ -364,19 +338,7 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
           </div>
           <table className="main-table" style={{ width: '100%' }}>
             <thead>
-              <tr>
-                <th colSpan="2" className="nombre-maquinaria">NOMBRE DE LA MAQUINARIA O EQUIPO:</th>
-                <th colSpan="3">
-                  <textarea className="nombre-maquinaria" placeholder="Nombre de la maquinaria" name='textarea' rows="1" cols={53}></textarea>
-                </th>
-                <th colSpan="2" className="energia-utilizada">ENERGIA UTILIZADA:</th>
-                <th colSpan="2">  
-                  <select className="energia-utilizada" value={state.energiaUtilizada} onChange={(e) => handleChange('energiaUtilizada', e.target.value)} style={{ width: '100%' }}>
-                    {renderOptions(opciones.energia)}
-                  </select>
-                </th>
-
-              </tr>
+              
               <tr>
                 <th colSpan="2" className="descripcion-maquinaria">DESCRIPCIÓN DE LA MAQUINARIA O EQUIPO:</th>
                 <th colSpan="4">
@@ -387,8 +349,24 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
                     cols={1}
                   />
                 </th>
+                <th className='descripcion-maquinaria' colspan="">NOMBRE DE LA MAQUINARIA</th>
+                <th colspan="2">
+                <textarea className="descripcion-maquinaria"
+                    value={state.maquinariaDescripcion}
+                    onChange={(e) => handleChange('maquinariaDescripcion', e.target.value)}
+                    placeholder="Describa la maquinaria o equipo"
+                    cols={1}
+                  />
+                </th>
+                <th colSpan="2" className="energia-utilizada">ENERGIA UTILIZADA:</th>
+                <th colSpan="2">  
+                  <select className="energia-utilizada" value={state.energiaUtilizada} onChange={(e) => handleChange('energiaUtilizada', e.target.value)} style={{ width: '100%' }}>
+                    {renderOptions(opciones.energia)}
+                  </select>
+                </th>
                 <th colSpan="1" className="area">ÁREA:</th>
                 <th colSpan="2">
+                  
                 <select name="areas" value={area} onChange={(e) => setArea(e.target.value)}>
                 <option value="">Seleccione un área</option>
                 {areas
@@ -399,11 +377,14 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
                     </option>
                   ))}
               </select>
+              
                 </th>
-
+                
               </tr>
+              
               <tr>
-                <th colSpan="3" className='area'>LOCALIZACIÓN ESQUEMÁTICA DE LOS RIESGOS EN LA MAQUINARIA Y/O EQUIPO:</th>
+                
+                <th colSpan="10" className='area'>LOCALIZACIÓN ESQUEMÁTICA DE LOS RIESGOS EN LA MAQUINARIA Y/O EQUIPO:</th>
                 <th className='area'>PUESTO</th>
                 <th>
                 <select name="puestos" value={newPuesto} onChange={(e) => setNewPuesto(e.target.value)}>
@@ -430,7 +411,7 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
               </tr>
             </thead>
             
-              <tr><td colSpan="2" rowSpan="2">
+              <tr><td colSpan="6" rowSpan="2">
                 <div className="image-sectionn">
                   {!state.imagePreview && (
                     <p className="image-placeholder">No hay imagen seleccionada</p>
@@ -447,7 +428,7 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
                   />
                 </div>
               </td>
-                <td colSpan="7" className="right-alignedd">
+                <td colSpan="10" className="right-alignedd">
                   <div className="text1">Evaluación de riesgo de trabajo</div>
                   <table className="" style={{ width: '100%' }}>
                     <thead>
@@ -504,7 +485,7 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
 
               </tr>
 
-              <td colSpan="7" style={{ backgroundColor: color, color: 'black', textAlign: 'center', padding: '1px' }}>
+              <td colSpan="10" style={{ backgroundColor: color, color: 'black', textAlign: 'center', padding: '1px' }}>
                 <div style={{ fontSize: '14px' }}>Clasificación de magnitud de riesgo</div>
                 <div style={{ display: 'flex', justifyContent: 'space-around', padding: '1px', fontSize: '12px' }}>
                   <div>Magnitud del Riesgo: {magnitudRiesgo}</div>
@@ -514,7 +495,7 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
               </td>
               
               <tr>
-                <td colSpan="5" rowSpan="5">
+                <td colSpan="11" rowSpan="5">
                   <table className="main-table">
                         <th rowSpan="">Identificación del Riesgo</th>
                     <tbody>
@@ -644,7 +625,7 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
             </div>
           </div>
         )}
-      <button onClick={() => setShowAreaModal(true)} className="area-button">Agregar Área</button>
+      <button onClick={() => setShowAreaModal(true)} className="download-button">Agregar Área</button>
 
       {showPuestoModal && (
           <div className="modal">
@@ -663,7 +644,7 @@ const [tableId, setTableId] = useState(null); // Guarda el ID de la tabla en Fir
             </div>
           </div>
         )}
-      <button onClick={() => setShowPuestoModal(true)} className="puesto-button">Agregar Puesto</button>
+      <button onClick={() => setShowPuestoModal(true)} className="download-button">Agregar Puesto</button>
 
 
     </div>

@@ -57,7 +57,7 @@ body {
 
 .image-sectionn {
   width: 340px; /* Ancho fijo del cuadro */
-  height: 200px; /* Alto fijo del cuadro */
+  height: 250px; /* Alto fijo del cuadro */
   display: flex;
   align-items: center;
   justify-content: center;

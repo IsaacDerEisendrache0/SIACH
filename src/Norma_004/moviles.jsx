@@ -565,7 +565,7 @@ const handleRemovePuesto = () => {
             </td>
 
             <th className="red">POE:</th>
-            <td colSpan="20">
+            <td colSpan="25">
               <input 
                 placeholder='Introduzca el POE' 
                 type="text"
@@ -575,7 +575,7 @@ const handleRemovePuesto = () => {
               />
             </td>
             <th className="red">Tiempo de exposición:</th>
-            <td colSpan="15">
+            <td colSpan="20">
               <textarea 
                 placeholder='Introduzca el tiempo' 
                 type="text"
@@ -754,7 +754,7 @@ const handleRemovePuesto = () => {
             <td style={{ verticalAlign: 'top', width: '10%' }} className='epp-suggested' colSpan="">
               <div style={{ marginTop: '20px' }}>
                 <h6 className="red" style={{ display: 'inline-block', marginRight: '200px', fontSize: '14px' }}>Protección sugerido</h6>
-                <select onChange={handleSelectBodyImage} style={{ width: '80%', height: '30px', marginLeft: '30x' }}>
+                <select onChange={handleSelectBodyImage} style={{ width: '100%', height: '40px', marginLeft: '30x' }}>
                   <option value="">Seleccione Imagen del cuerpo</option>
                   {Object.keys(optionImages).map((key) => (
                     <option key={key} value={optionImages[key]}>{key}</option>
@@ -765,8 +765,8 @@ const handleRemovePuesto = () => {
             </td>
             <td colSpan="10" className="epp-suggested" style={{ verticalAlign: 'top', width: '23%' }}>
               <div style={{ marginTop: '20px' }}>
-                <h5 className="red" style={{ display: 'inline-block', marginRight: '10px', fontSize: '14px' }}>Seleccione EPP</h5>
-                <select onChange={handleAddEPPImage} style={{ width: '70%', height: '30px', marginRight: '20px' }}>
+                <h5 className="red" style={{ display: 'inline-block', marginRight: '15px', fontSize: '14px' }}>Seleccione EPP</h5>
+                <select onChange={handleAddEPPImage} style={{ width: '100%', height: '40px', marginRight: '20px' }}>
                   <option value="">Seleccione EPP</option>
                   {eppImages.map((eppImage, idx) => (
                     <option key={idx} value={eppImage}>{`EPP ${idx + 1}`}</option>
