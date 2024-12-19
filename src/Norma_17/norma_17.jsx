@@ -2,7 +2,7 @@ import html2canvas from 'html2canvas';
 import './Table17.css';
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import { collection, addDoc, getDocs, updateDoc, doc, getDoc, setDoc } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase'; // Importar la configuración de Firebase
 import logo from '../logos/logo.png';
 import maxion from '../logos/maxion.jpeg';
@@ -1071,27 +1071,28 @@ const handleMainOptionChange = (e) => {
               </td>
 
           </tr>
-
-
-
-      
-
-
           <tr>
-          <td className="no-border-cell" colSpan="3">
-          <label htmlFor="descripcion-actividad" className="titulo-descripcion">Puestos:</label>
+              <td className="no-border-cell" colSpan="3">
+              <label htmlFor="descripcion-actividad" className="titulo-descripcion">Puestos:</label>
 
               <div className="puesto-con-botones">
-                <select id="puesto" value={puestoSeleccionado} onChange={handlePuestoChange} className="select-puesto">
-                  <option value="" disabled>Seleccione un puesto</option>
+                <select
+                  id="puesto"
+                  value={puestoSeleccionado}
+                  onChange={handlePuestoChange}
+                  className="select-puesto"
+                >
+                  <option value="" disabled className="option-item">
+                    Seleccione un puesto
+                  </option>
                   {puestos.map((puesto, index) => (
-                    <option key={index} value={puesto}>
-                      {puesto}
+                    <option key={index} value={puesto} className="option-item">
+                      {puesto} 
                     </option>
                   ))}
                 </select>
-                
               </div>
+
 
               {!hideButtons && (
                   <>
@@ -1118,7 +1119,7 @@ const handleMainOptionChange = (e) => {
           </div>
         </td>
 
-
+        
 
 
         <Modal isOpen={isModalOpen} onRequestClose={handleModalClose}>
@@ -1220,18 +1221,26 @@ const handleMainOptionChange = (e) => {
 
           <table className="details-table">
             <tbody>
+
+
               {/* Fila de Área */}
               <tr>
   <td className="label-cell">Área:</td>
   <td className="input-cell">
     <div className="cell-container">
-      <select id="area" value={areaSeleccionada} onChange={handleAreaChange} className="select-area">
+            <select
+        id="area"
+        value={areaSeleccionada}
+        onChange={handleAreaChange}
+        className="large-text-dropdown" // Usa la misma clase definida
+      >
         {areas.map((area, index) => (
           <option key={index} value={area.nombre}>
             {area.nombre}
           </option>
         ))}
       </select>
+
       <div className="button-group">
         <button className="btn-icon" onClick={handleAddAreaClick} title="Agregar">
           <svg className="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1285,24 +1294,20 @@ const handleMainOptionChange = (e) => {
               </tr>
 
               {/* Fila de Tiempo de exposición */}
-              <tr>
-                <td className="label-cell">Tiempo de exposición:</td>
-                <td colSpan="2" className="input-cell">
-                  <select
-                    id="tiempoExposicion"
-                    className="select-area"                    
-                    value={tiempoExposicion}
-                    onChange={(e) => setTiempoExposicion(e.target.value)}
-                  >
-                    <option value="2hrs">2 horas</option>
-                    <option value="4hrs">4 horas</option>
-                    <option value="6hrs">6 horas</option>
-                    <option value="8hrs">8 horas</option>
-                    <option value="10hrs">10 horas</option>
-                    <option value="12hrs">12 horas</option>
-                  </select>
-                </td>
-              </tr>
+                <tr>
+                  <td className="label-cell">Tiempo de exposición:</td>
+                  <td colSpan="2" className="input-cell">
+                    <input
+                      type="text"
+                      id="tiempoExposicion"
+                      className="text-input"
+                      placeholder="Ingrese tiempo en horas (e.g., 8hrs)"
+                      value={tiempoExposicion}
+                      onChange={(e) => setTiempoExposicion(e.target.value)}
+                    />
+                  </td>
+                </tr>
+
             </tbody>
           </table>
         </td>
@@ -1354,72 +1359,82 @@ const handleMainOptionChange = (e) => {
                 </Modal>
 
                 <td colSpan="2" className="right-section right-aligned" style={{ backgroundColor: 'white' }}>
-      <div className="text1">Equipo utilizado<br></br></div>
-      <div className="section-content">
-        <select value={selectedOptionEquipoUtilizado} onChange={handleOptionChangeEquipoUtilizado}>
-          <option value="">Selecciona la extremidad afectada</option>
-          <option value="option1">Cabeza</option>
-          <option value="option2">Tronco</option>
-          <option value="option3">Pies</option>
-          <option value="option4">Brazos</option>
-          <option value="option5">Cabeza y Tronco</option>
-          <option value="option6">Brazos y Pies</option>
-          <option value="option7">Cabeza y Pies</option>
-          <option value="option8">Cabeza y Brazos</option>
-          <option value="option9">Tronco y Brazos</option>
-          <option value="option10">Tronco y Pies</option>
-          <option value="option11">Cabeza, Tronco y Brazos</option>
-          <option value="option12">Cabeza, Tronco y Pies</option>
-          <option value="option13">Cabeza, Brazos y Pies</option>
-          <option value="option14">Tronco, Brazos y Pies</option>
-          <option value="option15">Todas las Extremidades</option>
-        </select>
+        <div className="text1">Equipo utilizado<br /></div>
+        <div className="section-content">
+          <select
+            value={selectedOptionEquipoUtilizado}
+            onChange={handleOptionChangeEquipoUtilizado}
+            className="large-text-dropdown"
+          >
+            <option value="">Selecciona la extremidad afectada</option>
+            <option value="option1">Cabeza</option>
+            <option value="option2">Tronco</option>
+            <option value="option3">Pies</option>
+            <option value="option4">Brazos</option>
+            <option value="option5">Cabeza y Tronco</option>
+            <option value="option6">Brazos y Pies</option>
+            <option value="option7">Cabeza y Pies</option>
+            <option value="option8">Cabeza y Brazos</option>
+            <option value="option9">Tronco y Brazos</option>
+            <option value="option10">Tronco y Pies</option>
+            <option value="option11">Cabeza, Tronco y Brazos</option>
+            <option value="option12">Cabeza, Tronco y Pies</option>
+            <option value="option13">Cabeza, Brazos y Pies</option>
+            <option value="option14">Tronco, Brazos y Pies</option>
+            <option value="option15">Todas las Extremidades</option>
+          </select>
 
-        {selectedOptionEquipoUtilizado && optionImages[selectedOptionEquipoUtilizado] && (
-          <div className="protection-image-container">
-            <img
-              src={optionImages[selectedOptionEquipoUtilizado]}
-              alt={`Equipo utilizado para ${selectedOptionEquipoUtilizado}`}
-              className="protection-image2"
-            />
-          </div>
-        )}
-      </div>
-    </td>
-    <td colSpan="2" className="right-section right-aligned">
-      <div className="text1">Equipo de protección personal sugerido</div>
-      <div className="body-and-hazards-container">
-        <select value={selectedOptionProteccionSugerida} onChange={handleOptionChangeProteccionSugerida}>
-          <option value="">Selecciona la extremidad afectada</option>
-          <option value="option1">Cabeza</option>
-          <option value="option2">Tronco</option>
-          <option value="option3">Pies</option>
-          <option value="option4">Brazos</option>
-          <option value="option5">Cabeza y Tronco</option>
-          <option value="option6">Brazos y Pies</option>
-          <option value="option7">Cabeza y Pies</option>
-          <option value="option8">Cabeza y Brazos</option>
-          <option value="option9">Tronco y Brazos</option>
-          <option value="option10">Tronco y Pies</option>
-          <option value="option11">Cabeza, Tronco y Brazos</option>
-          <option value="option12">Cabeza, Tronco y Pies</option>
-          <option value="option13">Cabeza, Brazos y Pies</option>
-          <option value="option14">Tronco, Brazos y Pies</option>
-          <option value="option15">Todas las Extremidades</option>
-        </select>
-        <div className="images-in-row"> {/* Nueva clase para alinear en fila */}
-          {selectedOptionProteccionSugerida && optionImages[selectedOptionProteccionSugerida] && (
-            <div className="body-image-left">
+          {selectedOptionEquipoUtilizado && optionImages[selectedOptionEquipoUtilizado] && (
+            <div className="protection-image-container">
               <img
-                src={optionImages[selectedOptionProteccionSugerida]}
-                alt={`Equipo de protección sugerido para ${selectedOptionProteccionSugerida}`}
-                className="protection-image3"
+                src={optionImages[selectedOptionEquipoUtilizado]}
+                alt={`Equipo utilizado para ${selectedOptionEquipoUtilizado}`}
+                className="protection-image2"
               />
             </div>
           )}
         </div>
-      </div>
-    </td>
+      </td>
+
+      {/* Menú desplegable para seleccionar equipo de protección sugerido */}
+      <td colSpan="2" className="right-section right-aligned">
+        <div className="text1">Equipo de protección personal sugerido</div>
+        <div className="body-and-hazards-container">
+          <select
+            value={selectedOptionProteccionSugerida}
+            onChange={handleOptionChangeProteccionSugerida}
+            className="large-text-dropdown"
+          >
+            <option value="">Selecciona la extremidad afectada</option>
+            <option value="option1">Cabeza</option>
+            <option value="option2">Tronco</option>
+            <option value="option3">Pies</option>
+            <option value="option4">Brazos</option>
+            <option value="option5">Cabeza y Tronco</option>
+            <option value="option6">Brazos y Pies</option>
+            <option value="option7">Cabeza y Pies</option>
+            <option value="option8">Cabeza y Brazos</option>
+            <option value="option9">Tronco y Brazos</option>
+            <option value="option10">Tronco y Pies</option>
+            <option value="option11">Cabeza, Tronco y Brazos</option>
+            <option value="option12">Cabeza, Tronco y Pies</option>
+            <option value="option13">Cabeza, Brazos y Pies</option>
+            <option value="option14">Tronco, Brazos y Pies</option>
+            <option value="option15">Todas las Extremidades</option>
+          </select>
+
+          {selectedOptionProteccionSugerida && optionImages[selectedOptionProteccionSugerida] && (
+            <div className="protection-image-container">
+              <img
+                src={optionImages[selectedOptionProteccionSugerida]}
+                alt={`Equipo de protección para ${selectedOptionProteccionSugerida}`}
+                className="protection-image2"
+              />
+            </div>
+          )}
+        </div>
+      </td>
+
 
 
                 <td colSpan="2" className="epp-component-right-section">
@@ -1446,27 +1461,28 @@ const handleMainOptionChange = (e) => {
                   <div className="epp-container">
   {/* Contenedor del menú principal */}
   <div className="epp-dropdown-container">
-  <label htmlFor="main-epp-select" className="dropdown-label">
-    Selecciona el equipo principal:
-  </label>
-  <select
-    id="main-epp-select"
-    value={selectedMainOption}
-    onChange={handleMainOptionChange}
-    className="epp-dropdown"
-  >
-    <option value="" disabled>
-      Selecciona el equipo
-    </option>
-    {Object.keys(eppOptions)
-      .filter((option) => autoSelectedOptions.includes(option)) // Mostrar solo las opciones detectadas
-      .map((option, index) => (
-        <option key={index} value={option}>
-          {option}
-        </option>
-      ))}
-  </select>
-</div>
+    <label htmlFor="main-epp-select" className="dropdown-label">
+      Selecciona el equipo principal:
+    </label>
+    <select
+      id="main-epp-select"
+      value={selectedMainOption}
+      onChange={handleMainOptionChange}
+      className="epp-dropdown large-text-dropdown" // Se combinan ambas clases
+    >
+      <option value="" disabled>
+        Selecciona el equipo
+      </option>
+      {Object.keys(eppOptions)
+        .filter((option) => autoSelectedOptions.includes(option)) // Mostrar solo las opciones detectadas
+        .map((option, index) => (
+          <option key={index} value={option}>
+            {option}
+          </option>
+        ))}
+    </select>
+  </div>
+
 
 
 {showSubDropdown && selectedMainOption && (
@@ -1537,61 +1553,74 @@ const handleMainOptionChange = (e) => {
           </tr>
           
           <tr>
-          <td colSpan="7" className="right-aligned">
-    <div className="banana-title">Evaluación de riesgo de trabajo</div>
-    <table className="inner-table">
-      <thead>
-        <tr>
-          <th className="apple-header">Consecuencia</th>
-          <th className="apple-header" style={{ backgroundColor: 'red' }}>Exposición</th>
-          <th className="apple-header" colSpan="4" style={{ width: '45%' }}>Probabilidad</th>
-          <th className="apple-header">Magnitud del Riesgo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <select value={consequence} onChange={handleConsequenceChange} className="cherry-select">
-              <option value={10}>Catástrofe</option>
-              <option value={50}>Varias muertes</option>
-              <option value={25}>Muerte</option>
-              <option value={15}>Lesiones graves</option>
-              <option value={5}>Lesiones con baja</option>
-              <option value={1}>Lesiones sin baja</option>
-            </select>
-            <div className="grape-value">Valor: {consequence}</div>
-          </td>
-          <td>
-            <select value={exposure} onChange={handleExposureChange} className="cherry-select">
-              <option value={10}>Continuamente</option>
-              <option value={6}>Frecuentemente</option>
-              <option value={3}>Ocasionalmente</option>
-              <option value={2}>Irregularmente</option>
-              <option value={1}>Raramente</option>
-              <option value={0.5}>Remotamente</option>
-            </select>
-            <div className="grape-value">Valor: {exposure}</div>
-          </td>
-          <td colSpan="4" style={{ width: '45%' }}>
-            <select value={probability} onChange={handleProbabilityChange} className="cherry-select" style={{ width: '100%', whiteSpace: 'normal' }}>
-              <option value={10} style={{ whiteSpace: 'normal' }}>Es el resultado más probable y esperado</option>
-              <option value={6} style={{ whiteSpace: 'normal' }}>Es completamente posible, no será nada extraño</option>
-              <option value={3} style={{ whiteSpace: 'normal' }}>Sería una secuencia o coincidencia rara pero posible, ha ocurrido</option>
-              <option value={1} style={{ whiteSpace: 'normal' }}>Coincidencia muy rara, pero se sabe que ha ocurrido</option>
-              <option value={0.5} style={{ whiteSpace: 'normal' }}>Coincidencia extremadamente remota pero concebible</option>
-              <option value={0.1} style={{ whiteSpace: 'normal' }}>Coincidencia prácticamente imposible, jamás ocurrio</option>
-            </select>
-            <div className="grape-value">Valor: {probability}</div>
-          </td>
+                <td colSpan="7" className="right-aligned">
+                  <div className="banana-title">Evaluación de riesgo de trabajo</div>
+                  <table className="inner-table">
+                    <thead>
+                      <tr>
+                        <th className="apple-header">Consecuencia</th>
+                        <th className="apple-header" style={{ backgroundColor: 'red' }}>Exposición</th>
+                        <th className="apple-header" colSpan="4" style={{ width: '45%' }}>Probabilidad</th>
+                        <th className="apple-header">Magnitud del Riesgo</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <select
+                            value={consequence}
+                            onChange={handleConsequenceChange}
+                            className="cherry-select large-text-dropdown"
+                          >
+                            <option value={10}>Catástrofe</option>
+                            <option value={50}>Varias muertes</option>
+                            <option value={25}>Muerte</option>
+                            <option value={15}>Lesiones graves</option>
+                            <option value={5}>Lesiones con baja</option>
+                            <option value={1}>Lesiones sin baja</option>
+                          </select>
+                          <div className="grape-value">Valor: {consequence}</div>
+                        </td>
+                        <td>
+                          <select
+                            value={exposure}
+                            onChange={handleExposureChange}
+                            className="cherry-select large-text-dropdown"
+                          >
+                            <option value={10}>Continuamente</option>
+                            <option value={6}>Frecuentemente</option>
+                            <option value={3}>Ocasionalmente</option>
+                            <option value={2}>Irregularmente</option>
+                            <option value={1}>Raramente</option>
+                            <option value={0.5}>Remotamente</option>
+                          </select>
+                          <div className="grape-value">Valor: {exposure}</div>
+                        </td>
+                        <td colSpan="4" style={{ width: '45%' }}>
+                          <select
+                            value={probability}
+                            onChange={handleProbabilityChange}
+                            className="cherry-select large-text-dropdown"
+                            style={{ width: '100%', whiteSpace: 'normal' }}
+                          >
+                            <option value={10} style={{ whiteSpace: 'normal' }}>Es el resultado más probable y esperado</option>
+                            <option value={6} style={{ whiteSpace: 'normal' }}>Es completamente posible, no será nada extraño</option>
+                            <option value={3} style={{ whiteSpace: 'normal' }}>Sería una secuencia o coincidencia rara pero posible, ha ocurrido</option>
+                            <option value={1} style={{ whiteSpace: 'normal' }}>Coincidencia muy rara, pero se sabe que ha ocurrido</option>
+                            <option value={0.5} style={{ whiteSpace: 'normal' }}>Coincidencia extremadamente remota pero concebible</option>
+                            <option value={0.1} style={{ whiteSpace: 'normal' }}>Coincidencia prácticamente imposible, jamás ocurrió</option>
+                          </select>
+                          <div className="grape-value">Valor: {probability}</div>
+                        </td>
 
-          <td className="blueberry-risk" style={{ backgroundColor: getRiskColor(calculateRisk()) }}>
-            {calculateRisk().toFixed(2)}
-          </td>
+                        <td className="blueberry-risk" style={{ backgroundColor: getRiskColor(calculateRisk()) }}>
+                          {calculateRisk().toFixed(2)}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
 
-        </tr>
-      </tbody>
-    </table>
-  </td>
             
             <td colSpan="3" className="right-aligned">
               <div className="risk-title">Clasificación de Magnitud de Riesgo</div>
