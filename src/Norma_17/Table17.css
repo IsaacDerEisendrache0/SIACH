@@ -1247,7 +1247,7 @@ button {
   background-color: #f0f0f0 !important; /* Fondo gris claro al pasar el mouse */
 }
 
-.upload-icon {
+.upload-icon { 
   width: 20px;
   height: 20px;
   stroke: black; /* Icono en color negro */
@@ -1325,7 +1325,7 @@ button {
 /* Grupo de botones */
 .button-group {
   display: flex;
-  gap: 5px; /* Espacio entre los botones */
+  gap: 20px; /* Espacio entre los botones */
 }
 
 /* Botones con iconos */
@@ -1333,11 +1333,11 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px; /* Asegúrate de que haya espacio suficiente */
+  width: 40px; /* Asegúrate de que haya espacio suficiente */
   height: 36px; /* Asegúrate de que haya espacio suficiente */
   background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #000000;
+  border-radius: 5px;
   cursor: pointer;
 }
 
@@ -1352,3 +1352,79 @@ button {
   height: 84px; /* Tamaño actualizado */
 }
 
+
+
+
+
+
+
+.large-text-dropdown {
+  width: 80%; /* Ajusta el ancho al 100% del contenedor */
+  font-size: 16px; /* Tamaño del texto */
+  padding: 10px; /* Espaciado interno */
+  border: 1px solid #ccc; /* Borde */
+  border-radius: 4px; /* Bordes redondeados */
+  background-color: #f9f9f9; /* Fondo */
+  appearance: none; /* Elimina el estilo predeterminado del navegador */
+  outline: none; /* Elimina el contorno al seleccionar */
+}
+
+.large-text-dropdown:hover {
+  border-color: #888; /* Cambia el color del borde al pasar el cursor */
+}
+
+.large-text-dropdown:focus {
+  border-color: #555; /* Cambia el color del borde al enfocar */
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2); /* Sombra en foco */
+}
+
+.large-text-dropdown option {
+  font-size: 16px; /* Ajusta el tamaño del texto de las opciones */
+  padding: 5px; /* Espaciado interno para las opciones */
+}
+
+
+
+
+/* Clase general para inputs y selects grandes */
+.large-input {
+  width: 100%; /* Ajusta el ancho al 100% del contenedor */
+  font-size: 16px; /* Tamaño del texto */
+  padding: 10px; /* Espaciado interno */
+  border: 1px solid #ccc; /* Borde */
+  border-radius: 4px; /* Bordes redondeados */
+  background-color: #f9f9f9; /* Fondo */
+  outline: none; /* Elimina el contorno al seleccionar */
+}
+
+/* Cambios al pasar el cursor */
+.large-input:hover {
+  border-color: #888;
+}
+
+/* Cambios al enfocar */
+.large-input:focus {
+  border-color: #555;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Específico para select */
+.large-text-dropdown {
+  appearance: none; /* Elimina el estilo predeterminado del navegador */
+}
+
+/* Opciones dentro del select */
+.large-text-dropdown {
+  width: auto; /* El ancho se ajusta al contenido */
+  min-width: 150px; /* Ancho mínimo por si el contenido es muy corto */
+  font-size: 16px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  outline: none;
+  appearance: none;
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  overflow: hidden; /* Oculta el texto que excede el ancho del select */
+  text-overflow: ellipsis; /* Muestra "..." si el texto es demasiado largo */
+}

@@ -88,7 +88,6 @@ const RiskAssessmentTable = () => {
     'Daños Ergonómicos': false,
     'Calentamiento de materia prima, subproducto o producto': false,
     'Protección de material o herramienta': false,
-    'Mantenimiento preventivo, correctivo o predictivo': false,
   });
 
   const bodyParts = {
@@ -102,10 +101,9 @@ const RiskAssessmentTable = () => {
     'Exposición a Vibraciones': ['Brazos y Manos', 'Tronco', 'Extremidades inferiores'],
     'Superficies cortantes': ['Ojos y Cara', 'Brazos y Manos', 'Extremidades inferiores'],
     'Caídas a nivel o desnivel': ['Cabeza y Oídos', 'Ojos y Cara', 'Brazos y Manos', 'Tronco', 'Extremidades inferiores'],
-    'Daños Ergonómicos': ['Brazos y Manos', 'Tronco', 'Extremidades inferiores'],
+    'Daños Ergonómicos': [],
     'Calentamiento de materia prima, subproducto o producto': ['Ojos y Cara', 'Brazos y Manos', 'Tronco', 'Extremidades inferiores'],
     'Protección de material o herramienta': ['Ojos y Cara', 'Brazos y Manos', 'Tronco'],
-    'Mantenimiento preventivo, correctivo o predictivo': ['Ojos y Cara', 'Brazos y Manos', 'Tronco'],
   };
 
   const protectionImages = {
@@ -119,10 +117,9 @@ const RiskAssessmentTable = () => {
     'Exposición a Vibraciones': ['/images/19.png', '/images/6.png' , '/images/4.png'],
     'Superficies cortantes': ['/images/6.png', '/images/1.png', '/images/21.png', '/images/14.png'],
     'Caídas a nivel o desnivel':  ['/images/4.png', '/images/34.png'],
-    'Daños Ergonómicos':  ['/images/15.png'],
+    'Daños Ergonómicos':  [],
     'Calentamiento de materia prima, subproducto o producto':  ['/images/6.png', '/images/15.png' , '/images/9.png', '/images/4.png', '/images/21.png'],
     'Protección de material o herramienta':  ['/images/7.png', '/images/1.png', '/images/21.png', '/images/14.png', '/images/6.png', '/images/4.png', '/images/35.png'],
-    'Mantenimiento preventivo, correctivo o predictivo':  [],
   };
 
    // Coloca los hooks dentro del componente funcional
@@ -728,6 +725,7 @@ useEffect(() => {
 }, []);
 
 
+
 const [selectedMainOption, setSelectedMainOption] = useState(''); // Estado para la opción principal
   const [selectedSubOption, setSelectedSubOption] = useState('');   // Estado para la subcategoría seleccionada
   const [showSubDropdown, setShowSubDropdown] = useState(false);     // Estado para mostrar u ocultar el segundo menú
@@ -735,7 +733,7 @@ const [selectedMainOption, setSelectedMainOption] = useState(''); // Estado para
 
   // Opciones principales y sus subcategorías
   const eppOptions = {
-    'Casco': [
+    'Casco': [  
       'Casco Dielectrico',
       'Casco de Seguridad',
       'Casco con Visera',
@@ -1225,37 +1223,27 @@ const handleMainOptionChange = (e) => {
 
               {/* Fila de Área */}
               <tr>
-  <td className="label-cell">Área:</td>
-  <td className="input-cell">
-    <div className="cell-container">
-            <select
-        id="area"
-        value={areaSeleccionada}
-        onChange={handleAreaChange}
-        className="large-text-dropdown" // Usa la misma clase definida
-      >
-        {areas.map((area, index) => (
-          <option key={index} value={area.nombre}>
-            {area.nombre}
-          </option>
-        ))}
-      </select>
+                <td className="label-cell">Área:</td>
+                <td className="input-cell">
+                  <div className="cell-container">
+                  <select
+                    id="area"
+                    value={areaSeleccionada}
+                    onChange={handleAreaChange}
+                    className="large-text-dropdown"
+                  >
+                    {areas.map((area, index) => (
+                      <option key={index} value={area.nombre}>
+                        {area.nombre}
+                      </option>
+                    ))}
+                  </select>
 
-      <div className="button-group">
-        <button className="btn-icon" onClick={handleAddAreaClick} title="Agregar">
-          <svg className="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 5v14M5 12h14" />
-          </svg>
-        </button>
-        <button className="btn-icon" onClick={handleDeleteAreaClick} title="Borrar">
-          <svg className="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 6h18M9 6v12M15 6v12M19 6l-1 14H6L5 6" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  </td>
-</tr>
+
+                    
+                  </div>
+                </td>
+              </tr>
 
               {/* Modal para borrar áreas */}
               <Modal isOpen={isAreaModalOpen} onRequestClose={handleAreaModalClose} className="overlay">
@@ -1294,19 +1282,20 @@ const handleMainOptionChange = (e) => {
               </tr>
 
               {/* Fila de Tiempo de exposición */}
-                <tr>
-                  <td className="label-cell">Tiempo de exposición:</td>
-                  <td colSpan="2" className="input-cell">
-                    <input
-                      type="text"
-                      id="tiempoExposicion"
-                      className="text-input"
-                      placeholder="Ingrese tiempo en horas (e.g., 8hrs)"
-                      value={tiempoExposicion}
-                      onChange={(e) => setTiempoExposicion(e.target.value)}
-                    />
-                  </td>
-                </tr>
+              <tr>
+                <td className="label-cell">Tiempo de exposición:</td>
+                <td colSpan="2" className="input-cell">
+                  <input
+                    type="text"
+                    id="tiempoExposicion"
+                    className="large-input" // Usa la misma clase para el tamaño grande
+                    placeholder="Ingrese tiempo en horas (e.g., 8hrs)"
+                    value={tiempoExposicion}
+                    onChange={(e) => setTiempoExposicion(e.target.value)}
+                  />
+                </td>
+              </tr>
+
 
             </tbody>
           </table>
@@ -1459,94 +1448,92 @@ const handleMainOptionChange = (e) => {
                   </div>
 
                   <div className="epp-container">
-  {/* Contenedor del menú principal */}
-  <div className="epp-dropdown-container">
-    <label htmlFor="main-epp-select" className="dropdown-label">
-      Selecciona el equipo principal:
-    </label>
-    <select
-      id="main-epp-select"
-      value={selectedMainOption}
-      onChange={handleMainOptionChange}
-      className="epp-dropdown large-text-dropdown" // Se combinan ambas clases
-    >
-      <option value="" disabled>
-        Selecciona el equipo
-      </option>
-      {Object.keys(eppOptions)
-        .filter((option) => autoSelectedOptions.includes(option)) // Mostrar solo las opciones detectadas
-        .map((option, index) => (
-          <option key={index} value={option}>
-            {option}
-          </option>
-        ))}
-    </select>
-  </div>
+                    {/* Contenedor del menú principal */}
+                    <div className="epp-dropdown-container">
+                      <label htmlFor="main-epp-select" className="dropdown-label">
+                        Selecciona el equipo principal:
+                      </label>
+                      <select
+                        id="main-epp-select"
+                        value={selectedMainOption}
+                        onChange={handleMainOptionChange}
+                        className="epp-dropdown large-text-dropdown" // Se combinan ambas clases
+                      >
+                        <option value="" disabled>
+                          Selecciona el equipo
+                        </option>
+                        {Object.keys(eppOptions)
+                          .filter((option) => autoSelectedOptions.includes(option)) // Mostrar solo las opciones detectadas
+                          .map((option, index) => (
+                            <option key={index} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
 
 
 
-{showSubDropdown && selectedMainOption && (
-  <div className="epp-sub-dropdown-container">
-    <label htmlFor="sub-epp-select" className="dropdown-label">
-      Selecciona el tipo de {selectedMainOption.toLowerCase()}:
-    </label>
-    <select
-      id="sub-epp-select"
-      value={selectedSubOption}
-      onChange={handleSubOptionChange}
-      className="epp-sub-dropdown"
-    >
-      <option value="" disabled>
-        Selecciona el tipo
-      </option>
-      {eppOptions[selectedMainOption]?.map((subOption, index) => (
-        <option key={index} value={subOption}>
-          {subOption}
-        </option>
-      ))}
-    </select>
-  </div>
-)}
+                    {showSubDropdown && selectedMainOption && (
+                      <div className="epp-sub-dropdown-container">
+                        <label htmlFor="sub-epp-select" className="dropdown-label">
+                          Selecciona el tipo de {selectedMainOption.toLowerCase()}:
+                        </label>
+                        <select
+                          id="sub-epp-select"
+                          value={selectedSubOption}
+                          onChange={handleSubOptionChange}
+                          className="large-text-dropdown"
+                        >
+                          <option value="" disabled>
+                            Selecciona el tipo
+                          </option>
+                          {eppOptions[selectedMainOption]?.map((subOption, index) => (
+                            <option key={index} value={subOption}>
+                              {subOption}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
 
 
-<div className="epp-selection-list-container">
-  {selectionList.length > 0 ? (
-    selectionList.reduce((rows, key, index) => {
-      // Agrupa los elementos en pares
-      if (index % 2 === 0) rows.push([selectionList[index]]);
-      else rows[rows.length - 1].push(selectionList[index]);
-      return rows;
-    }, []).map((row, rowIndex) => (
-      <div key={rowIndex} className="epp-selection-row">
-        {row.map((selection, index) => (
-          <div key={index} className="epp-selection-item">
-            {selection.slice(selection.indexOf('-') + 2)} {/* Elimina el prefijo */}
-            <button
-              className="delete-button"
-              onClick={() => handleDeleteSelection(selectionList.indexOf(selection))}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="white"
-                width="20px"
-                height="20px"
-                className="delete-icon"
-              >
-                <path d="M3 6h18v2H3V6zm2 2v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V8H5zm7 4v6h2v-6h-2zm-4 0v6h2v-6H8zm8 0v6h2v-6h-2zM7 4h10v2H7V4z" />
-              </svg>
-            </button>
-          </div>
-        ))}
-      </div>
-    ))
-  ) : (
-    <p className="no-selection-message">No hay selecciones</p>
-  )}
-</div>
-
-
-</div>
+                    <div className="epp-selection-list-container">
+                      {selectionList.length > 0 ? (
+                        selectionList.reduce((rows, key, index) => {
+                          // Agrupa los elementos en pares
+                          if (index % 2 === 0) rows.push([selectionList[index]]);
+                          else rows[rows.length - 1].push(selectionList[index]);
+                          return rows;
+                        }, []).map((row, rowIndex) => (
+                          <div key={rowIndex} className="epp-selection-row">
+                            {row.map((selection, index) => (
+                              <div key={index} className="epp-selection-item">
+                                {selection.slice(selection.indexOf('-') + 2)} {/* Elimina el prefijo */}
+                                <button
+                                  className="delete-button"
+                                  onClick={() => handleDeleteSelection(selectionList.indexOf(selection))}
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="white"
+                                    width="20px"
+                                    height="20px"
+                                    className="delete-icon"
+                                  >
+                                    <path d="M3 6h18v2H3V6zm2 2v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V8H5zm7 4v6h2v-6h-2zm-4 0v6h2v-6H8zm8 0v6h2v-6h-2zM7 4h10v2H7V4z" />
+                                  </svg>
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        ))
+                      ) : (
+                        <p className="no-selection-message">No hay selecciones</p>
+                      )}
+                    </div>
+                  </div>
 
 
             </td>  
@@ -1572,7 +1559,7 @@ const handleMainOptionChange = (e) => {
                             onChange={handleConsequenceChange}
                             className="cherry-select large-text-dropdown"
                           >
-                            <option value={10}>Catástrofe</option>
+                            <option value={100}>Catástrofe</option>
                             <option value={50}>Varias muertes</option>
                             <option value={25}>Muerte</option>
                             <option value={15}>Lesiones graves</option>
@@ -1655,6 +1642,20 @@ const handleMainOptionChange = (e) => {
       <button onClick={isEditing ? updateTable : saveTable} className="save-button">
         {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
       </button>
+                      
+      <button className="btn-icon" onClick={handleAddAreaClick} title="Agregar">
+                        <svg className="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 5v14M5 12h14" />
+                        </svg>
+                      </button>
+                      <button className="btn-icon" onClick={handleDeleteAreaClick} title="Borrar">
+                        <svg className="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M3 6h18M9 6v12M15 6v12M19 6l-1 14H6L5 6" />
+                        </svg>
+                      </button>
+
+
+      
     </div>
   );
 };
