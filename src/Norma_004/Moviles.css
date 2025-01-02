@@ -19,6 +19,7 @@
 
 .risk-table {
   width: 100%;
+  max-width: 1600px; /* Ajusta el ancho máximo según sea necesario */
   display: flex;
   flex-direction: column;
   font-size: 11px; /* Ajuste leve del tamaño de fuente */
@@ -45,7 +46,7 @@
 .epp-suggested select {
   width: 100%;
   padding: 12px; /* Incrementar ligeramente el padding */
-  margin-top: 10px;
+  margin-top: 5px;
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
   font-family: var(--font-family);
@@ -273,3 +274,44 @@ body {
   margin: 0;
   padding: 0;
 }
+
+
+
+
+#body-parts-table {
+  width: 130%; /* Estira la tabla al 130% del contenedor */
+  min-width: 100%; /* Asegura que la tabla no sea más pequeña que el 100% */
+  border-collapse: collapse; /* Combina los bordes de las celdas */
+  margin: 0px 0; /* Espaciado superior e inferior */
+  font-size: 16px; /* Tamaño de texto ajustado */
+  text-align: left; /* Alineación del texto */
+}
+
+.container {
+  width: 100%; /* El contenedor puede permitir el 100% */
+  overflow: visible; /* Permite que el contenido se expanda más allá del 100% */
+}
+
+#body-parts-table th {
+  background-color: #f4f4f4; /* Color de fondo para encabezados */
+  border: 1px solid #ccc; /* Borde de las celdas */
+  padding: 10px; /* Espaciado interno */
+  text-align: center; /* Alinea el texto al centro */
+  font-weight: bold; /* Texto en negrita */
+}
+
+#body-parts-table td {
+  border: 1px solid #ccc; /* Borde de las celdas */
+  padding: 10px; /* Espaciado interno */
+}
+
+#body-parts-table td[data-check="true"] {
+  text-align: center; /* Centrar contenido en estas celdas */
+  background-color: #e8f5e9; /* Fondo verde claro */
+}
+
+#body-parts-table td[data-part] {
+  font-weight: bold; /* Resalta los nombres de las partes del cuerpo */
+  background-color: #f9f9f9; /* Fondo gris claro */
+}
+

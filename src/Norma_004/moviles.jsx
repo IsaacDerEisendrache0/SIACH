@@ -508,28 +508,28 @@ const handleRemovePuesto = () => {
           ANÁLISIS DE RIESGO POTENCIAL GENERADO POR EQUIPOS MÓVILES
           NOM-004-STPS-1999
         </h4>
-{logoSeleccionado ? (
-  <div className="logo-container" style={{ display: 'flex', alignItems: 'center' }}>
-    <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" style={{ marginLeft: '20px', width: '100px', height: 'auto' }} />
-    <button onClick={handleRemoveLogo} className="remove-logo-button" style={{ marginLeft: '10px' }}>×</button>
-  </div>
-) : (
-  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-    <input
-      type="file"
-      accept="image/*"
-      onChange={(event) => {
-        const file = event.target.files[0];
-        if (file) {
-          const imageUrl = URL.createObjectURL(file);
-          setLogoSeleccionado(imageUrl);
-        }
-      }}
-      style={{ cursor: 'pointer', padding: '5px' }}
-    />
-   
-  </div>
-)}
+          {logoSeleccionado ? (
+            <div className="logo-container" style={{ display: 'flex', alignItems: 'center' }}>
+              <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" style={{ marginLeft: '20px', width: '100px', height: 'auto' }} />
+              <button onClick={handleRemoveLogo} className="remove-logo-button" style={{ marginLeft: '10px' }}>×</button>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(event) => {
+                  const file = event.target.files[0];
+                  if (file) {
+                    const imageUrl = URL.createObjectURL(file);
+                    setLogoSeleccionado(imageUrl);
+                  }
+                }}
+                style={{ cursor: 'pointer', padding: '5px' }}
+              />
+            
+            </div>
+          )}
 
         
 
@@ -539,7 +539,7 @@ const handleRemovePuesto = () => {
         <thead>
           <tr>
             <th className="red">Nombre de la maquinaria</th>
-            <td colSpan="25">
+            <td colSpan="2">
               <textarea
                 placeholder='Introduzca un nombre' 
                 type="text" 
@@ -550,7 +550,7 @@ const handleRemovePuesto = () => {
             </td>
 
             <th className="red">Área:</th>
-            <td colSpan="10">
+            <td colSpan="2">
             <select name="areas" value={area} onChange={(e) => setArea(e.target.value)}>
             <option value="">Seleccione un área</option>
             {areas
@@ -565,17 +565,17 @@ const handleRemovePuesto = () => {
             </td>
 
             <th className="red">POE:</th>
-            <td colSpan="25">
+            <td colSpan="2">
               <input 
                 placeholder='Introduzca el POE' 
                 type="text"
                 value={poe}
                 onChange={(e) => setPoe(e.target.value)}
-                style={{ width: '100%' }}
+                
               />
             </td>
             <th className="red">Tiempo de exposición:</th>
-            <td colSpan="20">
+            <td colSpan="1">
               <textarea 
                 placeholder='Introduzca el tiempo' 
                 type="text"
@@ -584,12 +584,11 @@ const handleRemovePuesto = () => {
                 style={{ width: '100%' }}
               />
             </td>
- 
 
           </tr>
           <tr>
             <th className="red">Descripción de la maquinaria o equipo:</th>
-            <td colSpan="56">
+            <td colSpan="3"> 
               <textarea
                 placeholder='Introduzca una descripción' 
                 type="text"
@@ -599,7 +598,7 @@ const handleRemovePuesto = () => {
               />
             </td>
             <th className="red">Fecha de inspección:</th>
-            <td colSpan="12">
+            <td colSpan="2">
               <input 
                 type="date"
                 value={fechaInspeccion}
@@ -607,8 +606,8 @@ const handleRemovePuesto = () => {
                 style={{ width: '100%' }}
               />
             </td>
-            <th className="red">PUESTOS</th>
-            <td colSpan="10">
+            <th className="red" >PUESTOS</th>
+            <td colSpan="3">
             <select name="puestos" value={newPuesto} onChange={(e) => setNewPuesto(e.target.value)}>
             <option value="">Seleccione un puesto</option>
             {puestos
@@ -670,29 +669,38 @@ const handleRemovePuesto = () => {
                 </select>
               ))}
             </td>
+
+            
           </tr>
-          <table id="body-parts-table">
-        <tr>
-            <th colspan="6">Principales partes del cuerpo expuestas al riesgo:</th>
-        </tr>
-        <tr>
-            <td data-part="Cabeza y Oídos">Cabeza y Oídos</td>
-            <td data-check="true"></td>
-            <td data-part="Ojos y Cara">Ojos y Cara</td>
-            <td data-check="true"></td>
-            <td data-part="Sistema respiratorio">Sistema respiratorio</td>
-            <td data-check="true"></td>
-        </tr>
-        <tr>
-            <td data-part="Brazos y Manos">Brazos y Manos</td>
-            <td data-check="true"></td>
-            <td data-part="Tronco">Tronco</td>
-            <td data-check="true"></td>
-            <td data-part="Extremidades inferiores">Extremidades inferiores</td>
-            <td data-check="true"></td>
-        </tr>
-    </table>
+
+
+          <table  id="body-parts-table" colspan="8" >
+            <tr > 
+              <th colspan="6">Principales partes del cuerpo expuestas al riesgo:</th>
+            </tr>
+            <tr>
+              <td data-part="Cabeza y Oídos">Cabeza y Oídos</td>
+              <td data-check="true"></td>
+              <td data-part="Ojos y Cara">Ojos y Cara</td>
+              <td data-check="true"></td>
+              <td data-part="Sistema respiratorio">Sistema respiratorio</td>
+              <td data-check="true"></td>
+            </tr>
+            <tr>
+              <td data-part="Brazos y Manos">Brazos y Manos</td>
+              <td data-check="true"></td>
+              <td data-part="Tronco">Tronco</td>
+              <td data-check="true"></td>
+              <td data-part="Extremidades inferiores">Extremidades inferiores</td>
+              <td data-check="true"></td>
+            </tr>
+          </table>
+
+          
           <tr>
+            
+
+            
             <td colSpan="4" className="risk-evaluation-section">
               <table style={{ width: '100%' }}>
                 <thead>
@@ -748,8 +756,11 @@ const handleRemovePuesto = () => {
                     <td style={{ fontSize: '16px' }}>Clasificación: {clasificacion}</td>
                     <td style={{ fontSize: '16px' }}>Acción: {accion}</td>
                   </tr>
+                  
                 </tbody>
+                
               </table>
+              
             </td>
             <td style={{ verticalAlign: 'top', width: '10%' }} className='epp-suggested' colSpan="">
               <div style={{ marginTop: '20px' }}>

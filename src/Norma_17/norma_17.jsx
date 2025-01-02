@@ -1636,23 +1636,43 @@ const handleMainOptionChange = (e) => {
           </tr>
         </tbody>
       </table>
-      <button onClick={downloadImage} className="download-button">
-        Descargar PDF
-      </button>
-      <button onClick={isEditing ? updateTable : saveTable} className="save-button">
-        {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
-      </button>
-                      
-      <button className="btn-icon" onClick={handleAddAreaClick} title="Agregar">
-                        <svg className="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M12 5v14M5 12h14" />
-                        </svg>
-                      </button>
-                      <button className="btn-icon" onClick={handleDeleteAreaClick} title="Borrar">
-                        <svg className="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M3 6h18M9 6v12M15 6v12M19 6l-1 14H6L5 6" />
-                        </svg>
-                      </button>
+      <div className="button-container">
+  <button onClick={downloadImage} className="download-button">
+    Descargar PDF
+  </button>
+  <button onClick={isEditing ? updateTable : saveTable} className="save-button">
+    {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
+  </button>
+  <button className="btn-icon" onClick={handleAddAreaClick} title="Agregar">
+    <svg
+      className="button-icon"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="black"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  </button>
+  <button className="btn-icon" onClick={handleDeleteAreaClick} title="Borrar">
+    <svg
+      className="button-icon"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="black"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M3 6h18M9 6v12M15 6v12M19 6l-1 14H6L5 6" />
+    </svg>
+  </button>
+</div>
+
 
 
       
