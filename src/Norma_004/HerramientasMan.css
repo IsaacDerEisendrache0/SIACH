@@ -30,7 +30,7 @@ body {
 .main-table th, .main-table td {
   padding: 5px;
   line-height: 1.2;
- font-size: 0.9em;
+  font-size: 0.9em;
   border: 1px solid
 }
 
@@ -96,10 +96,8 @@ body {
 /* Observations */
 textarea#observaciones {
   width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 5px;
-  font-size: 0.9em;
+  height: 100% !important;
+  font-size: 1.50em;
 }
 
 /* EPP Table */

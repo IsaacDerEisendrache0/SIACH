@@ -479,7 +479,7 @@
           <tbody>
             <div className="table-flex-container">
               <div className="image-insert-table">
-                <table>
+                <table className='imagefilter'>
                   <tbody>
                     <tr>
                     <td>
@@ -511,45 +511,14 @@
                   </tbody>
                 </table>
 
-                {/* Tabla de triángulos con select */}
-                <table className="risk-table">
-                  <tbody>
-                    <tr>
-                      <td>
-                      <select onChange={handleSelectImage}>
-                      <option value="">Selecciona una imagen</option>
-                      {[...Array(24)].map((_, index) => (
-                        <option key={index} value={`/images/Imagen${index + 1}.png`}>
-                          Imagen {index + 1}
-                        </option>
-                      ))}
-                    </select>
+                
 
-                      </td>
-                    </tr>
-                    <tr>
-                      {/* Contenedor de imágenes seleccionadas desde el select */}
-                      <td className="triangle-images-container" colSpan="">
-                        {selectedTriangleImages.map((img, index) => (
-                          <img
-                            key={index}
-                            src={img}
-                            alt="Triangle"
-                            className="selected-image"
-                            onClick={() => handleRemoveTriangleImage(img)}
-                          />
-                        ))}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
 
-              <div className="identification-table">
+                <div className="identification-table">
                 <table className="risk-table">
                   <thead>
                     <tr className="red">
-                      <th>Identificación de peligros</th>
+                      <th className='warning'>Identificación de peligros</th>
                       <th>Si/No</th>
                     </tr>
                   </thead>
@@ -569,8 +538,12 @@
                 </table>
               </div>
 
+            </div>
+
+              
+
               <div className="evaluation-table">
-                <table>
+                
                 <table>
                   <thead>
                     <tr className="red">
@@ -644,7 +617,6 @@
                               <textarea name="textarea" rows="3" cols="212" id="observaciones" placeholder='Observaciones'></textarea>
                 </table>
                 
-                </table>
                 <table id="body-parts-table" style={{ width: "90%", margin: "20px auto", borderCollapse: "collapse" }}>
       <thead>
         <tr>
@@ -672,6 +644,38 @@
         </tr>
       </tbody>
     </table>
+                {/* Tabla de triángulos con select */}
+                <table className='warning'>
+                  <tbody >
+                    <tr>
+                      <td >
+                      <select onChange={handleSelectImage}>
+                      <option value="">Selecciona una imagen</option>
+                      {[...Array(24)].map((_, index) => (
+                        <option key={index} value={`/images/Imagen${index + 1}.png`}>
+                          Imagen {index + 1}
+                        </option>
+                      ))}
+                    </select>
+
+                      </td>
+                    </tr>
+                    <tr>
+                      {/* Contenedor de imágenes seleccionadas desde el select */}
+                      <td className="triangle-images-container" colSpan="">
+                        {selectedTriangleImages.map((img, index) => (
+                          <img
+                            key={index}
+                            src={img}
+                            alt="Triangle"
+                            className="selected-image"
+                            onClick={() => handleRemoveTriangleImage(img)}
+                          />
+                        ))}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
   
               </div>
             </div>

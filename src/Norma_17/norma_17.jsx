@@ -85,9 +85,7 @@ const RiskAssessmentTable = () => {
     'Exposición a Vibraciones': false,
     'Superficies cortantes': false,
     'Caídas a nivel o desnivel': false,
-    'Daños Ergonómicos': false,
     'Calentamiento de materia prima, subproducto o producto': false,
-    'Protección de material o herramienta': false,
   });
 
   const bodyParts = {
@@ -101,7 +99,6 @@ const RiskAssessmentTable = () => {
     'Exposición a Vibraciones': ['Brazos y Manos', 'Tronco', 'Extremidades inferiores'],
     'Superficies cortantes': ['Ojos y Cara', 'Brazos y Manos', 'Extremidades inferiores'],
     'Caídas a nivel o desnivel': ['Cabeza y Oídos', 'Ojos y Cara', 'Brazos y Manos', 'Tronco', 'Extremidades inferiores'],
-    'Daños Ergonómicos': [],
     'Calentamiento de materia prima, subproducto o producto': ['Ojos y Cara', 'Brazos y Manos', 'Tronco', 'Extremidades inferiores'],
     'Protección de material o herramienta': ['Ojos y Cara', 'Brazos y Manos', 'Tronco'],
   };
@@ -117,7 +114,6 @@ const RiskAssessmentTable = () => {
     'Exposición a Vibraciones': ['/images/19.png', '/images/6.png' , '/images/4.png'],
     'Superficies cortantes': ['/images/6.png', '/images/1.png', '/images/21.png', '/images/14.png'],
     'Caídas a nivel o desnivel':  ['/images/4.png', '/images/34.png'],
-    'Daños Ergonómicos':  [],
     'Calentamiento de materia prima, subproducto o producto':  ['/images/6.png', '/images/15.png' , '/images/9.png', '/images/4.png', '/images/21.png'],
     'Protección de material o herramienta':  ['/images/7.png', '/images/1.png', '/images/21.png', '/images/14.png', '/images/6.png', '/images/4.png', '/images/35.png'],
   };
@@ -1277,7 +1273,7 @@ const handleMainOptionChange = (e) => {
               <tr>
                 <td className="label-cell">Fecha de inspección:</td>
                 <td colSpan="2" className="input-cell">
-                  <input type="date" id="fechaInspeccion" defaultValue="2023-09-13" className="date-input" />
+                  <input type="date" id="fechaInspeccion" defaultValue="2025-01-01" className="date-input" />
                 </td>
               </tr>
 

@@ -25,7 +25,6 @@
 
     /* Ajuste para hacer más grande la tabla de evaluación de riesgo de trabajo */
     .evaluation-table {
-        flex: 2; /* Incrementado el valor flex para ocupar más espacio */
         margin: 10px 5px;
     }
 
@@ -107,29 +106,18 @@
         flex-wrap: wrap; /* Las imágenes pasan a la siguiente fila si no caben */
         justify-content: space-between; /* Espaciado uniforme entre imágenes */
         align-items: center; /* Centra las imágenes verticalmente */
-        gap: 5px; /* Espaciado entre las imágenes */
-        width: 320px; /* Ancho fijo del cuadro */
-        height: 400px; /* Alto fijo del cuadro */
+        width: 900px; /* Ancho fijo del cuadro */
+        height: 210px; /* Alto fijo del cuadro */
         background-color: #ffffff;
         border: 1px solid #ffffff; /* Borde sutil para distinguir el cuadro */
-       
-        padding: 10px; /* Espaciado interno */
-        box-sizing: border-box; /* Incluye padding en las dimensiones totales */
-        overflow: hidden; /* Oculta contenido que exceda el cuadro */
-        margin: 0 auto; /* Centra el cuadro horizontalmente */
     }
     
     /* Ajuste para las imágenes dentro del contenedor */
     .triangle-images-container .selected-image {
-        width: 90px; /* Tamaño fijo de las imágenes */
-        height: 90px;
-        object-fit: contain; /* Asegura que las imágenes mantengan su proporción */
-      
-        padding: 6px;
+        width: 140px; /* Tamaño fijo de las imágenes */
+        height: 120px;
         background-color: white;
-      
         cursor: pointer;
-        margin-top: 20px; /* Baja las imágenes dentro del cuadro */
         transition: transform 0.2s ease, margin-top 0.2s ease;
     }
     
@@ -281,5 +269,13 @@
     display: block; /* Garantiza que sea visible */
     margin: 10px auto;
   }
-  
-  
+
+
+
+.warning {
+    width: 100%;
+}
+
+.imagefilter {
+    height: 0%;
+}
