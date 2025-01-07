@@ -542,7 +542,7 @@
 
               
 
-              <div className="evaluation-table">
+              <div className="evaluation-table" style={{ overflowX: 'auto' }}>
                 
                 <table>
                   <thead>
@@ -657,7 +657,7 @@
                         </option>
                       ))}
                     </select>
-
+                    
                       </td>
                     </tr>
                     <tr>

@@ -526,12 +526,6 @@ const saveTable = async () => {
   }
 };
 
-
-
-
-
-
-
 const updateTable = async () => {
   const updatedTable = {
     areaSeleccionada,
@@ -992,8 +986,6 @@ const handleMainOptionChange = (e) => {
 
         <table class="custom-table" className="table-container" style={{ backgroundColor: 'white' }} ><thead>
         
-      
-        
           <tr className="no-border-row">
             {/* Nueva fila superior con celdas individuales para cada sección */}
             <td colSpan="3">
@@ -1086,8 +1078,6 @@ const handleMainOptionChange = (e) => {
                   ))}
                 </select>
               </div>
-
-
               {!hideButtons && (
                   <>
                     <button className="btn-agregar" onClick={handleAddPuestoClick}>Agregar</button>
@@ -1276,7 +1266,6 @@ const handleMainOptionChange = (e) => {
                   <input type="date" id="fechaInspeccion" defaultValue="2025-01-01" className="date-input" />
                 </td>
               </tr>
-
               {/* Fila de Tiempo de exposición */}
               <tr>
                 <td className="label-cell">Tiempo de exposición:</td>

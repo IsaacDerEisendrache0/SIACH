@@ -23,10 +23,41 @@
         margin: 10px 5px;
     }
 
-    /* Ajuste para hacer más grande la tabla de evaluación de riesgo de trabajo */
-    .evaluation-table {
-        margin: 10px 5px;
-    }
+    .evaluation-table table {
+        width: 100%; /* Ajusta el ancho de la tabla al contenedor */
+        border-collapse: collapse; /* Opcional: para un diseño más limpio */
+      }
+      
+      .evaluation-table table th,
+      .evaluation-table table td {
+        word-wrap: break-word; /* Asegura que el texto se ajuste al tamaño de la celda */
+        text-align: center; /* Opcional: centra el contenido */
+        padding: 8px; /* Opcional: agrega un poco de espacio dentro de las celdas */
+      }
+      
+      .evaluation-table {
+        overflow-x: auto; /* Permite que la tabla tenga un scroll horizontal si se desborda */
+      }
+      
+      .additional-table img {
+        max-width: 100px; /* Asegúrate de que las imágenes no excedan el ancho */
+        height: auto; /* Mantén la relación de aspecto */
+        margin: 5px; /* Opcional: agrega un margen entre imágenes */
+      }
+      
+      textarea {
+        width: 100%; /* Ajusta el ancho del textarea */
+        box-sizing: border-box; /* Asegura que el padding se incluya en el tamaño */
+      }
+      
+      @media screen and (max-width: 768px) {
+        /* Ajustes específicos para pantallas pequeñas */
+        .evaluation-table table,
+        .risk-classification table {
+          font-size: 0.9rem; /* Reduce el tamaño del texto para adaptarlo mejor */
+        }
+      }
+      
 
 
 
@@ -106,7 +137,6 @@
         flex-wrap: wrap; /* Las imágenes pasan a la siguiente fila si no caben */
         justify-content: space-between; /* Espaciado uniforme entre imágenes */
         align-items: center; /* Centra las imágenes verticalmente */
-        width: 900px; /* Ancho fijo del cuadro */
         height: 210px; /* Alto fijo del cuadro */
         background-color: #ffffff;
         border: 1px solid #ffffff; /* Borde sutil para distinguir el cuadro */
@@ -114,8 +144,8 @@
     
     /* Ajuste para las imágenes dentro del contenedor */
     .triangle-images-container .selected-image {
-        width: 140px; /* Tamaño fijo de las imágenes */
-        height: 120px;
+        width: 180px; /* Tamaño fijo de las imágenes */
+        height: 100px;
         background-color: white;
         cursor: pointer;
         transition: transform 0.2s ease, margin-top 0.2s ease;
@@ -272,9 +302,30 @@
 
 
 
-.warning {
-    width: 100%;
+  .warning {
+    width: 100%; /* Asegura que la tabla ocupe el ancho del contenedor */
+    table-layout: fixed; /* Distribuye el ancho de las columnas de manera uniforme */
+    overflow-x: auto; /* Permite el desplazamiento horizontal si es necesario */
 }
+
+.warning select {
+    width: 100%; /* Ajusta el select al ancho de su celda */
+    box-sizing: border-box; /* Incluye el padding en el ancho total */
+}
+
+.triangle-images-container {
+    display: flex; /* Alinea las imágenes en fila */
+    flex-wrap: wrap; /* Permite que las imágenes salten a la siguiente línea si es necesario */
+    gap: 10px; /* Espaciado entre imágenes */
+    justify-content: center; /* Centra las imágenes */
+}
+
+.selected-image {
+    max-width: 100px; /* Ajusta el tamaño máximo de las imágenes */
+    height: auto; /* Mantiene la proporción de las imágenes */
+    cursor: pointer; /* Añade un indicador de clic para las imágenes */
+}
+
 
 .imagefilter {
     height: 0%;
