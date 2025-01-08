@@ -4,12 +4,12 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage"; // Agregar Storage
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBYqInVt7UjKxKmELfMnW_BkTJr0erKf7o",
-  authDomain: "siach-df969.firebaseapp.com",
-  projectId: "siach-df969",
-  storageBucket: "siach-df969.appspot.com",
-  messagingSenderId: "506973198690",
-  appId: "1:506973198690:web:e603297d7df67362c3f43b",
+  apiKey: "AIzaSyDISJI-4GyaKXa7gQv7cDeQ1mtVNZWZWow",
+  authDomain: "siach-78ffb.firebaseapp.com",
+  projectId: "siach-78ffb",
+  storageBucket: "siach-78ffb.firebasestorage.app",
+  messagingSenderId: "1014581207927",
+  appId: "1:1014581207927:web:3e56cee81c052f5adb3772"
 };
 
 // Inicializa Firebase
