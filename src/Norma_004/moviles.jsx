@@ -260,6 +260,9 @@ const RiskTable = () => {
 
   const magnitudRiesgo = calcularMagnitudRiesgo();
   const { color, accion, clasificacion } = obtenerClasificacionRiesgo(magnitudRiesgo);
+  const handleEdit = (table) => {
+    localStorage.setItem('tableToEdit', JSON.stringify(table));
+  };
 
   const saveTableData = async () => {
     const auth = getAuth();
@@ -285,6 +288,10 @@ const RiskTable = () => {
       selectedBodyImage,
       area,
       puestos,
+      norma: "N-004 (Moviles)",
+      fecha: new Date().toLocaleDateString(),
+      hora: new Date().toLocaleTimeString(),
+      risk: calcularMagnitudRiesgo(),
     };
 
     try {

@@ -1369,7 +1369,6 @@ const handleMainOptionChange = (e) => {
           )}
         </div>
       </td>
-
       {/* Menú desplegable para seleccionar equipo de protección sugerido */}
       <td colSpan="2" className="right-section right-aligned">
         <div className="text1">Equipo de protección personal sugerido</div>

@@ -34,6 +34,7 @@ const SavedTables = () => {
   const handleEditTable = (table) => {
     localStorage.setItem('tableToEdit', JSON.stringify(table));
     navigate('/norma_17');
+    navigate('/norma_004');
   };
 
   const handleDeleteTable = async (tableId) => {
