@@ -1137,7 +1137,7 @@ const handleMainOptionChange = (e) => {
 
 
 
-        <td className="header-cell" colSpan="3" style={{ backgroundColor: 'red', padding: '10px' }}>
+        <td className="header-cell" colSpan="3" style={{ backgroundColor: '#808b96', padding: '10px' }}>
       <div className="body-parts-title">Principales partes del cuerpo expuestas al riesgo:</div>
       
       <table className="body-parts-table">
@@ -1530,8 +1530,8 @@ const handleMainOptionChange = (e) => {
                     <thead>
                       <tr>
                         <th className="apple-header">Consecuencia</th>
-                        <th className="apple-header" style={{ backgroundColor: 'red' }}>Exposición</th>
-                        <th className="apple-header" colSpan="4" style={{ width: '45%' }}>Probabilidad</th>
+                        <th className="apple-header" style={{ backgroundColor: '#808b96' }}>Exposición</th>
+                        <th className="apple-header" colSpan="4" style={{ width: '45%', color: 'black' }}>Probabilidad</th>
                         <th className="apple-header">Magnitud del Riesgo</th>
                       </tr>
                     </thead>

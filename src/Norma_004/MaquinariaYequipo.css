@@ -43,21 +43,20 @@
         max-width: 100px; /* Asegúrate de que las imágenes no excedan el ancho */
         height: auto; /* Mantén la relación de aspecto */
         margin: 5px; /* Opcional: agrega un margen entre imágenes */
-      }
-      
-      textarea {
+    }
+    
+    textarea {
         width: 100%; /* Ajusta el ancho del textarea */
         box-sizing: border-box; /* Asegura que el padding se incluya en el tamaño */
-      }
-      
-      @media screen and (max-width: 768px) {
+    }
+    @media screen and (max-width: 768px) {
         /* Ajustes específicos para pantallas pequeñas */
         .evaluation-table table,
         .risk-classification table {
           font-size: 0.9rem; /* Reduce el tamaño del texto para adaptarlo mejor */
         }
-      }
-      
+    }
+    
 
 
 
@@ -79,7 +78,8 @@
  
 
     .red {
-        color: rgb(194, 53, 53);
+        color: rgb(138, 136, 255) !important;
+        color: rgb(255, 255, 255) !important;
     }
 
     .download-button,
@@ -196,7 +196,7 @@
     }
 
     .cancel-button {
-        background-color: #ce3f35;
+        background-color: #527aff;
         color: white;
         border: none;
         padding: 10px 15px;
@@ -330,3 +330,23 @@
 .imagefilter {
     height: 0%;
 }
+
+
+/* Clase para aumentar la altura de las celdas */
+.tall-cell {
+    height: 100px; /* Ajusta la altura según lo necesites */
+    vertical-align: middle; /* Centrar contenido verticalmente */
+  }
+  
+  /* Clase para las filas con mayor altura */
+  .tall-row td {
+    height: 100px; /* Aumenta la altura de toda la fila */
+  }
+  
+  /* Clase adicional para estilos específicos */
+  .risk-score-cell {
+    font-weight: bold; /* Negrita para destacar */
+    color: white; /* Texto blanco para contraste */
+    vertical-align: middle; /* Centrar contenido verticalmente */
+  }
+  

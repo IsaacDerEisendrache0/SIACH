@@ -77,7 +77,7 @@ table, th, td {
 
 /* Estilos de encabezados */
 .inner-table th, .header, .sub-header {
-  background-color: #ff0000 ; /* Color de fondo para encabezados */
+  background-color: #808b96 ; /* Color de fondo para encabezados */
   color: #ffffff;
   font-weight: bold;
   text-align: center;
@@ -123,7 +123,7 @@ table, th, td {
 
 .no-border-cell {
   border: none !important;
-  background-color: #e63946 !important;
+  background-color: #808b96 !important;
   color: white !important;
 }
 
@@ -191,8 +191,8 @@ table, th, td {
   color: black;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 10px; /* Espacio debajo del título */
-  font-size: 20px !important; /* Aumenta el tamaño de la fuente, usando !important */
+  margin-bottom: 20px; /* Espacio debajo del título */
+  font-size: 25px !important; /* Aumenta el tamaño de la fuente, usando !important */
 }
 
 
@@ -333,7 +333,7 @@ table, th, td {
 
 .header-td {
   padding: 10px;
-  background-color: red !important;
+  background-color: #808b96 !important;
 }
 
 .modal-container {
@@ -669,12 +669,10 @@ button {
 /* Título de la sección "Datos adicionales" */
 .additional-data-title {
   font-weight: bold;
-  font-size: 20px;
+  font-size: 25px;
   text-align: center;
-  background-color: yellow;
   color: black;
-  padding: 5px;
-  margin-bottom: 18px;
+  margin-bottom: 30px;
 }
 
 /* Estilo de la tabla principal */
@@ -690,9 +688,9 @@ button {
   text-align: left; /* Alinea a la izquierda */
   padding-left: 15px; /* Agrega espacio a la izquierda */
   width: 25%;
-  color: white;
-  background-color: rgb(255, 0, 0) !important;
-  font-size: 16px !important;
+  color: rgb(0, 0, 0);
+  background-color: #808b96 !important;
+  font-size: 22px !important;
 }
 
 /* Celdas de entrada */
@@ -761,7 +759,7 @@ button {
 
 /* Fondo rojo del contenedor principal */
 .header-cell {
-  background-color: red ;
+  background-color: rgb(23, 96, 255) ;
   padding: 10px;
   text-align: center;
 }
@@ -769,33 +767,23 @@ button {
 /* Título con fondo amarillo y subrayado */
 .body-parts-title {
   font-weight: bold;
-  font-size: 20px;
+  font-size: 23px;
   text-align: center;
   color: black;
-  background-color: yellow;
-  padding: 5px;
-  border-bottom: 3px solid #ff0; /* Subrayado en amarillo */
-  margin-bottom: 20px;
 }
 
 /* Tabla de partes del cuerpo */
-.body-parts-table {
-  width: 100%;
-  border-collapse: collapse;  
-  text-align: center;
-  background-color: white;
-  font-size: 16px !important; /* Forzar el tamaño */
 
-}
 
 /* Celdas de etiquetas */
 .risk-label-cell {
   border: 1px solid black !important;
   padding: 10px;
-  width: 25%;
-  background-color: red !important;
-  color: white;
+  background-color: #808b96 !important;
   font-weight: bold;
+  color: #000;
+  font-size: 20px !important;  /* Aumenta el tamaño de las etiquetas */
+
 }
 
 /* Celdas de marcas (X) */
@@ -839,16 +827,15 @@ button {
 }
 
 /* Ajustes específicos para etiquetas y valores */
-.risk-label-cell {
-  font-weight: bold;
-  font-size: 20px; /* Aumenta el tamaño de las etiquetas */
-}
+
 
 .risk-value-cell,
 .risk-classification-cell,
 .risk-action-cell {
   font-size: 20px; /* Aumenta el tamaño de los valores */
-  font-weight: normal;
+  font-weight: bold; /* Hace que los valores sean más llamativos */
+  text-align: center !important; /* Centra el texto */
+  
 }
 
 /* Ajustes para el título de la sección */
@@ -880,8 +867,8 @@ button {
 /* Título de la sección */
 .titulo-descripcion {
   font-weight: bold;
-  font-size: 16px;
-  color: white;
+  font-size: 20px;
+  color: black;
   margin-bottom: 5px;
 }
 
@@ -915,7 +902,7 @@ button {
   padding: 5px;
   border-radius: 4px;
   border: 1px solid #ccc;
-  font-size: 14px !important;
+  font-size: 17px !important;
 }
 
 /* Botones de agregar y borrar */
@@ -1035,10 +1022,13 @@ button {
 
 /* Encabezados de la tabla */
 .apple-header {
-  font-size: 16px !important; /* Mantén el tamaño original, usando !important */
+  font-size: 19px !important; /* Mantén el tamaño original, usando !important */
   font-weight: bold;
   text-align: center;
+  color: #000 !important;
 }
+
+
 
 
 /* Selectores */

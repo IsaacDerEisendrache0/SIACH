@@ -66,7 +66,15 @@
 
     const downloadImage = () => {
       const input = document.querySelector('.risk-table-container');
-      html2canvas(input, { scale: 2, useCORS: true, backgroundColor: null }).then((canvas) => {
+      const tableWidth = input.offsetWidth; // Obtener el ancho de la tabla
+    
+      html2canvas(input, { 
+        scale: 2, 
+        useCORS: true, 
+        backgroundColor: null,
+        width: tableWidth,  // Establecer el ancho del canvas
+        scrollX: 0           // Agregar esta opción
+      }).then((canvas) => {
         const imgData = canvas.toDataURL('image/png');
         const link = document.createElement('a');
         link.href = imgData;
@@ -359,7 +367,18 @@
       }
     };
 
-            return (
+    // Función para obtener el color según la puntuación del riesgo
+    const obtenerColorPuntuacion = (puntuacion) => {
+      if (puntuacion >= 200) return 'red'; // Riesgo muy alto
+      if (puntuacion >= 100) return 'orange'; // Riesgo alto
+      if (puntuacion >= 50) return 'yellow'; // Riesgo moderado
+      return 'green'; // Riesgo bajo
+    };
+
+
+
+
+      return (
               <div className="risk-table-container">
               <div className="header-container">
                 {/* Logo izquierdo */}
@@ -544,60 +563,82 @@
 
               <div className="evaluation-table" style={{ overflowX: 'auto' }}>
                 
-                <table>
-                  <thead>
-                    <tr className="red">
-                      <th colSpan="3">Evaluación de riesgo de trabajo</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Consecuencia</td>
-                      <td>Exposición</td>
-                      <td>Probabilidad</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <select value={consequence} onChange={(e) => setConsequence(e.target.value)}>
-                          {['Catástrofe', 'Varias muertes', 'Muerte', 'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'].map((opcion, idx) => (
-                            <option key={idx} value={opcion}>{opcion}</option>
-                          ))}
-                        </select>
-                      </td>
-                      <td>
-                        <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
-                          {['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente'].map((opcion, idx) => (
-                            <option key={idx} value={opcion}>{opcion}</option>
-                          ))}
-                        </select>
-                      </td>
-                      <td>
-                        <select value={probability} onChange={(e) => setProbability(e.target.value)}>
-                          {['Es el resultado más probable y esperado', 'Es completamente posible, no será nada extraño', 'Sería una secuencia o coincidencia rara pero posible, ha ocurrido', 'Coincidencia muy rara, pero se sabe que ha ocurrido', 'Coincidencia extremadamente remota pero concebible', 'Coincidencia prácticamente imposible, jamás ha ocurrido'].map((opcion, idx) => (<option key={idx} value={opcion}>{opcion}</option>))}
-                        </select>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Valor Consecuencia: {calcularValorConsecuencia(consequence)}</td>
-                      <td>Valor Exposición: {calcularValorExposicion(exposure)}</td>
-                      <td>Valor Probabilidad: {calcularValorProbabilidad(probability)}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <table className="risk-classification">
-                  <thead>
-                    <tr className="red">
-                      <th colSpan="3">Clasificación de Magnitud de Riesgo</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr style={{ backgroundColor: color }}>
-                      <td>Magnitud del Riesgo: {magnitudRiesgo}</td>
-                      <td>Clasificación: {clasificacion}</td>
-                      <td>Acción: {accion}</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <table>
+  <thead>
+    <tr className="red">
+      <th colSpan="3" className="red" >Evaluación de riesgo de trabajo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Consecuencia</td>
+      <td>Exposición</td>
+      <td>Probabilidad</td>
+    </tr>
+    <tr>
+      <td>
+        <select value={consequence} onChange={(e) => setConsequence(e.target.value)}>
+          {['Catástrofe', 'Varias muertes', 'Muerte', 'Lesiones graves', 'Lesiones con baja', 'Lesiones sin baja'].map((opcion, idx) => (
+            <option key={idx} value={opcion}>{opcion}</option>
+          ))}
+        </select>
+      </td>
+      <td>
+        <select value={exposure} onChange={(e) => setExposure(e.target.value)}>
+          {['Continuamente', 'Frecuentemente', 'Ocasionalmente', 'Irregularmente', 'Raramente'].map((opcion, idx) => (
+            <option key={idx} value={opcion}>{opcion}</option>
+          ))}
+        </select>
+      </td>
+      <td>
+        <select value={probability} onChange={(e) => setProbability(e.target.value)}>
+          {['Es el resultado más probable y esperado', 'Es completamente posible, no será nada extraño', 'Sería una secuencia o coincidencia rara pero posible, ha ocurrido', 'Coincidencia muy rara, pero se sabe que ha ocurrido', 'Coincidencia extremadamente remota pero concebible', 'Coincidencia prácticamente imposible, jamás ha ocurrido'].map((opcion, idx) => (
+            <option key={idx} value={opcion}>{opcion}</option>
+          ))}
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>Valor Consecuencia: {calcularValorConsecuencia(consequence)}</td>
+      <td>Valor Exposición: {calcularValorExposicion(exposure)}</td>
+      <td>Valor Probabilidad: {calcularValorProbabilidad(probability)}</td>
+    </tr>
+  </tbody>
+</table>
+
+<table className="risk-classification">
+  <thead>
+    <tr className="red">
+      <th colSpan="4" className="red">Clasificación de Magnitud de Riesgo</th>
+    </tr>
+  </thead>
+  <tbody>
+    {/* Fila con celdas alargadas */}
+    <tr className="tall-row">
+      {/* Celda grande para Magnitud del Riesgo */}
+      <td rowSpan={2} className="tall-cell">
+        Magnitud del Riesgo: {magnitudRiesgo}
+      </td>
+      {/* Celda grande para Clasificación */}
+      <td className="tall-cell">
+        Clasificación: {clasificacion}
+      </td>
+      {/* Celda grande para Acción */}
+      <td className="tall-cell">
+        Acción: {accion}
+      </td>
+      {/* Celda grande para Puntuación con cambio de color */}
+      <td
+        className="tall-cell risk-score-cell"
+        style={{ backgroundColor: obtenerColorPuntuacion(magnitudRiesgo) }}
+      >
+        Puntuación: {magnitudRiesgo.toFixed(2)}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
 
                 {/* Tabla adicional para mostrar las imágenes de EPP seleccionadas */} 
                 <table className="additional-table">
@@ -620,7 +661,7 @@
                 <table id="body-parts-table" style={{ width: "90%", margin: "20px auto", borderCollapse: "collapse" }}>
       <thead>
         <tr>
-          <th colSpan="6" style={{ backgroundColor: "#f9f9f9", fontWeight: "bold", padding: "6px" }}>
+          <th colSpan="6"  className="red" style={{ backgroundColor: "red", fontWeight: "bold", padding: "6px" }}>
             Principales partes del cuerpo expuestas al riesgo:
           </th>
         </tr>
@@ -644,38 +685,38 @@
         </tr>
       </tbody>
     </table>
-                {/* Tabla de triángulos con select */}
-                <table className='warning'>
-                  <tbody >
-                    <tr>
-                      <td >
-                      <select onChange={handleSelectImage}>
-                      <option value="">Selecciona una imagen</option>
-                      {[...Array(24)].map((_, index) => (
-                        <option key={index} value={`/images/Imagen${index + 1}.png`}>
-                          Imagen {index + 1}
-                        </option>
-                      ))}
-                    </select>
-                    
-                      </td>
-                    </tr>
-                    <tr>
-                      {/* Contenedor de imágenes seleccionadas desde el select */}
-                      <td className="triangle-images-container" colSpan="">
-                        {selectedTriangleImages.map((img, index) => (
-                          <img
-                            key={index}
-                            src={img}
-                            alt="Triangle"
-                            className="selected-image"
-                            onClick={() => handleRemoveTriangleImage(img)}
-                          />
+                  {/* Tabla de triángulos con select */}
+                  <table className='warning'>
+                    <tbody >
+                      <tr>
+                        <td >
+                        <select onChange={handleSelectImage}>
+                        <option value="">Selecciona una imagen</option>
+                        {[...Array(24)].map((_, index) => (
+                          <option key={index} value={`/images/Imagen${index + 1}.png`}>
+                            Imagen {index + 1}
+                          </option>
                         ))}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                      </select>
+                      
+                        </td>
+                      </tr>
+                      <tr>
+                        {/* Contenedor de imágenes seleccionadas desde el select */}
+                        <td className="triangle-images-container" colSpan="">
+                          {selectedTriangleImages.map((img, index) => (
+                            <img
+                              key={index}
+                              src={img}
+                              alt="Triangle"
+                              className="selected-image"
+                              onClick={() => handleRemoveTriangleImage(img)}
+                            />
+                          ))}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
   
               </div>
             </div>
@@ -720,7 +761,7 @@
           </div>
         )}
 
-        <div className="button-container">
+<div className="button-container">
           <button onClick={downloadImage} className="download-button">Descargar PDF</button>
           <button onClick={saveTableData} className="save-button">{isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}</button>
           <button onClick={() => setShowAreaModal(true)} className="area-button">Agregar Área</button>
