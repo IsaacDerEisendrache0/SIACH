@@ -76,17 +76,21 @@ const RiskTable = () => {
 
 
   const optionImages = {
-    option1: '/body/lvl1_head.png',
-    option2: '/body/lvl1_mid.png',
-    option3: '/body/lvl1_foot.png',
-    option4: '/body/lvl1_hand.png',
-    option5: '/body/lvl2_headmid.png',
-    option6: '/body/lvl2_handfoot.png',
-    option7: '/body/lvl2_headfoot.png',
-    option8: '/body/lvl2_headhand.png',
-    option9: '/body/lvl2_midfoot.png',
-    option10: '/body/lvl2_midhand.png',
-    option11: '/body/lvl3_all.png',
+    option1: '/body/lvl1_head.png',         // Cabeza
+    option2: '/body/lvl1_mid.png',          // Tronco
+    option3: '/body/lvl1_foot.png',         // Pies
+    option4: '/body/lvl1_hand.png',         // Brazos
+    option5: '/body/lvl2_headmid.png',      // Cabeza y Tronco
+    option6: '/body/lvl2_handfoot.png',     // Brazos y Pies
+    option7: '/body/lvl2_headfoot.png',     // Cabeza y Pies
+    option8: '/body/lvl2_headhand.png',     // Cabeza y Brazos
+    option9: '/body/lvl2_midhand.png',      // Tronco y Brazos
+    option10: '/body/lvl2_midfoot.png',     // Tronco y Pies
+    option11: '/body/lvl3_headmidhand.png', // Cabeza, Tronco y Brazos
+    option12: '/body/lvl3_headmidfoot.png', // Cabeza, Tronco y Pies
+    option13: '/body/lvl3_headhandfoot.png',// Cabeza, Brazos y Pies
+    option14: '/body/lvl3_midhandfoot.png', // Tronco, Brazos y Pies
+    option15: '/body/lvl3_all.png',         // Todas las Extremidades
   };
 
   const eppImages = [
@@ -121,17 +125,26 @@ const RiskTable = () => {
     setIsCapturing(true);
     setTimeout(() => {
       const input = document.querySelector('.risk-table-container');
-
+      const rect = input.getBoundingClientRect();  // Obtener las dimensiones del contenedor
+  
       // Aumentamos la escala para una mejor calidad de imagen
-      html2canvas(input, { scale: 2, useCORS: true, backgroundColor: null }).then((canvas) => {
+      html2canvas(input, {
+        scale: 2,  // Aumenta la calidad de la captura
+        useCORS: true,
+        backgroundColor: null,
+        width: rect.width,  // Establece el ancho según el contenedor
+        height: rect.height,  // Establece la altura según el contenedor
+        x: 0,
+        y: 0,
+      }).then((canvas) => {
         // Convertimos el canvas a imagen (formato PNG)
         const imgData = canvas.toDataURL('image/png');
-
+  
         // Creamos un enlace para la descarga
         const link = document.createElement('a');
         link.href = imgData;
         link.download = 'tabla_herramientas_manual.png'; // Nombre del archivo
-
+  
         // Simulamos un clic en el enlace para descargar la imagen
         document.body.appendChild(link);
         link.click();
@@ -140,6 +153,7 @@ const RiskTable = () => {
       });
     }, 100);
   };
+  
 
   // Agregar imágenes de EPP seleccionadas
   const handleAddEPPImage = (e) => {
@@ -505,6 +519,44 @@ const handleRemovePuesto = () => {
 
 
 
+const eppNames = {
+  option1: '',
+  option2: '',
+  option3: '',
+  option4: 'Botas de seguridad',
+  option5: 'Tapones auditivos',
+  option6: 'Guantes de protección',
+  option7: '',
+  option8: '',
+  option9: 'Mandil',
+  option10: 'Casco de seguridad',
+  option11: 'Cubrebocas',
+  option12: 'Chaleco reflectante',
+  option13: 'Bata contra sustancias quimicas',
+  option14: 'Mascara de protección',
+  option15: 'Mascara para soldar',
+  option16: 'Traje antiradiacion',
+  option17: '',
+  option18: 'Red',
+  option19: 'Conchas',
+  option20: 'Audifonos',
+  option21: 'Mangas',
+  option22: '',
+  option23: 'Arnes',
+  option24: '',
+  option25: '',
+  option36: 'Oberol',
+};
+
+
+
+const obtenerColorPuntuacion = (puntuacion) => {
+  if (puntuacion >= 200) return 'red'; // Riesgo muy alto
+  if (puntuacion >= 100) return 'orange'; // Riesgo alto
+  if (puntuacion >= 50) return 'yellow'; // Riesgo moderado
+  return 'green'; // Riesgo bajo
+};
+
 
 
   return (
@@ -537,9 +589,7 @@ const handleRemovePuesto = () => {
             
             </div>
           )}
-
         
-
       </div>
     
       <table className="risk-table" style={{ backgroundColor: 'white' }}>
@@ -558,16 +608,22 @@ const handleRemovePuesto = () => {
 
             <th className="red">Área:</th>
             <td colSpan="2">
-            <select name="areas" value={area} onChange={(e) => setArea(e.target.value)}>
-            <option value="">Seleccione un área</option>
-            {areas
-              .filter((area) => area && area.nombre) // Filtra valores inválidos
-              .map((area, index) => (
-                <option key={index} value={area.nombre}>
-                  {area.nombre}
-                </option>
-              ))}
-          </select>
+            <select 
+                name="areas" 
+                value={area} 
+                onChange={(e) => setArea(e.target.value)} 
+                className="dropdown-puestos"
+              >
+                <option value="">Seleccione un área</option>
+                {areas
+                  .filter((area) => area && area.nombre) // Filtra valores inválidos
+                  .map((area, index) => (
+                    <option key={index} value={area.nombre}>
+                      {area.nombre}
+                    </option>
+                ))}
+              </select>
+
 
             </td>
 
@@ -615,16 +671,22 @@ const handleRemovePuesto = () => {
             </td>
             <th className="red" >PUESTOS</th>
             <td colSpan="3">
-            <select name="puestos" value={newPuesto} onChange={(e) => setNewPuesto(e.target.value)}>
-            <option value="">Seleccione un puesto</option>
-            {puestos
-              .filter((puesto) => puesto && puesto.nombre) // Filtra valores inválidos
-              .map((puesto, index) => (
-                <option key={index} value={puesto.nombre}>
-                  {puesto.nombre}
-                </option>
+            <select 
+              name="puestos" 
+              value={newPuesto} 
+              onChange={(e) => setNewPuesto(e.target.value)} 
+              className="dropdown-puestos"
+            >
+              <option value="">Seleccione un puesto</option>
+              {puestos
+                .filter((puesto) => puesto && puesto.nombre) // Filtra valores inválidos
+                .map((puesto, index) => (
+                  <option key={index} value={puesto.nombre}>
+                    {puesto.nombre}
+                  </option>
               ))}
             </select>
+
             </td>
           </tr>
         </thead>
@@ -654,28 +716,32 @@ const handleRemovePuesto = () => {
 
 
 
-            <td className="risk-info" colSpan="5">
-              <h4 className="red" style={{ fontSize: '14px' }}>Identificación de riesgos</h4>
-              {[...Array(7)].map((_, index) => (
-                <select key={index} style={{ padding: '5px', fontSize: '12px', borderRadius: '5px', border: '1px solid #ccc', width: '100%', marginBottom: '5px' }}>
-                  <option value="">Seleccione un riesgo</option>
-                  {opcionesIdentificaciones.map((opt, idx) => (
-                    <option key={idx} value={opt}>{opt}</option>
-                  ))}
-                </select>
-              ))}
-            </td>
-            <td className="safety-info" colSpan="3">
-              <h4 className="red" style={{ fontSize: '14px' }}>Sistemas de seguridad</h4>
-              {[...Array(7)].map((_, index) => (
-                <select key={index} style={{ padding: '5px', fontSize: '12px', borderRadius: '5px', border: '1px solid #ccc', width: '100%', marginBottom: '5px' }}>
-                  <option value="">Seleccione un sistema de seguridad</option>
-                  {opcionesSistemaseguridad.map((opt, idx) => (
-                    <option key={idx} value={opt}>{opt}</option>
-                  ))}
-                </select>
-              ))}
-            </td>
+<td className="risk-info" colSpan="5">
+  <h4 className="blacktitle-small">Identificación de riesgos</h4>
+  {[...Array(7)].map((_, index) => (
+    <select key={index} className="dropdown-large-text">
+      <option value="">Seleccione un riesgo</option>
+      {opcionesIdentificaciones.map((opt, idx) => (
+        <option key={idx} value={opt}>{opt}</option>
+      ))}
+    </select>
+  ))}
+</td>
+
+<td className="safety-info" colSpan="3">
+  <h4 className="blacktitle-small">Sistemas de seguridad</h4>
+  {[...Array(7)].map((_, index) => (
+    <select key={index} className="dropdown-large-text">
+      <option value="">Seleccione un sistema de seguridad</option>
+      {opcionesSistemaseguridad.map((opt, idx) => (
+        <option key={idx} value={opt}>{opt}</option>
+      ))}
+    </select>
+  ))}
+</td>
+
+
+
 
             
           </tr>
@@ -709,10 +775,10 @@ const handleRemovePuesto = () => {
 
             
             <td colSpan="4" className="risk-evaluation-section">
-              <table style={{ width: '100%' }}>
+              <table >
                 <thead>
-                  <tr className="red">
-                    <th colSpan="3" style={{ fontSize: '20px' }}>Evaluación de riesgo de trabajo</th>
+                  <tr className="epp-title">
+                    <th colSpan="3" >Evaluación de riesgo de trabajo</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -722,27 +788,42 @@ const handleRemovePuesto = () => {
                     <td style={{ fontSize: '16px' }}>Probabilidad</td>
                   </tr>
                   <tr>
-                    <td>
-                      <select value={consequence} onChange={(e) => setConsequence(e.target.value)} style={{ width: '100%' }}>
-                        {opcionesConsecuencia.map((opcion, idx) => (
-                          <option key={idx} value={opcion}>{opcion}</option>
-                        ))}
-                      </select>
-                    </td>
-                    <td>
-                      <select value={exposure} onChange={(e) => setExposure(e.target.value)} style={{ width: '100%' }}>
-                        {opcionesExposicion.map((opcion, idx) => (
-                          <option key={idx} value={opcion}>{opcion}</option>
-                        ))}
-                      </select>
-                    </td>
-                    <td>
-                      <select value={probability} onChange={(e) => setProbability(e.target.value)} style={{ width: '100%' }}>
-                        {opcionesProbabilidad.map((opcion, idx) => (
-                          <option key={idx} value={opcion}>{opcion}</option>
-                        ))}
-                      </select>
-                    </td>
+                  <td>
+                    <select 
+                      value={consequence} 
+                      onChange={(e) => setConsequence(e.target.value)} 
+                      className="dropdown-large-text"
+                    >
+                      {opcionesConsecuencia.map((opcion, idx) => (
+                        <option key={idx} value={opcion}>{opcion}</option>
+                      ))}
+                    </select>
+                  </td>
+
+                  <td>
+                    <select 
+                      value={exposure} 
+                      onChange={(e) => setExposure(e.target.value)} 
+                      className="dropdown-large-text"
+                    >
+                      {opcionesExposicion.map((opcion, idx) => (
+                        <option key={idx} value={opcion}>{opcion}</option>
+                      ))}
+                    </select>
+                  </td>
+
+                  <td>
+                    <select 
+                      value={probability} 
+                      onChange={(e) => setProbability(e.target.value)} 
+                      className="dropdown-large-text"
+                    >
+                      {opcionesProbabilidad.map((opcion, idx) => (
+                        <option key={idx} value={opcion}>{opcion}</option>
+                      ))}
+                    </select>
+                  </td>
+
                   </tr>
                   <tr>
                     <td>Valor Consecuencia: {calcularValorConsecuencia(consequence)}</td>
@@ -751,52 +832,118 @@ const handleRemovePuesto = () => {
                   </tr>
                 </tbody>
               </table>
-              <table className="risk-classification" style={{ width: '100%', marginTop: '20px', backgroundColor: 'white' }}>
-                <thead>
-                  <tr className="red">
-                    <th colSpan="3" style={{ fontSize: '20px', color: 'black' }}>Clasificación de Magnitud de Riesgo</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr style={{ backgroundColor: color }}>
-                    <td style={{ fontSize: '16px' }}>Magnitud del Riesgo: {magnitudRiesgo}</td>
-                    <td style={{ fontSize: '16px' }}>Clasificación: {clasificacion}</td>
-                    <td style={{ fontSize: '16px' }}>Acción: {accion}</td>
-                  </tr>
-                  
-                </tbody>
-                
-              </table>
+
+              <table className="risk-classification">
+  <thead>
+    <tr className="red">
+      <th colSpan="4" className="red">Clasificación de Magnitud de Riesgo</th>
+    </tr>
+  </thead>
+  <tbody>
+    {/* Fila con celdas alargadas */}
+    <tr className="tall-row">
+      {/* Celda grande para Magnitud del Riesgo */}
+      <td rowSpan={2} className="tall-cell">
+        Magnitud del Riesgo: {magnitudRiesgo}
+      </td>
+      {/* Celda grande para Clasificación */}
+      <td className="tall-cell">
+        Clasificación: {clasificacion}
+      </td>
+      {/* Celda grande para Acción */}
+      <td className="tall-cell">
+        Acción: {accion}
+      </td>
+      {/* Celda grande para Puntuación con cambio de color */}
+      <td
+        className="tall-cell risk-score-cell"
+        style={{ backgroundColor: obtenerColorPuntuacion(magnitudRiesgo) }}
+      >
+        Puntuación: {magnitudRiesgo.toFixed(2)}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
               
             </td>
-            <td style={{ verticalAlign: 'top', width: '10%' }} className='epp-suggested' colSpan="">
-              <div style={{ marginTop: '20px' }}>
-                <h6 className="red" style={{ display: 'inline-block', marginRight: '200px', fontSize: '14px' }}>Protección sugerido</h6>
-                <select onChange={handleSelectBodyImage} style={{ width: '100%', height: '40px', marginLeft: '30x' }}>
-                  <option value="">Seleccione Imagen del cuerpo</option>
-                  {Object.keys(optionImages).map((key) => (
-                    <option key={key} value={optionImages[key]}>{key}</option>
-                  ))}
-                </select>
-                {selectedBodyImage && <img src={selectedBodyImage} alt="Selected Body Part" style={{ width: '70%', height: 'auto', marginTop: '10px' }} />}
-              </div>
-            </td>
-            <td colSpan="10" className="epp-suggested" style={{ verticalAlign: 'top', width: '23%' }}>
-              <div style={{ marginTop: '20px' }}>
-                <h5 className="red" style={{ display: 'inline-block', marginRight: '15px', fontSize: '14px' }}>Seleccione EPP</h5>
-                <select onChange={handleAddEPPImage} style={{ width: '100%', height: '40px', marginRight: '20px' }}>
-                  <option value="">Seleccione EPP</option>
-                  {eppImages.map((eppImage, idx) => (
-                    <option key={idx} value={eppImage}>{`EPP ${idx + 1}`}</option>
-                  ))}
-                </select> 
-                <div className="epp-images-grid" style={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap', gap: '5px', justifyContent: 'flex-start' }}>
-                  {selectedEPPImages.map((imgSrc, idx) => (
-                    <img key={idx} src={imgSrc} alt={`EPP ${idx + 1}`} className="epp-image" style={{ width: '50px', height: '50px' }} onClick={() => handleRemoveEPPImage(imgSrc)} />
-                  ))}
-                </div>
-              </div>
-            </td>
+
+
+            <td className="epp-suggested" colSpan="2">
+            <div className="epp-container">
+              <h6 className="epp-title">Protección sugerido</h6>
+              <select className="custom-select" onChange={handleSelectBodyImage}>
+                <option value="">Selecciona la extremidad afectada</option>
+                {Object.entries(optionImages).map(([key, imagePath]) => (
+                  <option key={key} value={imagePath}>
+                    {
+                      {
+                        option1: 'Cabeza',
+                        option2: 'Tronco',
+                        option3: 'Pies',
+                        option4: 'Brazos',
+                        option5: 'Cabeza y Tronco',
+                        option6: 'Brazos y Pies',
+                        option7: 'Cabeza y Pies',
+                        option8: 'Cabeza y Brazos',
+                        option9: 'Tronco y Brazos',
+                        option10: 'Tronco y Pies',
+                        option11: 'Cabeza, Tronco y Brazos',
+                        option12: 'Cabeza, Tronco y Pies',
+                        option13: 'Cabeza, Brazos y Pies',
+                        option14: 'Tronco, Brazos y Pies',
+                        option15: 'Todas las Extremidades',
+                      }[key]
+                    }
+                  </option>
+                ))}
+              </select>
+              {selectedBodyImage && (
+                <img
+                  src={selectedBodyImage}
+                  alt="Selected Body Part"
+                  className="body-image"
+                />
+              )}
+            </div>
+          </td>
+
+          <td className="epp-suggested" colSpan="10">
+  <div className="epp-container">
+    <h5 className="epp-title">Seleccione EPP</h5>
+    <select className="custom-select" onChange={handleAddEPPImage}>
+      <option value="">Seleccione EPP</option>
+      {eppImages
+        .map((eppImage, idx) => ({
+          image: eppImage,
+          name: eppNames[`option${idx + 1}`] || `EPP ${idx + 1}`,  // Nombre del EPP
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name))  // Ordenamos alfabéticamente por nombre
+        .map((epp, idx) => (
+          <option key={idx} value={epp.image}>
+            {epp.name}
+          </option>
+        ))}
+    </select>
+    <div className="epp-images-grid">
+      {selectedEPPImages.map((imgSrc, idx) => (
+        <img
+          key={idx}
+          src={imgSrc}
+          alt={`EPP ${idx + 1}`}
+          className="epp-image"
+          onClick={() => handleRemoveEPPImage(imgSrc)}
+        />
+      ))}
+    </div>
+  </div>
+</td>
+  
+
+
+
+
+
           </tr>
         </tbody>
       </table>

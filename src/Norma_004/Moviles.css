@@ -1,9 +1,8 @@
 :root {
-  --strong-red: #e60000; /* Rojo más fuerte */
+  --strong-red: #808b96; /* Rojo más fuerte */
   --border-color: #ccc;
   --button-bg: #e60000;
   --button-text: #fff;
-  --button-hover-bg: #cc0000;
   --border-radius: 8px;
   --font-family: 'Arial', sans-serif;
 }
@@ -315,3 +314,134 @@ body {
   background-color: #f9f9f9; /* Fondo gris claro */
 }
 
+
+/* Estilo para los menús desplegables con texto grande (para Identificación de riesgos y Sistemas de seguridad) */
+.dropdown-large-text {
+  font-size: 20px;  /* Aumenta el tamaño de la fuente */
+  font-family: Arial, sans-serif;
+  color: #333;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: calc(100% - 20px);
+  margin-bottom: 9px;
+  padding: 10px;  /* Aumenta el padding para mejorar la estética */
+  box-sizing: border-box;
+}
+
+/* Estilo para las opciones dentro del menú con texto grande */
+.dropdown-large-text option {
+  font-size: 20px;  /* Aumenta el tamaño de la fuente dentro de las opciones */
+}
+
+
+/* Estilo para los títulos */
+.blacktitle-small {
+  font-size: 19px;  /* Aumenta el tamaño del título */
+  margin-bottom: 10px;  /* Ajusta el margen para los títulos */
+  color: black;
+  font-weight: bold;  /* Opcional, para hacerlo más destacado */
+}
+
+/* Asegura que las celdas estén alineadas correctamente */
+.risk-info, .safety-info {
+  padding: 10px;
+  vertical-align: top;  /* Alinea el contenido al principio de la celda */
+}
+
+
+
+
+
+
+
+
+
+ /* codigo proteccion sugerido */
+
+ .epp-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra horizontalmente */
+  justify-content: flex-start; /* Alinea hacia la parte superior */
+  padding: 10px;
+  height: 100%; /* Asegura que el contenedor use toda la altura */
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.epp-suggested {
+  vertical-align: top; /* Asegura que las celdas se alineen al top */
+}
+
+.epp-container h6,
+.epp-container h5 {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Estilo para los menús desplegables personalizados con texto grande */
+.custom-select {
+  font-size: 20px;  /* Aumenta el tamaño de la fuente dentro del select */
+  font-family: Arial, sans-serif; /* Puedes cambiar la fuente si lo deseas */
+  color: #333;  /* Ajusta el color si es necesario */
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;  /* Asegura que el select ocupe todo el ancho disponible */
+  padding: 10px;  /* Añade padding para mayor estética */
+  box-sizing: border-box;  /* Asegura que el padding y border se incluyan en el cálculo del ancho */
+}
+
+/* Estilo para las opciones dentro del select */
+.custom-select option {
+  font-size: 20px;  /* Aumenta el tamaño de la fuente dentro de las opciones */
+  white-space: nowrap;  /* Evita que el texto de las opciones se rompa en varias líneas */
+  overflow: hidden;  /* Previene que el texto se desborde */
+  text-overflow: ellipsis;  /* Añade puntos suspensivos si el texto es demasiado largo */
+}
+
+
+.custom-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.body-image {
+  width: auto;
+  height: 290px; /* Mantiene un tamaño fijo */
+  margin-top: 10px;
+  object-fit: contain;
+}                                                         
+
+
+
+
+/* Estilo para el menú desplegable */
+.dropdown-puestos {
+  font-size: 18px;  /* Aumenta el tamaño de la fuente */
+  padding: 10px;    /* Opcional, para mayor espacio dentro del menú */
+  border-radius: 5px;  /* Opcional, para bordes redondeados */
+  border: 1px solid #ccc; /* Opcional, para un borde delgado */
+  width: 100%; /* Opcional, asegura que el select ocupe el 100% del contenedor */
+}
+
+/* Estilo para las opciones dentro del menú */
+.dropdown-puestos option {
+  font-size: 18px;  /* Aumenta el tamaño de la fuente de las opciones */
+}
+
+/* Estilo para el menú desplegable de áreas */
+.dropdown-areas {
+  font-size: 18px;  /* Aumenta el tamaño de la fuente */
+  padding: 10px;    /* Opcional, para mayor espacio dentro del menú */
+  border-radius: 5px;  /* Opcional, para bordes redondeados */
+  border: 1px solid #ccc; /* Opcional, para un borde delgado */
+  width: 100%; /* Opcional, asegura que el select ocupe el 100% del contenedor */
+}
+
+/* Estilo para las opciones dentro del menú */
+.dropdown-areas option {
+  font-size: 18px;  /* Aumenta el tamaño de la fuente de las opciones */
+}
