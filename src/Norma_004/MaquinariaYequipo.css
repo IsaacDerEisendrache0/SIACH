@@ -350,3 +350,15 @@
     vertical-align: middle; /* Centrar contenido verticalmente */
   }
   
+
+  /* Estilo para el select */
+select {
+    font-size: 18px; /* Ajusta el tamaño del texto del select */
+    padding: 8px;    /* Añade un poco de relleno */
+    width: 100%;     /* Ajusta el tamaño del select al 100% de su contenedor */
+  }
+  
+  /* Estilo para las opciones dentro del select */
+  option {
+    font-size: 18px !important; /* Ajusta el tamaño de las opciones dentro del select */
+  }

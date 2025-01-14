@@ -66,15 +66,15 @@
 
     const downloadImage = () => {
       const input = document.querySelector('.risk-table-container');
-      const tableWidth = input.offsetWidth; // Obtener el ancho de la tabla
-    
+      
       html2canvas(input, { 
         scale: 2, 
         useCORS: true, 
         backgroundColor: null,
-        width: tableWidth,  // Establecer el ancho del canvas
-        scrollX: 0           // Agregar esta opción
+        scrollX: 0, 
+        scrollY: 0,
       }).then((canvas) => {
+        // Crear la imagen y preparar la descarga
         const imgData = canvas.toDataURL('image/png');
         const link = document.createElement('a');
         link.href = imgData;
@@ -84,6 +84,7 @@
         document.body.removeChild(link);
       });
     };
+    
 
     useEffect(() => {
       const savedAreas = JSON.parse(localStorage.getItem('areas')) || [];
@@ -449,15 +450,16 @@
               <th className='red' colSpan="10">ÁREA:</th>
               <th colSpan="20"> 
               <select name="areas" value={area} onChange={(e) => setArea(e.target.value)}>
-              <option value="">Seleccione un área</option>
-              {areas
-                .filter((area) => area && area.nombre) // Filtra valores inválidos
-                .map((area, index) => (
-                  <option key={index} value={area.nombre}>
-                    {area.nombre}
-                  </option>
-                ))}
-            </select>
+                <option value="">Seleccione un área</option>
+                {areas
+                  .filter((area) => area && area.nombre) // Filtra valores inválidos
+                  .map((area, index) => (
+                    <option key={index} value={area.nombre}>
+                      {area.nombre}
+                    </option>
+                  ))}
+              </select>
+
 
               </th>
             </tr>
@@ -661,7 +663,7 @@
                 <table id="body-parts-table" style={{ width: "90%", margin: "20px auto", borderCollapse: "collapse" }}>
       <thead>
         <tr>
-          <th colSpan="6"  className="red" style={{ backgroundColor: "red", fontWeight: "bold", padding: "6px" }}>
+          <th colSpan="6"  className="red" style={{ backgroundColor: "#808b96", fontWeight: "bold", padding: "6px" }}>
             Principales partes del cuerpo expuestas al riesgo:
           </th>
         </tr>
@@ -686,37 +688,64 @@
       </tbody>
     </table>
                   {/* Tabla de triángulos con select */}
-                  <table className='warning'>
-                    <tbody >
-                      <tr>
-                        <td >
-                        <select onChange={handleSelectImage}>
-                        <option value="">Selecciona una imagen</option>
-                        {[...Array(24)].map((_, index) => (
-                          <option key={index} value={`/images/Imagen${index + 1}.png`}>
-                            Imagen {index + 1}
-                          </option>
-                        ))}
-                      </select>
-                      
-                        </td>
-                      </tr>
-                      <tr>
-                        {/* Contenedor de imágenes seleccionadas desde el select */}
-                        <td className="triangle-images-container" colSpan="">
-                          {selectedTriangleImages.map((img, index) => (
-                            <img
-                              key={index}
-                              src={img}
-                              alt="Triangle"
-                              className="selected-image"
-                              onClick={() => handleRemoveTriangleImage(img)}
-                            />
-                          ))}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+<table className='warning'>
+  <tbody>
+    <tr>
+      <td>
+        <select onChange={handleSelectImage}>
+          <option value="">Selecciona una imagen</option>
+          {[...Array(24)].map((_, index) => (
+            <option key={index} value={`/images/Imagen${index + 1}.png`}>
+              {
+                {
+                  0: 'Baja tempretaura',
+                  1: 'Imagen 2',
+                  2: 'Imagen 3',
+                  3: 'Riesgo de accidentes',
+                  4: 'Imagen 5',
+                  5: 'Imagen 6',
+                  6: 'Riesgo electrico',
+                  7: 'Inflamable',
+                  8: 'Material explosivo',
+                  9: 'Superficies cortantes',
+                  10: 'Sustancias toxicas',
+                  11: 'Imagen 12',
+                  12: 'Carga suspendida en altura',
+                  13: 'Imagen 14',
+                  14: 'Imagen 15',
+                  15: 'Imagen 16',
+                  16: 'Superficies calientes',
+                  17: 'Imagen 18',
+                  18: 'Peligro de caidas',
+                  19: 'Peligro de obstaculos',
+                  20: 'Riesgo biologico',
+                  21: 'Frecuencias altas',
+                  22: 'Radiacion en lazer',
+                  23: 'Imagen 24',
+                }[index]
+              }
+            </option>
+          ))}
+        </select>
+      </td>
+    </tr>
+    <tr>
+      {/* Contenedor de imágenes seleccionadas desde el select */}
+      <td className="triangle-images-container" colSpan="">
+        {selectedTriangleImages.map((img, index) => (
+          <img
+            key={index}
+            src={img}
+            alt={`Imagen seleccionada ${index + 1}`} // Nombre único para cada imagen
+            className="selected-image"
+            onClick={() => handleRemoveTriangleImage(img)}
+          />
+        ))}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
   
               </div>
             </div>
