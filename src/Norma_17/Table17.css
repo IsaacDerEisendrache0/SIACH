@@ -671,7 +671,7 @@ button {
   font-weight: bold;
   font-size: 25px;
   text-align: center;
-  color: black;
+  color: white;
   margin-bottom: 30px;
 }
 
@@ -688,7 +688,7 @@ button {
   text-align: left; /* Alinea a la izquierda */
   padding-left: 15px; /* Agrega espacio a la izquierda */
   width: 25%;
-  color: rgb(0, 0, 0);
+  color: white;
   background-color: #808b96 !important;
   font-size: 22px !important;
 }
@@ -769,7 +769,7 @@ button {
   font-weight: bold;
   font-size: 23px;
   text-align: center;
-  color: black;
+  color: white;
 }
 
 /* Tabla de partes del cuerpo */
@@ -781,7 +781,7 @@ button {
   padding: 10px;
   background-color: #808b96 !important;
   font-weight: bold;
-  color: #000;
+  color: white;
   font-size: 20px !important;  /* Aumenta el tamaño de las etiquetas */
 
 }
@@ -868,7 +868,7 @@ button {
 .titulo-descripcion {
   font-weight: bold;
   font-size: 20px;
-  color: black;
+  color: white;
   margin-bottom: 5px;
 }
 
@@ -1025,7 +1025,7 @@ button {
   font-size: 19px !important; /* Mantén el tamaño original, usando !important */
   font-weight: bold;
   text-align: center;
-  color: #000 !important;
+  color: white !important;
 }
 
 

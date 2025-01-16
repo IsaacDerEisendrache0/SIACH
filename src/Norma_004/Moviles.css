@@ -317,16 +317,22 @@ body {
 
 /* Estilo para los menús desplegables con texto grande (para Identificación de riesgos y Sistemas de seguridad) */
 .dropdown-large-text {
-  font-size: 20px;  /* Aumenta el tamaño de la fuente */
-  font-family: Arial, sans-serif;
-  color: #333;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  width: calc(100% - 20px);
-  margin-bottom: 9px;
-  padding: 10px;  /* Aumenta el padding para mejorar la estética */
-  box-sizing: border-box;
+  font-size: 20px !important; /* Aumenta el tamaño de la fuente */
+  font-family: Arial, sans-serif !important;
+  color: #333 !important;
+  border-radius: 5px !important;
+  border: 1px solid #ccc !important;
+  width: 100% !important; /* Asegura que ocupe todo el ancho */
+  margin-bottom: 9px !important;
+  padding: 10px !important; /* Mejora la estética */
+  box-sizing: border-box !important;
+
+  /* Evita que el texto se corte */
+  white-space: nowrap !important; /* Evita que el texto se divida en varias líneas */
+  overflow: hidden !important; /* Oculta contenido que desborde */
+  text-overflow: ellipsis !important; /* Muestra "..." si el texto es demasiado largo */
 }
+
 
 /* Estilo para las opciones dentro del menú con texto grande */
 .dropdown-large-text option {
@@ -445,3 +451,4 @@ body {
 .dropdown-areas option {
   font-size: 18px;  /* Aumenta el tamaño de la fuente de las opciones */
 }
+
