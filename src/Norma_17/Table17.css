@@ -400,7 +400,7 @@ button {
   display: flex;
   align-items: center; /* Alinea verticalmente en el centro */
   justify-content: flex-start; /* Mantiene el contenido alineado a la izquierda */
-  width: 200%; /* Ocupa todo el ancho disponible */
+  width: 100%; /* Ocupa todo el ancho disponible */
   gap: 5px; /* Espacio entre el menú desplegable y los botones */
 }
 
@@ -1125,7 +1125,14 @@ button {
 }
 
 
+.textarea-descripcion {
+  
+  height: auto; /* Permite la expansión vertical automática */
+  min-height: 5em; /* Altura mínima, para que no sea demasiado pequeño cuando esté vacío. Ajústalo según tus necesidades.*/
 
+  /* OPCIONAL - Permite al usuario redimensionar manualmente de forma vertical */
+  resize: vertical;
+}
 
 
 
@@ -1333,25 +1340,49 @@ button {
   padding: 8px 16px; /* Asegúrate de que los botones tengan un buen tamaño */
 }
 
-.btn-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 36px;
-  background-color: white;
-  border: 1px solid #000;
-  border-radius: 5px;
-  cursor: pointer;
-}
+
+
 
 .btn-icon:hover {
   background-color: #f0f0f0;
 }
 
-.button-icon {
-  width: 24px;
-  height: 24px;
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 36px;
+  background-color: white;
+  border: 1px solid #000;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: opacity 0.3s ease; /* Transición suave */
+}
+
+.hidden-buttons {
+  display: none !important; /* Oculta completamente el botón */
+}
+
+.btn-icon.hidden {
+  opacity: 0; /* Oculta los botones */
+  pointer-events: none; /* Desactiva la interacción */
+}
+
+.btn-icon + .btn-icon {
+  margin-left: 10px; /* Espaciado entre los botones */
+}
+
+/* Opcional: Alinea los botones a la derecha dentro de su contenedor */
+button.btn-icon {
+  float: right;
+}
+
+
+
+.container { /* Contenedor donde están los botones */
+  display: flex;
+  justify-content: flex-end;
 }
 
 

@@ -122,8 +122,8 @@ const RiskAssessmentTable = () => {
   const [areaSeleccionada, setAreaSeleccionada] = useState(areas[0].nombre);
   const [puestoSeleccionado, setPuestoSeleccionado] = useState('');
   const [puestos, setPuestos] = useState(areas[0].puestos);
-  const [descripcionActividad, setDescripcionActividad] = useState(''); // Descripción de la actividad
-  
+  const [descripcionActividad1, setDescripcionActividad1] = useState('');
+  const [descripcionActividad2, setDescripcionActividad2] = useState('');  
   
   
 
@@ -468,7 +468,8 @@ const saveTable = async () => {
     probability,
     risk: calculateRisk(),
     selectedImages,
-    descripcionActividad,
+    descripcionActividad1,
+    descripcionActividad2,
     selectedOptionEquipoUtilizado,
     selectedOptionProteccionSugerida,
     tiempoExposicion,
@@ -536,7 +537,7 @@ const updateTable = async () => {
     probability,
     risk: calculateRisk(),
     selectedImages,
-    descripcionActividad,
+    descripcionActividad1,
     selectedOptionEquipoUtilizado,
     selectedOptionProteccionSugerida,
     tiempoExposicion,
@@ -635,7 +636,7 @@ useEffect(() => {
     setExposure(tableToEdit.exposure);
     setProbability(tableToEdit.probability);
     setSelectedImages(tableToEdit.selectedImages || []);
-    setDescripcionActividad(tableToEdit.descripcionActividad || '');
+    setDescripcionActividad1(tableToEdit.descripcionActividad1 || '');
     setSelectedOptionEquipoUtilizado(tableToEdit.selectedOptionEquipoUtilizado || '');
     setSelectedOptionProteccionSugerida(tableToEdit.selectedOptionProteccionSugerida || '');
     setTiempoExposicion(tableToEdit.tiempoExposicion || '');
@@ -1091,14 +1092,13 @@ const handleMainOptionChange = (e) => {
           <div className="contenedor-descripcion">
             <label htmlFor="descripcion-actividad" className="titulo-descripcion">Descripción de la actividad:</label>
             <textarea
-              id="descripcion-actividad"
-              name="descripcion-actividad"
-              rows="3"
+              id="descripcion-actividad-1"
+              name="descripcion-actividad-1"
               cols="50"
               className="textarea-descripcion"
-              placeholder="Escribe aquí la descripción de la actividad..."
-              value={descripcionActividad}
-              onChange={(e) => setDescripcionActividad(e.target.value)}
+              placeholder="Escribe aquí la descripción de la actividad "
+              value={descripcionActividad1}
+              onChange={(e) => setDescripcionActividad1(e.target.value)}
             ></textarea>
           </div>
         </td>
@@ -1202,6 +1202,35 @@ const handleMainOptionChange = (e) => {
   
         <td className="header-td" colSpan="3">
           <div className="additional-data-title">Datos adicionales</div>
+          <button className="btn-icon btn-agregar" onClick={handleAddAreaClick} title="Agregar">
+  <svg
+    className="button-icon"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="black"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M12 5v14M5 12h14" />
+  </svg>
+</button>
+<button className="btn-icon btn-borrar" onClick={handleDeleteAreaClick} title="Borrar">
+  <svg
+    className="button-icon"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="black"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M3 6h18M9 6v12M15 6v12M19 6l-1 14H6L5 6" />
+  </svg>
+</button>
+
 
           <table className="details-table">
             <tbody>
@@ -1521,8 +1550,20 @@ const handleMainOptionChange = (e) => {
 
 
             </td>  
-          </tr>
           
+          </tr>
+            <td colSpan={8}>
+              <span></span>
+              <textarea
+              id="descripcion-actividad-2"
+              name="descripcion-actividad-2"
+              cols="50"
+              className="textarea-descripcion"
+              placeholder="Escribe aquí la descripción de EPP"
+              value={descripcionActividad2}
+              onChange={(e) => setDescripcionActividad2(e.target.value)}
+            ></textarea>
+            </td>
           <tr>
                 <td colSpan="7" className="right-aligned">
                   <div className="banana-title">Evaluación de riesgo de trabajo</div>
@@ -1627,34 +1668,7 @@ const handleMainOptionChange = (e) => {
   <button onClick={isEditing ? updateTable : saveTable} className="save-button">
     {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
   </button>
-  <button className="btn-icon" onClick={handleAddAreaClick} title="Agregar">
-    <svg
-      className="button-icon"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="black"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 5v14M5 12h14" />
-    </svg>
-  </button>
-  <button className="btn-icon" onClick={handleDeleteAreaClick} title="Borrar">
-    <svg
-      className="button-icon"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="black"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 6h18M9 6v12M15 6v12M19 6l-1 14H6L5 6" />
-    </svg>
-  </button>
+  
 </div>
 
 
