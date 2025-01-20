@@ -981,11 +981,12 @@ button {
 
 /* Contenedor del logo para mantener alineación y posicionamiento */
 .logo-container {
-  display: flex;
+  display: flex;  
   align-items: center;
   justify-content: center;
-  width: 350px; /* Ajusta el ancho máximo del contenedor según tu preferencia */
-  height: auto;
+  width: 400px; /* Ajusta el ancho máximo del contenedor según tu preferencia */
+  height: 30%;
+  margin-top: 20px;
 }
 
 /* Imagen del logo */
@@ -1002,11 +1003,6 @@ button {
 .hidden-buttons {
   display: none;
 }
-
-
-
-
-
 
 
 /* /////////////////////////////////////////////////*/ 

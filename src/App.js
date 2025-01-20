@@ -30,6 +30,8 @@ function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para el modal de imagen
   const [isNorma004Expanded, setIsNorma004Expanded] = useState(false);
 
+  
+
   useEffect(() => {
     const fetchUserData = async () => {
       const currentUser = auth.currentUser;
@@ -71,6 +73,26 @@ function Dashboard() {
   const toggleMenu = () => {
     setIsMenuOpen((prevState) => !prevState);
   };
+
+  // useCallback para evitar re-creación innecesaria del handler
+  const handleClickOutside = useCallback((event) => {
+    if (isMenuOpen && !event.target.closest('.custom-dropdown')) {
+      setIsMenuOpen(false);
+    }
+  }, [isMenuOpen]);
+
+  useEffect(() => {
+    // Agrega el event listener cuando el menú está abierto
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    // Limpia el event listener al desmontar el componente o 
+    // cuando isMenuOpen cambia
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMenuOpen, handleClickOutside]);
 
 
   const openModal = () => setIsModalOpen(true);
@@ -241,21 +263,21 @@ function Dashboard() {
       </div>
 
       {isMenuOpen && (
-        <div
-          className="custom-dropdown"
-          style={{
-            position: "absolute",
-            top: "110%",
-            right: "0",
-            backgroundColor: "#fff",
-            boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
-            borderRadius: "10px",
-            padding: "10px",
-            zIndex: 1000,
-            opacity: 1,
-            transform: "translateY(0)",
-          }}
-        >
+        <div 
+        className="custom-dropdown"
+        style={{
+          position: "absolute",
+          top: "110%",
+          right: "0",
+          backgroundColor: "#fff",
+          boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
+          borderRadius: "10px",
+          padding: "10px",
+          zIndex: 1000,
+          opacity: 1,
+          transform: "translateY(0)",
+        }}
+      >
           {/* Botón Inicio */}
           <button
             className="dropdown-item"

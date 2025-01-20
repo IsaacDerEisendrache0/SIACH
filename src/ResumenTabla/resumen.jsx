@@ -16,7 +16,7 @@ const TablaResumen = () => {
     if (!user) {
       console.error("No se encontró un usuario autenticado.");
       return;
-    }     
+    }
   
     const uid = user.uid;
   
@@ -130,7 +130,7 @@ const TablaResumen = () => {
         </thead>
         <tbody>
           {data.map((row, index) => (
-            <React.Fragment key={index}>
+            <React.Fragment key={index}>  
               <tr>
                 <td className="tabla-area">
                   <button
