@@ -251,6 +251,8 @@ const RiskAssessmentTable = () => {
 
   const [selectedOptionEquipoUtilizado, setSelectedOptionEquipoUtilizado] = useState('');
   const [selectedOptionProteccionSugerida, setSelectedOptionProteccionSugerida] = useState('');
+  const [empresaSeleccionada, setEmpresaSeleccionada] = useState('');
+
 
 
   const handleOptionChangeEquipoUtilizado = (event) => {
@@ -1340,118 +1342,118 @@ const handleMainOptionChange = (e) => {
     </td>
   
         <td className="header-td" colSpan="3">
-          <div className="additional-data-title">Datos adicionales</div>
+          <div className="additional-data-title">Datos adicionales
+
           <button className="btn-icon btn-agregar" onClick={handleAddAreaClick} title="Agregar">
-  <svg
-    className="button-icon"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="black"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M12 5v14M5 12h14" />
-  </svg>
-</button>
-<button className="btn-icon btn-borrar" onClick={handleDeleteAreaClick} title="Borrar">
-  <svg
-    className="button-icon"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="black"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M3 6h18M9 6v12M15 6v12M19 6l-1 14H6L5 6" />
-  </svg>
-</button>
+              <svg
+                className="button-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="black"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+            </button>
+            
+            <button className="btn-icon btn-borrar" onClick={handleDeleteAreaClick} title="Borrar">
+              <svg
+                className="button-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="black"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M3 6h18M9 6v12M15 6v12M19 6l-1 14H6L5 6" />
+              </svg>
+            </button>
+
+            
+          </div>
+
+      
+          
 
 
-          <table className="details-table">
-            <tbody>
+<table className="details-table">
+  <tbody>
+
+    {/* Fila de Empresa */}
+    <tr>
+      <td className="label-cell">Empresa:</td>
+      <td className="input-cell" colSpan="2">
+        <select
+          id="empresa"
+          value={empresaSeleccionada}
+          onChange={(e) => setEmpresaSeleccionada(e.target.value)}
+          className="large-text-dropdown"
+        >
+          {/* Aquí pones las opciones que quieras */}
+          <option value="Safran">Safran</option>
+          <option value="Maxion">Maxion</option>
+          <option value="OtraEmpresa">Otra Empresa</option>
+        </select>
+      </td>
+    </tr>
+
+    {/* Fila de Área */}
+    <tr>
+      <td className="label-cell">Área:</td>
+      <td className="input-cell">
+        <div className="cell-container">
+          <select
+            id="area"
+            value={areaSeleccionada}
+            onChange={handleAreaChange}
+            className="large-text-dropdown"
+          >
+            {areas.map((area, index) => (
+              <option key={index} value={area.nombre}>
+                {area.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
+      </td>
+    </tr>
+
+    {/* Resto de tu tabla (modal de borrar áreas, fecha de inspección, etc.) */}
+    <tr>
+      <td className="label-cell">Fecha de inspección:</td>
+      <td colSpan="2" className="input-cell">
+        <input
+          type="date"
+          id="fechaInspeccion"
+          defaultValue="2025-01-01"
+          className="date-input"
+        />
+      </td>
+    </tr>
+    <tr>
+      <td className="label-cell">Tiempo de exposición:</td>
+      <td colSpan="2" className="input-cell">
+        <input
+          type="text"
+          id="tiempoExposicion"
+          className="large-input"
+          placeholder="Ingrese tiempo en horas (e.g., 8hrs)"
+          value={tiempoExposicion}
+          onChange={(e) => setTiempoExposicion(e.target.value)}
+        />
+      </td>
+    </tr>
+    {/* ...y así sucesivamente */}
+  </tbody>
+</table>
 
 
-              {/* Fila de Área */}
-              <tr>
-                <td className="label-cell">Área:</td>
-                <td className="input-cell">
-                  <div className="cell-container">
-                  <select
-                    id="area"
-                    value={areaSeleccionada}
-                    onChange={handleAreaChange}
-                    className="large-text-dropdown"
-                  >
-                    {areas.map((area, index) => (
-                      <option key={index} value={area.nombre}>
-                        {area.nombre}
-                      </option>
-                    ))}
-                  </select>
 
-
-                    
-                  </div>
-                </td>
-              </tr>
-
-              {/* Modal para borrar áreas */}
-              <Modal isOpen={isAreaModalOpen} onRequestClose={handleAreaModalClose} className="overlay">
-                <div className="modal-container">
-                  <h2>Selecciona las áreas a borrar</h2>
-                  <div className="areas-lista">
-                    {areas.length > 0 ? (
-                      areas.map((area, index) => (
-                        <div className="area-item" key={index}>
-                          <input
-                            type="checkbox"
-                            value={area.nombre}
-                            onChange={handleAreaSelectionChange}
-                            checked={areasSeleccionadasParaBorrar.includes(area.nombre)}
-                          />
-                          <label>{area.nombre}</label>
-                        </div>
-                      ))
-                    ) : (
-                      <p>No hay áreas disponibles para borrar</p>
-                    )}
-                  </div>
-                  <div className="modal-buttons">
-                    <button onClick={handleDeleteSelectedAreas}>Borrar seleccionadas</button>
-                    <button onClick={handleAreaModalClose}>Cerrar</button>
-                  </div>
-                </div>
-              </Modal>
-
-              {/* Fila de Fecha de inspección */}
-              <tr>
-                <td className="label-cell">Fecha de inspección:</td>
-                <td colSpan="2" className="input-cell">
-                  <input type="date" id="fechaInspeccion" defaultValue="2025-01-01" className="date-input" />
-                </td>
-              </tr>
-              {/* Fila de Tiempo de exposición */}
-              <tr>
-                <td className="label-cell">Tiempo de exposición:</td>
-                <td colSpan="2" className="input-cell">
-                  <input
-                    type="text"
-                    id="tiempoExposicion"
-                    className="large-input" // Usa la misma clase para el tamaño grande
-                    placeholder="Ingrese tiempo en horas (e.g., 8hrs)"
-                    value={tiempoExposicion}
-                    onChange={(e) => setTiempoExposicion(e.target.value)}
-                  />
-                </td>
-              </tr>
-
-
-            </tbody>
-          </table>
         </td>
         </tr>
         
@@ -1460,22 +1462,22 @@ const handleMainOptionChange = (e) => {
         <tbody>
           <tr>
           <td colSpan="3" className="left-section">
-  <div className="text1">Identificación de peligros</div>
-  <ul className="hazard-list">
-    {Object.keys(hazards).map((hazard) => (
-      <li key={hazard} className="hazard-item">
-        <span>{hazard}</span> {/* Texto del peligro */}
-        <label className="hazard-checkbox">
-          <input
-            type="checkbox"
-            name={hazard}
-            checked={hazards[hazard]}
-            onChange={handleCheckboxChange}
-          />
-        </label>
-      </li>
-    ))}
-  </ul>
+    <div className="text1">Identificación de peligros</div>
+    <ul className="hazard-list">
+      {Object.keys(hazards).map((hazard) => (
+        <li key={hazard} className="hazard-item">
+          <span>{hazard}</span> {/* Texto del peligro */}
+          <label className="hazard-checkbox">
+            <input
+              type="checkbox"
+              name={hazard}
+              checked={hazards[hazard]}
+              onChange={handleCheckboxChange}
+            />
+          </label>
+        </li>
+      ))}
+    </ul>
 </td>
 
 

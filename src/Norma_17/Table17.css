@@ -672,14 +672,16 @@ button {
   font-size: 25px;
   text-align: center;
   color: white;
-  margin-bottom: 30px;
+  margin-bottom: 2%;
 }
 
 /* Estilo de la tabla principal */
 .details-table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 0;  /* elimina cualquier margen superior */
 }
+
 
 /* Celdas de etiqueta con texto en blanco */
 .label-cell {
