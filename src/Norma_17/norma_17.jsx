@@ -118,6 +118,9 @@ const RiskAssessmentTable = () => {
     'Protección de material o herramienta':  ['/images/7.png', '/images/1.png', '/images/21.png', '/images/14.png', '/images/6.png', '/images/4.png', '/images/35.png'],
   };
 
+  const STORAGE_KEY = 'riskAssessmentData_v1';
+
+
    // Coloca los hooks dentro del componente funcional
   const [areaSeleccionada, setAreaSeleccionada] = useState(areas[0].nombre);
   const [puestoSeleccionado, setPuestoSeleccionado] = useState('');
@@ -129,10 +132,15 @@ const RiskAssessmentTable = () => {
 
 
   const handleAreaChange = (e) => {
-    const selectedArea = areas.find((area) => area.nombre === e.target.value);
+    const selectedName = e.target.value;
+    // Aquí siempre habrá un "selectedArea" porque el <select>
+    // solo tiene options que coinciden con `areas`.
+    const selectedArea = areas.find((area) => area.nombre === selectedName);
+
+    // Como no hay opción inválida, no tememos undefined
     setAreaSeleccionada(selectedArea.nombre);
-    setPuestos(selectedArea.puestos); // Actualiza los puestos según el área seleccionada
-    setPuestoSeleccionado(''); // Reinicia el puesto seleccionado cuando cambia el área
+    setPuestos(selectedArea.puestos);
+    setPuestoSeleccionado('');
   };
 
   const handlePuestoChange = (e) => {
@@ -981,6 +989,137 @@ const handleMainOptionChange = (e) => {
     const shouldShowX = (part) =>
       affectedBodyParts.includes(part) && !removedParts.includes(part);
 
+
+
+
+
+    useEffect(() => {
+      const savedData = localStorage.getItem(STORAGE_KEY);
+      if (savedData) {
+        const parsed = JSON.parse(savedData);
+  
+        // Restaurar cada campo (valida si existe en el objeto)
+        if (parsed.areaSeleccionada) setAreaSeleccionada(parsed.areaSeleccionada);
+        if (parsed.puestoSeleccionado) setPuestoSeleccionado(parsed.puestoSeleccionado);
+  
+        if (parsed.descripcionActividad1) setDescripcionActividad1(parsed.descripcionActividad1);
+        if (parsed.descripcionActividad2) setDescripcionActividad2(parsed.descripcionActividad2);
+  
+        if (parsed.hazards) setHazards(parsed.hazards);
+        if (parsed.removedParts) setRemovedParts(parsed.removedParts);
+  
+        if (parsed.consequence) setConsequence(parsed.consequence);
+        if (parsed.exposure) setExposure(parsed.exposure);
+        if (parsed.probability) setProbability(parsed.probability);
+  
+        if (parsed.selectedImages) setSelectedImages(parsed.selectedImages);
+        if (parsed.selectedOptionEquipoUtilizado) {
+          setSelectedOptionEquipoUtilizado(parsed.selectedOptionEquipoUtilizado);
+        }
+        if (parsed.selectedOptionProteccionSugerida) {
+          setSelectedOptionProteccionSugerida(parsed.selectedOptionProteccionSugerida);
+        }
+        if (parsed.selectedMainOption) setSelectedMainOption(parsed.selectedMainOption);
+        if (parsed.selectedSubOption) setSelectedSubOption(parsed.selectedSubOption);
+        if (parsed.selectionList) setSelectionList(parsed.selectionList);
+  
+        if (parsed.tiempoExposicion) setTiempoExposicion(parsed.tiempoExposicion);
+      }
+    }, []);
+  
+  
+    // ==== 3. CADA VEZ QUE ALGÚN ESTADO CAMBIA: GUARDO EN LOCALSTORAGE ====
+    useEffect(() => {
+      const dataToSave = {
+        // Incluye todos tus estados
+        areaSeleccionada,
+        puestoSeleccionado,
+  
+        descripcionActividad1,
+        descripcionActividad2,
+  
+        hazards,
+        removedParts,
+  
+        consequence,
+        exposure,
+        probability,
+  
+        selectedImages,
+        selectedOptionEquipoUtilizado,
+        selectedOptionProteccionSugerida,
+        selectedMainOption,
+        selectedSubOption,
+        selectionList,
+  
+        tiempoExposicion
+      };
+  
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+    }, [
+      // Lista de dependencias: todos los estados que quieras persistir
+      areaSeleccionada,
+      puestoSeleccionado,
+  
+      descripcionActividad1,
+      descripcionActividad2,
+  
+      hazards,
+      removedParts,
+  
+      consequence,
+      exposure,
+      probability,
+  
+      selectedImages,
+      selectedOptionEquipoUtilizado,
+      selectedOptionProteccionSugerida,
+      selectedMainOption,
+      selectedSubOption,
+      selectionList,
+  
+      tiempoExposicion
+    ]);
+  
+  
+    const handleReset = () => {
+      localStorage.removeItem(STORAGE_KEY);
+    
+      // 1. Quita o comenta la línea que resetea el área 
+      // setAreaSeleccionada('');  <-- la quitas o comentas
+    
+      setPuestoSeleccionado('');
+      setDescripcionActividad1('');
+      setDescripcionActividad2('');
+      setHazards({
+        'Caídas de Altura': false,
+        'Exposición a Temperaturas': false,
+        'Exposición a Electricidad Estática': false,
+        'Exposición a Sustancias Químicas': false,
+        'Exposición a Radiaciones': false,
+        'Exposición agentes Biológicos': false,
+        'Exposición a Ruido': false,
+        'Exposición a Vibraciones': false,
+        'Superficies cortantes': false,
+        'Caídas a nivel o desnivel': false,
+        'Calentamiento de materia prima, subproducto o producto': false,
+      });
+      setRemovedParts([]);
+      setConsequence(1);
+      setExposure(1);
+      setProbability(0.1);
+      setSelectedImages([]);
+      setSelectedOptionEquipoUtilizado('');
+      setSelectedOptionProteccionSugerida('');
+      setSelectedMainOption('');
+      setSelectedSubOption('');
+      setSelectionList([]);
+      setTiempoExposicion('8hrs');
+    };
+    
+
+    
+
   
   return (
       <div class="main-table">
@@ -1668,6 +1807,8 @@ const handleMainOptionChange = (e) => {
   <button onClick={isEditing ? updateTable : saveTable} className="save-button">
     {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
   </button>
+  <button onClick={handleReset}>Reiniciar Tabla</button>
+
   
 </div>
 
