@@ -2,7 +2,7 @@ import html2canvas from 'html2canvas';
 import './Table17.css';
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import { collection, addDoc, updateDoc, doc, getDoc, setDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase'; // Importar la configuración de Firebase
 import logo from '../logos/logo.png';
 import maxion from '../logos/maxion.jpeg';
@@ -124,9 +124,19 @@ const RiskAssessmentTable = () => {
    // Coloca los hooks dentro del componente funcional
   const [areaSeleccionada, setAreaSeleccionada] = useState(areas[0].nombre);
   const [puestoSeleccionado, setPuestoSeleccionado] = useState('');
+  const [nombreEmpresa, setNombreEmpresa] = useState("");
   const [puestos, setPuestos] = useState(areas[0].puestos);
   const [descripcionActividad1, setDescripcionActividad1] = useState('');
-  const [descripcionActividad2, setDescripcionActividad2] = useState('');  
+  const [descripcionActividad2, setDescripcionActividad2] = useState(''); 
+  
+  // **Estados para Carpetas y Modal**
+  const [folders, setFolders] = useState([]);
+  const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
+  const [selectedFolderId, setSelectedFolderId] = useState('');
+  const [newFolderName, setNewFolderName] = useState('');
+
+  
+
   
   
 
@@ -469,7 +479,7 @@ const saveTable = async () => {
   const uid = user.uid; // Obtener UID del usuario
 
   const tableData = {
-    uid, // Asociar al usuario autenticado
+    uid,
     areaSeleccionada,
     puestoSeleccionado,
     hazards,
@@ -486,7 +496,10 @@ const saveTable = async () => {
     norma: "N-017",
     fecha: new Date().toLocaleDateString(),
     hora: new Date().toLocaleTimeString(),
+    nombreEmpresa: empresaSeleccionada, // Aquí agregas el valor seleccionado
   };
+  
+  
 
   try {
     await addDoc(collection(db, "tablas"), tableData);
@@ -1118,6 +1131,67 @@ const handleMainOptionChange = (e) => {
       setSelectionList([]);
       setTiempoExposicion('8hrs');
     };
+
+
+    // Función para cargar las carpetas desde Firestore
+    const loadFolders = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'carpetas'));
+        const fetchedFolders = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          nombre: doc.data().nombre,
+        }));
+        setFolders(fetchedFolders);
+      } catch (error) {
+        console.error('Error al cargar las carpetas:', error);
+      }
+    };
+
+    useEffect(() => {
+      loadFolders();
+    }, []);
+
+
+    // Abrir el modal
+const openFolderModal = () => {
+  setIsFolderModalOpen(true);
+};
+
+// Cerrar el modal
+const closeFolderModal = () => {
+  setIsFolderModalOpen(false);
+  setSelectedFolderId('');
+  setNewFolderName('');
+};
+
+// Crear una nueva carpeta
+const handleCreateNewFolder = async () => {
+  if (newFolderName.trim() === '') {
+    alert('El nombre de la carpeta no puede estar vacío.');
+    return;
+  }
+
+  try {
+    const docRef = await addDoc(collection(db, 'carpetas'), {
+      nombre: newFolderName,
+      fechaCreacion: serverTimestamp(),
+    });
+    setFolders([...folders, { id: docRef.id, nombre: newFolderName }]);
+    setSelectedFolderId(docRef.id);
+    setNewFolderName('');
+    alert('Carpeta creada con éxito.');
+  } catch (error) {
+    console.error('Error al crear la carpeta:', error);
+    alert('Error al crear la carpeta.');
+  }
+};
+
+// Seleccionar una carpeta existente
+const handleSelectFolder = (folderId) => {
+  setSelectedFolderId(folderId);
+};
+
+
     
 
     
@@ -1199,6 +1273,70 @@ const handleMainOptionChange = (e) => {
               </td>
 
           </tr>
+
+          <Modal
+  isOpen={isFolderModalOpen}
+  onRequestClose={closeFolderModal}
+  contentLabel="Seleccionar Carpeta"
+  className="folder-modal"
+  overlayClassName="folder-modal-overlay"
+>
+  <h2>Selecciona una Carpeta</h2>
+  <div className="folder-selection">
+    <h3>Carpetas Existentes:</h3>
+    {folders.length > 0 ? (
+      <ul>
+        {folders.map(folder => (
+          <li key={folder.id}>
+            <label>
+              <input
+                type="radio"
+                name="selectedFolder"
+                value={folder.id}
+                checked={selectedFolderId === folder.id}
+                onChange={() => handleSelectFolder(folder.id)}
+              />
+              {folder.nombre}
+            </label>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p>No hay carpetas existentes.</p>
+    )}
+  </div>
+
+  <div className="create-new-folder">
+    <h3>Crear Nueva Carpeta:</h3>
+    <input
+      type="text"
+      placeholder="Nombre de la nueva carpeta"
+      value={newFolderName}
+      onChange={(e) => setNewFolderName(e.target.value)}
+    />
+    <button onClick={handleCreateNewFolder}>Crear</button>
+  </div>
+
+  <div className="modal-buttons">
+    <button
+      onClick={() => {
+        if (selectedFolderId) {
+          isEditing ? updateTable(selectedFolderId) : saveTable(selectedFolderId);
+          closeFolderModal();
+        } else {
+          alert('Por favor, selecciona una carpeta o crea una nueva.');
+        }
+      }}
+      className="confirm-button"
+    >
+      Confirmar
+    </button>
+    <button onClick={closeFolderModal} className="cancel-button">
+      Cancelar
+    </button>
+  </div>
+</Modal>
+
           <tr>
               <td className="no-border-cell" colSpan="3">
               <label htmlFor="descripcion-actividad" className="titulo-descripcion">Puestos:</label>
@@ -1385,22 +1523,23 @@ const handleMainOptionChange = (e) => {
   <tbody>
 
     {/* Fila de Empresa */}
-    <tr>
-      <td className="label-cell">Empresa:</td>
-      <td className="input-cell" colSpan="2">
-        <select
-          id="empresa"
-          value={empresaSeleccionada}
-          onChange={(e) => setEmpresaSeleccionada(e.target.value)}
-          className="large-text-dropdown"
-        >
-          {/* Aquí pones las opciones que quieras */}
-          <option value="Safran">Safran</option>
-          <option value="Maxion">Maxion</option>
-          <option value="OtraEmpresa">Otra Empresa</option>
-        </select>
-      </td>
-    </tr>
+      <tr>
+        <td className="label-cell">Empresa:</td>
+        <td className="input-cell" colSpan="2">
+          <select
+            id="empresa"
+            value={empresaSeleccionada}
+            onChange={(e) => setEmpresaSeleccionada(e.target.value)}
+            className="large-text-dropdown"
+          >
+            {/* Opciones de empresa */}
+            <option value="Safran">Safran</option>
+            <option value="Maxion">Maxion</option>
+            <option value="OtraEmpresa">Otra Empresa</option>
+          </select>
+        </td>
+      </tr>
+
 
     {/* Fila de Área */}
     <tr>
@@ -1806,9 +1945,11 @@ const handleMainOptionChange = (e) => {
   <button onClick={downloadImage} className="download-button">
     Descargar PDF
   </button>
-  <button onClick={isEditing ? updateTable : saveTable} className="save-button">
-    {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
+
+  <button onClick={openFolderModal} className="save-button">
+  {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
   </button>
+
   <button onClick={handleReset}>Reiniciar Tabla</button>
 
   

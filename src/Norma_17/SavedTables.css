@@ -1,60 +1,131 @@
+/* src/components/SavedTables.css */
+
 .saved-tables-container {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .saved-table {
-    width: 80%;
-    margin: 15px 0;
-    padding: 15px;
-    border: 2px solid #007bff;
-    border-radius: 8px;
-    background-color: #f1f1f1;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .saved-table p {
-    margin: 5px 0;
-  }
-  
-  .table-buttons {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 10px;
-  }
-  
-  .btn-edit, .btn-delete {
-    padding: 5px 10px;
-    margin-left: 10px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .btn-edit {
-    background-color: #28a745;
-  }
-  
-  .btn-edit:hover {
-    background-color: #218838;
-  }
-  
-  .btn-delete {
-    background-color: #dc3545;
-  }
-  
-  .btn-delete:hover {
-    background-color: #c82333;
-  }
-  
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+/* Estilos para la vista de Carpetas */
+.add-folder-form {
+  display: flex;
+  margin-bottom: 20px;
+}
 
-  /* Contenedor del botón regresar */
+.input-folder-name {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #007bff;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+  width: 250px;
+}
+
+.btn-add-folder {
+  padding: 10px 15px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-add-folder:hover {
+  background-color: #218838;
+}
+
+.folders-list {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+}
+
+.folder-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.folder-item:hover {
+  background-color: #e9ecef;
+}
+
+.folder-name {
+  font-size: 18px;
+  flex-grow: 1;
+}
+
+.btn-delete-folder {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-delete-folder:hover {
+  background-color: #c82333;
+}
+
+/* Estilos para la vista de Tablas */
+.saved-table {
+  width: 80%;
+  margin: 15px 0;
+  padding: 15px;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  background-color: #f1f1f1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.saved-table p {
+  margin: 5px 0;
+}
+
+.table-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.btn-edit, .btn-delete {
+  padding: 5px 10px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background-color: #28a745;
+}
+
+.btn-edit:hover {
+  background-color: #218838;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+}
+
+.btn-delete:hover {
+  background-color: #c82333;
+}
+
+/* Contenedor del botón regresar */
 .back-to-home {
   margin-bottom: 20px;
   text-align: left;
@@ -76,5 +147,13 @@
   background-color: #0056b3;
 }
 
+/* Responsividad */
+@media (max-width: 768px) {
+  .folders-list, .saved-table {
+    width: 95%;
+  }
 
-
+  .input-folder-name {
+    width: 200px;
+  }
+}
