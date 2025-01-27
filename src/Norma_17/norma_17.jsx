@@ -467,7 +467,7 @@ const handleImageSelect = (image) => {
 
 
 
-const saveTable = async () => {
+const saveTable = async (folderId) => {
   const auth = getAuth();
   const user = auth.currentUser;
 
@@ -496,20 +496,20 @@ const saveTable = async () => {
     norma: "N-017",
     fecha: new Date().toLocaleDateString(),
     hora: new Date().toLocaleTimeString(),
-    nombreEmpresa: empresaSeleccionada, // Aquí agregas el valor seleccionado
+    nombreEmpresa: empresaSeleccionada,
   };
-  
-  
 
   try {
-    await addDoc(collection(db, "tablas"), tableData);
+    // Guardar la tabla en la carpeta específica
+    await addDoc(collection(db, "carpetas", folderId, "tablas"), tableData);
     alert("Tabla guardada con éxito en Firestore.");
 
+    // Actualizar el resumen correspondiente si es necesario
     const resumenRef = doc(db, "resumen_17", areaSeleccionada);
     const resumenSnapshot = await getDoc(resumenRef);
 
     let newResumenData = {
-      uid, // Asociar al usuario autenticado
+      uid,
       tolerable: 0,
       moderado: 0,
       notable: 0,
@@ -550,7 +550,9 @@ const saveTable = async () => {
   }
 };
 
-const updateTable = async () => {
+
+
+const updateTable = async (folderId) => {
   const updatedTable = {
     areaSeleccionada,
     puestoSeleccionado,
@@ -561,6 +563,7 @@ const updateTable = async () => {
     risk: calculateRisk(),
     selectedImages,
     descripcionActividad1,
+    descripcionActividad2,
     selectedOptionEquipoUtilizado,
     selectedOptionProteccionSugerida,
     tiempoExposicion,
@@ -574,8 +577,8 @@ const updateTable = async () => {
       throw new Error('No se encontró el ID de la tabla para actualizar.');
     }
 
-    // Actualizar la tabla principal en Firestore
-    const docRef = doc(db, 'tablas', tableId);
+    // Actualizar la tabla en la carpeta específica
+    const docRef = doc(db, 'carpetas', folderId, 'tablas', tableId);
     await updateDoc(docRef, updatedTable);
 
     // Actualizar la colección de resumen por área
@@ -591,7 +594,7 @@ const updateTable = async () => {
 
     // Actualizar o agregar el puesto en el campo "puestos"
     const updatedPuestos = [
-      ...areaData.puestos.filter((p) => p.nombre !== puestoSeleccionado), // Elimina el puesto si ya existe
+      ...areaData.puestos.filter((p) => p.nombre !== puestoSeleccionado),
       {
         nombre: puestoSeleccionado,
         magnitudRiesgo: calculateRisk(),
@@ -635,6 +638,7 @@ const updateTable = async () => {
     alert('Error al actualizar la tabla.');
   }
 };
+
 
 
 
@@ -1952,7 +1956,7 @@ const handleSelectFolder = (folderId) => {
 
   <button onClick={handleReset}>Reiniciar Tabla</button>
 
-  
+
 </div>
 
 

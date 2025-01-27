@@ -39,23 +39,25 @@ const SavedTables = () => {
   };
 
   // Función para cargar las tablas desde Firestore dentro de una carpeta específica
-  const loadTablesFromFirestore = async () => {
-    try {
-      const tablasCollection = collection(db, 'tablas');
-      const querySnapshot = await getDocs(tablasCollection);
-      const tables = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      
-      const sortedTables = tables.sort((a, b) => {
-        const dateA = new Date(`${a.fecha} ${a.hora}`);
-        const dateB = new Date(`${b.fecha} ${b.hora}`);
-        return dateB - dateA;
-      });
-  
-      setSavedTables(sortedTables);
-    } catch (error) {
-      console.error('Error al cargar las tablas desde Firestore:', error);
-    }
-  };
+  // src/components/SavedTables.jsx
+const loadTablesFromFirestore = async (folderId) => {
+  try {
+    const tablasCollection = collection(db, 'carpetas', folderId, 'tablas');
+    const querySnapshot = await getDocs(tablasCollection);
+    const tables = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    const sortedTables = tables.sort((a, b) => {
+      const dateA = new Date(`${a.fecha} ${a.hora}`);
+      const dateB = new Date(`${b.fecha} ${b.hora}`);
+      return dateB - dateA;
+    });
+
+    setSavedTables(sortedTables);
+  } catch (error) {
+    console.error('Error al cargar las tablas desde Firestore:', error);
+  }
+};
+
   
 
   useEffect(() => {
@@ -129,6 +131,7 @@ const SavedTables = () => {
     setSelectedFolder(folder);
     loadTablesFromFirestore(folder.id);
   };
+  
 
   // Función para regresar al listado de carpetas
   const handleGoBack = () => {
@@ -136,14 +139,16 @@ const SavedTables = () => {
     setSavedTables([]);
   };
 
+
   // Función para editar una tabla
-  const handleEditTable = (table) => {
-    localStorage.setItem('tableToEdit', JSON.stringify(table));
-    navigate('/norma_17');
-    // Nota: Navegar a '/norma_004' inmediatamente después puede causar que solo se ejecute la última navegación
-    // Asegúrate de que esto sea lo que deseas. De lo contrario, elimina una de las navegaciones.
-    navigate('/norma_004');
-  };
+  // src/components/SavedTables.jsx
+const handleEditTable = (table) => {
+  // Incluir folderId al guardar en localStorage
+  localStorage.setItem('tableToEdit', JSON.stringify({ ...table, folderId: selectedFolder.id }));
+  navigate('/norma_17');
+  navigate('/norma_004'); // Revisar si necesitan ambas navegaciones
+};
+
 
   // Función para eliminar una tabla
   const handleDeleteTable = async (tableId) => {

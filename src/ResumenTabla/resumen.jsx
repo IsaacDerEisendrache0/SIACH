@@ -109,7 +109,6 @@ const TablaResumen = () => {
     }),
     { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 }
   );
-  
 
   return (
     <div className="tabla-container">
