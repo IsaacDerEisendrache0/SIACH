@@ -1935,7 +1935,7 @@ const handleSelectFolder = (folderId) => {
                   <tr>
                     <td className="risk-label-cell">Acción:</td>
                     <td className="risk-action-cell">
-                      {calculateRisk() > 400 ? 'Detención inmediata' : calculateRisk() > 200 ? 'Corrección inmediata' : calculateRisk() > 70 ? 'Corrección urgente' : calculateRisk() > 20 ? 'Debe corregirse' : 'Tolerable'}
+                      {calculateRisk() > 400 ? 'Detención inmediata' : calculateRisk() > 200 ? 'Corrección inmediata' : calculateRisk() > 70 ? 'Corrección urgente' : calculateRisk() > 20 ? 'requiere atencion' : 'Tolerable'}
                     </td>
                   </tr>
                 </tbody>
