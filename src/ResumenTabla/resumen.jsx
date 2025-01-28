@@ -25,6 +25,7 @@ const TablaResumen = () => {
       query(collection(db, "resumen_17"), where("uid", "==", uid)),
       (snapshot) => {
         const areasData17 = snapshot.docs.map((doc) => ({
+          nombreEmpresa: doc.data().nombreEmpresa || "Sin empresa", // Asegúrate de capturar el campo
           area: doc.id,
           collectionName: "resumen_17",
           puestos: doc.data().puestos || [],
@@ -47,6 +48,7 @@ const TablaResumen = () => {
       query(collection(db, "resumen"), where("uid", "==", uid)),
       (snapshot) => {
         const areasData04 = snapshot.docs.map((doc) => ({
+          nombreEmpresa: doc.data().nombreEmpresa || "Sin empresa", // Asegúrate de capturar el campo
           area: doc.id,
           collectionName: "resumen",
           puestos: doc.data().puestos || [],
