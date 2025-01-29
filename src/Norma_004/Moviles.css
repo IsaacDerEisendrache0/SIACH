@@ -452,3 +452,65 @@ body {
   font-size: 18px;  /* Aumenta el tamaño de la fuente de las opciones */
 }
 
+
+/* Asegurar que el contenedor del logo esté alineado correctamente */
+.logo-container-04 {
+  display: flex;
+  align-items: flex-start; /* Alinea el logo en la parte superior */
+  justify-content: flex-end;
+  gap: 10px;
+  width: auto;
+  padding: 5px;
+}
+
+/* Ajustar la imagen del logo y subirla */
+.company-logo-04 {
+  width: 100px;
+  height: auto;
+  max-height: 80px; /* Mantener proporciones */
+  object-fit: contain;
+  border: none;
+  background: transparent;
+  margin-top: -10px; /* Subir el logo ligeramente */
+}
+
+/* Ajustar la celda del logo */
+.td-logo-04 {
+  text-align: center;
+  vertical-align: top; /* Subir el contenido de la celda */
+  padding: 5px;
+}
+
+
+/* Botón de eliminación del logo */
+.remove-logo-button-04 {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+
+
+
+/* Eliminar bordes y fondos innecesarios en la celda */
+td[colspan="2"].logo-cell-04 {
+  text-align: center;
+  vertical-align: middle;
+  background: none !important;
+  border: none !important;
+  padding: 5px;
+}
+
+
+
+
+
+  

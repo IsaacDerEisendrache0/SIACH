@@ -558,6 +558,19 @@ const obtenerColorPuntuacion = (puntuacion) => {
 };
 
 
+const [empresa, setEmpresa] = useState('');
+
+
+const empresas = [
+  { nombre: 'Maxion', url: Maxion },
+  { nombre: 'Safran', url: Safran },
+  { nombre: 'OtraEmpresa', url: '' }
+];
+
+
+
+
+
 
   return (
     <div className="risk-table-container">
@@ -566,31 +579,34 @@ const obtenerColorPuntuacion = (puntuacion) => {
         <h4 className="section-header" style={{ color: 'black' }}>
           ANÁLISIS DE RIESGO POTENCIAL GENERADO POR EQUIPOS MÓVILES
           NOM-004-STPS-1999
+
+          
         </h4>
-          {logoSeleccionado ? (
-            <div className="logo-container" style={{ display: 'flex', alignItems: 'center' }}>
-              <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" style={{ marginLeft: '20px', width: '100px', height: 'auto' }} />
-              <button onClick={handleRemoveLogo} className="remove-logo-button" style={{ marginLeft: '10px' }}>×</button>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(event) => {
-                  const file = event.target.files[0];
-                  if (file) {
-                    const imageUrl = URL.createObjectURL(file);
-                    setLogoSeleccionado(imageUrl);
-                  }
-                }}
-                style={{ cursor: 'pointer', padding: '5px' }}
-              />
-            
-            </div>
-          )}
+          
+        <td colSpan="2" className="logo-cell-04">
+  {logoSeleccionado ? (
+    <div className="logo-container-04" style={{ display: 'flex', alignItems: 'center' }}>
+      <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo-04" style={{ width: '100px', height: 'auto' }} />
+      <button onClick={handleRemoveLogo} className="remove-logo-button-04">×</button>
+    </div>
+  ) : (
+    <select 
+      value={logoSeleccionado} 
+      onChange={handleLogoChange} 
+      className="dropdown-logo-04"
+    >
+      <option value="">Seleccione un logo</option>
+      {empresas.map((emp, index) => emp.url && (
+        <option key={index} value={emp.url}>{emp.nombre}</option>
+      ))}
+    </select>
+  )}
+</td>
+
+
         
       </div>
+      
     
       <table className="risk-table" style={{ backgroundColor: 'white' }}>
         <thead>
@@ -626,6 +642,21 @@ const obtenerColorPuntuacion = (puntuacion) => {
 
 
             </td>
+
+            <th className="red">Empresa</th>
+<td colSpan="2">
+  <select 
+    value={empresa} 
+    onChange={(e) => setEmpresa(e.target.value)} 
+    className="dropdown-empresa"
+  >
+    <option value="">Seleccione una empresa</option>
+    {empresas.map((emp, index) => (
+      <option key={index} value={emp.url}>{emp.nombre}</option>
+    ))}
+  </select>
+</td>
+
 
             <th className="red">POE:</th>
             <td colSpan="2">
