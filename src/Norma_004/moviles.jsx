@@ -578,6 +578,7 @@ const handleAddPuesto = () => {
       alert('Hubo un problema al guardar la tabla.');
     }
   };
+  
 
   return (
     <div className="risk-table-container">
