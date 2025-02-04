@@ -40,23 +40,28 @@ const SavedTables = () => {
 
   // Función para cargar las tablas desde Firestore dentro de una carpeta específica
   // src/components/SavedTables.jsx
-const loadTablesFromFirestore = async (folderId) => {
-  try {
-    const tablasCollection = collection(db, 'carpetas', folderId, 'tablas');
-    const querySnapshot = await getDocs(tablasCollection);
-    const tables = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-    const sortedTables = tables.sort((a, b) => {
-      const dateA = new Date(`${a.fecha} ${a.hora}`);
-      const dateB = new Date(`${b.fecha} ${b.hora}`);
-      return dateB - dateA;
-    });
-
-    setSavedTables(sortedTables);
-  } catch (error) {
-    console.error('Error al cargar las tablas desde Firestore:', error);
-  }
-};
+  const loadTablesFromFirestore = async (folderId) => {
+    try {
+      const tablasCollection = collection(db, 'carpetas', folderId, 'tablas');
+      const querySnapshot = await getDocs(tablasCollection);
+      const tables = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        nombreEmpresa: doc.data().nombreEmpresa || "No especificada" // Asegurar que siempre tenga un valor
+      }));
+  
+      const sortedTables = tables.sort((a, b) => {
+        const dateA = new Date(`${a.fecha} ${a.hora}`);
+        const dateB = new Date(`${b.fecha} ${b.hora}`);
+        return dateB - dateA;
+      });
+  
+      setSavedTables(sortedTables);
+    } catch (error) {
+      console.error('Error al cargar las tablas desde Firestore:', error);
+    }
+  };
+  
 
   
 
@@ -142,12 +147,16 @@ const loadTablesFromFirestore = async (folderId) => {
 
   // Función para editar una tabla
   // src/components/SavedTables.jsx
-const handleEditTable = (table) => {
-  // Incluir folderId al guardar en localStorage
-  localStorage.setItem('tableToEdit', JSON.stringify({ ...table, folderId: selectedFolder.id }));
-  navigate('/norma_17');
-  navigate('/norma_004'); // Revisar si necesitan ambas navegaciones
-};
+  const handleEditTable = (table) => {
+    localStorage.setItem('tableToEdit', JSON.stringify({ 
+      ...table, 
+      folderId: selectedFolder.id,
+      nombreEmpresa: table.nombreEmpresa || "No especificada" // Asegurar que siempre tenga un valor
+    }));
+    navigate('/norma_17');
+    navigate('/norma_004'); // Revisa si ambas rutas son necesarias
+  };
+  
 
 
   // Función para eliminar una tabla

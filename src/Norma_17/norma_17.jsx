@@ -134,6 +134,7 @@ const RiskAssessmentTable = () => {
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState('');
   const [newFolderName, setNewFolderName] = useState('');
+  const [fechaActual, setFechaActual] = useState("");
 
   
 
@@ -1197,7 +1198,10 @@ const handleSelectFolder = (folderId) => {
 
 
     
-
+useEffect(() => {
+  const hoy = new Date().toISOString().split("T")[0]; // Obtiene la fecha actual en formato YYYY-MM-DD
+  setFechaActual(hoy);
+}, []);
     
 
   
@@ -1537,9 +1541,9 @@ const handleSelectFolder = (folderId) => {
             className="large-text-dropdown"
           >
             {/* Opciones de empresa */}
-            <option value="Safran">Safran</option>
+            <option value="seleccione una empresa">seleccione una empresa</option>
             <option value="Maxion">Maxion</option>
-            <option value="OtraEmpresa">Otra Empresa</option>
+            <option value="Safran">Safran</option>
           </select>
         </td>
       </tr>
@@ -1573,7 +1577,8 @@ const handleSelectFolder = (folderId) => {
         <input
           type="date"
           id="fechaInspeccion"
-          defaultValue="2025-01-01"
+          value={fechaActual} // Establece la fecha actual como valor
+          onChange={(e) => setFechaActual(e.target.value)} // Permite modificar la fecha manualmente
           className="date-input"
         />
       </td>
