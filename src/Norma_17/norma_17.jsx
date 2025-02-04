@@ -13,6 +13,7 @@ import { getAuth } from "firebase/auth";
 
 
 
+
 const RiskAssessmentTable = () => {
 
   const [areas, setAreas] = useState([
@@ -927,25 +928,16 @@ const handleMainOptionChange = (e) => {
   
 
   // Estado para almacenar el logo seleccionado
-  const [logoSeleccionado, setLogoSeleccionado] = useState(() => {
-    return localStorage.getItem("logoEmpresa") || null;
-  });
+  const [logoSeleccionado, setLogoSeleccionado] = useState(null);
 
+  // Maneja el cambio de selección en el menú desplegable
   const handleLogoChange = (event) => {
-    const selectedLogo = event.target.value;
-    setLogoSeleccionado(selectedLogo);
+    setLogoSeleccionado(event.target.value); // Guarda la URL del logo seleccionado
   };
-
-  useEffect(() => {
-    if (logoSeleccionado) {
-      localStorage.setItem("logoEmpresa", logoSeleccionado);
-    }
-  }, [logoSeleccionado]);
 
   // Maneja la eliminación del logo y muestra el menú desplegable nuevamente
   const handleRemoveLogo = () => {
-    setLogoSeleccionado(null);
-    localStorage.removeItem("logoEmpresa");
+    setLogoSeleccionado(null); // Elimina el logo seleccionado
   };
   
   const [hideButtons, setHideButtons] = useState(false);
@@ -990,16 +982,14 @@ const handleMainOptionChange = (e) => {
   
   
 
-  // Manejar la subida de un logo personalizado
   const handleCustomLogoUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setLogoSeleccionado(reader.result); // Establece la imagen subida
-        localStorage.setItem("logoEmpresa", reader.result); // Guarda en localStorage
+        setLogoSeleccionado(reader.result); // Establece la imagen cargada como el logo seleccionado
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file); // Lee el archivo como una URL de datos
     }
   };
   
@@ -1208,16 +1198,7 @@ const handleSelectFolder = (folderId) => {
 
     
 
-
-  const [fechaActual, setFechaActual] = useState("");
-
-  useEffect(() => {
-    // Obtener la fecha actual en formato YYYY-MM-DD
-    const hoy = new Date();
-    const fechaHoy = hoy.toISOString().split("T")[0];
-    setFechaActual(fechaHoy);
-  }, []);
-
+    
 
   
   return (
@@ -1236,52 +1217,64 @@ const handleSelectFolder = (folderId) => {
             </h3>
           </td>
 
-          <td colSpan="3">
-      {logoSeleccionado ? (
-        <div className="logo-container">
-          <img
-            src={logoSeleccionado}
-            alt="Logo de la Empresa"
-            className="company-logo"
-          />
-          <button onClick={handleRemoveLogo} className="remove-logo-button">×</button>
-        </div>
-      ) : (
-        <div className="logo-upload-container">
-          <select onChange={handleLogoChange} className="logo-dropdown">
-            <option value="">Selecciona una empresa</option>
-            {logos.map((logo, index) => (
-              <option key={index} value={logo.url}>
-                {logo.nombre}
-              </option>
-            ))}
-          </select>
-          <label htmlFor="upload-logo" className="upload-button">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="black"
-              className="upload-icon"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3 16.5V19a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 19v-2.5M16.5 12l-4.5-4.5m0 0L7.5 12m4.5-4.5V19"
+              <td colSpan="3">
+                {logoSeleccionado ? (
+                  <div className="logo-container">
+                    <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" />
+                    <button onClick={handleRemoveLogo} className="remove-logo-button">×</button>
+                  </div>
+                ) : (
+                  <div className="logo-upload-container">
+                    <select onChange={handleLogoChange} className="logo-dropdown">
+                      <option value="">Selecciona una empresa</option>
+                      {logos.map((logo, index) => (
+                        <option key={index} value={logo.url}>
+                          {logo.nombre}
+                        </option>
+                      ))}
+                    </select>
+                    <label htmlFor="upload-logo" className="upload-button">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="black"
+                    className="upload-icon"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 16.5V19a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 19v-2.5M16.5 12l-4.5-4.5m0 0L7.5 12m4.5-4.5V19"
+                    />
+                  </svg>
+                </label>
+                <input
+                  type="file"
+                  id="upload-logo"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={handleCustomLogoUpload}
+                />
+
+              <input
+                type="file"
+                id="upload-logo"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={handleCustomLogoUpload}
               />
-            </svg>
-          </label>
-          <input
-            type="file"
-            id="upload-logo"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={handleCustomLogoUpload}
-          />
-        </div>
-      )}
-    </td>
+
+                    <input
+                      type="file"
+                      id="upload-logo"
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={handleCustomLogoUpload}
+                    />
+                  </div>
+                )}
+              </td>
 
           </tr>
 
@@ -1580,9 +1573,8 @@ const handleSelectFolder = (folderId) => {
         <input
           type="date"
           id="fechaInspeccion"
-          value={fechaActual}
+          defaultValue="2025-01-01"
           className="date-input"
-          readOnly // Opcional, si no quieres que se edite manualmente
         />
       </td>
     </tr>
