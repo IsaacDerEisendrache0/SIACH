@@ -225,55 +225,34 @@ const SavedTables = () => {
     setSelectedNorma(norma);
     loadRegistros(selectedEmpresa.id, norma.id);
   };
+  
 
   const loadRegistros = async (empresaId, normaId) => {
     try {
       const registrosSnap = await getDocs(
-        collection(db, 'empresas', empresaId, 'normas', normaId, 'registros')
+        collection(db, 'empresas', empresaId, 'normas', normaId, 'tablas')
       );
       const fetchedRegistros = registrosSnap.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
       }));
-      // Ordenar si lo deseas por fecha/hora
+      // Por ejemplo, ordenamos por fecha y hora (si estos campos están en el formato adecuado)
       const sorted = fetchedRegistros.sort((a, b) => {
         const dateA = new Date(`${a.fecha} ${a.hora}`);
         const dateB = new Date(`${b.fecha} ${b.hora}`);
-        return dateB - dateA; // más reciente primero
+        return dateB - dateA;
       });
       setRegistros(sorted);
     } catch (error) {
       console.error('Error al cargar registros:', error);
     }
   };
+  
 
   // ------------------------------------------------------------------
   // CREAR REGISTRO (EJEMPLO SIMPLIFICADO)
   // ------------------------------------------------------------------
-  const handleAddRegistro = async () => {
-    // Datos de ejemplo: adapta esto a tu formulario real
-    const nuevoRegistro = {
-      nombreEmpresa: selectedEmpresa.nombre,
-      norma: selectedNorma.nombre,
-      fecha: '2025-02-05',
-      hora: '10:00',
-      areaSeleccionada: 'Área X',
-      puestoSeleccionado: 'Puesto Y',
-      risk: 'Medio',
-      fechaCreacion: serverTimestamp(),
-    };
-
-    try {
-      const docRef = await addDoc(
-        collection(db, 'empresas', selectedEmpresa.id, 'normas', selectedNorma.id, 'registros'),
-        nuevoRegistro
-      );
-      setRegistros([...registros, { id: docRef.id, ...nuevoRegistro }]);
-      alert('Registro creado con éxito.');
-    } catch (error) {
-      console.error('Error al crear el registro:', error);
-    }
-  };
+  
 
   // ------------------------------------------------------------------
   // ELIMINAR REGISTRO
@@ -429,9 +408,7 @@ const SavedTables = () => {
           <h2>Registros de la Norma: {selectedNorma.nombre}</h2>
 
           {/* Ejemplo de botón para crear un registro rápido */}
-          <button onClick={handleAddRegistro} className="btn-add-folder">
-            Crear nuevo registro (demo)
-          </button>
+          
 
           {registros.map((registro) => (
             <div key={registro.id} className="saved-table">

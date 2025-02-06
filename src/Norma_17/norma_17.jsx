@@ -468,15 +468,13 @@ const handleImageSelect = (image) => {
 
 
 
-const saveTable = async (folderId) => {
+const saveTable = async (empresaId, normaId) => {
   const auth = getAuth();
   const user = auth.currentUser;
-
   if (!user) {
     alert("No estás autenticado.");
     return;
   }
-
   const uid = user.uid; // Obtener UID del usuario
 
   const tableData = {
@@ -501,11 +499,11 @@ const saveTable = async (folderId) => {
   };
 
   try {
-    // Guardar la tabla en la carpeta específica
-    await addDoc(collection(db, "carpetas", folderId, "tablas"), tableData);
+    // Guardar la tabla en la subcolección "tablas" de la norma seleccionada dentro de la empresa
+    await addDoc(collection(db, "empresas", empresaId, "normas", normaId, "tablas"), tableData);
     alert("Tabla guardada con éxito en Firestore.");
 
-    // Actualizar el resumen correspondiente si es necesario
+    // Actualizar el resumen correspondiente si es necesario (este bloque se mantiene igual)
     const resumenRef = doc(db, "resumen_17", areaSeleccionada);
     const resumenSnapshot = await getDoc(resumenRef);
 
@@ -553,7 +551,8 @@ const saveTable = async (folderId) => {
 
 
 
-const updateTable = async (folderId) => {
+
+const updateTable = async (empresaId, normaId) => {
   const updatedTable = {
     areaSeleccionada,
     puestoSeleccionado,
@@ -570,30 +569,26 @@ const updateTable = async (folderId) => {
     tiempoExposicion,
     norma: 'N-017',
     fecha, // Mantener la misma fecha
-    hora, // Mantener la misma hora de creación
+    hora,  // Mantener la misma hora de creación
   };
 
   try {
     if (!tableId) {
       throw new Error('No se encontró el ID de la tabla para actualizar.');
     }
-
-    // Actualizar la tabla en la carpeta específica
-    const docRef = doc(db, 'carpetas', folderId, 'tablas', tableId);
+    // Actualizar la tabla en la subcolección "tablas" de la norma seleccionada
+    const docRef = doc(db, 'empresas', empresaId, 'normas', normaId, 'tablas', tableId);
     await updateDoc(docRef, updatedTable);
 
-    // Actualizar la colección de resumen por área
-    const resumenRef = doc(db, 'resumen', areaSeleccionada);
+    // Actualizar el resumen (este bloque se mantiene igual)
+    const resumenRef = doc(db, 'resumen_17', areaSeleccionada);
     const resumenSnapshot = await getDoc(resumenRef);
-
-    // Obtener los datos existentes de la colección "resumen"
     let areaData = resumenSnapshot.exists()
       ? resumenSnapshot.data()
       : { puestos: [], tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 };
 
     console.log('Datos del área antes de actualizar:', areaData);
 
-    // Actualizar o agregar el puesto en el campo "puestos"
     const updatedPuestos = [
       ...areaData.puestos.filter((p) => p.nombre !== puestoSeleccionado),
       {
@@ -614,7 +609,6 @@ const updateTable = async (folderId) => {
 
     console.log('Puestos actualizados:', updatedPuestos);
 
-    // Calcular los totales acumulados para la categoría de riesgos
     const newTotals = updatedPuestos.reduce(
       (acc, puesto) => {
         const { magnitudRiesgo } = puesto;
@@ -630,7 +624,6 @@ const updateTable = async (folderId) => {
 
     console.log('Nuevos totales calculados:', newTotals);
 
-    // Actualizar el documento del área con los nuevos datos
     await setDoc(resumenRef, { ...areaData, puestos: updatedPuestos, ...newTotals });
 
     alert('Tabla actualizada con éxito en Firestore.');
@@ -639,6 +632,7 @@ const updateTable = async (folderId) => {
     alert('Error al actualizar la tabla.');
   }
 };
+
 
 
 
@@ -929,7 +923,19 @@ const handleMainOptionChange = (e) => {
   
 
   // Estado para almacenar el logo seleccionado
-  const [logoSeleccionado, setLogoSeleccionado] = useState(null);
+  const [logoSeleccionado, setLogoSeleccionado] = useState(() => {
+    return localStorage.getItem('logoSeleccionado') || null;
+  });
+  
+  // Persistir el logo en localStorage
+  useEffect(() => {
+    if (logoSeleccionado) {
+      localStorage.setItem('logoSeleccionado', logoSeleccionado);
+    } else {
+      localStorage.removeItem('logoSeleccionado');
+    }
+  }, [logoSeleccionado]);
+
 
   // Maneja el cambio de selección en el menú desplegable
   const handleLogoChange = (event) => {
@@ -1138,23 +1144,25 @@ const handleMainOptionChange = (e) => {
     };
 
 
-    // Función para cargar las carpetas desde Firestore
-    const loadFolders = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, 'carpetas'));
-        const fetchedFolders = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          nombre: doc.data().nombre,
-        }));
-        setFolders(fetchedFolders);
-      } catch (error) {
-        console.error('Error al cargar las carpetas:', error);
-      }
-    };
+    // Función para cargar las empresas desde Firestore
+const loadFolders = async () => {
+  try {
+    // Se lee de la colección "empresas" en lugar de "carpetas"
+    const querySnapshot = await getDocs(collection(db, 'empresas'));
+    const fetchedFolders = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      nombre: doc.data().nombre,
+    }));
+    setFolders(fetchedFolders);
+  } catch (error) {
+    console.error('Error al cargar las empresas:', error);
+  }
+};
 
-    useEffect(() => {
-      loadFolders();
-    }, []);
+useEffect(() => {
+  loadFolders();
+}, []);
+
 
 
     // Abrir el modal
@@ -1165,8 +1173,9 @@ const openFolderModal = () => {
 // Cerrar el modal
 const closeFolderModal = () => {
   setIsFolderModalOpen(false);
-  setSelectedFolderId('');
-  setNewFolderName('');
+  setSelectedEmpresaId('');
+  setSelectedNormaId('');
+  setNormas([]);
 };
 
 // Crear una nueva carpeta
@@ -1203,6 +1212,38 @@ useEffect(() => {
   setFechaActual(hoy);
 }, []);
     
+// Estado para la empresa seleccionada (anteriormente selectedFolderId)
+const [selectedEmpresaId, setSelectedEmpresaId] = useState('');
+
+// Estado para la norma seleccionada dentro de la empresa
+const [selectedNormaId, setSelectedNormaId] = useState('');
+
+// Estado para almacenar las normas cargadas de la empresa seleccionada
+const [normas, setNormas] = useState([]);
+
+const loadNormas = async (empresaId) => {
+  try {
+    const snapshot = await getDocs(collection(db, 'empresas', empresaId, 'normas'));
+    const fetchedNormas = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setNormas(fetchedNormas);
+  } catch (error) {
+    console.error('Error al cargar normas:', error);
+  }
+};
+
+const handleSelectEmpresa = (empresaId) => {
+  setSelectedEmpresaId(empresaId);
+  // Cargar las normas correspondientes a la empresa seleccionada:
+  loadNormas(empresaId);
+};
+
+const handleSelectNorma = (normaId) => {
+  setSelectedNormaId(normaId);
+};
+
 
   
   return (
@@ -1221,129 +1262,170 @@ useEffect(() => {
             </h3>
           </td>
 
-              <td colSpan="3">
-                {logoSeleccionado ? (
-                  <div className="logo-container">
-                    <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" />
-                    <button onClick={handleRemoveLogo} className="remove-logo-button">×</button>
-                  </div>
-                ) : (
-                  <div className="logo-upload-container">
-                    <select onChange={handleLogoChange} className="logo-dropdown">
-                      <option value="">Selecciona una empresa</option>
-                      {logos.map((logo, index) => (
-                        <option key={index} value={logo.url}>
-                          {logo.nombre}
-                        </option>
-                      ))}
-                    </select>
-                    <label htmlFor="upload-logo" className="upload-button">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="black"
-                    className="upload-icon"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 16.5V19a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 19v-2.5M16.5 12l-4.5-4.5m0 0L7.5 12m4.5-4.5V19"
-                    />
-                  </svg>
-                </label>
-                <input
-                  type="file"
-                  id="upload-logo"
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  onChange={handleCustomLogoUpload}
-                />
-
-              <input
-                type="file"
-                id="upload-logo"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={handleCustomLogoUpload}
-              />
-
-                    <input
-                      type="file"
-                      id="upload-logo"
-                      accept="image/*"
-                      style={{ display: 'none' }}
-                      onChange={handleCustomLogoUpload}
-                    />
-                  </div>
-                )}
-              </td>
+          <td colSpan="3">
+    {logoSeleccionado ? (
+      <div className="logo-container">
+        <img src={logoSeleccionado} alt="Logo de la Empresa" className="company-logo" />
+        <button onClick={handleRemoveLogo} className="remove-logo-button">×</button>
+      </div>
+    ) : (
+      <div className="logo-upload-container">
+        <select onChange={handleLogoChange} className="logo-dropdown">
+          <option value="">Selecciona una empresa</option>
+          {logos.map((logo, index) => (
+            <option key={index} value={logo.url}>
+              {logo.nombre}
+            </option>
+          ))}
+        </select>
+        <label htmlFor="upload-logo" className="upload-button">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="black"
+            className="upload-icon"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3 16.5V19a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 19v-2.5M16.5 12l-4.5-4.5m0 0L7.5 12m4.5-4.5V19"
+            />
+          </svg>
+        </label>
+        <input
+          type="file"
+          id="upload-logo"
+          accept="image/*"
+          style={{ display: 'none' }}
+          onChange={handleCustomLogoUpload}
+        />
+      </div>
+    )}
+  </td>
 
           </tr>
 
           <Modal
   isOpen={isFolderModalOpen}
   onRequestClose={closeFolderModal}
-  contentLabel="Seleccionar Carpeta"
+  contentLabel="Seleccionar Empresa y Norma"
   className="folder-modal"
   overlayClassName="folder-modal-overlay"
 >
-  <h2>Selecciona una Carpeta</h2>
-  <div className="folder-selection">
-    <h3>Carpetas Existentes:</h3>
-    {folders.length > 0 ? (
-      <ul>
-        {folders.map(folder => (
-          <li key={folder.id}>
-            <label>
-              <input
-                type="radio"
-                name="selectedFolder"
-                value={folder.id}
-                checked={selectedFolderId === folder.id}
-                onChange={() => handleSelectFolder(folder.id)}
-              />
-              {folder.nombre}
-            </label>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <p>No hay carpetas existentes.</p>
-    )}
-  </div>
+  {/* Si aún no se ha seleccionado la empresa, mostramos la lista de empresas */}
+  {!selectedEmpresaId && (
+    <>
+      <h2>Selecciona una Empresa</h2>
+      <div className="folder-selection">
+        <h3>Empresas Existentes:</h3>
+        {folders.length > 0 ? (
+          <ul>
+            {folders.map(empresa => (
+              <li key={empresa.id}>
+                <label>
+                  <input
+                    type="radio"
+                    name="selectedEmpresa"
+                    value={empresa.id}
+                    checked={selectedEmpresaId === empresa.id}
+                    onChange={() => handleSelectEmpresa(empresa.id)}
+                  />
+                  {empresa.nombre}
+                </label>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No hay empresas existentes.</p>
+        )}
+      </div>
+      <div className="modal-buttons">
+        <button
+          onClick={() => {
+            if (selectedEmpresaId) {
+              // Se cargan las normas, ya se hizo en handleSelectEmpresa
+              // Ahora el modal cambiará a mostrar la lista de normas
+            } else {
+              alert('Por favor, selecciona una empresa.');
+            }
+          }}
+          className="next-button"
+        >
+          Siguiente
+        </button>
+        <button onClick={closeFolderModal} className="cancel-button">
+          Cancelar
+        </button>
+      </div>
+    </>
+  )}
 
-  <div className="create-new-folder">
-    <h3>Crear Nueva Carpeta:</h3>
-    <input
-      type="text"
-      placeholder="Nombre de la nueva carpeta"
-      value={newFolderName}
-      onChange={(e) => setNewFolderName(e.target.value)}
-    />
-    <button onClick={handleCreateNewFolder}>Crear</button>
-  </div>
-
-  <div className="modal-buttons">
-    <button
-      onClick={() => {
-        if (selectedFolderId) {
-          isEditing ? updateTable(selectedFolderId) : saveTable(selectedFolderId);
-          closeFolderModal();
-        } else {
-          alert('Por favor, selecciona una carpeta o crea una nueva.');
-        }
-      }}
-      className="confirm-button"
-    >
-      Confirmar
-    </button>
-    <button onClick={closeFolderModal} className="cancel-button">
-      Cancelar
-    </button>
-  </div>
+  {/* Si se ha seleccionado una empresa, mostramos la lista de normas para esa empresa */}
+  {selectedEmpresaId && (
+    <>
+      <h2>Selecciona una Norma</h2>
+      <div className="folder-selection">
+        <h3>Normas Existentes:</h3>
+        {normas.length > 0 ? (
+          <ul>
+            {normas.map(norma => (
+              <li key={norma.id}>
+                <label>
+                  <input
+                    type="radio"
+                    name="selectedNorma"
+                    value={norma.id}
+                    checked={selectedNormaId === norma.id}
+                    onChange={() => handleSelectNorma(norma.id)}
+                  />
+                  {norma.nombre}
+                </label>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No hay normas existentes para esta empresa.</p>
+        )}
+      </div>
+      <div className="modal-buttons">
+        <button
+          onClick={() => {
+            if (selectedNormaId) {
+              // Llamamos a la función de guardado o actualización usando ambos IDs
+              if (isEditing) {
+                updateTable(selectedEmpresaId, selectedNormaId);
+              } else {
+                saveTable(selectedEmpresaId, selectedNormaId);
+              }
+              closeFolderModal();
+            } else {
+              alert('Por favor, selecciona una norma.');
+            }
+          }}
+          className="confirm-button"
+        >
+          Confirmar
+        </button>
+        <button
+          onClick={() => {
+            // Permite volver atrás para elegir otra empresa
+            setSelectedEmpresaId('');
+            setSelectedNormaId('');
+            setNormas([]);
+          }}
+          className="back-button"
+        >
+          Volver a Empresas
+        </button>
+      </div>
+    </>
+  )}
 </Modal>
+
+
+
 
           <tr>
               <td className="no-border-cell" colSpan="3">
