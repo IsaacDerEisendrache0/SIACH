@@ -1,5 +1,5 @@
 // src/components/SavedTables.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   collection,
@@ -36,8 +36,6 @@ const SavedTables = () => {
   // 3) REGISTROS
   const [registros, setRegistros] = useState([]);
 
-  
-
   // ------------------------------------------------------------------
   // CARGA DE EMPRESAS AL MONTAR EL COMPONENTE
   // ------------------------------------------------------------------
@@ -57,8 +55,6 @@ const SavedTables = () => {
       console.error('Error al cargar empresas:', error);
     }
   };
-  
-  
 
   // ------------------------------------------------------------------
   // CREAR EMPRESA
@@ -226,7 +222,6 @@ const SavedTables = () => {
     loadRegistros(selectedEmpresa.id, norma.id);
   };
   
-
   const loadRegistros = async (empresaId, normaId) => {
     try {
       const registrosSnap = await getDocs(
@@ -236,7 +231,7 @@ const SavedTables = () => {
         id: doc.id,
         ...doc.data(),
       }));
-      // Por ejemplo, ordenamos por fecha y hora (si estos campos están en el formato adecuado)
+      // Por ejemplo, ordenamos por fecha y hora
       const sorted = fetchedRegistros.sort((a, b) => {
         const dateA = new Date(`${a.fecha} ${a.hora}`);
         const dateB = new Date(`${b.fecha} ${b.hora}`);
@@ -247,12 +242,10 @@ const SavedTables = () => {
       console.error('Error al cargar registros:', error);
     }
   };
-  
 
   // ------------------------------------------------------------------
   // CREAR REGISTRO (EJEMPLO SIMPLIFICADO)
   // ------------------------------------------------------------------
-  
 
   // ------------------------------------------------------------------
   // ELIMINAR REGISTRO
@@ -281,7 +274,6 @@ const SavedTables = () => {
       empresaId: selectedEmpresa.id,
       normaId: selectedNorma.id,
     }));
-    // Navegar a alguna vista de edición
     navigate('/norma_004');
   };
 
@@ -301,10 +293,107 @@ const SavedTables = () => {
   };
 
   // ------------------------------------------------------------------
-  // RENDER PRINCIPAL
+  // (A) Estados para Filtros (Empresa, Norma)
   // ------------------------------------------------------------------
+  const [selectedFilterEmpresa, setSelectedFilterEmpresa] = useState('');
+  const [selectedFilterNorma, setSelectedFilterNorma] = useState('');
+
+  // (B) Variables filtradas
+  const displayedEmpresas = selectedFilterEmpresa
+    ? empresas.filter(emp => emp.nombre === selectedFilterEmpresa)
+    : empresas;
+
+  const displayedNormas = selectedFilterNorma
+    ? normas.filter(norm => norm.nombre === selectedFilterNorma)
+    : normas;
+
+  const displayedRegistros = registros.filter(reg =>
+    (selectedFilterEmpresa ? reg.nombreEmpresa === selectedFilterEmpresa : true) &&
+    (selectedFilterNorma ? reg.norma === selectedFilterNorma : true)
+  );
+
+  // ------------------------------------------------------------------
+  // (C) Estado para controlar la visibilidad del menú (Hamburger)
+  // ------------------------------------------------------------------
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+
+  // ------------------------------------------------------------------
+  // D) Estado previo "searchTerm" (sin uso actual)
+  // ------------------------------------------------------------------
+  const [searchTerm, setSearchTerm] = useState('');
+
+  
+  const menuRef = useRef(null); // Referencia para detectar clics fuera
+
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setShowFilterMenu(false); // Cierra el menú si se hace clic fuera
+    }
+  };
+
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, []);
+
   return (
     <div className="saved-tables-container">
+      {/* Botón para regresar al menú principal */}
+      <div className="back-to-main">
+        <button onClick={() => navigate('/')} className="btn-back-main">
+          ⬅ Regresar al Menú Principal
+        </button>
+
+
+      </div>
+
+    
+      <div className="hamburger-menu-container" ref={menuRef}>
+    <button
+      className="hamburger-btn"
+      onClick={() => setShowFilterMenu(!showFilterMenu)}
+    >
+      ☰
+    </button>
+
+{/* Menú de filtros con clases condicionales */}
+<div className={`filter-container ${showFilterMenu ? 'show' : 'hide'}`}>
+  <label><strong>Empresa:</strong></label>
+  <select
+    value={selectedFilterEmpresa}
+    onChange={(e) => setSelectedFilterEmpresa(e.target.value)}
+  >
+    <option value="">Todas</option>
+    {empresas.map((emp) => (
+      <option key={emp.id} value={emp.nombre}>
+        {emp.nombre}
+      </option>
+    ))}
+  </select>
+
+  {selectedEmpresa && (
+    <>
+      <label><strong>Norma:</strong></label>
+      <select
+        value={selectedFilterNorma}
+        onChange={(e) => setSelectedFilterNorma(e.target.value)}
+      >
+        <option value="">Todas</option>
+        {normas.map((n) => (
+          <option key={n.id} value={n.nombre}>
+            {n.nombre}
+          </option>
+        ))}
+      </select>
+    </>
+  )}
+</div>
+</div>
+
+      {/* FIN BLOQUE BOTÓN HAMBURGER/FILTROS */}
+
       {/* =========================
           VISTA DE EMPRESAS
          ========================= */}
@@ -324,7 +413,11 @@ const SavedTables = () => {
 
           {empresas.length > 0 ? (
             <div className="folders-list">
-              {empresas.map((empresa) => (
+              {/* 
+                Se muestra la lista de empresas 
+                según el filtro "selectedFilterEmpresa"
+              */}
+              {displayedEmpresas.map((empresa) => (
                 <div key={empresa.id} className="folder-item">
                   <span
                     className="folder-name"
@@ -372,7 +465,7 @@ const SavedTables = () => {
 
           {normas.length > 0 ? (
             <div className="folders-list">
-              {normas.map((norma) => (
+              {displayedNormas.map((norma) => (
                 <div key={norma.id} className="folder-item">
                   <span
                     className="folder-name"
@@ -407,29 +500,28 @@ const SavedTables = () => {
           </div>
           <h2>Registros de la Norma: {selectedNorma.nombre}</h2>
 
-          {/* Ejemplo de botón para crear un registro rápido */}
-          
-
-          {registros.map((registro) => (
-            <div key={registro.id} className="saved-table">
-              <p><strong>Empresa:</strong> {registro.nombreEmpresa}</p>
-              <p><strong>Norma:</strong> {registro.norma}</p>
-              <p><strong>Área:</strong> {registro.areaSeleccionada}</p>
-              <p><strong>Puesto:</strong> {registro.puestoSeleccionado}</p>
-              <p><strong>Fecha de creación:</strong> {registro.fecha} - {registro.hora}</p>
-              <p><strong>Magnitud del Riesgo:</strong> {registro.risk}</p>
-              <div className="table-buttons">
-                <button className="btn-edit" onClick={() => handleEditRegistro(registro)}>
-                  Editar
-                </button>
-                <button className="btn-delete" onClick={() => handleDeleteRegistro(registro.id)}>
-                  Borrar
-                </button>
+          {registros.length > 0 ? (
+            displayedRegistros.map((registro) => (
+              <div key={registro.id} className="saved-table">
+                <p><strong>Empresa:</strong> {registro.nombreEmpresa}</p>
+                <p><strong>Norma:</strong> {registro.norma}</p>
+                <p><strong>Área:</strong> {registro.areaSeleccionada}</p>
+                <p><strong>Puesto:</strong> {registro.puestoSeleccionado}</p>
+                <p><strong>Fecha de creación:</strong> {registro.fecha} - {registro.hora}</p>
+                <p><strong>Magnitud del Riesgo:</strong> {registro.risk}</p>
+                <div className="table-buttons">
+                  <button className="btn-edit" onClick={() => handleEditRegistro(registro)}>
+                    Editar
+                  </button>
+                  <button className="btn-delete" onClick={() => handleDeleteRegistro(registro.id)}>
+                    Borrar
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-
-          {registros.length === 0 && <p>No hay registros en esta norma.</p>}
+            ))
+          ) : (
+            <p>No hay registros en esta norma.</p>
+          )}
         </>
       )}
     </div>
