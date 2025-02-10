@@ -298,7 +298,7 @@ const RiskAssessmentTable = () => {
   const downloadImage = () => {
     // Selecciona todos los botones que deben ocultarse
     const buttons = document.querySelectorAll(
-      '.btn-agregar, .btn-borrar, .download-button, .save-button'
+      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button"
     );
   
     // Oculta los botones temporalmente
@@ -2031,7 +2031,7 @@ const handleSelectNorma = (normaId) => {
                   <tr>
                     <td className="risk-label-cell">Acción:</td>
                     <td className="risk-action-cell">
-                      {calculateRisk() > 400 ? 'Detención inmediata' : calculateRisk() > 200 ? 'Corrección inmediata' : calculateRisk() > 70 ? 'Corrección urgente' : calculateRisk() > 20 ? 'requiere atencion' : 'Tolerable'}
+                      {calculateRisk() > 400 ? 'Detención inmediata' : calculateRisk() > 200 ? 'Corrección inmediata' : calculateRisk() > 70 ? 'Corrección urgente' : calculateRisk() > 20 ? 'Requiere atencion' : 'Tolerable'}
                     </td>
                   </tr>
                 </tbody>
@@ -2050,7 +2050,9 @@ const handleSelectNorma = (normaId) => {
   {isEditing ? 'Actualizar Tabla' : 'Guardar Tabla'}
   </button>
 
-  <button onClick={handleReset}>Reiniciar Tabla</button>
+  <button onClick={handleReset} className={`reset-button ${hideButtons ? "hidden-buttons" : ""}`}>
+  Reiniciar Tabla
+</button>
 
 
 </div>
