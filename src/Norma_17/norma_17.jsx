@@ -648,6 +648,7 @@ const [tableId, setTableId] = useState(null);
 
 
 
+
 useEffect(() => {
   const tableToEdit = JSON.parse(localStorage.getItem('tableToEdit'));
   if (tableToEdit) {
@@ -1007,13 +1008,20 @@ const handleMainOptionChange = (e) => {
     // Función para alternar la selección de una parte del cuerpo
     const toggleBodyPart = (part) => {
       setRemovedParts((prev) =>
-        prev.includes(part) ? prev.filter((p) => p !== part) : [...prev, part]
+        prev.includes(part)
+          ? prev.filter((p) => p !== part) // Si ya estaba en removedParts, se elimina (se vuelve a mostrar)
+          : [...prev, part] // Si no estaba, se agrega (se oculta)
       );
     };
+    
   
     // Determinar si mostrar "X" (si está en affectedBodyParts y no en removedParts)
-    const shouldShowX = (part) =>
-      affectedBodyParts.includes(part) && !removedParts.includes(part);
+    const shouldShowX = (part) => {
+      const isAutoSelected = affectedBodyParts.includes(part);
+      const isManuallyRemoved = removedParts.includes(part);
+    
+      return isAutoSelected !== isManuallyRemoved; 
+    };
 
 
 
@@ -1214,6 +1222,7 @@ useEffect(() => {
     
 // Estado para la empresa seleccionada (anteriormente selectedFolderId)
 const [selectedEmpresaId, setSelectedEmpresaId] = useState('');
+
 
 // Estado para la norma seleccionada dentro de la empresa
 const [selectedNormaId, setSelectedNormaId] = useState('');
