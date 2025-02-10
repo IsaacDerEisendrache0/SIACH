@@ -224,24 +224,27 @@ const SavedTables = () => {
   
   const loadRegistros = async (empresaId, normaId) => {
     try {
-      const registrosSnap = await getDocs(
-        collection(db, 'empresas', empresaId, 'normas', normaId, 'tablas')
-      );
-      const fetchedRegistros = registrosSnap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      // Por ejemplo, ordenamos por fecha y hora
-      const sorted = fetchedRegistros.sort((a, b) => {
-        const dateA = new Date(`${a.fecha} ${a.hora}`);
-        const dateB = new Date(`${b.fecha} ${b.hora}`);
-        return dateB - dateA;
-      });
-      setRegistros(sorted);
+        const registrosSnap = await getDocs(
+            collection(db, 'empresas', empresaId, 'normas', normaId, 'tablas')
+        );
+        const fetchedRegistros = registrosSnap.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+
+        // Ordenar por timestamp de Firebase si existe, o por fecha/hora si no está disponible
+        const sorted = fetchedRegistros.sort((a, b) => {
+            const dateA = a.fechaCreacion?.toDate() || new Date(`${a.fecha} ${a.hora}`);
+            const dateB = b.fechaCreacion?.toDate() || new Date(`${b.fecha} ${b.hora}`);
+            return dateB - dateA; // Orden descendente (más reciente primero)
+        });
+
+        setRegistros(sorted);
     } catch (error) {
-      console.error('Error al cargar registros:', error);
+        console.error('Error al cargar registros:', error);
     }
-  };
+};
+
 
   // ------------------------------------------------------------------
   // CREAR REGISTRO (EJEMPLO SIMPLIFICADO)
@@ -338,6 +341,24 @@ useEffect(() => {
   };
 }, []);
 
+
+// Estado para controlar la visibilidad del menú de filtros de área
+const [showAreaFilterMenu, setShowAreaFilterMenu] = useState(false);
+
+// Estado para filtrar registros por área
+const [selectedFilterArea, setSelectedFilterArea] = useState('');
+
+// Obtener áreas únicas de los registros disponibles
+const uniqueAreas = [...new Set(registros.map(reg => reg.areaSeleccionada))];
+
+// Aplicar filtro de área a los registros mostrados
+const filteredRegistros = registros.filter(reg =>
+  selectedFilterArea ? reg.areaSeleccionada === selectedFilterArea : true
+);
+
+
+
+
   return (
     <div className="saved-tables-container">
       {/* Botón para regresar al menú principal */}
@@ -350,7 +371,11 @@ useEffect(() => {
       </div>
 
     
-      <div className="hamburger-menu-container" ref={menuRef}>
+      {/* =========================
+    FILTRO DE EMPRESA Y NORMA (SOLO EN EMPRESAS Y NORMAS)
+   ========================= */}
+{(!selectedEmpresa || (selectedEmpresa && !selectedNorma)) && (
+  <div className="hamburger-menu-container" ref={menuRef}>
     <button
       className="hamburger-btn"
       onClick={() => setShowFilterMenu(!showFilterMenu)}
@@ -358,39 +383,73 @@ useEffect(() => {
       ☰
     </button>
 
-{/* Menú de filtros con clases condicionales */}
-<div className={`filter-container ${showFilterMenu ? 'show' : 'hide'}`}>
-  <label><strong>Empresa:</strong></label>
-  <select
-    value={selectedFilterEmpresa}
-    onChange={(e) => setSelectedFilterEmpresa(e.target.value)}
-  >
-    <option value="">Todas</option>
-    {empresas.map((emp) => (
-      <option key={emp.id} value={emp.nombre}>
-        {emp.nombre}
-      </option>
-    ))}
-  </select>
-
-  {selectedEmpresa && (
-    <>
-      <label><strong>Norma:</strong></label>
+    {/* Menú de filtros con clases condicionales */}
+    <div className={`filter-container ${showFilterMenu ? 'show' : 'hide'}`}>
+      <label><strong>Empresa:</strong></label>
       <select
-        value={selectedFilterNorma}
-        onChange={(e) => setSelectedFilterNorma(e.target.value)}
+        value={selectedFilterEmpresa}
+        onChange={(e) => setSelectedFilterEmpresa(e.target.value)}
       >
         <option value="">Todas</option>
-        {normas.map((n) => (
-          <option key={n.id} value={n.nombre}>
-            {n.nombre}
+        {empresas.map((emp) => (
+          <option key={emp.id} value={emp.nombre}>
+            {emp.nombre}
           </option>
         ))}
       </select>
-    </>
-  )}
-</div>
-</div>
+
+      {selectedEmpresa && (
+        <>
+          <label><strong>Norma:</strong></label>
+          <select
+            value={selectedFilterNorma}
+            onChange={(e) => setSelectedFilterNorma(e.target.value)}
+          >
+            <option value="">Todas</option>
+            {normas.map((n) => (
+              <option key={n.id} value={n.nombre}>
+                {n.nombre}
+              </option>
+            ))}
+          </select>
+        </>
+      )}
+    </div>
+  </div>
+)}
+
+{/* =========================
+    FILTRO POR ÁREA (SOLO EN REGISTROS)
+   ========================= */}
+{/* =========================
+    FILTRO DE ÁREA (SOLO EN REGISTROS)
+   ========================= */}
+{selectedNorma && registros.length > 0 && (
+  <div className="hamburger-menu-container" ref={menuRef}>
+    <button
+      className="hamburger-btn"
+      onClick={() => setShowAreaFilterMenu(!showAreaFilterMenu)}
+    >
+      ☰
+    </button>
+
+    {/* Menú de filtros con clases condicionales */}
+    <div className={`filter-container ${showAreaFilterMenu ? 'show' : 'hide'}`}>
+      <label><strong>Filtrar por Área:</strong></label>
+      <select
+        value={selectedFilterArea}
+        onChange={(e) => setSelectedFilterArea(e.target.value)}
+      >
+        <option value="">Todas</option>
+        {uniqueAreas.map((area, index) => (
+          <option key={index} value={area}>{area}</option>
+        ))}
+      </select>
+    </div>
+  </div>
+)}
+
+
 
       {/* FIN BLOQUE BOTÓN HAMBURGER/FILTROS */}
 
@@ -492,36 +551,36 @@ useEffect(() => {
           VISTA DE REGISTROS
          ========================= */}
       {selectedNorma && (
-        <>
-          <div className="back-to-home">
-            <button onClick={handleGoBackToNormas} className="btn-back-home">
-              ← Regresar a Normas
+  <>
+    <div className="back-to-home">
+      <button onClick={handleGoBackToNormas} className="btn-back-home">
+        ← Regresar a Normas
+      </button>
+    </div>
+    <h2>Registros de la Norma: {selectedNorma.nombre}</h2>
+
+    {filteredRegistros.length > 0 ? (
+      filteredRegistros.map((registro) => (
+        <div key={registro.id} className="saved-table">
+          <p><strong>Empresa:</strong> {registro.nombreEmpresa}</p>
+          <p><strong>Norma:</strong> {registro.norma}</p>
+          <p><strong>Área:</strong> {registro.areaSeleccionada}</p>
+          <p><strong>Puesto:</strong> {registro.puestoSeleccionado}</p>
+          <p><strong>Fecha de creación:</strong> {registro.fecha} - {registro.hora}</p>
+          <p><strong>Magnitud del Riesgo:</strong> {registro.risk}</p>
+          <div className="table-buttons">
+            <button className="btn-edit" onClick={() => handleEditRegistro(registro)}>
+              Editar
+            </button>
+            <button className="btn-delete" onClick={() => handleDeleteRegistro(registro.id)}>
+              Borrar
             </button>
           </div>
-          <h2>Registros de la Norma: {selectedNorma.nombre}</h2>
-
-          {registros.length > 0 ? (
-            displayedRegistros.map((registro) => (
-              <div key={registro.id} className="saved-table">
-                <p><strong>Empresa:</strong> {registro.nombreEmpresa}</p>
-                <p><strong>Norma:</strong> {registro.norma}</p>
-                <p><strong>Área:</strong> {registro.areaSeleccionada}</p>
-                <p><strong>Puesto:</strong> {registro.puestoSeleccionado}</p>
-                <p><strong>Fecha de creación:</strong> {registro.fecha} - {registro.hora}</p>
-                <p><strong>Magnitud del Riesgo:</strong> {registro.risk}</p>
-                <div className="table-buttons">
-                  <button className="btn-edit" onClick={() => handleEditRegistro(registro)}>
-                    Editar
-                  </button>
-                  <button className="btn-delete" onClick={() => handleDeleteRegistro(registro.id)}>
-                    Borrar
-                  </button>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p>No hay registros en esta norma.</p>
-          )}
+        </div>
+      ))
+    ) : (
+      <p>No hay registros en esta norma.</p>
+    )}
         </>
       )}
     </div>
