@@ -5,20 +5,21 @@
   width: auto; /* Permite que la tabla mantenga su tamaño natural */
   overflow: auto; /* Habilita el desplazamiento si es necesario */
   background-color: white !important; /* Fondo blanco sólido */
-  border: none !important;           /* Sin bordes */
-  margin: 0 !important;              /* Sin márgenes */
-  padding: 0 !important;             /* Sin relleno */
-  box-shadow: none !important;       /* Sin sombra */
-
+  border: none !important; /* Sin bordes */
+  margin: 0 !important; /* Sin márgenes */
+  padding: 0 !important; /* Sin relleno */
+  box-shadow: none !important; /* Sin sombra */
 }
 
-table, th, td {
+table,
+th,
+td {
   border: 1px solid black;
   border-collapse: collapse;
 }
 
-
-.custom-table td, .custom-table th {
+.custom-table td,
+.custom-table th {
   padding: 8px; /* Espaciado interno en las celdas */
   text-align: center; /* Alinea el texto al centro */
   border: none !important;
@@ -26,15 +27,13 @@ table, th, td {
   box-shadow: none !important; /* Sin sombra */
 }
 
-
 .hide-for-capture {
   display: none !important;
 }
 
-
-.main-table th, 
-.main-table td, 
-.custom-table th, 
+.main-table th,
+.main-table td,
+.custom-table th,
 .custom-table td {
   border: 1px solid black !important;
   padding: 1px;
@@ -65,8 +64,6 @@ table, th, td {
   text-align: center; /* Alineación centrada */
 }
 
-
-
 /* Centra el contenido de las celdas que contienen tablas internas */
 .table-cell {
   display: flex;
@@ -76,8 +73,10 @@ table, th, td {
 }
 
 /* Estilos de encabezados */
-.inner-table th, .header, .sub-header {
-  background-color: #808b96 ; /* Color de fondo para encabezados */
+.inner-table th,
+.header,
+.sub-header {
+  background-color: #808b96; /* Color de fondo para encabezados */
   color: #ffffff;
   font-weight: bold;
   text-align: center;
@@ -99,22 +98,29 @@ table, th, td {
 }
 
 /* Secciones con flexbox */
-.header-section, .left-column, .right-column, .section-content {
+.header-section,
+.left-column,
+.right-column,
+.section-content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   align-items: center;
-  transform: translateY(24px); /* Ajusta el valor para mover el elemento hacia abajo */
-
+  transform: translateY(
+    24px
+  ); /* Ajusta el valor para mover el elemento hacia abajo */
 }
 
-.risk-table, .container-full-width, .main-table table {
+.risk-table,
+.container-full-width,
+.main-table table {
   width: 100%; /* Ancho completo */
   border-collapse: collapse;
 }
 
 /* Clases para estilos de celdas */
-.full-width-cell, .no-border-cell {
+.full-width-cell,
+.no-border-cell {
   width: 50%;
   text-align: left;
   padding: 0px;
@@ -139,8 +145,6 @@ table, th, td {
 .hazard-item:last-child {
   border-bottom: none; /* Elimina la línea del último elemento */
 }
-
-
 
 .hazard-checkbox {
   display: inline-block; /* Asegura que el contenedor no colapse */
@@ -172,7 +176,7 @@ table, th, td {
   display: flex;
   justify-content: center; /* Centra la imagen horizontalmente */
   align-items: center; /* Centra la imagen verticalmente */
-  margin: 0 auto;  /* Centra el contenedor */
+  margin: 0 auto; /* Centra el contenedor */
 }
 
 .protection-image {
@@ -187,15 +191,14 @@ table, th, td {
 }
 
 /* Estilos para texto */
-.text1, .text2 {
+.text1,
+.text2 {
   color: black;
   font-weight: bold;
   text-align: center;
   margin-bottom: 20px; /* Espacio debajo del título */
   font-size: 25px !important; /* Aumenta el tamaño de la fuente, usando !important */
 }
-
-
 
 /* Estilo para imágenes y filas */
 .body-image-left {
@@ -211,9 +214,6 @@ table, th, td {
 .table-container:active {
   cursor: grabbing; /* Cambia el cursor cuando se está arrastrando */
 }
-
-
-
 
 .images-in-row {
   display: flex;
@@ -266,7 +266,8 @@ table, th, td {
     padding: 8px; /* Ajusta el espacio interno */
   }
 
-  .main-table th, .main-table td {
+  .main-table th,
+  .main-table td {
     min-width: 150px; /* Ajusta el ancho mínimo de las celdas para evitar la compactación */
     padding: 10px; /* Añade espacio alrededor del texto */
   }
@@ -301,18 +302,23 @@ table, th, td {
     padding: 0; /* Sin padding */
     margin: 0; /* Sin margen */
     width: 100%; /* Ocupar el ancho completo */
-    
   }
 }
 
 /* Pantallas medianas (tabletas) */
 @media (max-width: 1024px) {
-  .inner-table, .risk-table, .container-full-width, .main-table {
+  .inner-table,
+  .risk-table,
+  .container-full-width,
+  .main-table {
     width: 100%; /* Ancho completo */
     border-collapse: separate;
   }
 
-  .main-table th, .main-table td, .custom-table th, .custom-table td {
+  .main-table th,
+  .main-table td,
+  .custom-table th,
+  .custom-table td {
     padding: 8px;
     font-size: 0.9rem;
   }
@@ -388,7 +394,6 @@ table, th, td {
 }
 
 button {
-
   padding: 5px 10px;
   font-size: 16px;
   border-radius: 4px;
@@ -588,9 +593,6 @@ button {
   color: #333;
 }
 
-
-
-
 /* Contenedor para el título y el cuadro de texto */
 .contenedor-descripcion {
   display: flex;
@@ -608,7 +610,6 @@ button {
   font-size: 18px;
 }
 
-
 /* Estilos para el cuadro de texto */
 .textarea-descripcion {
   width: 100%; /* Aumenta el ancho del cuadro de texto */
@@ -618,7 +619,6 @@ button {
   resize: vertical; /* Permite cambiar la altura pero no el ancho */
   box-sizing: border-box;
 }
-
 
 /* Título fijo en la parte superior */
 .epp-component-title1 {
@@ -640,7 +640,8 @@ button {
   padding: 20px;
 }
 
-.epp-dropdown, .epp-sub-dropdown {
+.epp-dropdown,
+.epp-sub-dropdown {
   margin-top: 5px;
   padding: 8px;
   width: 100%;
@@ -657,14 +658,9 @@ button {
   color: #333;
 }
 
-
-
-
 /* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
-
 /* Contenedor principal de la celda areas */
-
 
 /* Título de la sección "Datos adicionales" */
 .additional-data-title {
@@ -679,9 +675,8 @@ button {
 .details-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 0;  /* elimina cualquier margen superior */
+  margin-top: 0; /* elimina cualquier margen superior */
 }
-
 
 /* Celdas de etiqueta con texto en blanco */
 .label-cell {
@@ -711,14 +706,14 @@ button {
 }
 
 /* Estilo de los botones */
-.btn-agregar, .btn-borrar {
+.btn-agregar,
+.btn-borrar {
   margin-right: 5px;
   padding: 5px 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
-
 
 /* Estilo del modal */
 .modal-container {
@@ -740,7 +735,7 @@ button {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5) ;
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
 }
 
@@ -751,17 +746,13 @@ button {
   cursor: pointer;
 }
 
-
-
 /* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
-
 
 /* Contenedor principal de la celda partes del cuerpo */
 
-
 /* Fondo rojo del contenedor principal */
 .header-cell {
-  background-color: rgb(23, 96, 255) ;
+  background-color: rgb(23, 96, 255);
   padding: 10px;
   text-align: center;
 }
@@ -776,7 +767,6 @@ button {
 
 /* Tabla de partes del cuerpo */
 
-
 /* Celdas de etiquetas */
 .risk-label-cell {
   border: 1px solid black !important;
@@ -784,8 +774,7 @@ button {
   background-color: #808b96 !important;
   font-weight: bold;
   color: white;
-  font-size: 20px !important;  /* Aumenta el tamaño de las etiquetas */
-
+  font-size: 20px !important; /* Aumenta el tamaño de las etiquetas */
 }
 
 /* Celdas de marcas (X) */
@@ -796,14 +785,9 @@ button {
   color: black; /* Texto negro para la "X" */
 }
 
-
-
 /* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
-
 /* Contenedor principal de la celda partes del magnitud calculo. */
-
-
 
 /* Contenedor principal de la celda */
 .right-aligned {
@@ -830,14 +814,12 @@ button {
 
 /* Ajustes específicos para etiquetas y valores */
 
-
 .risk-value-cell,
 .risk-classification-cell,
 .risk-action-cell {
   font-size: 20px; /* Aumenta el tamaño de los valores */
   font-weight: bold; /* Hace que los valores sean más llamativos */
   text-align: center !important; /* Centra el texto */
-  
 }
 
 /* Ajustes para el título de la sección */
@@ -849,12 +831,7 @@ button {
   color: #333;
 }
 
-
-
-
-
-/* /////////////////////////////////////////////////*/ 
-
+/* /////////////////////////////////////////////////*/
 
 /* Contenedor principal sin borde */
 .no-border-cell {
@@ -884,13 +861,9 @@ button {
   padding: 5px; /* Opcional: aumenta la clicabilidad */
 }
 
-
-
-
 .large-text-dropdown option {
   font-size: 20px !important; /* Aumenta el tamaño del texto de las opciones */
 }
-
 
 /* Contenedor del select y botones de puestos */
 .puesto-con-botones {
@@ -908,13 +881,13 @@ button {
 }
 
 /* Botones de agregar y borrar */
-.btn-agregar, .btn-borrar {
+.btn-agregar,
+.btn-borrar {
   padding: 5px 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
-
 
 /* Contenedor de descripción de actividad */
 .contenedor-descripcion {
@@ -932,14 +905,9 @@ button {
   box-sizing: border-box;
 }
 
+/* /////////////////////////////////////////////////*/
 
-
-/* /////////////////////////////////////////////////*/ 
-
-
-
-
-/* /////////////////////////////////////////////////*/ 
+/* /////////////////////////////////////////////////*/
 /* Para la tabla completa */
 /* Estilos para toda la tabla */
 .custom-table {
@@ -960,8 +928,6 @@ button {
   display: inline-block;
 }
 
-
-
 /* Botón de eliminación posicionado en la esquina superior derecha de la imagen */
 .remove-logo-button {
   position: absolute;
@@ -969,10 +935,10 @@ button {
   left: 9px;
   padding: 3px 6px;
   font-size: 0.7em;
-  background-color:  black;
+  background-color: black;
   border: none;
   border-radius: 50%;
-  color: white; 
+  color: white;
   cursor: pointer;
 }
 
@@ -980,10 +946,9 @@ button {
   background-color: black;
 }
 
-
 /* Contenedor del logo para mantener alineación y posicionamiento */
 .logo-container {
-  display: flex;  
+  display: flex;
   align-items: center;
   justify-content: center;
   width: 400px; /* Ajusta el ancho máximo del contenedor según tu preferencia */
@@ -1000,14 +965,11 @@ button {
   object-fit: contain; /* Asegura que la imagen se ajuste sin deformarse */
 }
 
-
-
 .hidden-buttons {
   display: none;
 }
 
-
-/* /////////////////////////////////////////////////*/ 
+/* /////////////////////////////////////////////////*/
 /* Título principal */
 .banana-title {
   font-size: 24px; /* Tamaño de texto más grande */
@@ -1026,9 +988,6 @@ button {
   color: white !important;
 }
 
-
-
-
 /* Selectores */
 .cherry-select {
   font-size: 16px; /* Tamaño de texto más grande */
@@ -1039,13 +998,10 @@ button {
 /* Valores seleccionados */
 .grape-value {
   font-size: 18px; /* Tamaño más grande para los valores */
-  font-weight: bold ; /* Resalta los valores */
+  font-weight: bold; /* Resalta los valores */
   margin-top: 10px; /* Separación superior */
   text-align: center;
 }
-
-
-
 
 .blueberry-risk {
   font-size: 24px !important; /* Aumenta el tamaño del texto y evita sobrescrituras */
@@ -1054,15 +1010,6 @@ button {
   color: white !important; /* Texto blanco para contraste */
   background-color: inherit; /* El color de fondo dinámico se mantiene */
 }
-
-
-
-
-
-
-
-
-
 
 .epp-container {
   padding: 0px;
@@ -1114,25 +1061,19 @@ button {
   margin: 0;
 }
 
-
-
 .no-selection-message {
   font-size: 14px;
   color: #666;
   margin-top: 10px;
 }
 
-
 .textarea-descripcion {
-  
   height: auto; /* Permite la expansión vertical automática */
   min-height: 5em; /* Altura mínima, para que no sea demasiado pequeño cuando esté vacío. Ajústalo según tus necesidades.*/
 
   /* OPCIONAL - Permite al usuario redimensionar manualmente de forma vertical */
   resize: vertical;
 }
-
-
 
 .epp-container {
   padding: 20px;
@@ -1158,8 +1099,6 @@ button {
   border-radius: 4px;
   font-size: 14px;
 }
-
-
 
 .selection-title {
   font-size: 16px;
@@ -1198,11 +1137,9 @@ button {
   transition: color 0.3s ease;
 }
 
-
 .delete-button:hover {
   color: #ff0000; /* Más intenso al hacer hover */
 }
-
 
 .delete-icon {
   width: 20px;
@@ -1219,8 +1156,6 @@ button {
   color: #666;
   margin-top: 10px;
 }
-
-
 
 /* ////////////////////////////////////////// */
 
@@ -1242,16 +1177,11 @@ button {
   background-color: #f0f0f0 !important; /* Fondo gris claro al pasar el mouse */
 }
 
-.upload-icon { 
+.upload-icon {
   width: 20px;
   height: 20px;
   stroke: black; /* Icono en color negro */
 }
-
-
-
-
-
 
 .cell-container {
   display: flex;
@@ -1282,7 +1212,6 @@ button {
   cursor: pointer;
 }
 
-
 .btn-agregar:hover,
 .btn-borrar:hover {
   background-color: #0056b3;
@@ -1295,13 +1224,6 @@ button {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-
-
-
-
-
-
-
 
 /* Contenedor del menú y los botones */
 .cell-container {
@@ -1323,8 +1245,6 @@ button {
   gap: 20px; /* Espacio entre los botones */
 }
 
-
-
 /* Botones con iconos */
 .button-container {
   display: flex;
@@ -1337,9 +1257,6 @@ button {
 .save-button {
   padding: 8px 16px; /* Asegúrate de que los botones tengan un buen tamaño */
 }
-
-
-
 
 .btn-icon:hover {
   background-color: #f0f0f0;
@@ -1376,18 +1293,11 @@ button.btn-icon {
   float: right;
 }
 
-
-
-.container { /* Contenedor donde están los botones */
+.container {
+  /* Contenedor donde están los botones */
   display: flex;
   justify-content: flex-end;
 }
-
-
-
-
-
-
 
 .large-text-dropdown {
   width: 80%; /* Ajusta el ancho al 100% del contenedor */
@@ -1413,9 +1323,6 @@ button.btn-icon {
   font-size: 16px; /* Ajusta el tamaño del texto de las opciones */
   padding: 5px; /* Espaciado interno para las opciones */
 }
-
-
-
 
 /* Clase general para inputs y selects grandes */
 .large-input {
@@ -1460,12 +1367,7 @@ button.btn-icon {
   text-overflow: ellipsis; /* Muestra "..." si el texto es demasiado largo */
 }
 
-
-
-
-
 /* Modal de guardado*/
-
 
 /* Estilos para el modal de carpetas */
 .folder-modal {
@@ -1480,7 +1382,7 @@ button.btn-icon {
   max-width: 500px;
   width: 90%;
   border-radius: 8px;
-  box-shadow: 0 5px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
 }
 
 .folder-modal-overlay {

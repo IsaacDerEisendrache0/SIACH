@@ -4,7 +4,7 @@
   --button-bg: #e60000;
   --button-text: #fff;
   --border-radius: 8px;
-  --font-family: 'Arial', sans-serif;
+  --font-family: "Arial", sans-serif;
 }
 
 .risk-table-container {
@@ -69,7 +69,9 @@
   height: 60px;
   border-radius: var(--border-radius);
   padding: 2px;
-  transition: transform 0.2s, border-color 0.2s;
+  transition:
+    transform 0.2s,
+    border-color 0.2s;
 }
 
 .epp-images-grid img:hover {
@@ -117,8 +119,6 @@ h4.red {
   margin-bottom: 10px;
 }
 
-
-
 .button:hover {
   background-color: var(--button-hover-bg);
   transform: translateY(-2px);
@@ -148,8 +148,6 @@ h4.red {
   gap: 20px;
 }
 
-
-
 .button-group .button {
   flex: 1;
 }
@@ -171,7 +169,9 @@ h4.red {
   cursor: pointer;
   font-weight: bold;
   font-size: 12px; /* Tamaño de fuente más pequeño */
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 }
 
 .button-area:hover {
@@ -221,7 +221,9 @@ h4.red {
   font-weight: bold;
   font-size: 14px;
   margin-bottom: 10px;
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 }
 
 .upload-button:hover {
@@ -251,7 +253,8 @@ table {
   max-width: 1200px; /* Establece un ancho máximo */
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ccc; /* Bordes más delgados */
   text-align: center;
   padding: 2px; /* Reduce el grosor del padding */
@@ -273,9 +276,6 @@ body {
   margin: 0;
   padding: 0;
 }
-
-
-
 
 #body-parts-table {
   width: 130%; /* Estira la tabla al 130% del contenedor */
@@ -314,7 +314,6 @@ body {
   background-color: #f9f9f9; /* Fondo gris claro */
 }
 
-
 /* Estilo para los menús desplegables con texto grande (para Identificación de riesgos y Sistemas de seguridad) */
 .dropdown-large-text {
   font-size: 20px !important; /* Aumenta el tamaño de la fuente */
@@ -333,38 +332,29 @@ body {
   text-overflow: ellipsis !important; /* Muestra "..." si el texto es demasiado largo */
 }
 
-
 /* Estilo para las opciones dentro del menú con texto grande */
 .dropdown-large-text option {
-  font-size: 20px;  /* Aumenta el tamaño de la fuente dentro de las opciones */
+  font-size: 20px; /* Aumenta el tamaño de la fuente dentro de las opciones */
 }
-
 
 /* Estilo para los títulos */
 .blacktitle-small {
-  font-size: 19px;  /* Aumenta el tamaño del título */
-  margin-bottom: 10px;  /* Ajusta el margen para los títulos */
+  font-size: 19px; /* Aumenta el tamaño del título */
+  margin-bottom: 10px; /* Ajusta el margen para los títulos */
   color: black;
-  font-weight: bold;  /* Opcional, para hacerlo más destacado */
+  font-weight: bold; /* Opcional, para hacerlo más destacado */
 }
 
 /* Asegura que las celdas estén alineadas correctamente */
-.risk-info, .safety-info {
+.risk-info,
+.safety-info {
   padding: 10px;
-  vertical-align: top;  /* Alinea el contenido al principio de la celda */
+  vertical-align: top; /* Alinea el contenido al principio de la celda */
 }
 
+/* codigo proteccion sugerido */
 
-
-
-
-
-
-
-
- /* codigo proteccion sugerido */
-
- .epp-container {
+.epp-container {
   display: flex;
   flex-direction: column;
   align-items: center; /* Centra horizontalmente */
@@ -390,24 +380,23 @@ body {
 
 /* Estilo para los menús desplegables personalizados con texto grande */
 .custom-select {
-  font-size: 20px;  /* Aumenta el tamaño de la fuente dentro del select */
+  font-size: 20px; /* Aumenta el tamaño de la fuente dentro del select */
   font-family: Arial, sans-serif; /* Puedes cambiar la fuente si lo deseas */
-  color: #333;  /* Ajusta el color si es necesario */
+  color: #333; /* Ajusta el color si es necesario */
   border-radius: 5px;
   border: 1px solid #ccc;
-  width: 100%;  /* Asegura que el select ocupe todo el ancho disponible */
-  padding: 10px;  /* Añade padding para mayor estética */
-  box-sizing: border-box;  /* Asegura que el padding y border se incluyan en el cálculo del ancho */
+  width: 100%; /* Asegura que el select ocupe todo el ancho disponible */
+  padding: 10px; /* Añade padding para mayor estética */
+  box-sizing: border-box; /* Asegura que el padding y border se incluyan en el cálculo del ancho */
 }
 
 /* Estilo para las opciones dentro del select */
 .custom-select option {
-  font-size: 20px;  /* Aumenta el tamaño de la fuente dentro de las opciones */
-  white-space: nowrap;  /* Evita que el texto de las opciones se rompa en varias líneas */
-  overflow: hidden;  /* Previene que el texto se desborde */
-  text-overflow: ellipsis;  /* Añade puntos suspensivos si el texto es demasiado largo */
+  font-size: 20px; /* Aumenta el tamaño de la fuente dentro de las opciones */
+  white-space: nowrap; /* Evita que el texto de las opciones se rompa en varias líneas */
+  overflow: hidden; /* Previene que el texto se desborde */
+  text-overflow: ellipsis; /* Añade puntos suspensivos si el texto es demasiado largo */
 }
-
 
 .custom-select:focus {
   border-color: #007bff;
@@ -419,39 +408,35 @@ body {
   height: 290px; /* Mantiene un tamaño fijo */
   margin-top: 10px;
   object-fit: contain;
-}                                                         
-
-
-
+}
 
 /* Estilo para el menú desplegable */
 .dropdown-puestos {
-  font-size: 18px;  /* Aumenta el tamaño de la fuente */
-  padding: 10px;    /* Opcional, para mayor espacio dentro del menú */
-  border-radius: 5px;  /* Opcional, para bordes redondeados */
+  font-size: 18px; /* Aumenta el tamaño de la fuente */
+  padding: 10px; /* Opcional, para mayor espacio dentro del menú */
+  border-radius: 5px; /* Opcional, para bordes redondeados */
   border: 1px solid #ccc; /* Opcional, para un borde delgado */
   width: 100%; /* Opcional, asegura que el select ocupe el 100% del contenedor */
 }
 
 /* Estilo para las opciones dentro del menú */
 .dropdown-puestos option {
-  font-size: 18px;  /* Aumenta el tamaño de la fuente de las opciones */
+  font-size: 18px; /* Aumenta el tamaño de la fuente de las opciones */
 }
 
 /* Estilo para el menú desplegable de áreas */
 .dropdown-areas {
-  font-size: 18px;  /* Aumenta el tamaño de la fuente */
-  padding: 10px;    /* Opcional, para mayor espacio dentro del menú */
-  border-radius: 5px;  /* Opcional, para bordes redondeados */
+  font-size: 18px; /* Aumenta el tamaño de la fuente */
+  padding: 10px; /* Opcional, para mayor espacio dentro del menú */
+  border-radius: 5px; /* Opcional, para bordes redondeados */
   border: 1px solid #ccc; /* Opcional, para un borde delgado */
   width: 100%; /* Opcional, asegura que el select ocupe el 100% del contenedor */
 }
 
 /* Estilo para las opciones dentro del menú */
 .dropdown-areas option {
-  font-size: 18px;  /* Aumenta el tamaño de la fuente de las opciones */
+  font-size: 18px; /* Aumenta el tamaño de la fuente de las opciones */
 }
-
 
 /* Asegurar que el contenedor del logo esté alineado correctamente */
 .logo-container-04 {
@@ -481,7 +466,6 @@ body {
   padding: 5px;
 }
 
-
 /* Botón de eliminación del logo */
 .remove-logo-button-04 {
   background-color: red;
@@ -497,9 +481,6 @@ body {
   cursor: pointer;
 }
 
-
-
-
 /* Eliminar bordes y fondos innecesarios en la celda */
 td[colspan="2"].logo-cell-04 {
   text-align: center;
@@ -508,9 +489,3 @@ td[colspan="2"].logo-cell-04 {
   border: none !important;
   padding: 5px;
 }
-
-
-
-
-
-  

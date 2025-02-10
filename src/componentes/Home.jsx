@@ -1,7 +1,7 @@
 // src/componentes/Home.jsx
-import React from 'react';
-import LogoutButton from './LogoutButton';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React from "react";
+import LogoutButton from "./LogoutButton";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function Home({ handleLogout }) {
   return (

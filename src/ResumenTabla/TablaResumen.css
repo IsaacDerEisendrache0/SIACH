@@ -1,55 +1,55 @@
 /* Estilo para la tabla principal */
 .tabla-principal {
-    border-collapse: collapse;
-    width: 100%;
-    margin: 10px auto; /* Centrar y dar margen */
-    font-size: 16px; /* Tamaño base para toda la tabla */
-    text-align: center;
+  border-collapse: collapse;
+  width: 100%;
+  margin: 10px auto; /* Centrar y dar margen */
+  font-size: 16px; /* Tamaño base para toda la tabla */
+  text-align: center;
 }
 
 .tabla-header {
-    border: 1px solid black;
-    background-color: #d3d3d3; /* Fondo gris en encabezado */
-    font-size: 18px; /* Aumentar tamaño en encabezados */
-    padding: 10px; /* Espacio más amplio */
+  border: 1px solid black;
+  background-color: #d3d3d3; /* Fondo gris en encabezado */
+  font-size: 18px; /* Aumentar tamaño en encabezados */
+  padding: 10px; /* Espacio más amplio */
 }
 
 /* Colores específicos para Magnitud de Riesgo */
 .tolerable {
-    background-color: #00bfff !important; /* Azul */
-    color: black;
-    font-weight: bold;
+  background-color: #00bfff !important; /* Azul */
+  color: black;
+  font-weight: bold;
 }
 
 .moderado {
-    background-color: #90ee90 !important; /* Verde */
-    color: black;
-    font-weight: bold;
+  background-color: #90ee90 !important; /* Verde */
+  color: black;
+  font-weight: bold;
 }
 
 .notable {
-    background-color: #ffff99 !important; /* Amarillo */
-    color: black;
-    font-weight: bold;
+  background-color: #ffff99 !important; /* Amarillo */
+  color: black;
+  font-weight: bold;
 }
 
 .elevado {
-    background-color: #ffa07a !important; /* Naranja */
-    color: black;
-    font-weight: bold;
+  background-color: #ffa07a !important; /* Naranja */
+  color: black;
+  font-weight: bold;
 }
 
 .grave {
-    background-color: #ff4500 !important; /* Rojo */
-    color: white; /* Texto en blanco */
-    font-weight: bold;
+  background-color: #ff4500 !important; /* Rojo */
+  color: white; /* Texto en blanco */
+  font-weight: bold;
 }
 
 /* Ajustes específicos para los números */
 .tabla-principal td {
-    font-size: 16px; /* Tamaño específico de números */
-    padding: 8px; /* Espacio uniforme en números */
-    text-align: center;
+  font-size: 16px; /* Tamaño específico de números */
+  padding: 8px; /* Espacio uniforme en números */
+  text-align: center;
 }
 
 /* Colores aplicados a las celdas de magnitud */
@@ -58,29 +58,29 @@
 .tabla-riesgo.notable,
 .tabla-riesgo.elevado,
 .tabla-riesgo.grave {
-    font-weight: bold;
-    padding: 8px;
+  font-weight: bold;
+  padding: 8px;
 }
 
 /* Estilo especial para la fila TOTAL */
 .tabla-principal tr:last-child th,
 .tabla-principal tr:last-child td {
-    font-size: 18px; /* Tamaño más grande para el total */
-    font-weight: bold;
-    background-color: #e9ecef; /* Fondo gris claro */
+  font-size: 18px; /* Tamaño más grande para el total */
+  font-weight: bold;
+  background-color: #e9ecef; /* Fondo gris claro */
 }
 
 /* Botón de expandir */
 .boton-expandir {
-    background: none;
-    border: none;
-    font-size: 14px; /* Sin cambios en tamaño */
-    cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 14px; /* Sin cambios en tamaño */
+  cursor: pointer;
 }
 
 /* Botón de eliminar */
 .boton-eliminar {
-    color: #ff4500;
-    cursor: pointer;
-    font-size: 16px; /* Icono de tamaño controlado */
+  color: #ff4500;
+  cursor: pointer;
+  font-size: 16px; /* Icono de tamaño controlado */
 }

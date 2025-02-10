@@ -1,6 +1,6 @@
 // src/components/SavedTables.jsx
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   collection,
   getDocs,
@@ -8,10 +8,10 @@ import {
   deleteDoc,
   doc,
   serverTimestamp,
-  writeBatch
-} from 'firebase/firestore';
-import { db } from '../firebase';
-import './SavedTables.css';
+  writeBatch,
+} from "firebase/firestore";
+import { db } from "../firebase";
+import "./SavedTables.css";
 
 const SavedTables = () => {
   const navigate = useNavigate();
@@ -25,12 +25,12 @@ const SavedTables = () => {
 
   // 1) EMPRESAS
   const [empresas, setEmpresas] = useState([]);
-  const [newEmpresaName, setNewEmpresaName] = useState('');
+  const [newEmpresaName, setNewEmpresaName] = useState("");
   const [selectedEmpresa, setSelectedEmpresa] = useState(null);
 
   // 2) NORMAS
   const [normas, setNormas] = useState([]);
-  const [newNormaName, setNewNormaName] = useState('');
+  const [newNormaName, setNewNormaName] = useState("");
   const [selectedNorma, setSelectedNorma] = useState(null);
 
   // 3) REGISTROS
@@ -42,17 +42,17 @@ const SavedTables = () => {
   useEffect(() => {
     loadEmpresas();
   }, []);
-  
+
   const loadEmpresas = async () => {
     try {
-      const snapshot = await getDocs(collection(db, 'empresas'));
+      const snapshot = await getDocs(collection(db, "empresas"));
       const fetchedEmpresas = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setEmpresas(fetchedEmpresas);
     } catch (error) {
-      console.error('Error al cargar empresas:', error);
+      console.error("Error al cargar empresas:", error);
     }
   };
 
@@ -62,20 +62,20 @@ const SavedTables = () => {
   const handleAddEmpresa = async (e) => {
     e.preventDefault();
     if (!newEmpresaName.trim()) {
-      alert('El nombre de la empresa no puede estar vacío.');
+      alert("El nombre de la empresa no puede estar vacío.");
       return;
     }
     try {
-      const docRef = await addDoc(collection(db, 'empresas'), {
+      const docRef = await addDoc(collection(db, "empresas"), {
         nombre: newEmpresaName,
         fechaCreacion: serverTimestamp(),
       });
       // Actualizamos el estado local
       setEmpresas([...empresas, { id: docRef.id, nombre: newEmpresaName }]);
-      setNewEmpresaName('');
-      alert('Empresa creada con éxito.');
+      setNewEmpresaName("");
+      alert("Empresa creada con éxito.");
     } catch (error) {
-      console.error('Error al crear empresa:', error);
+      console.error("Error al crear empresa:", error);
     }
   };
 
@@ -84,35 +84,47 @@ const SavedTables = () => {
   // ------------------------------------------------------------------
   const handleDeleteEmpresa = async (empresaId) => {
     const confirmDelete = window.confirm(
-      '¿Estás seguro de que deseas borrar esta empresa? Esto eliminará también todas sus normas y registros.'
+      "¿Estás seguro de que deseas borrar esta empresa? Esto eliminará también todas sus normas y registros.",
     );
     if (!confirmDelete) return;
 
     try {
       // 1. Cargar todas las normas de la empresa
-      const normasSnap = await getDocs(collection(db, 'empresas', empresaId, 'normas'));
-      
+      const normasSnap = await getDocs(
+        collection(db, "empresas", empresaId, "normas"),
+      );
+
       for (let normaDoc of normasSnap.docs) {
         const normaId = normaDoc.id;
 
         // 2. Cargar todos los registros de cada norma
         const registrosSnap = await getDocs(
-          collection(db, 'empresas', empresaId, 'normas', normaId, 'registros')
+          collection(db, "empresas", empresaId, "normas", normaId, "registros"),
         );
 
         // Usamos un batch para eliminar todos los registros de la norma
         const batch = writeBatch(db);
-        registrosSnap.forEach(regDoc => {
-          batch.delete(doc(db, 'empresas', empresaId, 'normas', normaId, 'registros', regDoc.id));
+        registrosSnap.forEach((regDoc) => {
+          batch.delete(
+            doc(
+              db,
+              "empresas",
+              empresaId,
+              "normas",
+              normaId,
+              "registros",
+              regDoc.id,
+            ),
+          );
         });
         await batch.commit();
 
         // 3. Eliminar la norma
-        await deleteDoc(doc(db, 'empresas', empresaId, 'normas', normaId));
+        await deleteDoc(doc(db, "empresas", empresaId, "normas", normaId));
       }
 
       // 4. Eliminar la empresa
-      await deleteDoc(doc(db, 'empresas', empresaId));
+      await deleteDoc(doc(db, "empresas", empresaId));
 
       // 5. Actualizamos el estado local
       setEmpresas((prev) => prev.filter((emp) => emp.id !== empresaId));
@@ -123,9 +135,9 @@ const SavedTables = () => {
         setRegistros([]);
       }
 
-      alert('Empresa eliminada con éxito.');
+      alert("Empresa eliminada con éxito.");
     } catch (error) {
-      console.error('Error al borrar la empresa:', error);
+      console.error("Error al borrar la empresa:", error);
     }
   };
 
@@ -139,14 +151,16 @@ const SavedTables = () => {
 
   const loadNormas = async (empresaId) => {
     try {
-      const snapshot = await getDocs(collection(db, 'empresas', empresaId, 'normas'));
+      const snapshot = await getDocs(
+        collection(db, "empresas", empresaId, "normas"),
+      );
       const fetchedNormas = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setNormas(fetchedNormas);
     } catch (error) {
-      console.error('Error al cargar normas:', error);
+      console.error("Error al cargar normas:", error);
     }
   };
 
@@ -156,23 +170,23 @@ const SavedTables = () => {
   const handleAddNorma = async (e) => {
     e.preventDefault();
     if (!newNormaName.trim()) {
-      alert('El nombre de la norma no puede estar vacío.');
+      alert("El nombre de la norma no puede estar vacío.");
       return;
     }
 
     try {
       const docRef = await addDoc(
-        collection(db, 'empresas', selectedEmpresa.id, 'normas'), 
+        collection(db, "empresas", selectedEmpresa.id, "normas"),
         {
           nombre: newNormaName,
           fechaCreacion: serverTimestamp(),
-        }
+        },
       );
       setNormas([...normas, { id: docRef.id, nombre: newNormaName }]);
-      setNewNormaName('');
-      alert('Norma creada con éxito.');
+      setNewNormaName("");
+      alert("Norma creada con éxito.");
     } catch (error) {
-      console.error('Error al crear la norma:', error);
+      console.error("Error al crear la norma:", error);
     }
   };
 
@@ -181,25 +195,42 @@ const SavedTables = () => {
   // ------------------------------------------------------------------
   const handleDeleteNorma = async (normaId) => {
     const confirmDelete = window.confirm(
-      '¿Estás seguro de que deseas borrar esta norma? Esto eliminará también todos sus registros.'
+      "¿Estás seguro de que deseas borrar esta norma? Esto eliminará también todos sus registros.",
     );
     if (!confirmDelete) return;
 
     try {
       // Borrar todos los registros de la norma en un batch
       const registrosSnap = await getDocs(
-        collection(db, 'empresas', selectedEmpresa.id, 'normas', normaId, 'registros')
+        collection(
+          db,
+          "empresas",
+          selectedEmpresa.id,
+          "normas",
+          normaId,
+          "registros",
+        ),
       );
       const batch = writeBatch(db);
-      registrosSnap.forEach(regDoc => {
+      registrosSnap.forEach((regDoc) => {
         batch.delete(
-          doc(db, 'empresas', selectedEmpresa.id, 'normas', normaId, 'registros', regDoc.id)
+          doc(
+            db,
+            "empresas",
+            selectedEmpresa.id,
+            "normas",
+            normaId,
+            "registros",
+            regDoc.id,
+          ),
         );
       });
       await batch.commit();
 
       // Borrar la norma
-      await deleteDoc(doc(db, 'empresas', selectedEmpresa.id, 'normas', normaId));
+      await deleteDoc(
+        doc(db, "empresas", selectedEmpresa.id, "normas", normaId),
+      );
 
       // Actualizar estado local
       setNormas((prev) => prev.filter((n) => n.id !== normaId));
@@ -208,9 +239,9 @@ const SavedTables = () => {
         setRegistros([]);
       }
 
-      alert('Norma eliminada con éxito.');
+      alert("Norma eliminada con éxito.");
     } catch (error) {
-      console.error('Error al borrar la norma:', error);
+      console.error("Error al borrar la norma:", error);
     }
   };
 
@@ -221,30 +252,31 @@ const SavedTables = () => {
     setSelectedNorma(norma);
     loadRegistros(selectedEmpresa.id, norma.id);
   };
-  
+
   const loadRegistros = async (empresaId, normaId) => {
     try {
-        const registrosSnap = await getDocs(
-            collection(db, 'empresas', empresaId, 'normas', normaId, 'tablas')
-        );
-        const fetchedRegistros = registrosSnap.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-        }));
+      const registrosSnap = await getDocs(
+        collection(db, "empresas", empresaId, "normas", normaId, "tablas"),
+      );
+      const fetchedRegistros = registrosSnap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
-        // Ordenar por timestamp de Firebase si existe, o por fecha/hora si no está disponible
-        const sorted = fetchedRegistros.sort((a, b) => {
-            const dateA = a.fechaCreacion?.toDate() || new Date(`${a.fecha} ${a.hora}`);
-            const dateB = b.fechaCreacion?.toDate() || new Date(`${b.fecha} ${b.hora}`);
-            return dateB - dateA; // Orden descendente (más reciente primero)
-        });
+      // Ordenar por timestamp de Firebase si existe, o por fecha/hora si no está disponible
+      const sorted = fetchedRegistros.sort((a, b) => {
+        const dateA =
+          a.fechaCreacion?.toDate() || new Date(`${a.fecha} ${a.hora}`);
+        const dateB =
+          b.fechaCreacion?.toDate() || new Date(`${b.fecha} ${b.hora}`);
+        return dateB - dateA; // Orden descendente (más reciente primero)
+      });
 
-        setRegistros(sorted);
+      setRegistros(sorted);
     } catch (error) {
-        console.error('Error al cargar registros:', error);
+      console.error("Error al cargar registros:", error);
     }
-};
-
+  };
 
   // ------------------------------------------------------------------
   // CREAR REGISTRO (EJEMPLO SIMPLIFICADO)
@@ -254,16 +286,26 @@ const SavedTables = () => {
   // ELIMINAR REGISTRO
   // ------------------------------------------------------------------
   const handleDeleteRegistro = async (registroId) => {
-    const confirmDelete = window.confirm('¿Estás seguro de que deseas borrar este registro?');
+    const confirmDelete = window.confirm(
+      "¿Estás seguro de que deseas borrar este registro?",
+    );
     if (!confirmDelete) return;
     try {
       await deleteDoc(
-        doc(db, 'empresas', selectedEmpresa.id, 'normas', selectedNorma.id, 'registros', registroId)
+        doc(
+          db,
+          "empresas",
+          selectedEmpresa.id,
+          "normas",
+          selectedNorma.id,
+          "registros",
+          registroId,
+        ),
       );
-      setRegistros((prev) => prev.filter(reg => reg.id !== registroId));
-      alert('Registro borrado con éxito.');
+      setRegistros((prev) => prev.filter((reg) => reg.id !== registroId));
+      alert("Registro borrado con éxito.");
     } catch (error) {
-      console.error('Error al borrar registro:', error);
+      console.error("Error al borrar registro:", error);
     }
   };
 
@@ -272,12 +314,15 @@ const SavedTables = () => {
   // ------------------------------------------------------------------
   const handleEditRegistro = (registro) => {
     // Guardar datos en localStorage o usar un estado global
-    localStorage.setItem('registroToEdit', JSON.stringify({
-      ...registro,
-      empresaId: selectedEmpresa.id,
-      normaId: selectedNorma.id,
-    }));
-    navigate('/norma_004');
+    localStorage.setItem(
+      "registroToEdit",
+      JSON.stringify({
+        ...registro,
+        empresaId: selectedEmpresa.id,
+        normaId: selectedNorma.id,
+      }),
+    );
+    navigate("/norma_004");
   };
 
   // ------------------------------------------------------------------
@@ -298,21 +343,24 @@ const SavedTables = () => {
   // ------------------------------------------------------------------
   // (A) Estados para Filtros (Empresa, Norma)
   // ------------------------------------------------------------------
-  const [selectedFilterEmpresa, setSelectedFilterEmpresa] = useState('');
-  const [selectedFilterNorma, setSelectedFilterNorma] = useState('');
+  const [selectedFilterEmpresa, setSelectedFilterEmpresa] = useState("");
+  const [selectedFilterNorma, setSelectedFilterNorma] = useState("");
 
   // (B) Variables filtradas
   const displayedEmpresas = selectedFilterEmpresa
-    ? empresas.filter(emp => emp.nombre === selectedFilterEmpresa)
+    ? empresas.filter((emp) => emp.nombre === selectedFilterEmpresa)
     : empresas;
 
   const displayedNormas = selectedFilterNorma
-    ? normas.filter(norm => norm.nombre === selectedFilterNorma)
+    ? normas.filter((norm) => norm.nombre === selectedFilterNorma)
     : normas;
 
-  const displayedRegistros = registros.filter(reg =>
-    (selectedFilterEmpresa ? reg.nombreEmpresa === selectedFilterEmpresa : true) &&
-    (selectedFilterNorma ? reg.norma === selectedFilterNorma : true)
+  const displayedRegistros = registros.filter(
+    (reg) =>
+      (selectedFilterEmpresa
+        ? reg.nombreEmpresa === selectedFilterEmpresa
+        : true) &&
+      (selectedFilterNorma ? reg.norma === selectedFilterNorma : true),
   );
 
   // ------------------------------------------------------------------
@@ -323,133 +371,137 @@ const SavedTables = () => {
   // ------------------------------------------------------------------
   // D) Estado previo "searchTerm" (sin uso actual)
   // ------------------------------------------------------------------
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
-  
   const menuRef = useRef(null); // Referencia para detectar clics fuera
 
-useEffect(() => {
-  const handleClickOutside = (event) => {
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setShowFilterMenu(false); // Cierra el menú si se hace clic fuera
-    }
-  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowFilterMenu(false); // Cierra el menú si se hace clic fuera
+      }
+    };
 
-  document.addEventListener('mousedown', handleClickOutside);
-  return () => {
-    document.removeEventListener('mousedown', handleClickOutside);
-  };
-}, []);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
+  // Estado para controlar la visibilidad del menú de filtros de área
+  const [showAreaFilterMenu, setShowAreaFilterMenu] = useState(false);
 
-// Estado para controlar la visibilidad del menú de filtros de área
-const [showAreaFilterMenu, setShowAreaFilterMenu] = useState(false);
+  // Estado para filtrar registros por área
+  const [selectedFilterArea, setSelectedFilterArea] = useState("");
 
-// Estado para filtrar registros por área
-const [selectedFilterArea, setSelectedFilterArea] = useState('');
+  // Obtener áreas únicas de los registros disponibles
+  const uniqueAreas = [
+    ...new Set(registros.map((reg) => reg.areaSeleccionada)),
+  ];
 
-// Obtener áreas únicas de los registros disponibles
-const uniqueAreas = [...new Set(registros.map(reg => reg.areaSeleccionada))];
-
-// Aplicar filtro de área a los registros mostrados
-const filteredRegistros = registros.filter(reg =>
-  selectedFilterArea ? reg.areaSeleccionada === selectedFilterArea : true
-);
-
-
-
+  // Aplicar filtro de área a los registros mostrados
+  const filteredRegistros = registros.filter((reg) =>
+    selectedFilterArea ? reg.areaSeleccionada === selectedFilterArea : true,
+  );
 
   return (
     <div className="saved-tables-container">
       {/* Botón para regresar al menú principal */}
       <div className="back-to-main">
-        <button onClick={() => navigate('/')} className="btn-back-main">
+        <button onClick={() => navigate("/")} className="btn-back-main">
           ⬅ Regresar al Menú Principal
         </button>
-
-
       </div>
 
-    
       {/* =========================
     FILTRO DE EMPRESA Y NORMA (SOLO EN EMPRESAS Y NORMAS)
    ========================= */}
-{(!selectedEmpresa || (selectedEmpresa && !selectedNorma)) && (
-  <div className="hamburger-menu-container" ref={menuRef}>
-    <button
-      className="hamburger-btn"
-      onClick={() => setShowFilterMenu(!showFilterMenu)}
-    >
-      ☰
-    </button>
-
-    {/* Menú de filtros con clases condicionales */}
-    <div className={`filter-container ${showFilterMenu ? 'show' : 'hide'}`}>
-      <label><strong>Empresa:</strong></label>
-      <select
-        value={selectedFilterEmpresa}
-        onChange={(e) => setSelectedFilterEmpresa(e.target.value)}
-      >
-        <option value="">Todas</option>
-        {empresas.map((emp) => (
-          <option key={emp.id} value={emp.nombre}>
-            {emp.nombre}
-          </option>
-        ))}
-      </select>
-
-      {selectedEmpresa && (
-        <>
-          <label><strong>Norma:</strong></label>
-          <select
-            value={selectedFilterNorma}
-            onChange={(e) => setSelectedFilterNorma(e.target.value)}
+      {(!selectedEmpresa || (selectedEmpresa && !selectedNorma)) && (
+        <div className="hamburger-menu-container" ref={menuRef}>
+          <button
+            className="hamburger-btn"
+            onClick={() => setShowFilterMenu(!showFilterMenu)}
           >
-            <option value="">Todas</option>
-            {normas.map((n) => (
-              <option key={n.id} value={n.nombre}>
-                {n.nombre}
-              </option>
-            ))}
-          </select>
-        </>
-      )}
-    </div>
-  </div>
-)}
+            ☰
+          </button>
 
-{/* =========================
+          {/* Menú de filtros con clases condicionales */}
+          <div
+            className={`filter-container ${showFilterMenu ? "show" : "hide"}`}
+          >
+            <label>
+              <strong>Empresa:</strong>
+            </label>
+            <select
+              value={selectedFilterEmpresa}
+              onChange={(e) => setSelectedFilterEmpresa(e.target.value)}
+            >
+              <option value="">Todas</option>
+              {empresas.map((emp) => (
+                <option key={emp.id} value={emp.nombre}>
+                  {emp.nombre}
+                </option>
+              ))}
+            </select>
+
+            {selectedEmpresa && (
+              <>
+                <label>
+                  <strong>Norma:</strong>
+                </label>
+                <select
+                  value={selectedFilterNorma}
+                  onChange={(e) => setSelectedFilterNorma(e.target.value)}
+                >
+                  <option value="">Todas</option>
+                  {normas.map((n) => (
+                    <option key={n.id} value={n.nombre}>
+                      {n.nombre}
+                    </option>
+                  ))}
+                </select>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* =========================
     FILTRO POR ÁREA (SOLO EN REGISTROS)
    ========================= */}
-{/* =========================
+      {/* =========================
     FILTRO DE ÁREA (SOLO EN REGISTROS)
    ========================= */}
-{selectedNorma && registros.length > 0 && (
-  <div className="hamburger-menu-container" ref={menuRef}>
-    <button
-      className="hamburger-btn"
-      onClick={() => setShowAreaFilterMenu(!showAreaFilterMenu)}
-    >
-      ☰
-    </button>
+      {selectedNorma && registros.length > 0 && (
+        <div className="hamburger-menu-container" ref={menuRef}>
+          <button
+            className="hamburger-btn"
+            onClick={() => setShowAreaFilterMenu(!showAreaFilterMenu)}
+          >
+            ☰
+          </button>
 
-    {/* Menú de filtros con clases condicionales */}
-    <div className={`filter-container ${showAreaFilterMenu ? 'show' : 'hide'}`}>
-      <label><strong>Filtrar por Área:</strong></label>
-      <select
-        value={selectedFilterArea}
-        onChange={(e) => setSelectedFilterArea(e.target.value)}
-      >
-        <option value="">Todas</option>
-        {uniqueAreas.map((area, index) => (
-          <option key={index} value={area}>{area}</option>
-        ))}
-      </select>
-    </div>
-  </div>
-)}
-
-
+          {/* Menú de filtros con clases condicionales */}
+          <div
+            className={`filter-container ${showAreaFilterMenu ? "show" : "hide"}`}
+          >
+            <label>
+              <strong>Filtrar por Área:</strong>
+            </label>
+            <select
+              value={selectedFilterArea}
+              onChange={(e) => setSelectedFilterArea(e.target.value)}
+            >
+              <option value="">Todas</option>
+              {uniqueAreas.map((area, index) => (
+                <option key={index} value={area}>
+                  {area}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      )}
 
       {/* FIN BLOQUE BOTÓN HAMBURGER/FILTROS */}
 
@@ -467,7 +519,9 @@ const filteredRegistros = registros.filter(reg =>
               onChange={(e) => setNewEmpresaName(e.target.value)}
               className="input-folder-name"
             />
-            <button type="submit" className="btn-add-folder">Agregar Empresa</button>
+            <button type="submit" className="btn-add-folder">
+              Agregar Empresa
+            </button>
           </form>
 
           {empresas.length > 0 ? (
@@ -519,7 +573,9 @@ const filteredRegistros = registros.filter(reg =>
               onChange={(e) => setNewNormaName(e.target.value)}
               className="input-folder-name"
             />
-            <button type="submit" className="btn-add-folder">Agregar Norma</button>
+            <button type="submit" className="btn-add-folder">
+              Agregar Norma
+            </button>
           </form>
 
           {normas.length > 0 ? (
@@ -551,36 +607,55 @@ const filteredRegistros = registros.filter(reg =>
           VISTA DE REGISTROS
          ========================= */}
       {selectedNorma && (
-  <>
-    <div className="back-to-home">
-      <button onClick={handleGoBackToNormas} className="btn-back-home">
-        ← Regresar a Normas
-      </button>
-    </div>
-    <h2>Registros de la Norma: {selectedNorma.nombre}</h2>
-
-    {filteredRegistros.length > 0 ? (
-      filteredRegistros.map((registro) => (
-        <div key={registro.id} className="saved-table">
-          <p><strong>Empresa:</strong> {registro.nombreEmpresa}</p>
-          <p><strong>Norma:</strong> {registro.norma}</p>
-          <p><strong>Área:</strong> {registro.areaSeleccionada}</p>
-          <p><strong>Puesto:</strong> {registro.puestoSeleccionado}</p>
-          <p><strong>Fecha de creación:</strong> {registro.fecha} - {registro.hora}</p>
-          <p><strong>Magnitud del Riesgo:</strong> {registro.risk}</p>
-          <div className="table-buttons">
-            <button className="btn-edit" onClick={() => handleEditRegistro(registro)}>
-              Editar
-            </button>
-            <button className="btn-delete" onClick={() => handleDeleteRegistro(registro.id)}>
-              Borrar
+        <>
+          <div className="back-to-home">
+            <button onClick={handleGoBackToNormas} className="btn-back-home">
+              ← Regresar a Normas
             </button>
           </div>
-        </div>
-      ))
-    ) : (
-      <p>No hay registros en esta norma.</p>
-    )}
+          <h2>Registros de la Norma: {selectedNorma.nombre}</h2>
+
+          {filteredRegistros.length > 0 ? (
+            filteredRegistros.map((registro) => (
+              <div key={registro.id} className="saved-table">
+                <p>
+                  <strong>Empresa:</strong> {registro.nombreEmpresa}
+                </p>
+                <p>
+                  <strong>Norma:</strong> {registro.norma}
+                </p>
+                <p>
+                  <strong>Área:</strong> {registro.areaSeleccionada}
+                </p>
+                <p>
+                  <strong>Puesto:</strong> {registro.puestoSeleccionado}
+                </p>
+                <p>
+                  <strong>Fecha de creación:</strong> {registro.fecha} -{" "}
+                  {registro.hora}
+                </p>
+                <p>
+                  <strong>Magnitud del Riesgo:</strong> {registro.risk}
+                </p>
+                <div className="table-buttons">
+                  <button
+                    className="btn-edit"
+                    onClick={() => handleEditRegistro(registro)}
+                  >
+                    Editar
+                  </button>
+                  <button
+                    className="btn-delete"
+                    onClick={() => handleDeleteRegistro(registro.id)}
+                  >
+                    Borrar
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No hay registros en esta norma.</p>
+          )}
         </>
       )}
     </div>

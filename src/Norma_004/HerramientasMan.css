@@ -27,22 +27,21 @@ body {
 }
 
 /* Compact Table Design */
-.main-table th, .main-table td {
+.main-table th,
+.main-table td {
   padding: 5px;
   line-height: 1.2;
   font-size: 0.9em;
-  border: 1px solid
+  border: 1px solid;
 }
 
-
-
 /* Highlighted Titles */
-.main-table th.nombre-maquinaria, 
-.main-table th.descripcion-maquinaria, 
-.main-table th.energia-utilizada, 
-.main-table th.area, 
-.main-table th.poe, 
-.main-table th.tiempo-exposicion, 
+.main-table th.nombre-maquinaria,
+.main-table th.descripcion-maquinaria,
+.main-table th.energia-utilizada,
+.main-table th.area,
+.main-table th.poe,
+.main-table th.tiempo-exposicion,
 .main-table th.localizacion-esquematica {
   background-color: #e13b3b;
   color: #fff;
@@ -88,7 +87,6 @@ body {
   cursor: pointer; /* Cambia el cursor para indicar interactividad */
 }
 
-
 .image-preview {
   display: block;
 }
@@ -97,7 +95,7 @@ body {
 textarea#observaciones {
   width: 100%;
   height: 100% !important;
-  font-size: 1.50em;
+  font-size: 1.5em;
 }
 
 /* EPP Table */
@@ -135,7 +133,7 @@ textarea#observaciones {
 .area,
 .poe,
 .tiempo-exposicion {
-  font-size: 0.10em; /* Reduce el tamaño de la letra */
+  font-size: 0.1em; /* Reduce el tamaño de la letra */
 }
 
 textarea.nombre-maquinaria,

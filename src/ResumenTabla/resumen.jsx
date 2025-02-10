@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { collection, onSnapshot, deleteDoc, doc, query, where } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  deleteDoc,
+  doc,
+  query,
+  where,
+} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
 import { FaTrash } from "react-icons/fa";
@@ -12,14 +19,14 @@ const TablaResumen = () => {
   useEffect(() => {
     const auth = getAuth();
     const user = auth.currentUser;
-  
+
     if (!user) {
       console.error("No se encontró un usuario autenticado.");
       return;
     }
-  
+
     const uid = user.uid;
-  
+
     // Suscribirse a cambios en la colección "resumen_17"
     const unsubscribe17 = onSnapshot(
       query(collection(db, "resumen_17"), where("uid", "==", uid)),
@@ -39,10 +46,9 @@ const TablaResumen = () => {
           ...prevData.filter((row) => row.collectionName !== "resumen_17"),
           ...areasData17,
         ]);
-      }
+      },
     );
-    
-  
+
     // Suscribirse a cambios en la colección "resumen"
     const unsubscribe04 = onSnapshot(
       query(collection(db, "resumen"), where("uid", "==", uid)),
@@ -62,7 +68,7 @@ const TablaResumen = () => {
           ...prevData.filter((row) => row.collectionName !== "resumen"),
           ...areasData04,
         ]);
-      }
+      },
     );
     return () => {
       unsubscribe17();
@@ -96,7 +102,7 @@ const TablaResumen = () => {
     setExpandedAreas((prevExpandedAreas) =>
       prevExpandedAreas.includes(areaId)
         ? prevExpandedAreas.filter((id) => id !== areaId)
-        : [...prevExpandedAreas, areaId]
+        : [...prevExpandedAreas, areaId],
     );
   };
 
@@ -109,7 +115,7 @@ const TablaResumen = () => {
       elevado: acc.elevado + (row.elevado || 0),
       grave: acc.grave + (row.grave || 0),
     }),
-    { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 }
+    { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 },
   );
 
   return (
@@ -117,9 +123,15 @@ const TablaResumen = () => {
       <table className="tabla-principal">
         <thead>
           <tr>
-            <th rowSpan="2" className="tabla-header">Área</th>
-            <th colSpan="5" className="tabla-header">Magnitud de riesgo</th>
-            <th rowSpan="2" className="tabla-header">Acción</th>
+            <th rowSpan="2" className="tabla-header">
+              Área
+            </th>
+            <th colSpan="5" className="tabla-header">
+              Magnitud de riesgo
+            </th>
+            <th rowSpan="2" className="tabla-header">
+              Acción
+            </th>
           </tr>
           <tr>
             <th className="tabla-riesgo tolerable">Tolerable</th>
@@ -131,7 +143,7 @@ const TablaResumen = () => {
         </thead>
         <tbody>
           {data.map((row, index) => (
-            <React.Fragment key={index}>  
+            <React.Fragment key={index}>
               <tr>
                 <td className="tabla-area">
                   <button
@@ -199,11 +211,8 @@ const TablaResumen = () => {
           </tr>
         </tbody>
       </table>
-
-          
-      
     </div>
   );
 };
 
-export default TablaResumen; 
+export default TablaResumen;

@@ -1,21 +1,25 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../firebase/firebaseConfig'; // Importa auth y db desde firebaseConfig
-import { doc, getDoc } from 'firebase/firestore';
-import './Login.css'; // Estilos personalizados (opcional)
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../firebase/firebaseConfig"; // Importa auth y db desde firebaseConfig
+import { doc, getDoc } from "firebase/firestore";
+import "./Login.css"; // Estilos personalizados (opcional)
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); // Reinicia el mensaje de error antes de intentar el login
+    setError(""); // Reinicia el mensaje de error antes de intentar el login
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
       const userEmail = userCredential.user.email; // Obtener el correo electrónico del usuario
       const userId = userCredential.user.uid;
 
@@ -23,20 +27,20 @@ function Login() {
       localStorage.setItem("userEmail", userEmail);
 
       // Recuperar datos del usuario desde Firestore (opcional)
-      const userDocRef = doc(db, 'users', userId);
+      const userDocRef = doc(db, "users", userId);
       const userDoc = await getDoc(userDocRef);
 
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        console.log('Datos del usuario:', userData);
+        console.log("Datos del usuario:", userData);
       } else {
-        console.error('No se encontraron datos del usuario en Firestore');
+        console.error("No se encontraron datos del usuario en Firestore");
       }
 
-      navigate('/'); // Redirige a la página inicial de tu aplicación
+      navigate("/"); // Redirige a la página inicial de tu aplicación
     } catch (err) {
-      console.error('Error de inicio de sesión:', err);
-      setError('Credenciales incorrectas o error en el inicio de sesión');
+      console.error("Error de inicio de sesión:", err);
+      setError("Credenciales incorrectas o error en el inicio de sesión");
     }
   };
 
@@ -46,9 +50,14 @@ function Login() {
         <source src="/videos/72544-543388333_small.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <main className="form-signin text-center" style={{ width: '300px', position: 'relative', zIndex: 1 }}>
+      <main
+        className="form-signin text-center"
+        style={{ width: "300px", position: "relative", zIndex: 1 }}
+      >
         <form onSubmit={handleSubmit}>
-          <h1 className="h3 mb-3 fw-normal" style={{ color: '#007bff' }}>LOGIN</h1>
+          <h1 className="h3 mb-3 fw-normal" style={{ color: "#007bff" }}>
+            LOGIN
+          </h1>
           <div className="form-floating mb-3">
             <input
               type="email"
@@ -73,7 +82,11 @@ function Login() {
             />
             <label htmlFor="floatingPassword">Contraseña</label>
           </div>
-          <button className="w-100 btn btn-lg mt-3" type="submit" style={{ backgroundColor: '#007bff', borderColor: '#007bff' }}>
+          <button
+            className="w-100 btn btn-lg mt-3"
+            type="submit"
+            style={{ backgroundColor: "#007bff", borderColor: "#007bff" }}
+          >
             Iniciar Sesión
           </button>
           {error && <p className="text-danger mt-3">{error}</p>}

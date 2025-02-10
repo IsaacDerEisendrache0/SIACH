@@ -1,5 +1,6 @@
 /* Asegúrate de que el cuerpo y el html ocupen el 100% de la altura */
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -44,7 +45,9 @@ body, html {
   padding: 10px 20px;
   border-radius: 50px; /* Botones redondeados */
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
 }
 
 /* Efecto hover para los botones */
@@ -66,14 +69,13 @@ body, html {
 
 /* Asegúrate de que otros contenedores de contenido tengan flexibilidad de altura */
 .data-section {
-  background-color: #ffffff; 
+  background-color: #ffffff;
   padding: 20px;
-  border-radius: 10px; 
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin: 20px auto;
   max-width: 800px;
 }
-
 
 .image-gallery {
   display: flex;
@@ -88,8 +90,6 @@ body, html {
   border-radius: 4px;
 }
 
-
-
 .popup {
   position: fixed;
   top: 50%;
@@ -98,7 +98,7 @@ body, html {
   padding: 20px;
   background: white;
   border: 1px solid #ccc;
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 }
 
@@ -119,7 +119,6 @@ body, html {
   left: 15%;
 }
 
-
 /* General container */
 .container {
   width: 100%;
@@ -129,9 +128,7 @@ body, html {
   font-family: Arial, sans-serif;
 }
 
-
 /* Header styling */
-
 
 .header .job-info {
   display: flex;
@@ -152,7 +149,8 @@ body, html {
   margin-bottom: 20px;
 }
 
-.main-table th, .main-table td {
+.main-table th,
+.main-table td {
   border: 1px solid black;
   padding: 8px;
   text-align: center;
@@ -165,7 +163,8 @@ body, html {
   margin-bottom: 20px;
 }
 
-.risk-table th, .risk-table td {
+.risk-table th,
+.risk-table td {
   border: 1px solid black;
   padding: 8px;
   text-align: left;
@@ -181,20 +180,27 @@ body, html {
 }
 
 /* Risk evaluation table styling */
-.risk-evaluation table, .risk-classification table {
+.risk-evaluation table,
+.risk-classification table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
 }
 
-.risk-evaluation th, .risk-evaluation td, .risk-classification th, .risk-classification td {
+.risk-evaluation th,
+.risk-evaluation td,
+.risk-classification th,
+.risk-classification td {
   border: 1px solid black;
   padding: 8px;
   text-align: center;
 }
 
 /* Table header background */
-.main-table th, .risk-table th, .risk-evaluation th, .risk-classification th {
+.main-table th,
+.risk-table th,
+.risk-evaluation th,
+.risk-classification th {
   background-color: #007bff;
   color: white;
 }
