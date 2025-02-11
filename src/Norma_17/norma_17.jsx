@@ -784,10 +784,6 @@ const RiskAssessmentTable = () => {
     );
   };
 
-  const [isAreaModalOpen, setIsAreaModalOpen] = useState(false);
-  const [areasSeleccionadasParaBorrar, setAreasSeleccionadasParaBorrar] =
-    useState([]);
-
   const handleAddAreaClick = () => {
     const nuevaArea = prompt("Ingrese el nombre de la nueva área:");
     if (nuevaArea && nuevaArea.trim() !== "") {
@@ -801,43 +797,6 @@ const RiskAssessmentTable = () => {
       localStorage.setItem("areas", JSON.stringify(updatedAreas));
       setAreaSeleccionada(nuevaArea.trim()); // Cambia a la nueva área
     }
-  };
-
-  const handleDeleteAreaClick = () => {
-    setIsAreaModalOpen(true);
-  };
-
-  // Cerrar el modal de borrar área
-  const handleAreaModalClose = () => {
-    setIsAreaModalOpen(false);
-  };
-
-  // Función para manejar selección de áreas en el modal
-  const handleAreaSelectionChange = (event) => {
-    const value = event.target.value;
-    const alreadySelected = areasSeleccionadasParaBorrar.includes(value);
-
-    if (alreadySelected) {
-      setAreasSeleccionadasParaBorrar(
-        areasSeleccionadasParaBorrar.filter((area) => area !== value),
-      );
-    } else {
-      setAreasSeleccionadasParaBorrar([...areasSeleccionadasParaBorrar, value]);
-    }
-  };
-
-  // Función para borrar las áreas seleccionadas
-  const handleDeleteSelectedAreas = () => {
-    const updatedAreas = areas.filter(
-      (area) => !areasSeleccionadasParaBorrar.includes(area.nombre),
-    );
-    setAreas(updatedAreas);
-
-    // Guardar las áreas actualizadas en localStorage
-    localStorage.setItem("areas", JSON.stringify(updatedAreas));
-
-    setAreasSeleccionadasParaBorrar([]);
-    setIsAreaModalOpen(false);
   };
 
   useEffect(() => {
@@ -1362,6 +1321,51 @@ const RiskAssessmentTable = () => {
     setSelectedNormaId(normaId);
   };
 
+  const [isAreaModalOpen, setIsAreaModalOpen] = useState(false);
+  const [areasSeleccionadasParaBorrar, setAreasSeleccionadasParaBorrar] =
+    useState([]);
+
+  const handleDeleteAreaClick = () => {
+    console.log("✅ Abriendo modal para eliminar áreas...");
+    setIsAreaModalOpen(true);
+  };
+
+  const handleAreaModalClose = () => {
+    setIsAreaModalOpen(false);
+    setAreasSeleccionadasParaBorrar([]); // Limpiar selección al cerrar
+  };
+
+  const handleAreaSelectionChange = (event) => {
+    const value = event.target.value;
+    setAreasSeleccionadasParaBorrar((prev) =>
+      prev.includes(value)
+        ? prev.filter((area) => area !== value)
+        : [...prev, value],
+    );
+  };
+
+  const handleDeleteSelectedAreas = () => {
+    if (areasSeleccionadasParaBorrar.length === 0) {
+      alert("Selecciona al menos un área para eliminar.");
+      return;
+    }
+
+    const confirmDelete = window.confirm(
+      `¿Seguro que deseas eliminar las siguientes áreas?\n${areasSeleccionadasParaBorrar.join(", ")}`,
+    );
+    if (!confirmDelete) return;
+
+    const updatedAreas = areas.filter(
+      (area) => !areasSeleccionadasParaBorrar.includes(area.nombre),
+    );
+    setAreas(updatedAreas);
+    localStorage.setItem("areas", JSON.stringify(updatedAreas));
+
+    setAreasSeleccionadasParaBorrar([]);
+    setIsAreaModalOpen(false);
+    alert("Áreas eliminadas con éxito.");
+  };
+
   return (
     <div class="main-table">
       <table
@@ -1434,6 +1438,49 @@ const RiskAssessmentTable = () => {
               )}
             </td>
           </tr>
+
+          <Modal
+            isOpen={isAreaModalOpen}
+            onRequestClose={handleAreaModalClose}
+            className="modal-container"
+          >
+            <h2>Eliminar Áreas</h2>
+            <p>Selecciona las áreas que deseas eliminar:</p>
+
+            {/* Lista de áreas con checkboxes */}
+            <div className="area-selection-list">
+              {areas.length > 0 ? (
+                areas.map((area) => (
+                  <label key={area.nombre} className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      value={area.nombre}
+                      checked={areasSeleccionadasParaBorrar.includes(
+                        area.nombre,
+                      )}
+                      onChange={handleAreaSelectionChange}
+                    />
+                    {area.nombre}
+                  </label>
+                ))
+              ) : (
+                <p>No hay áreas disponibles.</p>
+              )}
+            </div>
+
+            {/* Botones de acción */}
+            <div className="modal-buttons">
+              <button
+                onClick={handleDeleteSelectedAreas}
+                className="confirm-button"
+              >
+                Confirmar Eliminación
+              </button>
+              <button onClick={handleAreaModalClose} className="cancel-button">
+                Cancelar
+              </button>
+            </div>
+          </Modal>
 
           <Modal
             isOpen={isFolderModalOpen}

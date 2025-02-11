@@ -265,11 +265,9 @@ const SavedTables = () => {
 
       // Ordenar por timestamp de Firebase si existe, o por fecha/hora si no está disponible
       const sorted = fetchedRegistros.sort((a, b) => {
-        const dateA =
-          a.fechaCreacion?.toDate() || new Date(`${a.fecha} ${a.hora}`);
-        const dateB =
-          b.fechaCreacion?.toDate() || new Date(`${b.fecha} ${b.hora}`);
-        return dateB - dateA; // Orden descendente (más reciente primero)
+        const dateA = new Date(`${a.fecha} ${a.hora}`);
+        const dateB = new Date(`${b.fecha} ${b.hora}`);
+        return dateB - dateA;
       });
 
       setRegistros(sorted);
@@ -290,22 +288,50 @@ const SavedTables = () => {
       "¿Estás seguro de que deseas borrar este registro?",
     );
     if (!confirmDelete) return;
+
     try {
-      await deleteDoc(
-        doc(
+      // REFERENCIA CORRECTA AL DOCUMENTO EN FIREBASE
+      const registroRef = doc(
+        db,
+        "empresas",
+        selectedEmpresa.id,
+        "normas",
+        selectedNorma.id,
+        "tablas", // 🔹 Asegura que esta sea la colección correcta en Firestore
+        registroId,
+      );
+
+      // 🔹 Verificar si el documento existe antes de eliminar
+      const docSnapshot = await getDocs(
+        collection(
           db,
           "empresas",
           selectedEmpresa.id,
           "normas",
           selectedNorma.id,
-          "registros",
-          registroId,
+          "tablas",
         ),
       );
-      setRegistros((prev) => prev.filter((reg) => reg.id !== registroId));
+      const docExists = docSnapshot.docs.some((doc) => doc.id === registroId);
+
+      if (!docExists) {
+        alert("El registro no existe en la base de datos.");
+        return;
+      }
+
+      // 🔹 Eliminar el documento
+      await deleteDoc(registroRef);
+      console.log(
+        `✅ Registro ${registroId} eliminado de Firebase correctamente`,
+      );
+
+      // 🔹 Recargar registros después de eliminar
+      loadRegistros(selectedEmpresa.id, selectedNorma.id);
+
       alert("Registro borrado con éxito.");
     } catch (error) {
-      console.error("Error al borrar registro:", error);
+      console.error("❌ Error al borrar el registro en Firebase:", error);
+      alert("Error al eliminar el registro. Revisa la consola.");
     }
   };
 
