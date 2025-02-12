@@ -2,16 +2,7 @@ import html2canvas from "html2canvas";
 import "./Table17.css";
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
-import {
-  collection,
-  getDocs,
-  addDoc,
-  updateDoc,
-  doc,
-  getDoc,
-  setDoc,
-  serverTimestamp,
-} from "firebase/firestore";
+import {collection ,getDocs ,addDoc ,updateDoc ,doc ,getDoc ,setDoc} from "firebase/firestore";
 import { db } from "../firebase"; // Importar la configuración de Firebase
 import logo from "../logos/logo.png";
 import maxion from "../logos/maxion.jpeg";
@@ -213,7 +204,6 @@ const RiskAssessmentTable = () => {
   // Coloca los hooks dentro del componente funcional
   const [areaSeleccionada, setAreaSeleccionada] = useState(areas[0].nombre);
   const [puestoSeleccionado, setPuestoSeleccionado] = useState("");
-  const [nombreEmpresa, setNombreEmpresa] = useState("");
   const [puestos, setPuestos] = useState(areas[0].puestos);
   const [descripcionActividad1, setDescripcionActividad1] = useState("");
   const [descripcionActividad2, setDescripcionActividad2] = useState("");
@@ -221,8 +211,6 @@ const RiskAssessmentTable = () => {
   // **Estados para Carpetas y Modal**
   const [folders, setFolders] = useState([]);
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
-  const [selectedFolderId, setSelectedFolderId] = useState("");
-  const [newFolderName, setNewFolderName] = useState("");
   const [fechaActual, setFechaActual] = useState("");
 
   const handleAreaChange = (e) => {
@@ -1024,7 +1012,7 @@ const RiskAssessmentTable = () => {
     setLogoSeleccionado(null); // Elimina el logo seleccionado
   };
 
-  const [hideButtons, setHideButtons] = useState(false);
+  const [hideButtons] = useState(false);
 
   document.addEventListener("DOMContentLoaded", () => {
     const tableContainer = document.querySelector(".table-container");
