@@ -381,13 +381,7 @@ const SavedTables = () => {
     ? normas.filter((norm) => norm.nombre === selectedFilterNorma)
     : normas;
 
-  const displayedRegistros = registros.filter(
-    (reg) =>
-      (selectedFilterEmpresa
-        ? reg.nombreEmpresa === selectedFilterEmpresa
-        : true) &&
-      (selectedFilterNorma ? reg.norma === selectedFilterNorma : true),
-  );
+  
 
   // ------------------------------------------------------------------
   // (C) Estado para controlar la visibilidad del menú (Hamburger)
@@ -397,7 +391,6 @@ const SavedTables = () => {
   // ------------------------------------------------------------------
   // D) Estado previo "searchTerm" (sin uso actual)
   // ------------------------------------------------------------------
-  const [searchTerm, setSearchTerm] = useState("");
 
   const menuRef = useRef(null); // Referencia para detectar clics fuera
 

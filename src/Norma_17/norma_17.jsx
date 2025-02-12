@@ -1255,32 +1255,7 @@ const RiskAssessmentTable = () => {
     setNormas([]);
   };
 
-  // Crear una nueva carpeta
-  const handleCreateNewFolder = async () => {
-    if (newFolderName.trim() === "") {
-      alert("El nombre de la carpeta no puede estar vacío.");
-      return;
-    }
 
-    try {
-      const docRef = await addDoc(collection(db, "carpetas"), {
-        nombre: newFolderName,
-        fechaCreacion: serverTimestamp(),
-      });
-      setFolders([...folders, { id: docRef.id, nombre: newFolderName }]);
-      setSelectedFolderId(docRef.id);
-      setNewFolderName("");
-      alert("Carpeta creada con éxito.");
-    } catch (error) {
-      console.error("Error al crear la carpeta:", error);
-      alert("Error al crear la carpeta.");
-    }
-  };
-
-  // Seleccionar una carpeta existente
-  const handleSelectFolder = (folderId) => {
-    setSelectedFolderId(folderId);
-  };
 
   useEffect(() => {
     const hoy = new Date().toISOString().split("T")[0]; // Obtiene la fecha actual en formato YYYY-MM-DD
