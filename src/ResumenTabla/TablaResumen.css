@@ -1,17 +1,43 @@
-/* Estilo para la tabla principal */
-.tabla-principal {
-  border-collapse: collapse;
+/* ===============================
+   Estilos para la Tabla de Resumen
+================================ */
+
+/* Contenedor principal de la tabla */
+.tabla-container {
   width: 100%;
-  margin: 10px auto; /* Centrar y dar margen */
-  font-size: 16px; /* Tamaño base para toda la tabla */
-  text-align: center;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+/* Tabla principal */
+.tabla-principal {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 8px;
+  font-size: 18px;
+  text-align: center;
+  border: 2px solid #ddd;
+}
+
+/* Encabezados */
 .tabla-header {
-  border: 1px solid black;
-  background-color: #d3d3d3; /* Fondo gris en encabezado */
-  font-size: 18px; /* Aumentar tamaño en encabezados */
-  padding: 10px; /* Espacio más amplio */
+  background-color: #d3d3d3;
+  font-size: 20px;
+  padding: 12px;
+  border: 2px solid #000;
+  text-transform: uppercase;
+}
+
+/* Ajustar tamaño de columnas */
+th,
+td {
+  padding: 15px;
+  border: 2px solid #ddd;
+  font-size: 18px;
 }
 
 /* Colores específicos para Magnitud de Riesgo */
@@ -45,42 +71,52 @@
   font-weight: bold;
 }
 
-/* Ajustes específicos para los números */
+/* Ajustes específicos para las celdas */
 .tabla-principal td {
-  font-size: 16px; /* Tamaño específico de números */
-  padding: 8px; /* Espacio uniforme en números */
+  font-size: 18px;
+  padding: 12px;
   text-align: center;
 }
 
-/* Colores aplicados a las celdas de magnitud */
-.tabla-riesgo.tolerable,
-.tabla-riesgo.moderado,
-.tabla-riesgo.notable,
-.tabla-riesgo.elevado,
-.tabla-riesgo.grave {
-  font-weight: bold;
-  padding: 8px;
-}
-
-/* Estilo especial para la fila TOTAL */
+/* Ajuste para la fila de totales */
 .tabla-principal tr:last-child th,
 .tabla-principal tr:last-child td {
-  font-size: 18px; /* Tamaño más grande para el total */
+  font-size: 20px;
   font-weight: bold;
-  background-color: #e9ecef; /* Fondo gris claro */
+  background-color: #e9ecef;
 }
 
 /* Botón de expandir */
 .boton-expandir {
   background: none;
   border: none;
-  font-size: 14px; /* Sin cambios en tamaño */
+  font-size: 16px;
   cursor: pointer;
+  color: #000;
+  font-weight: bold;
 }
 
 /* Botón de eliminar */
 .boton-eliminar {
   color: #ff4500;
   cursor: pointer;
-  font-size: 16px; /* Icono de tamaño controlado */
+  font-size: 20px;
+  transition: color 0.3s ease;
+}
+
+.boton-eliminar:hover {
+  color: #c82333;
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 768px) {
+  .tabla-principal {
+    font-size: 16px;
+  }
+
+  th,
+  td {
+    padding: 10px;
+    font-size: 16px;
+  }
 }
