@@ -8,6 +8,7 @@ import {
   query,
   where,
   serverTimestamp,
+  getDocs,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
@@ -72,66 +73,111 @@ const TablaResumen = () => {
 
   // Al seleccionar una norma, cargar la tabla de resumen
   useEffect(() => {
-    if (selectedNorma && selectedEmpresa && uid) {
-      // Suscribirse a la colección "resumen_17"
-      const unsubscribe17 = onSnapshot(
-        query(collection(db, "resumen_17"), where("uid", "==", uid)),
-        (snapshot) => {
-          const areasData17 = snapshot.docs.map((doc) => ({
-            nombreEmpresa: doc.data().nombreEmpresa || "Sin empresa",
-            area: doc.id,
-            collectionName: "resumen_17",
-            puestos: doc.data().puestos || [],
-            tolerable: doc.data().tolerable || 0,
-            moderado: doc.data().moderado || 0,
-            notable: doc.data().notable || 0,
-            elevado: doc.data().elevado || 0,
-            grave: doc.data().grave || 0,
-          }));
-          setData((prevData) => [
-            ...prevData.filter((row) => row.collectionName !== "resumen_17"),
-            ...areasData17,
-          ]);
-        }
-      );
-      
-
-      // Suscribirse a la colección "resumen"
-      const unsubscribe04 = onSnapshot(
-        query(
-          collection(db, "resumen"),
-          where("uid", "==", uid),
-          where("nombreEmpresa", "==", selectedEmpresa.nombre),
-          where("norma", "==", selectedNorma.nombre)
-        ),
-        (snapshot) => {
-          const areasData04 = snapshot.docs.map((doc) => ({
-            nombreEmpresa: doc.data().nombreEmpresa || "Sin empresa",
-            area: doc.id,
-            collectionName: "resumen",
-            puestos: doc.data().puestos || [],
-            tolerable: doc.data().tolerable || 0,
-            moderado: doc.data().moderado || 0,
-            notable: doc.data().notable || 0,
-            elevado: doc.data().elevado || 0,
-            grave: doc.data().grave || 0,
-          }));
-          setData((prevData) => [
-            ...prevData.filter((row) => row.collectionName !== "resumen"),
-            ...areasData04,
-          ]);
-        }
-      );
-
-      return () => {
-        unsubscribe17();
-        unsubscribe04();
-      };
-    } else {
-      setData([]);
+    if (!selectedNorma || !selectedEmpresa || !uid) {
+      console.warn("⚠️ No se han seleccionado norma o empresa aún, esperando...");
+      return;
     }
+  
+    let unsubscribe;
+    let collectionName = "";
+  
+    // Convertimos a minúsculas para evitar errores de comparación
+    const normaNombre = selectedNorma.nombre.toLowerCase();
+  
+    if (normaNombre === "norma_17") {
+      collectionName = "resumen_17";
+    } else if (normaNombre === "norma_04") {
+      collectionName = "resumen_004";
+    } else {
+      console.warn("⚠️ La norma seleccionada no es válida:", selectedNorma.nombre);
+      return;
+    }
+  
+    console.log("📌 Cargando datos desde la colección:", collectionName);
+  
+    unsubscribe = onSnapshot(collection(db, collectionName), (snapshot) => {
+      if (snapshot.empty) {
+        console.warn("⚠️ No hay documentos en la colección:", collectionName);
+        setData([]); // Limpiar la tabla si no hay datos
+        return;
+      }
+  
+      const areasData = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        console.log("✅ Documento obtenido:", doc.id, data);
+  
+        return {
+          nombreEmpresa: selectedEmpresa.nombre,
+          area: doc.id,
+          collectionName: collectionName,
+          puestos: Array.isArray(data.puestos) ? data.puestos : [],
+          tolerable: data.tolerable ?? 0,
+          moderado: data.moderado ?? 0,
+          notable: data.notable ?? 0,
+          elevado: data.elevado ?? 0,
+          grave: data.grave ?? 0,
+        };
+      });
+  
+      setData(areasData);
+      console.log("📊 Datos actualizados en el estado:", areasData);
+    });
+  
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, [selectedNorma, selectedEmpresa, uid]);
 
+  
+  
+
+  // Función para eliminar una empresa con confirmación
+const deleteEmpresa = async (empresaId) => {
+  const confirmDelete = window.confirm(
+    "¿Estás seguro de que deseas eliminar esta empresa? Se eliminarán también todas sus normas."
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+    // Obtener todas las normas dentro de la empresa y eliminarlas primero
+    const normasSnapshot = await getDocs(collection(db, "resumenes", empresaId, "normas"));
+    normasSnapshot.forEach(async (normaDoc) => {
+      await deleteDoc(doc(db, "resumenes", empresaId, "normas", normaDoc.id));
+    });
+
+    // Luego eliminar la empresa
+    await deleteDoc(doc(db, "resumenes", empresaId));
+    setEmpresas((prev) => prev.filter((empresa) => empresa.id !== empresaId));
+    alert("Empresa eliminada con éxito.");
+  } catch (error) {
+    console.error("Error al eliminar la empresa:", error);
+    alert("Hubo un error al eliminar la empresa.");
+  }
+};
+
+// Función para eliminar una norma con confirmación
+const deleteNorma = async (normaId) => {
+  const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta norma?");
+  if (!confirmDelete) return;
+
+  try {
+    await deleteDoc(doc(db, "resumenes", selectedEmpresa.id, "normas", normaId));
+    setNormas((prev) => prev.filter((norma) => norma.id !== normaId));
+    alert("Norma eliminada con éxito.");
+  } catch (error) {
+    console.error("Error al eliminar la norma:", error);
+    alert("Hubo un error al eliminar la norma.");
+  }
+};
+
+  
+  
+  
+  console.log("🛠 selectedNorma:", selectedNorma);
+console.log("🛠 selectedEmpresa:", selectedEmpresa);
+
+  
   /* ================================
      FUNCIONALIDAD ORIGINAL DE LA TABLA
   ================================ */
@@ -231,16 +277,16 @@ const TablaResumen = () => {
             </button>
           </form>
           <div className="folders-list">
-            {empresas.map((empresa) => (
-              <div
-                key={empresa.id}
-                className="folder-item"
-                onClick={() => setSelectedEmpresa(empresa)}
-              >
-                <span className="folder-name">{empresa.nombre}</span>
-              </div>
-            ))}
-          </div>
+  {empresas.map((empresa) => (
+    <div key={empresa.id} className="folder-item">
+      <span className="folder-name" onClick={() => setSelectedEmpresa(empresa)}>
+        {empresa.nombre}
+      </span>
+      <FaTrash className="boton-eliminar" onClick={() => deleteEmpresa(empresa.id)} />
+    </div>
+  ))}
+</div>
+
         </>
       )}
 
@@ -267,16 +313,16 @@ const TablaResumen = () => {
             </button>
           </form>
           <div className="folders-list">
-            {normas.map((norma) => (
-              <div
-                key={norma.id}
-                className="folder-item"
-                onClick={() => setSelectedNorma(norma)}
-              >
-                <span className="folder-name">{norma.nombre}</span>
-              </div>
-            ))}
-          </div>
+  {normas.map((norma) => (
+    <div key={norma.id} className="folder-item">
+      <span className="folder-name" onClick={() => setSelectedNorma(norma)}>
+        {norma.nombre}
+      </span>
+      <FaTrash className="boton-eliminar" onClick={() => deleteNorma(norma.id)} />
+    </div>
+  ))}
+</div>
+
         </>
       )}
 
