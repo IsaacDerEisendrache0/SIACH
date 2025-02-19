@@ -338,18 +338,22 @@ const SavedTables = () => {
   // ------------------------------------------------------------------
   // EDITAR REGISTRO
   // ------------------------------------------------------------------
+  // ... resto de imports y código
+
   const handleEditRegistro = (registro) => {
-    // Guardar datos en localStorage o usar un estado global
     localStorage.setItem(
-      "registroToEdit",
+      "tableToEdit",
       JSON.stringify({
         ...registro,
         empresaId: selectedEmpresa.id,
         normaId: selectedNorma.id,
       }),
     );
-    navigate("/norma_004");
+    // Navegar a la nueva tabla duplicada (editor)
+    navigate("/norma_17_editor");
   };
+
+  // ... resto del componente SavedTables.jsx
 
   // ------------------------------------------------------------------
   // BOTONES PARA REGRESAR DE UN NIVEL AL ANTERIOR
@@ -380,8 +384,6 @@ const SavedTables = () => {
   const displayedNormas = selectedFilterNorma
     ? normas.filter((norm) => norm.nombre === selectedFilterNorma)
     : normas;
-
-  
 
   // ------------------------------------------------------------------
   // (C) Estado para controlar la visibilidad del menú (Hamburger)

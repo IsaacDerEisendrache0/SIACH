@@ -16,8 +16,9 @@ import logo from "../logos/logo.png";
 import maxion from "../logos/maxion.jpeg";
 import safran from "../logos/safran.jpeg";
 import { getAuth } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
-const RiskAssessmentTable = () => {
+const RiskAssessmentTableEditor = () => {
   const [areas, setAreas] = useState([
     {
       nombre: "Producción",
@@ -220,6 +221,7 @@ const RiskAssessmentTable = () => {
   const [folders, setFolders] = useState([]);
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
   const [fechaActual, setFechaActual] = useState("");
+  const navigate = useNavigate();
 
   const handleAreaChange = (e) => {
     const selectedName = e.target.value;
@@ -557,6 +559,7 @@ const RiskAssessmentTable = () => {
     setIsImageModalOpen(false);
   };
 
+  /*
   const saveTable = async (empresaId, normaId) => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -641,7 +644,7 @@ const RiskAssessmentTable = () => {
       console.error("Error al guardar en Firestore:", error);
       alert("Error al guardar la tabla.");
     }
-  };
+  }; */
 
   const updateTable = async (empresaId, normaId) => {
     const updatedTable = {
@@ -750,26 +753,32 @@ const RiskAssessmentTable = () => {
 
   useEffect(() => {
     const tableToEdit = JSON.parse(localStorage.getItem("tableToEdit"));
+
     if (tableToEdit) {
-      setAreaSeleccionada(tableToEdit.areaSeleccionada);
-      setPuestoSeleccionado(tableToEdit.puestoSeleccionado);
-      setHazards(tableToEdit.hazards);
-      setConsequence(tableToEdit.consequence);
-      setExposure(tableToEdit.exposure);
-      setProbability(tableToEdit.probability);
-      setSelectedImages(tableToEdit.selectedImages || []);
-      setDescripcionActividad1(tableToEdit.descripcionActividad1 || "");
+      // HACEMOS UNA COPIA PROFUNDA para evitar modificar el registro original
+      const tableCopy = JSON.parse(JSON.stringify(tableToEdit));
+      setSelectedEmpresaId(tableToEdit.empresaId || "");
+      setSelectedNormaId(tableToEdit.normaId || "");
+      setAreaSeleccionada(tableCopy.areaSeleccionada || "");
+      setPuestoSeleccionado(tableCopy.puestoSeleccionado || "");
+      setHazards(tableCopy.hazards || {});
+      setConsequence(tableCopy.consequence || 1);
+      setExposure(tableCopy.exposure || 1);
+      setProbability(tableCopy.probability || 0.1);
+      setSelectedImages(tableCopy.selectedImages || []);
+      setDescripcionActividad1(tableCopy.descripcionActividad1 || "");
       setSelectedOptionEquipoUtilizado(
-        tableToEdit.selectedOptionEquipoUtilizado || "",
+        tableCopy.selectedOptionEquipoUtilizado || "",
       );
       setSelectedOptionProteccionSugerida(
-        tableToEdit.selectedOptionProteccionSugerida || "",
+        tableCopy.selectedOptionProteccionSugerida || "",
       );
-      setTiempoExposicion(tableToEdit.tiempoExposicion || "");
-      setFecha(tableToEdit.fecha); // Establecer la fecha de la tabla en edición
-      setHora(tableToEdit.hora); // Establecer la hora de creación
-      setTableId(tableToEdit.id); // Guardar el ID del documento para actualizar
-      localStorage.removeItem("tableToEdit");
+      setTiempoExposicion(tableCopy.tiempoExposicion || "");
+      setFecha(tableCopy.fecha || new Date().toLocaleDateString());
+      setHora(tableCopy.hora || new Date().toLocaleTimeString());
+      setTableId(tableCopy.id || null);
+
+      setIsEditing(true);
     }
   }, []);
 
@@ -1338,6 +1347,13 @@ const RiskAssessmentTable = () => {
 
   return (
     <div class="main-table">
+      {/* Botón para regresar a la pantalla de registros (por ejemplo: /savedTables) */}
+      <button
+        onClick={() => navigate("/savedTables")}
+        className="btn-exit-editor"
+      >
+        ← Volver a los Registros
+      </button>
       <table
         class="custom-table"
         className="table-container"
@@ -1541,8 +1557,6 @@ const RiskAssessmentTable = () => {
                         // Llamamos a la función de guardado o actualización usando ambos IDs
                         if (isEditing) {
                           updateTable(selectedEmpresaId, selectedNormaId);
-                        } else {
-                          saveTable(selectedEmpresaId, selectedNormaId);
                         }
                         closeFolderModal();
                       } else {
@@ -2282,8 +2296,16 @@ const RiskAssessmentTable = () => {
           Descargar PDF
         </button>
 
-        <button onClick={openFolderModal} className="save-button">
-          {isEditing ? "Actualizar Tabla" : "Guardar Tabla"}
+        <button
+          onClick={() => {
+            if (!selectedEmpresaId || !selectedNormaId) {
+              return alert("Faltan datos de empresa/norma");
+            }
+            updateTable(selectedEmpresaId, selectedNormaId);
+          }}
+          className="save-button"
+        >
+          Actualizar Tabla
         </button>
 
         <button
@@ -2297,4 +2319,4 @@ const RiskAssessmentTable = () => {
   );
 };
 
-export default RiskAssessmentTable;
+export default RiskAssessmentTableEditor;

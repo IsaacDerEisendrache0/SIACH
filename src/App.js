@@ -23,6 +23,7 @@ import Moviles from "./Norma_004/moviles";
 import Maquinaria from "./Norma_004/maquinariaYequipo";
 import HerramientasManuales from "./Norma_004/herramientasMan";
 import ResumenAccion from "./ResumenTabla/resumenAccion";
+import RiskAssessmentTableEditor from "./Norma_17/norma_17_editor"; // Editor nuevo
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -586,6 +587,11 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/saved-tables" element={<SavedTables />} />
           <Route path="/" element={<Dashboard />} />
+          <Route
+            path="/norma_17_editor"
+            element={<RiskAssessmentTableEditor />}
+          />
+          <Route path="/savedTables" element={<SavedTables />} />
         </Routes>
       </header>
     </div>

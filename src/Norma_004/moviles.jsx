@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./Moviles.css";
 import html2canvas from "html2canvas";
-import { getDoc ,setDoc ,doc ,addDoc ,collection ,updateDoc , getDocs, serverTimestamp }from "firebase/firestore";
+import {
+  getDoc,
+  setDoc,
+  doc,
+  addDoc,
+  collection,
+  updateDoc,
+  getDocs,
+  serverTimestamp,
+} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
 import logo from "../logos/logo.png";
