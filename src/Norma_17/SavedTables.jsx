@@ -341,17 +341,21 @@ const SavedTables = () => {
   // ... resto de imports y código
 
   const handleEditRegistro = (registro) => {
+    console.log("Registro a editar:", registro);
+  
+    // Asegúrate de incluir todos los campos que el editor necesita.
     localStorage.setItem(
       "tableToEdit",
       JSON.stringify({
         ...registro,
         empresaId: selectedEmpresa.id,
         normaId: selectedNorma.id,
-      }),
+      })
     );
-    // Navegar a la nueva tabla duplicada (editor)
-    navigate("/norma_17_editor");
+    navigate("/norma_17_editor"); // o la ruta de tu editor
   };
+  
+  
 
   // ... resto del componente SavedTables.jsx
 

@@ -208,7 +208,7 @@ const RiskAssessmentTableEditor = () => {
     ],
   };
 
-  const STORAGE_KEY = "riskAssessmentData_v1";
+  const STORAGE_KEY = "riskAssessmentData_editor";
 
   // Coloca los hooks dentro del componente funcional
   const [areaSeleccionada, setAreaSeleccionada] = useState(areas[0].nombre);
@@ -647,104 +647,130 @@ const RiskAssessmentTableEditor = () => {
   }; */
 
   const updateTable = async (empresaId, normaId) => {
-    const updatedTable = {
-      areaSeleccionada,
-      puestoSeleccionado,
-      hazards,
-      consequence,
-      exposure,
-      probability,
-      risk: calculateRisk(),
-      selectedImages,
-      descripcionActividad1,
-      descripcionActividad2,
-      selectedOptionEquipoUtilizado,
-      selectedOptionProteccionSugerida,
-      tiempoExposicion,
-      norma: "N-017",
-      fecha, // Mantener la misma fecha
-      hora, // Mantener la misma hora de creación
-    };
-
-    try {
-      if (!tableId) {
-        throw new Error("No se encontró el ID de la tabla para actualizar.");
-      }
-      // Actualizar la tabla en la subcolección "tablas" de la norma seleccionada
-      const docRef = doc(
-        db,
-        "empresas",
-        empresaId,
-        "normas",
-        normaId,
-        "tablas",
-        tableId,
-      );
-      await updateDoc(docRef, updatedTable);
-
-      // Actualizar el resumen (este bloque se mantiene igual)
-      const resumenRef = doc(db, "resumen_17", areaSeleccionada);
-      const resumenSnapshot = await getDoc(resumenRef);
-      let areaData = resumenSnapshot.exists()
-        ? resumenSnapshot.data()
-        : {
-            puestos: [],
-            tolerable: 0,
-            moderado: 0,
-            notable: 0,
-            elevado: 0,
-            grave: 0,
-          };
-
-      console.log("Datos del área antes de actualizar:", areaData);
-
-      const updatedPuestos = [
-        ...areaData.puestos.filter((p) => p.nombre !== puestoSeleccionado),
-        {
-          nombre: puestoSeleccionado,
-          magnitudRiesgo: calculateRisk(),
-          categoria:
-            calculateRisk() <= 20
-              ? "Tolerable"
-              : calculateRisk() <= 70
-                ? "Moderado"
-                : calculateRisk() <= 200
-                  ? "Notable"
-                  : calculateRisk() <= 400
-                    ? "Elevado"
-                    : "Grave",
-        },
-      ];
-
-      console.log("Puestos actualizados:", updatedPuestos);
-
-      const newTotals = updatedPuestos.reduce(
-        (acc, puesto) => {
-          const { magnitudRiesgo } = puesto;
-          if (magnitudRiesgo <= 20) acc.tolerable++;
-          else if (magnitudRiesgo <= 70) acc.moderado++;
-          else if (magnitudRiesgo <= 200) acc.notable++;
-          else if (magnitudRiesgo <= 400) acc.elevado++;
-          else acc.grave++;
-          return acc;
-        },
-        { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 },
-      );
-
-      console.log("Nuevos totales calculados:", newTotals);
-
-      await setDoc(resumenRef, {
-        ...areaData,
-        puestos: updatedPuestos,
-        ...newTotals,
-      });
-
-      alert("Tabla actualizada con éxito en Firestore.");
-    } catch (error) {
-      console.error("Error al actualizar en Firestore:", error);
-      alert("Error al actualizar la tabla.");
-    }
+  const updatedTable = {
+    areaSeleccionada,
+    puestoSeleccionado,
+    hazards,
+    consequence,
+    exposure,
+    probability,
+    risk: calculateRisk(),
+    selectedImages,
+    descripcionActividad1,
+    descripcionActividad2,
+    selectedOptionEquipoUtilizado,
+    selectedOptionProteccionSugerida,
+    tiempoExposicion,
+    norma: "N-017",
+    fecha, // Mantener la misma fecha
+    hora,  // Mantener la misma hora de creación
   };
+
+  try {
+    if (!tableId) {
+      throw new Error("No se encontró el ID de la tabla para actualizar.");
+    }
+
+    // 1. Referencia al documento en Firestore
+    const docRef = doc(
+      db,
+      "empresas",
+      empresaId,
+      "normas",
+      normaId,
+      "tablas",
+      tableId
+    );
+
+    // 2. Actualiza el documento
+    await updateDoc(docRef, updatedTable);
+
+    // --- BLOQUE DEL RESUMEN (igual que antes) ---
+    const resumenRef = doc(db, "resumen_17", areaSeleccionada);
+    const resumenSnapshot = await getDoc(resumenRef);
+
+    let areaData = resumenSnapshot.exists()
+      ? resumenSnapshot.data()
+      : {
+          puestos: [],
+          tolerable: 0,
+          moderado: 0,
+          notable: 0,
+          elevado: 0,
+          grave: 0,
+        };
+
+    console.log("Datos del área antes de actualizar:", areaData);
+
+    const updatedPuestos = [
+      ...areaData.puestos.filter((p) => p.nombre !== puestoSeleccionado),
+      {
+        nombre: puestoSeleccionado,
+        magnitudRiesgo: calculateRisk(),
+        categoria:
+          calculateRisk() <= 20
+            ? "Tolerable"
+            : calculateRisk() <= 70
+            ? "Moderado"
+            : calculateRisk() <= 200
+            ? "Notable"
+            : calculateRisk() <= 400
+            ? "Elevado"
+            : "Grave",
+      },
+    ];
+
+    console.log("Puestos actualizados:", updatedPuestos);
+
+    const newTotals = updatedPuestos.reduce(
+      (acc, puesto) => {
+        const { magnitudRiesgo } = puesto;
+        if (magnitudRiesgo <= 20) acc.tolerable++;
+        else if (magnitudRiesgo <= 70) acc.moderado++;
+        else if (magnitudRiesgo <= 200) acc.notable++;
+        else if (magnitudRiesgo <= 400) acc.elevado++;
+        else acc.grave++;
+        return acc;
+      },
+      { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 }
+    );
+
+    console.log("Nuevos totales calculados:", newTotals);
+
+    await setDoc(resumenRef, {
+      ...areaData,
+      puestos: updatedPuestos,
+      ...newTotals,
+    });
+    // --- FIN BLOQUE DEL RESUMEN ---
+
+    // 3. **Vuelve a leer** el documento actualizado en Firestore para refrescar el estado local
+    const updatedSnapshot = await getDoc(docRef);
+    const updatedData = updatedSnapshot.data();
+
+    // 4. Ajusta el estado local del Editor
+    //    (para que el usuario vea inmediatamente lo que quedó en la base de datos)
+    setAreaSeleccionada(updatedData.areaSeleccionada || "");
+    setPuestoSeleccionado(updatedData.puestoSeleccionado || "");
+    setHazards(updatedData.hazards || {});
+    setConsequence(updatedData.consequence || 1);
+    setExposure(updatedData.exposure || 1);
+    setProbability(updatedData.probability || 0.1);
+    setSelectedImages(updatedData.selectedImages || []);
+    setDescripcionActividad1(updatedData.descripcionActividad1 || "");
+    setDescripcionActividad2(updatedData.descripcionActividad2 || "");
+    setSelectedOptionEquipoUtilizado(updatedData.selectedOptionEquipoUtilizado || "");
+    setSelectedOptionProteccionSugerida(updatedData.selectedOptionProteccionSugerida || "");
+    setTiempoExposicion(updatedData.tiempoExposicion || "8hrs");
+    // (la fecha y hora, si necesitas refrescarlas también, hazlo aquí)
+
+    alert("Tabla actualizada con éxito en Firestore y en pantalla.");
+  } catch (error) {
+    console.error("Error al actualizar en Firestore:", error);
+    alert("Error al actualizar la tabla.");
+  }
+};
+
 
   const [fecha, setFecha] = useState(new Date().toLocaleDateString()); // Estado para la fecha
   const [tiempoExposicion, setTiempoExposicion] = useState("8hrs");
@@ -757,8 +783,8 @@ const RiskAssessmentTableEditor = () => {
     if (tableToEdit) {
       // HACEMOS UNA COPIA PROFUNDA para evitar modificar el registro original
       const tableCopy = JSON.parse(JSON.stringify(tableToEdit));
-      setSelectedEmpresaId(tableToEdit.empresaId || "");
-      setSelectedNormaId(tableToEdit.normaId || "");
+      setSelectedEmpresaId(tableCopy.empresaId || "");
+      setSelectedNormaId(tableCopy.normaId || "");
       setAreaSeleccionada(tableCopy.areaSeleccionada || "");
       setPuestoSeleccionado(tableCopy.puestoSeleccionado || "");
       setHazards(tableCopy.hazards || {});
