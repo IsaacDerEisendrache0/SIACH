@@ -225,19 +225,20 @@ const RiskAssessmentTableEditor = () => {
 
   const handleAreaChange = (e) => {
     const selectedName = e.target.value;
-    // Aquí siempre habrá un "selectedArea" porque el <select>
-    // solo tiene options que coinciden con `areas`.
     const selectedArea = areas.find((area) => area.nombre === selectedName);
-
-    // Como no hay opción inválida, no tememos undefined
-    setAreaSeleccionada(selectedArea.nombre);
-    setPuestos(selectedArea.puestos);
-    setPuestoSeleccionado("");
+  
+    if (selectedArea) {
+      setAreaSeleccionada(selectedArea.nombre);
+      setPuestos(selectedArea.puestos);
+      setPuestoSeleccionado(""); // Reiniciar puesto al cambiar área
+    }
   };
+  
 
   const handlePuestoChange = (e) => {
     setPuestoSeleccionado(e.target.value);
   };
+  
 
   const handleCheckboxChange = (event) => {
     const hazard = event.target.name;
@@ -464,37 +465,21 @@ const RiskAssessmentTableEditor = () => {
   };
 
   useEffect(() => {
-    // Creamos una clave específica para el área seleccionada
-    const areaSeleccionadaKey = `puestos_${areaSeleccionada}`;
-
-    const savedPuestos = JSON.parse(localStorage.getItem(areaSeleccionadaKey));
-
-    // Verificamos si los datos en localStorage son válidos
-    if (
-      savedPuestos &&
-      savedPuestos.length > 0 &&
-      savedPuestos.includes("Puesto 1") &&
-      savedPuestos.includes("Puesto 2")
-    ) {
-      // Si los valores guardados son incorrectos, los eliminamos
-      localStorage.removeItem(areaSeleccionadaKey);
-      setPuestos(
-        areas.find((area) => area.nombre === areaSeleccionada).puestos,
-      ); // Inicializa con los puestos del área seleccionada
-    } else if (savedPuestos && savedPuestos.length > 0) {
-      setPuestos(savedPuestos); // Si los datos son válidos, los cargamos
-    } else {
-      setPuestos(
-        areas.find((area) => area.nombre === areaSeleccionada).puestos,
-      ); // Inicializa con los puestos del área seleccionada
-      localStorage.setItem(
-        areaSeleccionadaKey,
-        JSON.stringify(
-          areas.find((area) => area.nombre === areaSeleccionada).puestos,
-        ),
-      ); // Guardamos los valores iniciales en localStorage
+    if (areaSeleccionada) {
+      const areaSeleccionadaKey = `puestos_${areaSeleccionada}`;
+      const savedPuestos = JSON.parse(localStorage.getItem(areaSeleccionadaKey));
+  
+      if (savedPuestos && savedPuestos.length > 0) {
+        setPuestos(savedPuestos);
+      } else {
+        const areaObj = areas.find((area) => area.nombre === areaSeleccionada);
+        if (areaObj) {
+          setPuestos(areaObj.puestos);
+          localStorage.setItem(areaSeleccionadaKey, JSON.stringify(areaObj.puestos));
+        }
+      }
     }
-  }, [areaSeleccionada]);
+  }, [areaSeleccionada, areas]);
 
   // Función para agregar un nuevo puesto
   const handleAddPuestoClick = () => {
@@ -646,7 +631,7 @@ const RiskAssessmentTableEditor = () => {
     }
   }; */
 
-  const updateTable = async (empresaId, normaId) => {
+  const updateTable = async () => {
   const updatedTable = {
     areaSeleccionada,
     puestoSeleccionado,
@@ -671,18 +656,10 @@ const RiskAssessmentTableEditor = () => {
       throw new Error("No se encontró el ID de la tabla para actualizar.");
     }
 
-    // 1. Referencia al documento en Firestore
-    const docRef = doc(
-      db,
-      "empresas",
-      empresaId,
-      "normas",
-      normaId,
-      "tablas",
-      tableId
-    );
+    // Referencia directa a la tabla en Firestore sin empresa/norma
+    const docRef = doc(db, "tablas", tableId);
 
-    // 2. Actualiza el documento
+    // Actualiza el documento
     await updateDoc(docRef, updatedTable);
 
     // --- BLOQUE DEL RESUMEN (igual que antes) ---
@@ -742,14 +719,14 @@ const RiskAssessmentTableEditor = () => {
       puestos: updatedPuestos,
       ...newTotals,
     });
+
     // --- FIN BLOQUE DEL RESUMEN ---
 
-    // 3. **Vuelve a leer** el documento actualizado en Firestore para refrescar el estado local
+    // Vuelve a leer el documento actualizado en Firestore para refrescar el estado local
     const updatedSnapshot = await getDoc(docRef);
     const updatedData = updatedSnapshot.data();
 
-    // 4. Ajusta el estado local del Editor
-    //    (para que el usuario vea inmediatamente lo que quedó en la base de datos)
+    // Ajusta el estado local del Editor
     setAreaSeleccionada(updatedData.areaSeleccionada || "");
     setPuestoSeleccionado(updatedData.puestoSeleccionado || "");
     setHazards(updatedData.hazards || {});
@@ -762,7 +739,6 @@ const RiskAssessmentTableEditor = () => {
     setSelectedOptionEquipoUtilizado(updatedData.selectedOptionEquipoUtilizado || "");
     setSelectedOptionProteccionSugerida(updatedData.selectedOptionProteccionSugerida || "");
     setTiempoExposicion(updatedData.tiempoExposicion || "8hrs");
-    // (la fecha y hora, si necesitas refrescarlas también, hazlo aquí)
 
     alert("Tabla actualizada con éxito en Firestore y en pantalla.");
   } catch (error) {
@@ -772,42 +748,45 @@ const RiskAssessmentTableEditor = () => {
 };
 
 
+
   const [fecha, setFecha] = useState(new Date().toLocaleDateString()); // Estado para la fecha
   const [tiempoExposicion, setTiempoExposicion] = useState("8hrs");
   const [hora, setHora] = useState(new Date().toLocaleTimeString());
   const [tableId, setTableId] = useState(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  console.log(JSON.parse(localStorage.getItem("tableToEdit")));
+  const [tableToEdit, setTableToEdit] = useState(null);
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("tableToEdit"));
+    setTableToEdit(storedData);
+  }, []); // Se ejecuta una vez al montar el componente
+  
 
   useEffect(() => {
-    const tableToEdit = JSON.parse(localStorage.getItem("tableToEdit"));
-
     if (tableToEdit) {
-      // HACEMOS UNA COPIA PROFUNDA para evitar modificar el registro original
-      const tableCopy = JSON.parse(JSON.stringify(tableToEdit));
-      setSelectedEmpresaId(tableCopy.empresaId || "");
-      setSelectedNormaId(tableCopy.normaId || "");
-      setAreaSeleccionada(tableCopy.areaSeleccionada || "");
-      setPuestoSeleccionado(tableCopy.puestoSeleccionado || "");
-      setHazards(tableCopy.hazards || {});
-      setConsequence(tableCopy.consequence || 1);
-      setExposure(tableCopy.exposure || 1);
-      setProbability(tableCopy.probability || 0.1);
-      setSelectedImages(tableCopy.selectedImages || []);
-      setDescripcionActividad1(tableCopy.descripcionActividad1 || "");
-      setSelectedOptionEquipoUtilizado(
-        tableCopy.selectedOptionEquipoUtilizado || "",
-      );
-      setSelectedOptionProteccionSugerida(
-        tableCopy.selectedOptionProteccionSugerida || "",
-      );
-      setTiempoExposicion(tableCopy.tiempoExposicion || "");
-      setFecha(tableCopy.fecha || new Date().toLocaleDateString());
-      setHora(tableCopy.hora || new Date().toLocaleTimeString());
-      setTableId(tableCopy.id || null);
-
-      setIsEditing(true);
+      console.log("Datos recuperados en el editor:", tableToEdit);
+  
+      setAreaSeleccionada(tableToEdit.areaSeleccionada || ""); 
+      setPuestoSeleccionado(tableToEdit.puestoSeleccionado || "");
+      setSelectedOptionEquipoUtilizado(tableToEdit.selectedOptionEquipoUtilizado || "");
+      setSelectedOptionProteccionSugerida(tableToEdit.selectedOptionProteccionSugerida || "");
+      setSelectedImages(tableToEdit.selectedImages || []);
+      setHazards(tableToEdit.hazards || {});
+      setConsequence(tableToEdit.consequence || 1);
+      setExposure(tableToEdit.exposure || 1);
+      setProbability(tableToEdit.probability || 0.1);
+      setDescripcionActividad1(tableToEdit.descripcionActividad1 || "");
+      setDescripcionActividad2(tableToEdit.descripcionActividad2 || "");
+      setTiempoExposicion(tableToEdit.tiempoExposicion || "8hrs");
+      setFecha(tableToEdit.fecha || new Date().toLocaleDateString());
+      setHora(tableToEdit.hora || new Date().toLocaleTimeString());
+      setTableId(tableToEdit.id || null);
     }
-  }, []);
+  }, [tableToEdit]); // Se ejecuta cada vez que `tableToEdit` cambia
+  
+  
 
+  
   const handleImageRemove = (imageToRemove) => {
     setSelectedImages((prevSelectedImages) =>
       prevSelectedImages.filter((image) => image !== imageToRemove),
@@ -1125,45 +1104,30 @@ const RiskAssessmentTableEditor = () => {
   };
 
   useEffect(() => {
-    const savedData = localStorage.getItem(STORAGE_KEY);
-    if (savedData) {
-      const parsed = JSON.parse(savedData);
-
-      // Restaurar cada campo (valida si existe en el objeto)
-      if (parsed.areaSeleccionada) setAreaSeleccionada(parsed.areaSeleccionada);
-      if (parsed.puestoSeleccionado)
-        setPuestoSeleccionado(parsed.puestoSeleccionado);
-
-      if (parsed.descripcionActividad1)
-        setDescripcionActividad1(parsed.descripcionActividad1);
-      if (parsed.descripcionActividad2)
-        setDescripcionActividad2(parsed.descripcionActividad2);
-
-      if (parsed.hazards) setHazards(parsed.hazards);
-      if (parsed.removedParts) setRemovedParts(parsed.removedParts);
-
-      if (parsed.consequence) setConsequence(parsed.consequence);
-      if (parsed.exposure) setExposure(parsed.exposure);
-      if (parsed.probability) setProbability(parsed.probability);
-
-      if (parsed.selectedImages) setSelectedImages(parsed.selectedImages);
-      if (parsed.selectedOptionEquipoUtilizado) {
-        setSelectedOptionEquipoUtilizado(parsed.selectedOptionEquipoUtilizado);
+    if (!isEditing) { // Solo cargar si NO estamos editando
+      const savedData = localStorage.getItem(STORAGE_KEY);
+      if (savedData) {
+        const parsed = JSON.parse(savedData);
+        if (parsed.areaSeleccionada) setAreaSeleccionada(parsed.areaSeleccionada);
+        if (parsed.puestoSeleccionado) setPuestoSeleccionado(parsed.puestoSeleccionado);
+        if (parsed.descripcionActividad1) setDescripcionActividad1(parsed.descripcionActividad1);
+        if (parsed.descripcionActividad2) setDescripcionActividad2(parsed.descripcionActividad2);
+        if (parsed.hazards) setHazards(parsed.hazards);
+        if (parsed.consequence) setConsequence(parsed.consequence);
+        if (parsed.exposure) setExposure(parsed.exposure);
+        if (parsed.probability) setProbability(parsed.probability);
+        if (parsed.selectedImages) setSelectedImages(parsed.selectedImages);
+        if (parsed.selectedOptionEquipoUtilizado) {
+          setSelectedOptionEquipoUtilizado(parsed.selectedOptionEquipoUtilizado);
+        }
+        if (parsed.selectedOptionProteccionSugerida) {
+          setSelectedOptionProteccionSugerida(parsed.selectedOptionProteccionSugerida);
+        }
+        if (parsed.tiempoExposicion) setTiempoExposicion(parsed.tiempoExposicion);
       }
-      if (parsed.selectedOptionProteccionSugerida) {
-        setSelectedOptionProteccionSugerida(
-          parsed.selectedOptionProteccionSugerida,
-        );
-      }
-      if (parsed.selectedMainOption)
-        setSelectedMainOption(parsed.selectedMainOption);
-      if (parsed.selectedSubOption)
-        setSelectedSubOption(parsed.selectedSubOption);
-      if (parsed.selectionList) setSelectionList(parsed.selectionList);
-
-      if (parsed.tiempoExposicion) setTiempoExposicion(parsed.tiempoExposicion);
     }
-  }, []);
+  }, [isEditing]);
+  
 
   // ==== 3. CADA VEZ QUE ALGÚN ESTADO CAMBIA: GUARDO EN LOCALSTORAGE ====
   useEffect(() => {

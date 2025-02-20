@@ -350,9 +350,17 @@ const SavedTables = () => {
         ...registro,
         empresaId: selectedEmpresa.id,
         normaId: selectedNorma.id,
+        consequence: registro.consequence || 1,
+        exposure: registro.exposure || 1,
+        probability: registro.probability || 0.1,
+        hazards: registro.hazards || {},
+        // Agrega aquí cualquier otro campo que necesites,
+        // como risk, descripción de evaluación, etc.
       })
     );
-    navigate("/norma_17_editor"); // o la ruta de tu editor
+    navigate("/norma_17_editor");
+    
+    
   };
   
   
