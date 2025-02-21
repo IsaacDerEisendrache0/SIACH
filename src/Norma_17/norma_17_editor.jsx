@@ -632,13 +632,13 @@ const RiskAssessmentTableEditor = () => {
   }; */
 
   const updateTable = async () => {
-    // Extraemos la información de la empresa y la norma automáticamente desde tableToEdit
+    // Extraemos la información de la empresa y la norma desde tableToEdit
     const empresa = tableToEdit?.empresaSeleccionada || "";
     const normaAuto = tableToEdit?.norma || "N-017";
-    // Asegúrate de que tableToEdit tenga los IDs correctos
     const empresaId = tableToEdit?.empresaId || "";
     const normaId = tableToEdit?.normaId || "";
   
+    // Construimos el objeto actualizado, incluyendo selectedMainOption
     const updatedTable = {
       areaSeleccionada,
       puestoSeleccionado,
@@ -653,10 +653,12 @@ const RiskAssessmentTableEditor = () => {
       selectedOptionEquipoUtilizado,
       selectedOptionProteccionSugerida,
       tiempoExposicion,
-      norma: normaAuto,           // Norma extraída automáticamente
-      fecha,                    // Fecha de creación o actualización
-      hora,                     // Hora de creación o actualización
-      nombreEmpresa: empresa,   // Empresa extraída automáticamente
+      norma: normaAuto,
+      fecha,
+      hora,
+      nombreEmpresa: empresaSeleccionada,
+      selectedMainOption, // Campo del equipo principal a actualizar
+      selectionList,
     };
   
     try {
@@ -667,13 +669,13 @@ const RiskAssessmentTableEditor = () => {
         throw new Error("No se encontraron los IDs de la empresa o la norma.");
       }
   
-      // Referencia correcta al documento dentro de la estructura: empresas > normas > tablas
+      // Referencia correcta al documento en Firestore (estructura: empresas > normas > tablas)
       const docRef = doc(db, "empresas", empresaId, "normas", normaId, "tablas", tableId);
   
-      // Actualiza o crea el documento usando setDoc con merge: true
+      // Actualizamos el documento; merge: true permite actualizar sin sobrescribir otros campos
       await setDoc(docRef, updatedTable, { merge: true });
   
-      // --- BLOQUE DEL RESUMEN (igual que antes) ---
+      // --- BLOQUE DEL RESUMEN (se mantiene igual) ---
       const resumenRef = doc(db, "resumen_17", areaSeleccionada);
       const resumenSnapshot = await getDoc(resumenRef);
   
@@ -730,14 +732,13 @@ const RiskAssessmentTableEditor = () => {
         puestos: updatedPuestos,
         ...newTotals,
       });
-  
       // --- FIN BLOQUE DEL RESUMEN ---
   
-      // Vuelve a leer el documento actualizado en Firestore para refrescar el estado local
+      // Releemos el documento actualizado para refrescar el estado local
       const updatedSnapshot = await getDoc(docRef);
       const updatedData = updatedSnapshot.data();
   
-      // Ajusta el estado local del Editor
+      // Actualizamos los estados del editor, incluyendo selectedMainOption
       setAreaSeleccionada(updatedData.areaSeleccionada || "");
       setPuestoSeleccionado(updatedData.puestoSeleccionado || "");
       setHazards(updatedData.hazards || {});
@@ -751,8 +752,8 @@ const RiskAssessmentTableEditor = () => {
       setSelectedOptionProteccionSugerida(updatedData.selectedOptionProteccionSugerida || "");
       setTiempoExposicion(updatedData.tiempoExposicion || "8hrs");
   
-      // Actualizamos el localStorage con la información actualizada para evitar sobrescritura con datos antiguos
-      localStorage.setItem("tableToEdit", JSON.stringify({ ...tableToEdit, ...updatedTable }));
+      // Actualizamos localStorage con los datos actualizados, garantizando que se mantenga selectedMainOption
+      localStorage.setItem("tableToEdit", JSON.stringify(updatedTable));
       localStorage.removeItem("riskAssessmentData_editor");
   
       alert("Tabla actualizada con éxito en Firestore y en pantalla.");
@@ -761,6 +762,7 @@ const RiskAssessmentTableEditor = () => {
       alert("Error al actualizar la tabla.");
     }
   };
+  
   
   
 
@@ -798,6 +800,11 @@ const RiskAssessmentTableEditor = () => {
       setFecha(tableToEdit.fecha || new Date().toLocaleDateString());
       setHora(tableToEdit.hora || new Date().toLocaleTimeString());
       setTableId(tableToEdit.id || null);
+      setSelectedMainOption(tableToEdit.selectedMainOption || "");
+      setEmpresaSeleccionada(tableToEdit.nombreEmpresa || "");
+      setSelectionList(tableToEdit.selectionList || []);  // <--- Aquí
+
+      
     }
   }, [tableToEdit]); // Se ejecuta cada vez que `tableToEdit` cambia
   
@@ -1144,6 +1151,7 @@ const RiskAssessmentTableEditor = () => {
       }
     }
   }, [isEditing]);
+  
   
 
   // ==== 3. CADA VEZ QUE ALGÚN ESTADO CAMBIA: GUARDO EN LOCALSTORAGE ====
@@ -2035,22 +2043,22 @@ const RiskAssessmentTableEditor = () => {
                     Selecciona el equipo principal:
                   </label>
                   <select
-                    id="main-epp-select"
-                    value={selectedMainOption}
-                    onChange={handleMainOptionChange}
-                    className="epp-dropdown large-text-dropdown" // Se combinan ambas clases
-                  >
-                    <option value="" disabled>
-                      Selecciona el equipo
-                    </option>
-                    {Object.keys(eppOptions)
-                      .filter((option) => autoSelectedOptions.includes(option)) // Mostrar solo las opciones detectadas
-                      .map((option, index) => (
-                        <option key={index} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                  </select>
+  id="main-epp-select"
+  value={selectedMainOption}
+  onChange={(e) => setSelectedMainOption(e.target.value)}
+  className="epp-dropdown large-text-dropdown"
+>
+  <option value="" disabled>Selecciona el equipo</option>
+  {Object.keys(eppOptions)
+    .filter(option => autoSelectedOptions.includes(option) || option === selectedMainOption)
+    .map((option, index) => (
+      <option key={index} value={option}>
+        {option}
+      </option>
+    ))}
+</select>
+
+
                 </div>
 
                 {showSubDropdown && selectedMainOption && (

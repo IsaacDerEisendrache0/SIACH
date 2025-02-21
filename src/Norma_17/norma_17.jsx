@@ -584,7 +584,10 @@ const RiskAssessmentTable = () => {
       norma: "N-017",
       fecha: new Date().toLocaleDateString(),
       hora: new Date().toLocaleTimeString(),
+      selectedMainOption,
       nombreEmpresa: empresaSeleccionada,
+      selectionList,
+      
     };
 
     try {
@@ -773,6 +776,10 @@ const RiskAssessmentTable = () => {
       setHora(tableToEdit.hora); // Establecer la hora de creación
       setTableId(tableToEdit.id); // Guardar el ID del documento para actualizar
       localStorage.removeItem("tableToEdit");
+      setSelectedMainOption(tableToEdit.selectedMainOption || "");
+      setEmpresaSeleccionada(tableToEdit.nombreEmpresa || "");
+      setSelectionList(tableToEdit.selectionList || []);  // <--- Aquí
+
     }
   }, []);
 

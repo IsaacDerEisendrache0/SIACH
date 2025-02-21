@@ -354,6 +354,9 @@ const SavedTables = () => {
         exposure: registro.exposure || 1,
         probability: registro.probability || 0.1,
         hazards: registro.hazards || {},
+        selectedMainOption: registro.selectedMainOption || "",
+        nombreEmpresa: registro.nombreEmpresa || "",
+        selectionList: registro.selectionList || [],
         // Agrega aquí cualquier otro campo que necesites,
         // como risk, descripción de evaluación, etc.
       })
