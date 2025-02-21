@@ -632,120 +632,137 @@ const RiskAssessmentTableEditor = () => {
   }; */
 
   const updateTable = async () => {
-  const updatedTable = {
-    areaSeleccionada,
-    puestoSeleccionado,
-    hazards,
-    consequence,
-    exposure,
-    probability,
-    risk: calculateRisk(),
-    selectedImages,
-    descripcionActividad1,
-    descripcionActividad2,
-    selectedOptionEquipoUtilizado,
-    selectedOptionProteccionSugerida,
-    tiempoExposicion,
-    norma: "N-017",
-    fecha, // Mantener la misma fecha
-    hora,  // Mantener la misma hora de creación
-  };
-
-  try {
-    if (!tableId) {
-      throw new Error("No se encontró el ID de la tabla para actualizar.");
+    // Extraemos la información de la empresa y la norma automáticamente desde tableToEdit
+    const empresa = tableToEdit?.empresaSeleccionada || "";
+    const normaAuto = tableToEdit?.norma || "N-017";
+    // Asegúrate de que tableToEdit tenga los IDs correctos
+    const empresaId = tableToEdit?.empresaId || "";
+    const normaId = tableToEdit?.normaId || "";
+  
+    const updatedTable = {
+      areaSeleccionada,
+      puestoSeleccionado,
+      hazards,
+      consequence,
+      exposure,
+      probability,
+      risk: calculateRisk(),
+      selectedImages,
+      descripcionActividad1,
+      descripcionActividad2,
+      selectedOptionEquipoUtilizado,
+      selectedOptionProteccionSugerida,
+      tiempoExposicion,
+      norma: normaAuto,           // Norma extraída automáticamente
+      fecha,                    // Fecha de creación o actualización
+      hora,                     // Hora de creación o actualización
+      nombreEmpresa: empresa,   // Empresa extraída automáticamente
+    };
+  
+    try {
+      if (!tableId) {
+        throw new Error("No se encontró el ID de la tabla para actualizar.");
+      }
+      if (!empresaId || !normaId) {
+        throw new Error("No se encontraron los IDs de la empresa o la norma.");
+      }
+  
+      // Referencia correcta al documento dentro de la estructura: empresas > normas > tablas
+      const docRef = doc(db, "empresas", empresaId, "normas", normaId, "tablas", tableId);
+  
+      // Actualiza o crea el documento usando setDoc con merge: true
+      await setDoc(docRef, updatedTable, { merge: true });
+  
+      // --- BLOQUE DEL RESUMEN (igual que antes) ---
+      const resumenRef = doc(db, "resumen_17", areaSeleccionada);
+      const resumenSnapshot = await getDoc(resumenRef);
+  
+      let areaData = resumenSnapshot.exists()
+        ? resumenSnapshot.data()
+        : {
+            puestos: [],
+            tolerable: 0,
+            moderado: 0,
+            notable: 0,
+            elevado: 0,
+            grave: 0,
+          };
+  
+      console.log("Datos del área antes de actualizar:", areaData);
+  
+      const updatedPuestos = [
+        ...areaData.puestos.filter((p) => p.nombre !== puestoSeleccionado),
+        {
+          nombre: puestoSeleccionado,
+          magnitudRiesgo: calculateRisk(),
+          categoria:
+            calculateRisk() <= 20
+              ? "Tolerable"
+              : calculateRisk() <= 70
+              ? "Moderado"
+              : calculateRisk() <= 200
+              ? "Notable"
+              : calculateRisk() <= 400
+              ? "Elevado"
+              : "Grave",
+        },
+      ];
+  
+      console.log("Puestos actualizados:", updatedPuestos);
+  
+      const newTotals = updatedPuestos.reduce(
+        (acc, puesto) => {
+          const { magnitudRiesgo } = puesto;
+          if (magnitudRiesgo <= 20) acc.tolerable++;
+          else if (magnitudRiesgo <= 70) acc.moderado++;
+          else if (magnitudRiesgo <= 200) acc.notable++;
+          else if (magnitudRiesgo <= 400) acc.elevado++;
+          else acc.grave++;
+          return acc;
+        },
+        { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 }
+      );
+  
+      console.log("Nuevos totales calculados:", newTotals);
+  
+      await setDoc(resumenRef, {
+        ...areaData,
+        puestos: updatedPuestos,
+        ...newTotals,
+      });
+  
+      // --- FIN BLOQUE DEL RESUMEN ---
+  
+      // Vuelve a leer el documento actualizado en Firestore para refrescar el estado local
+      const updatedSnapshot = await getDoc(docRef);
+      const updatedData = updatedSnapshot.data();
+  
+      // Ajusta el estado local del Editor
+      setAreaSeleccionada(updatedData.areaSeleccionada || "");
+      setPuestoSeleccionado(updatedData.puestoSeleccionado || "");
+      setHazards(updatedData.hazards || {});
+      setConsequence(updatedData.consequence || 1);
+      setExposure(updatedData.exposure || 1);
+      setProbability(updatedData.probability || 0.1);
+      setSelectedImages(updatedData.selectedImages || []);
+      setDescripcionActividad1(updatedData.descripcionActividad1 || "");
+      setDescripcionActividad2(updatedData.descripcionActividad2 || "");
+      setSelectedOptionEquipoUtilizado(updatedData.selectedOptionEquipoUtilizado || "");
+      setSelectedOptionProteccionSugerida(updatedData.selectedOptionProteccionSugerida || "");
+      setTiempoExposicion(updatedData.tiempoExposicion || "8hrs");
+  
+      // Actualizamos el localStorage con la información actualizada para evitar sobrescritura con datos antiguos
+      localStorage.setItem("tableToEdit", JSON.stringify({ ...tableToEdit, ...updatedTable }));
+      localStorage.removeItem("riskAssessmentData_editor");
+  
+      alert("Tabla actualizada con éxito en Firestore y en pantalla.");
+    } catch (error) {
+      console.error("Error al actualizar en Firestore:", error);
+      alert("Error al actualizar la tabla.");
     }
-
-    // Referencia directa a la tabla en Firestore sin empresa/norma
-    const docRef = doc(db, "tablas", tableId);
-
-    // Actualiza el documento
-    await updateDoc(docRef, updatedTable);
-
-    // --- BLOQUE DEL RESUMEN (igual que antes) ---
-    const resumenRef = doc(db, "resumen_17", areaSeleccionada);
-    const resumenSnapshot = await getDoc(resumenRef);
-
-    let areaData = resumenSnapshot.exists()
-      ? resumenSnapshot.data()
-      : {
-          puestos: [],
-          tolerable: 0,
-          moderado: 0,
-          notable: 0,
-          elevado: 0,
-          grave: 0,
-        };
-
-    console.log("Datos del área antes de actualizar:", areaData);
-
-    const updatedPuestos = [
-      ...areaData.puestos.filter((p) => p.nombre !== puestoSeleccionado),
-      {
-        nombre: puestoSeleccionado,
-        magnitudRiesgo: calculateRisk(),
-        categoria:
-          calculateRisk() <= 20
-            ? "Tolerable"
-            : calculateRisk() <= 70
-            ? "Moderado"
-            : calculateRisk() <= 200
-            ? "Notable"
-            : calculateRisk() <= 400
-            ? "Elevado"
-            : "Grave",
-      },
-    ];
-
-    console.log("Puestos actualizados:", updatedPuestos);
-
-    const newTotals = updatedPuestos.reduce(
-      (acc, puesto) => {
-        const { magnitudRiesgo } = puesto;
-        if (magnitudRiesgo <= 20) acc.tolerable++;
-        else if (magnitudRiesgo <= 70) acc.moderado++;
-        else if (magnitudRiesgo <= 200) acc.notable++;
-        else if (magnitudRiesgo <= 400) acc.elevado++;
-        else acc.grave++;
-        return acc;
-      },
-      { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 }
-    );
-
-    console.log("Nuevos totales calculados:", newTotals);
-
-    await setDoc(resumenRef, {
-      ...areaData,
-      puestos: updatedPuestos,
-      ...newTotals,
-    });
-
-    // --- FIN BLOQUE DEL RESUMEN ---
-
-    // Vuelve a leer el documento actualizado en Firestore para refrescar el estado local
-    const updatedSnapshot = await getDoc(docRef);
-    const updatedData = updatedSnapshot.data();
-
-    // Ajusta el estado local del Editor
-    setAreaSeleccionada(updatedData.areaSeleccionada || "");
-    setPuestoSeleccionado(updatedData.puestoSeleccionado || "");
-    setHazards(updatedData.hazards || {});
-    setConsequence(updatedData.consequence || 1);
-    setExposure(updatedData.exposure || 1);
-    setProbability(updatedData.probability || 0.1);
-    setSelectedImages(updatedData.selectedImages || []);
-    setDescripcionActividad1(updatedData.descripcionActividad1 || "");
-    setDescripcionActividad2(updatedData.descripcionActividad2 || "");
-    setSelectedOptionEquipoUtilizado(updatedData.selectedOptionEquipoUtilizado || "");
-    setSelectedOptionProteccionSugerida(updatedData.selectedOptionProteccionSugerida || "");
-    setTiempoExposicion(updatedData.tiempoExposicion || "8hrs");
-
-    alert("Tabla actualizada con éxito en Firestore y en pantalla.");
-  } catch (error) {
-    console.error("Error al actualizar en Firestore:", error);
-    alert("Error al actualizar la tabla.");
-  }
-};
+  };
+  
+  
 
 
 
@@ -2287,16 +2304,12 @@ const RiskAssessmentTableEditor = () => {
         </button>
 
         <button
-          onClick={() => {
-            if (!selectedEmpresaId || !selectedNormaId) {
-              return alert("Faltan datos de empresa/norma");
-            }
-            updateTable(selectedEmpresaId, selectedNormaId);
-          }}
-          className="save-button"
-        >
-          Actualizar Tabla
-        </button>
+        onClick={updateTable}
+        className="save-button"
+      >
+        Actualizar Tabla
+      </button>
+
 
         <button
           onClick={handleReset}

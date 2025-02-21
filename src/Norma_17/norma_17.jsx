@@ -657,11 +657,14 @@ const RiskAssessmentTable = () => {
       descripcionActividad2,
       selectedOptionEquipoUtilizado,
       selectedOptionProteccionSugerida,
+      selectedMainOption,           // Equipo principal
       tiempoExposicion,
       norma: "N-017",
-      fecha, // Mantener la misma fecha
-      hora, // Mantener la misma hora de creación
+      fecha,
+      hora,
+      nombreEmpresa: empresaSeleccionada, // Nombre de la empresa
     };
+    
 
     try {
       if (!tableId) {
