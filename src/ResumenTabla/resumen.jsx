@@ -420,16 +420,17 @@ const TablaResumen = () => {
                                 </tr>
                               </thead>
                               <tbody>
-                                {row.puestos.map((puesto, idx) => (
-                                  <tr key={idx}>
-                                    <td>{puesto.nombre}</td>
-                                    <td>{puesto.tolerable || 0}</td>
-                                    <td>{puesto.moderado || 0}</td>
-                                    <td>{puesto.notable || 0}</td>
-                                    <td>{puesto.elevado || 0}</td>
-                                    <td>{puesto.grave || 0}</td>
-                                  </tr>
-                                ))}
+                              {row.puestos.map((puesto, idx) => (
+                                <tr key={`${puesto.nombre}-${idx}`}>
+                                  <td>{puesto.nombre}</td>
+                                  <td>{puesto.tolerable || 0}</td>
+                                  <td>{puesto.moderado || 0}</td>
+                                  <td>{puesto.notable || 0}</td>
+                                  <td>{puesto.elevado || 0}</td>
+                                  <td>{puesto.grave || 0}</td>
+                                </tr>
+                              ))}
+
                               </tbody>
                             </table>
                           </td>

@@ -557,6 +557,8 @@ const RiskAssessmentTable = () => {
     setIsImageModalOpen(false);
   };
 
+
+  
   const saveTable = async (empresaId, normaId) => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -626,12 +628,12 @@ const RiskAssessmentTable = () => {
         grave: risk > 400 ? 1 : 0,
       };
 
-      newResumenData.puestos = [
-        ...newResumenData.puestos.filter(
-          (p) => p.nombre !== puestoSeleccionado,
-        ),
-        puestoRiesgo,
-      ];
+      // AGREGA directamente el nuevo puesto
+newResumenData.puestos = [
+  ...newResumenData.puestos,
+  puestoRiesgo
+];
+
 
       newResumenData.tolerable += puestoRiesgo.tolerable;
       newResumenData.moderado += puestoRiesgo.moderado;
