@@ -601,7 +601,7 @@ const RiskAssessmentTable = () => {
       alert("Tabla guardada con éxito en Firestore.");
 
       // Actualizar el resumen correspondiente si es necesario (este bloque se mantiene igual)
-      const resumenRef = doc(db, "resumen_17", areaSeleccionada);
+      const resumenRef = doc(db, "resumen_17", empresaSeleccionada, "areas", areaSeleccionada);
       const resumenSnapshot = await getDoc(resumenRef);
 
       let newResumenData = {
@@ -688,7 +688,7 @@ newResumenData.puestos = [
       await updateDoc(docRef, updatedTable);
 
       // Actualizar el resumen (este bloque se mantiene igual)
-      const resumenRef = doc(db, "resumen_17", areaSeleccionada);
+      const resumenRef = doc(db, "resumen_17", empresaSeleccionada, "areas", areaSeleccionada);
       const resumenSnapshot = await getDoc(resumenRef);
       let areaData = resumenSnapshot.exists()
         ? resumenSnapshot.data()
@@ -1804,6 +1804,9 @@ newResumenData.puestos = [
                         </option>
                         <option value="Maxion">Maxion</option>
                         <option value="Safran">Safran</option>
+                        <option value="Soisa">Soisa</option>
+                        <option value="Bafar">Bafar</option>
+
                       </select>
                     </td>
                   </tr>

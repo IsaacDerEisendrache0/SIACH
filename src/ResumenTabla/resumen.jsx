@@ -80,7 +80,7 @@ const TablaResumen = () => {
       return;
     }
 
-    let unsubscribe;
+    let unsubscribe;  
     let collectionName = "";
 
     // Convertimos a minúsculas para evitar errores de comparación
@@ -100,33 +100,38 @@ const TablaResumen = () => {
 
     console.log("📌 Cargando datos desde la colección:", collectionName);
 
-    unsubscribe = onSnapshot(collection(db, collectionName), (snapshot) => {
-      if (snapshot.empty) {
-        console.warn("⚠️ No hay documentos en la colección:", collectionName);
-        setData([]); // Limpiar la tabla si no hay datos
-        return;
-      }
+    // Solo si hay empresa y norma seleccionadas, usamos la ruta que incluye el nombre de la empresa
+const empresaFolder = selectedEmpresa.nombre; // Se asume que el documento en Firestore se llama igual a la empresa
+unsubscribe = onSnapshot(
+  collection(db, collectionName, empresaFolder, "areas"),
+  (snapshot) => {
+    if (snapshot.empty) {
+      console.warn("⚠️ No hay documentos en la subcolección:", empresaFolder, "en", collectionName);
+      setData([]); // Limpiar la tabla si no hay datos
+      return;
+    }
 
-      const areasData = snapshot.docs.map((doc) => {
-        const data = doc.data();
-        console.log("✅ Documento obtenido:", doc.id, data);
-
-        return {
-          nombreEmpresa: selectedEmpresa.nombre,
-          area: doc.id,
-          collectionName: collectionName,
-          puestos: Array.isArray(data.puestos) ? data.puestos : [],
-          tolerable: data.tolerable ?? 0,
-          moderado: data.moderado ?? 0,
-          notable: data.notable ?? 0,
-          elevado: data.elevado ?? 0,
-          grave: data.grave ?? 0,
-        };
-      });
-
-      setData(areasData);
-      console.log("📊 Datos actualizados en el estado:", areasData);
+    const areasData = snapshot.docs.map((doc) => {
+      const data = doc.data();
+      console.log("✅ Documento obtenido:", doc.id, data);
+      return {
+        nombreEmpresa: selectedEmpresa.nombre,
+        area: doc.id,
+        collectionName: collectionName,
+        puestos: Array.isArray(data.puestos) ? data.puestos : [],
+        tolerable: data.tolerable ?? 0,
+        moderado: data.moderado ?? 0,
+        notable: data.notable ?? 0,
+        elevado: data.elevado ?? 0,
+        grave: data.grave ?? 0,
+      };
     });
+
+    setData(areasData);
+    console.log("📊 Datos actualizados en el estado:", areasData);
+  }
+);
+
 
     return () => {
       if (unsubscribe) unsubscribe();
