@@ -1503,3 +1503,8 @@ button.btn-icon {
   cursor: pointer;
   border-radius: 5px;
 }
+.right-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px; /* opcional */
+}

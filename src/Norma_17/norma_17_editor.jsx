@@ -1360,6 +1360,33 @@ const RiskAssessmentTableEditor = () => {
 
   const risk = calculateRisk();
 
+  // Define el estado inicial de las empresas
+const [empresas, setEmpresas] = useState(["Maxion", "Safran", "Soisa", "Bafar"]);
+  
+// Función para agregar una nueva empresa
+const handleAddEmpresa = () => {
+  const nuevaEmpresa = prompt("Ingrese el nombre de la nueva empresa:");
+  if (nuevaEmpresa && !empresas.includes(nuevaEmpresa)) {
+    setEmpresas([...empresas, nuevaEmpresa]);
+  }
+};
+
+// Función para borrar la empresa seleccionada
+const handleDeleteEmpresa = () => {
+  if (!empresaSeleccionada) {
+    alert("Seleccione una empresa para borrar");
+    return;
+  }
+  const confirmDelete = window.confirm(
+    `¿Está seguro de borrar la empresa ${empresaSeleccionada}?`
+  );
+  if (confirmDelete) {
+    setEmpresas(empresas.filter((empresa) => empresa !== empresaSeleccionada));
+    setEmpresaSeleccionada("");
+  }
+};
+
+
   return (
     <div class="main-table">
       {/* Botón para regresar a la pantalla de registros (por ejemplo: /savedTables) */}
@@ -2324,7 +2351,9 @@ const RiskAssessmentTableEditor = () => {
           className={`reset-button ${hideButtons ? "hidden-buttons" : ""}`}
         >
           Reiniciar Tabla
-        </button>
+        </button> 
+        <button onClick={handleAddEmpresa}>Agregar</button>
+        <button onClick={handleDeleteEmpresa}>Borrar</button>
       </div>
     </div>
   );

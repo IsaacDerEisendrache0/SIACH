@@ -1348,6 +1348,71 @@ newResumenData.puestos = [
 
   const risk = calculateRisk();
 
+
+  // Estados para el modal y selección de empresas a borrar
+const [isEmpresaModalOpen, setIsEmpresaModalOpen] = useState(false);
+const [empresasSeleccionadasParaBorrar, setEmpresasSeleccionadasParaBorrar] = useState([]);
+const STORAGE_KEY_EMPRESAS = "empresasList";
+const [empresas, setEmpresas] = useState(() => {
+  const savedEmpresas = localStorage.getItem(STORAGE_KEY_EMPRESAS);
+  return savedEmpresas ? JSON.parse(savedEmpresas) : ["Maxion", "Safran", "Soisa", "Bafar"];
+});
+
+useEffect(() => {
+  localStorage.setItem(STORAGE_KEY_EMPRESAS, JSON.stringify(empresas));
+}, [empresas]);
+
+
+// Función para abrir el modal
+const openEmpresaModal = () => {
+  setIsEmpresaModalOpen(true);
+};
+
+// Función para cerrar el modal
+const closeEmpresaModal = () => {
+  setIsEmpresaModalOpen(false);
+  setEmpresasSeleccionadasParaBorrar([]);
+};
+
+// Manejo del cambio en la selección de checkbox
+const handleEmpresaSelectionChange = (event) => {
+  const value = event.target.value;
+  setEmpresasSeleccionadasParaBorrar((prev) =>
+    prev.includes(value)
+      ? prev.filter((empresa) => empresa !== value)
+      : [...prev, value]
+  );
+};
+
+// Función para borrar las empresas seleccionadas
+const handleDeleteSelectedEmpresas = () => {
+  if (empresasSeleccionadasParaBorrar.length === 0) {
+    alert("Seleccione al menos una empresa para borrar.");
+    return;
+  }
+  const confirmDelete = window.confirm(
+    `¿Seguro que deseas eliminar las siguientes empresas?\n${empresasSeleccionadasParaBorrar.join(
+      ", "
+    )}`
+  );
+  if (confirmDelete) {
+    setEmpresas(empresas.filter((empresa) => !empresasSeleccionadasParaBorrar.includes(empresa)));
+    // Si la empresa borrada era la seleccionada, reiniciamos el valor
+    if (empresasSeleccionadasParaBorrar.includes(empresaSeleccionada)) {
+      setEmpresaSeleccionada("");
+    }
+    closeEmpresaModal();
+  }
+};
+
+const handleAddEmpresa = () => {
+  const nuevaEmpresa = prompt("Ingrese el nombre de la nueva empresa:");
+  if (nuevaEmpresa && !empresas.includes(nuevaEmpresa)) {
+    setEmpresas([...empresas, nuevaEmpresa]);
+  }
+};
+
+
   return (
     <div class="main-table">
       <table
@@ -1790,26 +1855,24 @@ newResumenData.puestos = [
                 <tbody>
                   {/* Fila de Empresa */}
                   <tr>
-                    <td className="label-cell">Empresa:</td>
-                    <td className="input-cell" colSpan="2">
-                      <select
-                        id="empresa"
-                        value={empresaSeleccionada}
-                        onChange={(e) => setEmpresaSeleccionada(e.target.value)}
-                        className="large-text-dropdown"
-                      >
-                        {/* Opciones de empresa */}
-                        <option value="seleccione una empresa">
-                          seleccione una empresa
-                        </option>
-                        <option value="Maxion">Maxion</option>
-                        <option value="Safran">Safran</option>
-                        <option value="Soisa">Soisa</option>
-                        <option value="Bafar">Bafar</option>
-
-                      </select>
-                    </td>
-                  </tr>
+  <td className="label-cell">Empresa:</td>
+  <td className="input-cell" colSpan="2">
+    <select
+      id="empresa"
+      value={empresaSeleccionada}
+      onChange={(e) => setEmpresaSeleccionada(e.target.value)}
+      className="large-text-dropdown"
+    >
+      <option value="">Seleccione una empresa</option>
+      {empresas.map((empresa, index) => (
+        <option key={index} value={empresa}>
+          {empresa}
+        </option>
+      ))}
+    </select>
+    
+  </td>
+</tr>
 
                   {/* Fila de Área */}
                   <tr>
@@ -1885,6 +1948,41 @@ newResumenData.puestos = [
                 ))}
               </ul>
             </td>
+
+            {/* Modal para borrar empresas */}
+<Modal
+  isOpen={isEmpresaModalOpen}
+  onRequestClose={closeEmpresaModal}
+  className="modal-container"
+>
+  <h2>Eliminar Empresas</h2>
+  <p>Selecciona las empresas que deseas eliminar:</p>
+  <div className="empresa-selection-list">
+    {empresas.length > 0 ? (
+      empresas.map((empresa) => (
+        <label key={empresa} className="checkbox-label">
+          <input
+            type="checkbox"
+            value={empresa}
+            checked={empresasSeleccionadasParaBorrar.includes(empresa)}
+            onChange={handleEmpresaSelectionChange}
+          />
+          {empresa}
+        </label>
+      ))
+    ) : (
+      <p>No hay empresas disponibles.</p>
+    )}
+  </div>
+  <div className="modal-buttons">
+    <button onClick={handleDeleteSelectedEmpresas} className="confirm-button">
+      Confirmar Eliminación
+    </button>
+    <button onClick={closeEmpresaModal} className="cancel-button">
+      Cancelar
+    </button>
+  </div>
+</Modal>
 
             <Modal
               isOpen={isImageModalOpen}
@@ -2292,22 +2390,27 @@ newResumenData.puestos = [
           </tr>
         </tbody>
       </table>
-      <div className="button-container">
-        <button onClick={downloadImage} className="download-button">
-          Descargar PDF
-        </button>
+      <div style={{ display: "flex", alignItems: "center" }}>
+  {/* Botones que se mantienen a la izquierda */}
+  <div>
+    <button onClick={downloadImage} className="download-button">
+      Descargar PDF
+    </button>
+    <button onClick={openFolderModal} className="save-button">
+      Guardar Tabla
+    </button>
+    <button onClick={handleReset} className="reset-button">
+      Reiniciar Tabla
+    </button>
+  </div>
 
-        <button onClick={openFolderModal} className="save-button">
-          {isEditing ? "Actualizar Tabla" : "Guardar Tabla"}
-        </button>
+  {/* Botones que se moverán a la derecha */}
+  <div style={{ marginLeft: "auto" }}>
+    <button onClick={handleAddEmpresa}>Agregar Empresa</button>
+    <button onClick={openEmpresaModal}>Borrar Empresa</button>
+  </div>
+</div>
 
-        <button
-          onClick={handleReset}
-          className={`reset-button ${hideButtons ? "hidden-buttons" : ""}`}
-        >
-          Reiniciar Tabla
-        </button>
-      </div>
     </div>
   );
 };
