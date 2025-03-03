@@ -208,8 +208,39 @@ td {
 }
 
 .table-container {
-  cursor: grab; /* Muestra un cursor indicativo para arrastrar */
+  /* Quita el max-width o ponlo en 'none' */
+  max-width: none;
+  width: auto;
+
+  /* Para que no se corte la tabla y aparezca scroll si es más ancha que la ventana */
+  overflow-x: auto;
+
+  /* Mantén el resto de estilos que necesites */
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
+
+@media (max-width: 1024px) {
+  .table-container {
+    transform: scale(0.8);
+    transform-origin: top left;
+    width: calc(100% / 0.8); /* Ajusta el ancho para que no se "estire" */
+  }
+}
+
+
+
+.table-container table {
+  /* Ocupará todo el ancho disponible del contenedor */
+  width: 100%;
+  /* Otros estilos que quieras */
+  border-collapse: collapse;
+}
+
+
 
 .table-container:active {
   cursor: grabbing; /* Cambia el cursor cuando se está arrastrando */

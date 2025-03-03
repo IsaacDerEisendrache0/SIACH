@@ -1033,6 +1033,8 @@ newResumenData.puestos = [
 
   const [hideButtons] = useState(false);
 
+  
+
   document.addEventListener("DOMContentLoaded", () => {
     const tableContainer = document.querySelector(".table-container");
 
@@ -1051,12 +1053,18 @@ newResumenData.puestos = [
     });
 
     tableContainer.addEventListener("touchmove", (e) => {
+      // Si hay más de un dedo tocando la pantalla,
+      // lo más probable es que sea un pinch-zoom y NO un drag horizontal.
+      if (e.touches.length > 1) return; 
+    
+      // Ahora sí, si solo hay 1 dedo, hacemos el drag
       if (!isDragging) return;
-      e.preventDefault();
+      e.preventDefault(); // Se evita scroll del body, pero no pinch
       const x = e.touches[0].pageX - tableContainer.offsetLeft;
-      const walk = (x - startX) * 2; // Ajusta la velocidad del desplazamiento
+      const walk = (x - startX) * 2;
       tableContainer.scrollLeft = scrollLeft - walk;
     });
+    
   });
 
   const handleDeleteSelection = (indexToDelete) => {
@@ -1418,6 +1426,7 @@ const handleAddEmpresa = () => {
       <table
         class="custom-table"
         className="table-container"
+        
         style={{ backgroundColor: "white" }}
       >
         <thead>
