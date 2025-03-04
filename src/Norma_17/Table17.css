@@ -1,7 +1,8 @@
 /* === Tamaño de la Tabla Principal === */
 
 .main-table {
-  min-width: 1200px; /* Define un ancho mínimo suficiente para evitar la compactación */
+  min-width: 1300px;  /* Se “estira” a 1200px como mínimo */
+
   width: auto; /* Permite que la tabla mantenga su tamaño natural */
   overflow: auto; /* Habilita el desplazamiento si es necesario */
   background-color: white !important; /* Fondo blanco sólido */
@@ -11,6 +12,20 @@
   box-shadow: none !important; /* Sin sombra */
 }
 
+
+@media (max-width: 1024px) {
+  .main-table {
+    transform: scale(0.6);
+    transform-origin: top left; 
+    display: inline-block;
+    width: 100%;
+    
+  }
+
+  
+}
+
+ 
 table,
 th,
 td {
@@ -223,13 +238,7 @@ td {
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-@media (max-width: 1024px) {
-  .table-container {
-    transform: scale(0.8);
-    transform-origin: top left;
-    width: calc(100% / 0.8); /* Ajusta el ancho para que no se "estire" */
-  }
-}
+
 
 
 
@@ -290,83 +299,6 @@ td {
 
 /* ===== Responsividad ===== */
 
-/* Pantallas pequeñas (móviles) */
-@media (max-width: 768px) {
-  .inner-table select {
-    font-size: 14px; /* Reduce el tamaño de fuente para pantallas pequeñas */
-    padding: 8px; /* Ajusta el espacio interno */
-  }
-
-  .main-table th,
-  .main-table td {
-    min-width: 150px; /* Ajusta el ancho mínimo de las celdas para evitar la compactación */
-    padding: 10px; /* Añade espacio alrededor del texto */
-  }
-
-  .label-action {
-    flex-direction: column; /* Coloca las etiquetas e inputs en columnas */
-    align-items: flex-start;
-  }
-
-  .small-input {
-    width: 100%; /* El input ocupa todo el ancho en pantallas pequeñas */
-  }
-
-  .protection-image-container {
-    max-width: 100%; /* Ajusta el ancho del contenedor de imágenes */
-  }
-
-  .protection-image {
-    max-width: 50px; /* Ajusta el tamaño de las imágenes */
-  }
-
-  .table-cell {
-    flex-direction: column; /* Apila el contenido */
-  }
-
-  .hazard-checkbox {
-    margin-bottom: 5px; /* Espacio entre el checkbox y el texto */
-  }
-
-  /* Scroll horizontal en tablas */
-  .table-container {
-    padding: 0; /* Sin padding */
-    margin: 0; /* Sin margen */
-    width: 100%; /* Ocupar el ancho completo */
-  }
-}
-
-/* Pantallas medianas (tabletas) */
-@media (max-width: 1024px) {
-  .inner-table,
-  .risk-table,
-  .container-full-width,
-  .main-table {
-    width: 100%; /* Ancho completo */
-    border-collapse: separate;
-  }
-
-  .main-table th,
-  .main-table td,
-  .custom-table th,
-  .custom-table td {
-    padding: 8px;
-    font-size: 0.9rem;
-  }
-
-  .label-action {
-    flex-direction: row; /* Mantén la etiqueta y el input en la misma línea */
-    justify-content: space-between;
-  }
-
-  .small-input {
-    width: 100px; /* Ajusta el ancho de los inputs */
-  }
-
-  .protection-image {
-    max-width: 60px; /* Ajusta el tamaño de imágenes */
-  }
-}
 
 .header-td {
   padding: 10px;
