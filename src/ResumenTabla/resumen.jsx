@@ -233,20 +233,27 @@ unsubscribe = onSnapshot(
   };
 
   // Función para eliminar un registro de resumen
-  const deleteArea = async (id, collectionName) => {
-    if (!collectionName) {
-      alert("Error: No se especificó la colección para eliminar el registro.");
+  const deleteArea = async (areaId, collectionName, empresaName) => {
+    if (!collectionName || !empresaName) {
+      alert("No se cuenta con la información necesaria para eliminar el área.");
       return;
     }
+  
     try {
-      await deleteDoc(doc(db, collectionName, id));
-      setData((prevData) => prevData.filter((row) => row.area !== id));
+      // Ruta completa: "collectionName / empresaName / areas / areaId"
+      const docRef = doc(db, collectionName, empresaName, "areas", areaId);
+      await deleteDoc(docRef);
+  
+      // Elimina del estado local
+      setData((prevData) => prevData.filter((row) => row.area !== areaId));
+  
       alert("Registro eliminado con éxito.");
     } catch (error) {
       console.error("Error al eliminar el registro:", error);
       alert("Error al eliminar el registro.");
     }
   };
+  
 
   // Función para expandir o contraer los puestos de un área
   const toggleExpandArea = (areaId) => {
@@ -399,15 +406,17 @@ unsubscribe = onSnapshot(
                 <td>{row.elevado || 0}</td>
                 <td>{row.grave || 0}</td>
                 <td>
-                  <FaTrash
-                    onClick={() =>
-                      deleteArea(
-                        row.area,
-                        row.collectionName || "resumen"
-                      )
-                    }
-                    className="boton-eliminar"
-                  />
+                <FaTrash
+  onClick={() =>
+    deleteArea(
+      row.area, 
+      row.collectionName, 
+      row.nombreEmpresa  // <-- IMPORTANTE: pasamos también el nombre de la empresa
+    )
+  }
+  className="boton-eliminar"
+/>
+
                 </td>
               </tr>
             ))
