@@ -349,121 +349,123 @@ unsubscribe = onSnapshot(
 
       {/* Vista de la Tabla de Resumen */}
       {selectedEmpresa && selectedNorma && (
-        <>
-          <button
-            onClick={() => setSelectedNorma(null)}
-            className="btn-back-home"
-          >
-            ← Regresar a Normas
-          </button>
-          <h2>Tabla de Resumen de {selectedNorma.nombre}</h2>
-          <div className="tabla-container">
-            <table className="tabla-principal">
+  <>
+    <button
+      onClick={() => setSelectedNorma(null)}
+      className="btn-back-home"
+    >
+      ← Regresar a Normas
+    </button>
+    <h2>Tabla de Resumen de {selectedNorma.nombre}</h2>
+    <div className="tabla-container">
+      {/* Tabla principal de Áreas */}
+      <table className="tabla-principal">
+        <thead>
+          <tr>
+            <th rowSpan="2" className="tabla-header">
+              Área
+            </th>
+            <th colSpan="5" className="tabla-header">
+              Magnitud de riesgo
+            </th>
+            <th rowSpan="2" className="tabla-header">
+              Acción
+            </th>
+          </tr>
+          <tr>
+            <th className="tabla-riesgo tolerable">Tolerable</th>
+            <th className="tabla-riesgo moderado">Moderado</th>
+            <th className="tabla-riesgo notable">Notable</th>
+            <th className="tabla-riesgo elevado">Elevado</th>
+            <th className="tabla-riesgo grave">Grave</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.length > 0 ? (
+            data.map((row) => (
+              <tr key={row.id}>
+                <td className="tabla-area">
+                  <button
+                    onClick={() => toggleExpandArea(row.area)}
+                    className="boton-expandir"
+                  >
+                    {expandedAreas.includes(row.area) ? "▼" : "▶"}
+                  </button>
+                  {row.area}
+                </td>
+                <td>{row.tolerable || 0}</td>
+                <td>{row.moderado || 0}</td>
+                <td>{row.notable || 0}</td>
+                <td>{row.elevado || 0}</td>
+                <td>{row.grave || 0}</td>
+                <td>
+                  <FaTrash
+                    onClick={() =>
+                      deleteArea(
+                        row.area,
+                        row.collectionName || "resumen"
+                      )
+                    }
+                    className="boton-eliminar"
+                  />
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7" style={{ textAlign: "center" }}>
+                No hay registros de resumen en esta norma.
+              </td>
+            </tr>
+          )}
+          <tr>
+            <th>TOTAL</th>
+            <th>{total.tolerable}</th>
+            <th>{total.moderado}</th>
+            <th>{total.notable}</th>
+            <th>{total.elevado}</th>
+            <th>{total.grave}</th>
+            <th></th>
+          </tr>
+        </tbody>
+      </table>
+
+      {/* Tabla(s) separada(s) para los puestos de cada área expandida */}
+      {data.map((row) =>
+        expandedAreas.includes(row.area) && row.puestos && row.puestos.length > 0 ? (
+          <div key={`puestos-${row.area}`} className="puestos-separados-container">
+            <h3>Puestos en {row.area}</h3>
+            <table className="tabla-interna">
               <thead>
                 <tr>
-                  <th rowSpan="2" className="tabla-header">
-                    Área
-                  </th>
-                  <th colSpan="5" className="tabla-header">
-                    Magnitud de riesgo
-                  </th>
-                  <th rowSpan="2" className="tabla-header">
-                    Acción
-                  </th>
-                </tr>
-                <tr>
-                  <th className="tabla-riesgo tolerable">Tolerable</th>
-                  <th className="tabla-riesgo moderado">Moderado</th>
-                  <th className="tabla-riesgo notable">Notable</th>
-                  <th className="tabla-riesgo elevado">Elevado</th>
-                  <th className="tabla-riesgo grave">Grave</th>
+                  <th className="tabla-header">Puesto</th>
+                  <th className="tolerable">Tolerable</th>
+                  <th className="moderado">Moderado</th>
+                  <th className="notable">Notable</th>
+                  <th className="elevado">Elevado</th>
+                  <th className="grave">Grave</th>
                 </tr>
               </thead>
               <tbody>
-                {data.length > 0 ? (
-                  data.map((row) => (
-                    <React.Fragment key={row.id}>
-                      <tr>
-                        <td className="tabla-area">
-                          <button
-                            onClick={() => toggleExpandArea(row.area)}
-                            className="boton-expandir"
-                          >
-                            {expandedAreas.includes(row.area) ? "▼  " : "▶"}
-                          </button>
-                          {row.area}
-                        </td>
-                        <td>{row.tolerable || 0}</td>
-                        <td>{row.moderado || 0}</td>
-                        <td>{row.notable || 0}</td>
-                        <td>{row.elevado || 0}</td>
-                        <td>{row.grave || 0}</td>
-                        <td>
-                          <FaTrash
-                            onClick={() =>
-                              deleteArea(
-                                row.area,
-                                row.collectionName || "resumen",
-                              )
-                            }
-                            className="boton-eliminar"
-                          />
-                        </td>
-                      </tr>
-                      {expandedAreas.includes(row.area) && row.puestos && (
-                        <tr>
-                          <td colSpan="7" className="tabla-subtabla">
-                            <table className="tabla-interna">
-                              <thead>
-                                <tr>
-                                  <th className="tabla-header">Puesto</th>
-                                  <th className="tolerable">Tolerable</th>
-                                  <th className="moderado">Moderado</th>
-                                  <th className="notable">Notable</th>
-                                  <th className="elevado">Elevado</th>
-                                  <th className="grave">Grave</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                              {row.puestos.map((puesto, idx) => (
-                                <tr key={`${puesto.nombre}-${idx}`}>
-                                  <td>{puesto.nombre}</td>
-                                  <td>{puesto.tolerable || 0}</td>
-                                  <td>{puesto.moderado || 0}</td>
-                                  <td>{puesto.notable || 0}</td>
-                                  <td>{puesto.elevado || 0}</td>
-                                  <td>{puesto.grave || 0}</td>
-                                </tr>
-                              ))}
-
-                              </tbody>
-                            </table>
-                          </td>
-                        </tr>
-                      )}
-                    </React.Fragment>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="7" style={{ textAlign: "center" }}>
-                      No hay registros de resumen en esta norma.
-                    </td>
+                {row.puestos.map((puesto, idx) => (
+                  <tr key={`${puesto.nombre}-${idx}`}>
+                    <td>{puesto.nombre}</td>
+                    <td>{puesto.tolerable || 0}</td>
+                    <td>{puesto.moderado || 0}</td>
+                    <td>{puesto.notable || 0}</td>
+                    <td>{puesto.elevado || 0}</td>
+                    <td>{puesto.grave || 0}</td>
                   </tr>
-                )}
-                <tr>
-                  <th>TOTAL</th>
-                  <th>{total.tolerable}</th>
-                  <th>{total.moderado}</th>
-                  <th>{total.notable}</th>
-                  <th>{total.elevado}</th>
-                  <th>{total.grave}</th>
-                  <th></th>
-                </tr>
+                ))}
               </tbody>
             </table>
           </div>
-        </>
+        ) : null
       )}
+    </div>
+  </>
+)}
+
     </div>
   );
 };
