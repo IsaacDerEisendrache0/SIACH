@@ -1,7 +1,7 @@
 /* === Tamaño de la Tabla Principal === */
 
 .main-table {
-  min-width: 1300px;  /* Se “estira” a 1200px como mínimo */
+  min-width: 1300px; /* Se “estira” a 1200px como mínimo */
 
   width: auto; /* Permite que la tabla mantenga su tamaño natural */
   overflow: auto; /* Habilita el desplazamiento si es necesario */
@@ -12,20 +12,15 @@
   box-shadow: none !important; /* Sin sombra */
 }
 
-
 @media (max-width: 1024px) {
   .main-table {
     transform: scale(0.6);
-    transform-origin: top left; 
+    transform-origin: top left;
     display: inline-block;
     width: 100%;
-    
   }
-
-  
 }
 
- 
 table,
 th,
 td {
@@ -235,12 +230,8 @@ td {
   padding: 20px;
   background-color: #f4f4f4;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
-
-
-
 
 .table-container table {
   /* Ocupará todo el ancho disponible del contenedor */
@@ -248,8 +239,6 @@ td {
   /* Otros estilos que quieras */
   border-collapse: collapse;
 }
-
-
 
 .table-container:active {
   cursor: grabbing; /* Cambia el cursor cuando se está arrastrando */
@@ -298,7 +287,6 @@ td {
 }
 
 /* ===== Responsividad ===== */
-
 
 .header-td {
   padding: 10px;

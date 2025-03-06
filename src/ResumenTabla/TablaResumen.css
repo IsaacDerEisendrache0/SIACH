@@ -18,23 +18,24 @@
   .tabla-container {
     overflow-x: auto; /* Permite scroll horizontal si es necesario */
   }
-  
+
   .tabla-principal {
     transform: scale(0.8);
     transform-origin: top left; /* Asegura que la escala se realice desde la esquina superior izquierda */
   }
-  th, td {
-    padding: 8px;         /* Ajusta el padding para ahorrar espacio */
-    font-size: 14px;      /* Reduce el tamaño de fuente en celdas */
+  th,
+  td {
+    padding: 8px; /* Ajusta el padding para ahorrar espacio */
+    font-size: 14px; /* Reduce el tamaño de fuente en celdas */
   }
 }
 
 .puestos-separados-container {
-  margin-top: 20px;         /* Espacio entre la tabla principal y la de puestos */
-  background: #ffffff;       /* Fondo blanco para coherencia */
-  padding: 10px;             /* Algo de padding interno */
-  border-radius: 8px;        /* Bordes redondeados */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);  /* Sombra para resaltar */
+  margin-top: 20px; /* Espacio entre la tabla principal y la de puestos */
+  background: #ffffff; /* Fondo blanco para coherencia */
+  padding: 10px; /* Algo de padding interno */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para resaltar */
 }
 
 .puestos-separados-container h3 {
@@ -51,8 +52,6 @@
     width: 125%;
   }
 }
-
-
 
 /* Tabla principal */
 .tabla-principal {

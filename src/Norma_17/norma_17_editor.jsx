@@ -226,19 +226,17 @@ const RiskAssessmentTableEditor = () => {
   const handleAreaChange = (e) => {
     const selectedName = e.target.value;
     const selectedArea = areas.find((area) => area.nombre === selectedName);
-  
+
     if (selectedArea) {
       setAreaSeleccionada(selectedArea.nombre);
       setPuestos(selectedArea.puestos);
       setPuestoSeleccionado(""); // Reiniciar puesto al cambiar área
     }
   };
-  
 
   const handlePuestoChange = (e) => {
     setPuestoSeleccionado(e.target.value);
   };
-  
 
   const handleCheckboxChange = (event) => {
     const hazard = event.target.name;
@@ -320,11 +318,11 @@ const RiskAssessmentTableEditor = () => {
 
   // Función para obtener el color basado en el riesgo
   const getRiskColor = (risk) => {
-    if (risk > 400) return "red";       // Muy Alto
-    if (risk > 200) return "orange";    // Alto
-    if (risk > 70)  return "yellow";    // Notable
-    if (risk > 20)  return "green";     // Moderado
-    return "blue";                      // Bajo o Aceptable
+    if (risk > 400) return "red"; // Muy Alto
+    if (risk > 200) return "orange"; // Alto
+    if (risk > 70) return "yellow"; // Notable
+    if (risk > 20) return "green"; // Moderado
+    return "blue"; // Bajo o Aceptable
   };
 
   // Manejadores de cambio para los selectores
@@ -443,7 +441,6 @@ const RiskAssessmentTableEditor = () => {
   const handleDeletePuestoClick = () => {
     setIsModalOpen(true);
   };
-  
 
   const handleModalClose = () => {
     setIsModalOpen(false); // Cerrar el modal
@@ -468,15 +465,20 @@ const RiskAssessmentTableEditor = () => {
   useEffect(() => {
     if (areaSeleccionada) {
       const areaSeleccionadaKey = `puestos_${areaSeleccionada}`;
-      const savedPuestos = JSON.parse(localStorage.getItem(areaSeleccionadaKey));
-  
+      const savedPuestos = JSON.parse(
+        localStorage.getItem(areaSeleccionadaKey),
+      );
+
       if (savedPuestos && savedPuestos.length > 0) {
         setPuestos(savedPuestos);
       } else {
         const areaObj = areas.find((area) => area.nombre === areaSeleccionada);
         if (areaObj) {
           setPuestos(areaObj.puestos);
-          localStorage.setItem(areaSeleccionadaKey, JSON.stringify(areaObj.puestos));
+          localStorage.setItem(
+            areaSeleccionadaKey,
+            JSON.stringify(areaObj.puestos),
+          );
         }
       }
     }
@@ -634,188 +636,202 @@ const RiskAssessmentTableEditor = () => {
 
   // Ejemplo de función para asignar color según el nivel de riesgo
   // Función simple para generar un ID único (sin librerías)
-const generateUniqueId = () => {
-  return Date.now().toString() + Math.floor(Math.random() * 1000).toString();
-};
-
-
-
-const updateTable = async () => {
-  const empresa = tableToEdit?.empresaSeleccionada || "";
-  const normaAuto = tableToEdit?.norma || "N-017";
-  const empresaId = tableToEdit?.empresaId || "";
-  const normaId = tableToEdit?.normaId || "";
-
-  // Si ya existe un id para el puesto, lo usamos; de lo contrario, generamos uno
-  // Esto debe estar guardado para futuras actualizaciones
-  const puestoId = tableToEdit?.puestoId || generateUniqueId();
-
-  // Incluimos el puestoId en el objeto actualizado para persistirlo
-  const updatedTable = {
-    areaSeleccionada,
-    puestoSeleccionado,
-    hazards,
-    consequence,
-    exposure,
-    probability,
-    risk: calculateRisk(),
-    selectedImages,
-    descripcionActividad1,
-    descripcionActividad2,
-    selectedOptionEquipoUtilizado,
-    selectedOptionProteccionSugerida,
-    tiempoExposicion,
-    norma: normaAuto,
-    fecha,
-    hora,
-    nombreEmpresa: empresaSeleccionada,
-    selectedMainOption,
-    selectionList,
-    puestoId, // ID único del puesto
+  const generateUniqueId = () => {
+    return Date.now().toString() + Math.floor(Math.random() * 1000).toString();
   };
 
-  try {
-    if (!tableId) {
-      throw new Error("No se encontró el ID de la tabla para actualizar.");
-    }
-    if (!empresaId || !normaId) {
-      throw new Error("No se encontraron los IDs de la empresa o la norma.");
-    }
+  const updateTable = async () => {
+    const empresa = tableToEdit?.empresaSeleccionada || "";
+    const normaAuto = tableToEdit?.norma || "N-017";
+    const empresaId = tableToEdit?.empresaId || "";
+    const normaId = tableToEdit?.normaId || "";
 
-    // 1. Actualiza el documento principal (tablas)
-    const docRef = doc(db, "empresas", empresaId, "normas", normaId, "tablas", tableId);
-    await setDoc(docRef, updatedTable, { merge: true });
+    // Si ya existe un id para el puesto, lo usamos; de lo contrario, generamos uno
+    // Esto debe estar guardado para futuras actualizaciones
+    const puestoId = tableToEdit?.puestoId || generateUniqueId();
 
-    // 2. Actualiza el resumen en la ruta que coincide con la Tabla de Resumen
-    const resumenCollection = "resumen_17"; // O "resumen_004" según corresponda
-    const empresaFolder = empresaSeleccionada;
-    const areaDocId = areaSeleccionada;
-    const resumenRef = doc(db, resumenCollection, empresaFolder, "areas", areaDocId);
-    const resumenSnapshot = await getDoc(resumenRef);
-
-    let areaData = resumenSnapshot.exists()
-      ? resumenSnapshot.data()
-      : {
-          puestos: [],
-          tolerable: 0,
-          moderado: 0,
-          notable: 0,
-          elevado: 0,
-          grave: 0,
-        };
-
-    // 3. Construye el objeto puesto
-    const risk = calculateRisk();
-    const newPuesto = {
-      id: puestoId, // ID único para identificar el puesto
-      nombre: puestoSeleccionado,
-      magnitudRiesgo: risk,
-      riskColor: getRiskColor(risk),
-      tolerable: 0,
-      moderado: 0,
-      notable: 0,
-      elevado: 0,
-      grave: 0,
+    // Incluimos el puestoId en el objeto actualizado para persistirlo
+    const updatedTable = {
+      areaSeleccionada,
+      puestoSeleccionado,
+      hazards,
+      consequence,
+      exposure,
+      probability,
+      risk: calculateRisk(),
+      selectedImages,
+      descripcionActividad1,
+      descripcionActividad2,
+      selectedOptionEquipoUtilizado,
+      selectedOptionProteccionSugerida,
+      tiempoExposicion,
+      norma: normaAuto,
+      fecha,
+      hora,
+      nombreEmpresa: empresaSeleccionada,
+      selectedMainOption,
+      selectionList,
+      puestoId, // ID único del puesto
     };
 
-    // Asigna la categoría y el "1" en la columna correspondiente
-    if (risk <= 20) {
-      newPuesto.categoria = "Tolerable";
-      newPuesto.tolerable = 1;
-    } else if (risk <= 70) {
-      newPuesto.categoria = "Moderado";
-      newPuesto.moderado = 1;
-    } else if (risk <= 200) {
-      newPuesto.categoria = "Notable";
-      newPuesto.notable = 1;
-    } else if (risk <= 400) {
-      newPuesto.categoria = "Elevado";
-      newPuesto.elevado = 1;
-    } else {
-      newPuesto.categoria = "Grave";
-      newPuesto.grave = 1;
-    }
+    try {
+      if (!tableId) {
+        throw new Error("No se encontró el ID de la tabla para actualizar.");
+      }
+      if (!empresaId || !normaId) {
+        throw new Error("No se encontraron los IDs de la empresa o la norma.");
+      }
 
-    // 4. Actualiza la lista de puestos:
-    // Primero, intenta encontrar el puesto por ID; si no existe, como respaldo busca por nombre
-    let copyPuestos = Array.isArray(areaData.puestos) ? [...areaData.puestos] : [];
-    let puestoIndex = copyPuestos.findIndex((p) => p.id === puestoId);
+      // 1. Actualiza el documento principal (tablas)
+      const docRef = doc(
+        db,
+        "empresas",
+        empresaId,
+        "normas",
+        normaId,
+        "tablas",
+        tableId,
+      );
+      await setDoc(docRef, updatedTable, { merge: true });
 
-    if (puestoIndex === -1) {
-      // Si no se encontró por ID, intenta encontrarlo por nombre
-      puestoIndex = copyPuestos.findIndex((p) => p.nombre === puestoSeleccionado);
-    }
+      // 2. Actualiza el resumen en la ruta que coincide con la Tabla de Resumen
+      const resumenCollection = "resumen_17"; // O "resumen_004" según corresponda
+      const empresaFolder = empresaSeleccionada;
+      const areaDocId = areaSeleccionada;
+      const resumenRef = doc(
+        db,
+        resumenCollection,
+        empresaFolder,
+        "areas",
+        areaDocId,
+      );
+      const resumenSnapshot = await getDoc(resumenRef);
 
-    if (puestoIndex !== -1) {
-      // Actualiza el puesto existente (sin duplicar)
-      copyPuestos[puestoIndex] = newPuesto;
-    } else {
-      // Si no se encontró ningún puesto, se agrega (esto ocurrirá sólo la primera vez)
-      copyPuestos.push(newPuesto);
-    }
+      let areaData = resumenSnapshot.exists()
+        ? resumenSnapshot.data()
+        : {
+            puestos: [],
+            tolerable: 0,
+            moderado: 0,
+            notable: 0,
+            elevado: 0,
+            grave: 0,
+          };
 
-    // 5. Recalcula totales acumulados
-    const newTotals = copyPuestos.reduce(
-      (acc, puesto) => {
-        acc.tolerable += puesto.tolerable || 0;
-        acc.moderado += puesto.moderado || 0;
-        acc.notable  += puesto.notable  || 0;
-        acc.elevado  += puesto.elevado  || 0;
-        acc.grave    += puesto.grave    || 0;
-        return acc;
-      },
-      { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 }
-    );
-
-    // 6. Guarda el área actualizada en el resumen
-    await setDoc(
-      resumenRef,
-      {
-        area: areaSeleccionada,
-        puesto: puestoSeleccionado,
-        riskScore: risk,
+      // 3. Construye el objeto puesto
+      const risk = calculateRisk();
+      const newPuesto = {
+        id: puestoId, // ID único para identificar el puesto
+        nombre: puestoSeleccionado,
+        magnitudRiesgo: risk,
         riskColor: getRiskColor(risk),
-        puestos: copyPuestos,
-        ...newTotals, // Totales por categoría
-      },
-      { merge: true }
-    );
+        tolerable: 0,
+        moderado: 0,
+        notable: 0,
+        elevado: 0,
+        grave: 0,
+      };
 
-    // 7. Lee el documento para refrescar el estado local
-    const updatedSnapshot = await getDoc(docRef);
-    const updatedData = updatedSnapshot.data();
+      // Asigna la categoría y el "1" en la columna correspondiente
+      if (risk <= 20) {
+        newPuesto.categoria = "Tolerable";
+        newPuesto.tolerable = 1;
+      } else if (risk <= 70) {
+        newPuesto.categoria = "Moderado";
+        newPuesto.moderado = 1;
+      } else if (risk <= 200) {
+        newPuesto.categoria = "Notable";
+        newPuesto.notable = 1;
+      } else if (risk <= 400) {
+        newPuesto.categoria = "Elevado";
+        newPuesto.elevado = 1;
+      } else {
+        newPuesto.categoria = "Grave";
+        newPuesto.grave = 1;
+      }
 
-    // 8. Actualiza los estados del editor
-    setAreaSeleccionada(updatedData.areaSeleccionada || "");
-    setPuestoSeleccionado(updatedData.puestoSeleccionado || "");
-    setHazards(updatedData.hazards || {});
-    setConsequence(updatedData.consequence || 1);
-    setExposure(updatedData.exposure || 1);
-    setProbability(updatedData.probability || 0.1);
-    setSelectedImages(updatedData.selectedImages || []);
-    setDescripcionActividad1(updatedData.descripcionActividad1 || "");
-    setDescripcionActividad2(updatedData.descripcionActividad2 || "");
-    setSelectedOptionEquipoUtilizado(updatedData.selectedOptionEquipoUtilizado || "");
-    setSelectedOptionProteccionSugerida(updatedData.selectedOptionProteccionSugerida || "");
-    setTiempoExposicion(updatedData.tiempoExposicion || "8hrs");
+      // 4. Actualiza la lista de puestos:
+      // Primero, intenta encontrar el puesto por ID; si no existe, como respaldo busca por nombre
+      let copyPuestos = Array.isArray(areaData.puestos)
+        ? [...areaData.puestos]
+        : [];
+      let puestoIndex = copyPuestos.findIndex((p) => p.id === puestoId);
 
-    localStorage.setItem("tableToEdit", JSON.stringify(updatedTable));
-    localStorage.removeItem("riskAssessmentData_editor");
+      if (puestoIndex === -1) {
+        // Si no se encontró por ID, intenta encontrarlo por nombre
+        puestoIndex = copyPuestos.findIndex(
+          (p) => p.nombre === puestoSeleccionado,
+        );
+      }
 
-    alert("Tabla y resumen actualizados con éxito en Firestore y en pantalla.");
-  } catch (error) {
-    console.error("Error al actualizar en Firestore:", error);
-    alert("Error al actualizar la tabla y el resumen.");
-  }
-};
+      if (puestoIndex !== -1) {
+        // Actualiza el puesto existente (sin duplicar)
+        copyPuestos[puestoIndex] = newPuesto;
+      } else {
+        // Si no se encontró ningún puesto, se agrega (esto ocurrirá sólo la primera vez)
+        copyPuestos.push(newPuesto);
+      }
 
+      // 5. Recalcula totales acumulados
+      const newTotals = copyPuestos.reduce(
+        (acc, puesto) => {
+          acc.tolerable += puesto.tolerable || 0;
+          acc.moderado += puesto.moderado || 0;
+          acc.notable += puesto.notable || 0;
+          acc.elevado += puesto.elevado || 0;
+          acc.grave += puesto.grave || 0;
+          return acc;
+        },
+        { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 },
+      );
 
-  
-  
-  
-  
+      // 6. Guarda el área actualizada en el resumen
+      await setDoc(
+        resumenRef,
+        {
+          area: areaSeleccionada,
+          puesto: puestoSeleccionado,
+          riskScore: risk,
+          riskColor: getRiskColor(risk),
+          puestos: copyPuestos,
+          ...newTotals, // Totales por categoría
+        },
+        { merge: true },
+      );
 
+      // 7. Lee el documento para refrescar el estado local
+      const updatedSnapshot = await getDoc(docRef);
+      const updatedData = updatedSnapshot.data();
 
+      // 8. Actualiza los estados del editor
+      setAreaSeleccionada(updatedData.areaSeleccionada || "");
+      setPuestoSeleccionado(updatedData.puestoSeleccionado || "");
+      setHazards(updatedData.hazards || {});
+      setConsequence(updatedData.consequence || 1);
+      setExposure(updatedData.exposure || 1);
+      setProbability(updatedData.probability || 0.1);
+      setSelectedImages(updatedData.selectedImages || []);
+      setDescripcionActividad1(updatedData.descripcionActividad1 || "");
+      setDescripcionActividad2(updatedData.descripcionActividad2 || "");
+      setSelectedOptionEquipoUtilizado(
+        updatedData.selectedOptionEquipoUtilizado || "",
+      );
+      setSelectedOptionProteccionSugerida(
+        updatedData.selectedOptionProteccionSugerida || "",
+      );
+      setTiempoExposicion(updatedData.tiempoExposicion || "8hrs");
+
+      localStorage.setItem("tableToEdit", JSON.stringify(updatedTable));
+      localStorage.removeItem("riskAssessmentData_editor");
+
+      alert(
+        "Tabla y resumen actualizados con éxito en Firestore y en pantalla.",
+      );
+    } catch (error) {
+      console.error("Error al actualizar en Firestore:", error);
+      alert("Error al actualizar la tabla y el resumen.");
+    }
+  };
 
   const [fecha, setFecha] = useState(new Date().toLocaleDateString()); // Estado para la fecha
   const [tiempoExposicion, setTiempoExposicion] = useState("8hrs");
@@ -828,16 +844,19 @@ const updateTable = async () => {
     const storedData = JSON.parse(localStorage.getItem("tableToEdit"));
     setTableToEdit(storedData);
   }, []); // Se ejecuta una vez al montar el componente
-  
 
   useEffect(() => {
     if (tableToEdit) {
       console.log("Datos recuperados en el editor:", tableToEdit);
-  
-      setAreaSeleccionada(tableToEdit.areaSeleccionada || ""); 
+
+      setAreaSeleccionada(tableToEdit.areaSeleccionada || "");
       setPuestoSeleccionado(tableToEdit.puestoSeleccionado || "");
-      setSelectedOptionEquipoUtilizado(tableToEdit.selectedOptionEquipoUtilizado || "");
-      setSelectedOptionProteccionSugerida(tableToEdit.selectedOptionProteccionSugerida || "");
+      setSelectedOptionEquipoUtilizado(
+        tableToEdit.selectedOptionEquipoUtilizado || "",
+      );
+      setSelectedOptionProteccionSugerida(
+        tableToEdit.selectedOptionProteccionSugerida || "",
+      );
       setSelectedImages(tableToEdit.selectedImages || []);
       setHazards(tableToEdit.hazards || {});
       setConsequence(tableToEdit.consequence || 1);
@@ -851,15 +870,10 @@ const updateTable = async () => {
       setTableId(tableToEdit.id || null);
       setSelectedMainOption(tableToEdit.selectedMainOption || "");
       setEmpresaSeleccionada(tableToEdit.nombreEmpresa || "");
-      setSelectionList(tableToEdit.selectionList || []);  // <--- Aquí
-
-      
+      setSelectionList(tableToEdit.selectionList || []); // <--- Aquí
     }
   }, [tableToEdit]); // Se ejecuta cada vez que `tableToEdit` cambia
-  
-  
 
-  
   const handleImageRemove = (imageToRemove) => {
     setSelectedImages((prevSelectedImages) =>
       prevSelectedImages.filter((image) => image !== imageToRemove),
@@ -1177,31 +1191,39 @@ const updateTable = async () => {
   };
 
   useEffect(() => {
-    if (!isEditing) { // Solo cargar si NO estamos editando
+    if (!isEditing) {
+      // Solo cargar si NO estamos editando
       const savedData = localStorage.getItem(STORAGE_KEY);
       if (savedData) {
         const parsed = JSON.parse(savedData);
-        if (parsed.areaSeleccionada) setAreaSeleccionada(parsed.areaSeleccionada);
-        if (parsed.puestoSeleccionado) setPuestoSeleccionado(parsed.puestoSeleccionado);
-        if (parsed.descripcionActividad1) setDescripcionActividad1(parsed.descripcionActividad1);
-        if (parsed.descripcionActividad2) setDescripcionActividad2(parsed.descripcionActividad2);
+        if (parsed.areaSeleccionada)
+          setAreaSeleccionada(parsed.areaSeleccionada);
+        if (parsed.puestoSeleccionado)
+          setPuestoSeleccionado(parsed.puestoSeleccionado);
+        if (parsed.descripcionActividad1)
+          setDescripcionActividad1(parsed.descripcionActividad1);
+        if (parsed.descripcionActividad2)
+          setDescripcionActividad2(parsed.descripcionActividad2);
         if (parsed.hazards) setHazards(parsed.hazards);
         if (parsed.consequence) setConsequence(parsed.consequence);
         if (parsed.exposure) setExposure(parsed.exposure);
         if (parsed.probability) setProbability(parsed.probability);
         if (parsed.selectedImages) setSelectedImages(parsed.selectedImages);
         if (parsed.selectedOptionEquipoUtilizado) {
-          setSelectedOptionEquipoUtilizado(parsed.selectedOptionEquipoUtilizado);
+          setSelectedOptionEquipoUtilizado(
+            parsed.selectedOptionEquipoUtilizado,
+          );
         }
         if (parsed.selectedOptionProteccionSugerida) {
-          setSelectedOptionProteccionSugerida(parsed.selectedOptionProteccionSugerida);
+          setSelectedOptionProteccionSugerida(
+            parsed.selectedOptionProteccionSugerida,
+          );
         }
-        if (parsed.tiempoExposicion) setTiempoExposicion(parsed.tiempoExposicion);
+        if (parsed.tiempoExposicion)
+          setTiempoExposicion(parsed.tiempoExposicion);
       }
     }
   }, [isEditing]);
-  
-  
 
   // ==== 3. CADA VEZ QUE ALGÚN ESTADO CAMBIA: GUARDO EN LOCALSTORAGE ====
   useEffect(() => {
@@ -1410,31 +1432,37 @@ const updateTable = async () => {
   const risk = calculateRisk();
 
   // Define el estado inicial de las empresas
-const [empresas, setEmpresas] = useState(["Maxion", "Safran", "Soisa", "Bafar"]);
-  
-// Función para agregar una nueva empresa
-const handleAddEmpresa = () => {
-  const nuevaEmpresa = prompt("Ingrese el nombre de la nueva empresa:");
-  if (nuevaEmpresa && !empresas.includes(nuevaEmpresa)) {
-    setEmpresas([...empresas, nuevaEmpresa]);
-  }
-};
+  const [empresas, setEmpresas] = useState([
+    "Maxion",
+    "Safran",
+    "Soisa",
+    "Bafar",
+  ]);
 
-// Función para borrar la empresa seleccionada
-const handleDeleteEmpresa = () => {
-  if (!empresaSeleccionada) {
-    alert("Seleccione una empresa para borrar");
-    return;
-  }
-  const confirmDelete = window.confirm(
-    `¿Está seguro de borrar la empresa ${empresaSeleccionada}?`
-  );
-  if (confirmDelete) {
-    setEmpresas(empresas.filter((empresa) => empresa !== empresaSeleccionada));
-    setEmpresaSeleccionada("");
-  }
-};
+  // Función para agregar una nueva empresa
+  const handleAddEmpresa = () => {
+    const nuevaEmpresa = prompt("Ingrese el nombre de la nueva empresa:");
+    if (nuevaEmpresa && !empresas.includes(nuevaEmpresa)) {
+      setEmpresas([...empresas, nuevaEmpresa]);
+    }
+  };
 
+  // Función para borrar la empresa seleccionada
+  const handleDeleteEmpresa = () => {
+    if (!empresaSeleccionada) {
+      alert("Seleccione una empresa para borrar");
+      return;
+    }
+    const confirmDelete = window.confirm(
+      `¿Está seguro de borrar la empresa ${empresaSeleccionada}?`,
+    );
+    if (confirmDelete) {
+      setEmpresas(
+        empresas.filter((empresa) => empresa !== empresaSeleccionada),
+      );
+      setEmpresaSeleccionada("");
+    }
+  };
 
   return (
     <div class="main-table">
@@ -2119,22 +2147,26 @@ const handleDeleteEmpresa = () => {
                     Selecciona el equipo principal:
                   </label>
                   <select
-  id="main-epp-select"
-  value={selectedMainOption}
-  onChange={(e) => setSelectedMainOption(e.target.value)}
-  className="epp-dropdown large-text-dropdown"
->
-  <option value="" disabled>Selecciona el equipo</option>
-  {Object.keys(eppOptions)
-    .filter(option => autoSelectedOptions.includes(option) || option === selectedMainOption)
-    .map((option, index) => (
-      <option key={index} value={option}>
-        {option}
-      </option>
-    ))}
-</select>
-
-
+                    id="main-epp-select"
+                    value={selectedMainOption}
+                    onChange={(e) => setSelectedMainOption(e.target.value)}
+                    className="epp-dropdown large-text-dropdown"
+                  >
+                    <option value="" disabled>
+                      Selecciona el equipo
+                    </option>
+                    {Object.keys(eppOptions)
+                      .filter(
+                        (option) =>
+                          autoSelectedOptions.includes(option) ||
+                          option === selectedMainOption,
+                      )
+                      .map((option, index) => (
+                        <option key={index} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                  </select>
                 </div>
 
                 {showSubDropdown && selectedMainOption && (
@@ -2387,20 +2419,16 @@ const handleDeleteEmpresa = () => {
           Descargar PDF
         </button>
 
-        <button
-        onClick={updateTable}
-        className="save-button"
-      >
-        Actualizar Tabla
-      </button>
-
+        <button onClick={updateTable} className="save-button">
+          Actualizar Tabla
+        </button>
 
         <button
           onClick={handleReset}
           className={`reset-button ${hideButtons ? "hidden-buttons" : ""}`}
         >
           Reiniciar Tabla
-        </button> 
+        </button>
         <button onClick={handleAddEmpresa}>Agregar</button>
         <button onClick={handleDeleteEmpresa}>Borrar</button>
       </div>

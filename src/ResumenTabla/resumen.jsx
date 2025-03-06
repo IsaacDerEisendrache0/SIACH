@@ -80,7 +80,7 @@ const TablaResumen = () => {
       return;
     }
 
-    let unsubscribe;  
+    let unsubscribe;
     let collectionName = "";
 
     // Convertimos a minúsculas para evitar errores de comparación
@@ -101,37 +101,41 @@ const TablaResumen = () => {
     console.log("📌 Cargando datos desde la colección:", collectionName);
 
     // Solo si hay empresa y norma seleccionadas, usamos la ruta que incluye el nombre de la empresa
-const empresaFolder = selectedEmpresa.nombre; // Se asume que el documento en Firestore se llama igual a la empresa
-unsubscribe = onSnapshot(
-  collection(db, collectionName, empresaFolder, "areas"),
-  (snapshot) => {
-    if (snapshot.empty) {
-      console.warn("⚠️ No hay documentos en la subcolección:", empresaFolder, "en", collectionName);
-      setData([]); // Limpiar la tabla si no hay datos
-      return;
-    }
+    const empresaFolder = selectedEmpresa.nombre; // Se asume que el documento en Firestore se llama igual a la empresa
+    unsubscribe = onSnapshot(
+      collection(db, collectionName, empresaFolder, "areas"),
+      (snapshot) => {
+        if (snapshot.empty) {
+          console.warn(
+            "⚠️ No hay documentos en la subcolección:",
+            empresaFolder,
+            "en",
+            collectionName,
+          );
+          setData([]); // Limpiar la tabla si no hay datos
+          return;
+        }
 
-    const areasData = snapshot.docs.map((doc) => {
-      const data = doc.data();
-      console.log("✅ Documento obtenido:", doc.id, data);
-      return {
-        nombreEmpresa: selectedEmpresa.nombre,
-        area: doc.id,
-        collectionName: collectionName,
-        puestos: Array.isArray(data.puestos) ? data.puestos : [],
-        tolerable: data.tolerable ?? 0,
-        moderado: data.moderado ?? 0,
-        notable: data.notable ?? 0,
-        elevado: data.elevado ?? 0,
-        grave: data.grave ?? 0,
-      };
-    });
+        const areasData = snapshot.docs.map((doc) => {
+          const data = doc.data();
+          console.log("✅ Documento obtenido:", doc.id, data);
+          return {
+            nombreEmpresa: selectedEmpresa.nombre,
+            area: doc.id,
+            collectionName: collectionName,
+            puestos: Array.isArray(data.puestos) ? data.puestos : [],
+            tolerable: data.tolerable ?? 0,
+            moderado: data.moderado ?? 0,
+            notable: data.notable ?? 0,
+            elevado: data.elevado ?? 0,
+            grave: data.grave ?? 0,
+          };
+        });
 
-    setData(areasData);
-    console.log("📊 Datos actualizados en el estado:", areasData);
-  }
-);
-
+        setData(areasData);
+        console.log("📊 Datos actualizados en el estado:", areasData);
+      },
+    );
 
     return () => {
       if (unsubscribe) unsubscribe();
@@ -238,22 +242,21 @@ unsubscribe = onSnapshot(
       alert("No se cuenta con la información necesaria para eliminar el área.");
       return;
     }
-  
+
     try {
       // Ruta completa: "collectionName / empresaName / areas / areaId"
       const docRef = doc(db, collectionName, empresaName, "areas", areaId);
       await deleteDoc(docRef);
-  
+
       // Elimina del estado local
       setData((prevData) => prevData.filter((row) => row.area !== areaId));
-  
+
       alert("Registro eliminado con éxito.");
     } catch (error) {
       console.error("Error al eliminar el registro:", error);
       alert("Error al eliminar el registro.");
     }
   };
-  
 
   // Función para expandir o contraer los puestos de un área
   const toggleExpandArea = (areaId) => {
@@ -356,125 +359,128 @@ unsubscribe = onSnapshot(
 
       {/* Vista de la Tabla de Resumen */}
       {selectedEmpresa && selectedNorma && (
-  <>
-    <button
-      onClick={() => setSelectedNorma(null)}
-      className="btn-back-home"
-    >
-      ← Regresar a Normas
-    </button>
-    <h2>Tabla de Resumen de {selectedNorma.nombre}</h2>
-    <div className="tabla-container">
-      {/* Tabla principal de Áreas */}
-      <table className="tabla-principal">
-        <thead>
-          <tr>
-            <th rowSpan="2" className="tabla-header">
-              Área
-            </th>
-            <th colSpan="5" className="tabla-header">
-              Magnitud de riesgo
-            </th>
-            <th rowSpan="2" className="tabla-header">
-              Acción
-            </th>
-          </tr>
-          <tr>
-            <th className="tabla-riesgo tolerable">Tolerable</th>
-            <th className="tabla-riesgo moderado">Moderado</th>
-            <th className="tabla-riesgo notable">Notable</th>
-            <th className="tabla-riesgo elevado">Elevado</th>
-            <th className="tabla-riesgo grave">Grave</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.length > 0 ? (
-            data.map((row) => (
-              <tr key={row.id}>
-                <td className="tabla-area">
-                  <button
-                    onClick={() => toggleExpandArea(row.area)}
-                    className="boton-expandir"
-                  >
-                    {expandedAreas.includes(row.area) ? "▼" : "▶"}
-                  </button>
-                  {row.area}
-                </td>
-                <td>{row.tolerable || 0}</td>
-                <td>{row.moderado || 0}</td>
-                <td>{row.notable || 0}</td>
-                <td>{row.elevado || 0}</td>
-                <td>{row.grave || 0}</td>
-                <td>
-                <FaTrash
-  onClick={() =>
-    deleteArea(
-      row.area, 
-      row.collectionName, 
-      row.nombreEmpresa  // <-- IMPORTANTE: pasamos también el nombre de la empresa
-    )
-  }
-  className="boton-eliminar"
-/>
-
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="7" style={{ textAlign: "center" }}>
-                No hay registros de resumen en esta norma.
-              </td>
-            </tr>
-          )}
-          <tr>
-            <th>TOTAL</th>
-            <th>{total.tolerable}</th>
-            <th>{total.moderado}</th>
-            <th>{total.notable}</th>
-            <th>{total.elevado}</th>
-            <th>{total.grave}</th>
-            <th></th>
-          </tr>
-        </tbody>
-      </table>
-
-      {/* Tabla(s) separada(s) para los puestos de cada área expandida */}
-      {data.map((row) =>
-        expandedAreas.includes(row.area) && row.puestos && row.puestos.length > 0 ? (
-          <div key={`puestos-${row.area}`} className="puestos-separados-container">
-            <h3>Puestos en {row.area}</h3>
-            <table className="tabla-interna">
+        <>
+          <button
+            onClick={() => setSelectedNorma(null)}
+            className="btn-back-home"
+          >
+            ← Regresar a Normas
+          </button>
+          <h2>Tabla de Resumen de {selectedNorma.nombre}</h2>
+          <div className="tabla-container">
+            {/* Tabla principal de Áreas */}
+            <table className="tabla-principal">
               <thead>
                 <tr>
-                  <th className="tabla-header">Puesto</th>
-                  <th className="tolerable">Tolerable</th>
-                  <th className="moderado">Moderado</th>
-                  <th className="notable">Notable</th>
-                  <th className="elevado">Elevado</th>
-                  <th className="grave">Grave</th>
+                  <th rowSpan="2" className="tabla-header">
+                    Área
+                  </th>
+                  <th colSpan="5" className="tabla-header">
+                    Magnitud de riesgo
+                  </th>
+                  <th rowSpan="2" className="tabla-header">
+                    Acción
+                  </th>
+                </tr>
+                <tr>
+                  <th className="tabla-riesgo tolerable">Tolerable</th>
+                  <th className="tabla-riesgo moderado">Moderado</th>
+                  <th className="tabla-riesgo notable">Notable</th>
+                  <th className="tabla-riesgo elevado">Elevado</th>
+                  <th className="tabla-riesgo grave">Grave</th>
                 </tr>
               </thead>
               <tbody>
-                {row.puestos.map((puesto, idx) => (
-                  <tr key={`${puesto.nombre}-${idx}`}>
-                    <td>{puesto.nombre}</td>
-                    <td>{puesto.tolerable || 0}</td>
-                    <td>{puesto.moderado || 0}</td>
-                    <td>{puesto.notable || 0}</td>
-                    <td>{puesto.elevado || 0}</td>
-                    <td>{puesto.grave || 0}</td>
+                {data.length > 0 ? (
+                  data.map((row) => (
+                    <tr key={row.id}>
+                      <td className="tabla-area">
+                        <button
+                          onClick={() => toggleExpandArea(row.area)}
+                          className="boton-expandir"
+                        >
+                          {expandedAreas.includes(row.area) ? "▼" : "▶"}
+                        </button>
+                        {row.area}
+                      </td>
+                      <td>{row.tolerable || 0}</td>
+                      <td>{row.moderado || 0}</td>
+                      <td>{row.notable || 0}</td>
+                      <td>{row.elevado || 0}</td>
+                      <td>{row.grave || 0}</td>
+                      <td>
+                        <FaTrash
+                          onClick={() =>
+                            deleteArea(
+                              row.area,
+                              row.collectionName,
+                              row.nombreEmpresa, // <-- IMPORTANTE: pasamos también el nombre de la empresa
+                            )
+                          }
+                          className="boton-eliminar"
+                        />
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" style={{ textAlign: "center" }}>
+                      No hay registros de resumen en esta norma.
+                    </td>
                   </tr>
-                ))}
+                )}
+                <tr>
+                  <th>TOTAL</th>
+                  <th>{total.tolerable}</th>
+                  <th>{total.moderado}</th>
+                  <th>{total.notable}</th>
+                  <th>{total.elevado}</th>
+                  <th>{total.grave}</th>
+                  <th></th>
+                </tr>
               </tbody>
             </table>
-          </div>
-        ) : null
-      )}
-    </div>
-  </>
-)}
 
+            {/* Tabla(s) separada(s) para los puestos de cada área expandida */}
+            {data.map((row) =>
+              expandedAreas.includes(row.area) &&
+              row.puestos &&
+              row.puestos.length > 0 ? (
+                <div
+                  key={`puestos-${row.area}`}
+                  className="puestos-separados-container"
+                >
+                  <h3>Puestos en {row.area}</h3>
+                  <table className="tabla-interna">
+                    <thead>
+                      <tr>
+                        <th className="tabla-header">Puesto</th>
+                        <th className="tolerable">Tolerable</th>
+                        <th className="moderado">Moderado</th>
+                        <th className="notable">Notable</th>
+                        <th className="elevado">Elevado</th>
+                        <th className="grave">Grave</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {row.puestos.map((puesto, idx) => (
+                        <tr key={`${puesto.nombre}-${idx}`}>
+                          <td>{puesto.nombre}</td>
+                          <td>{puesto.tolerable || 0}</td>
+                          <td>{puesto.moderado || 0}</td>
+                          <td>{puesto.notable || 0}</td>
+                          <td>{puesto.elevado || 0}</td>
+                          <td>{puesto.grave || 0}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : null,
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

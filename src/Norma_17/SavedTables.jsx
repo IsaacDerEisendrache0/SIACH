@@ -256,13 +256,13 @@ const SavedTables = () => {
   const loadRegistros = async (empresaId, normaId) => {
     try {
       const registrosSnap = await getDocs(
-        collection(db, "empresas", empresaId, "normas", normaId, "tablas")
+        collection(db, "empresas", empresaId, "normas", normaId, "tablas"),
       );
       const fetchedRegistros = registrosSnap.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-  
+
       // Función para parsear fecha y hora en formato válido para new Date()
       const parseDateTime = (fecha, hora) => {
         // 1. Reemplaza "a.m." por "AM" y "p.m." por "PM"
@@ -270,29 +270,29 @@ const SavedTables = () => {
           .replace("a.m.", "AM")
           .replace("p.m.", "PM")
           .trim();
-  
+
         // 2. Crea un string combinando fecha y hora que sea compatible con new Date()
         //    Asumiendo que 'fecha' es "5/3/2025" y 'horaNormalizada' es "10:53:28 AM"
         //    Esto debería ser interpretable en la mayoría de entornos en formato "MM/DD/YYYY HH:MM:SS AM/PM"
         const dateTimeString = `${fecha} ${horaNormalizada}`;
-        
+
         // 3. Retorna el objeto Date
         return new Date(dateTimeString);
       };
-  
+
       // Ordenar en el cliente: del registro más reciente al más antiguo
       const sortedRegistros = fetchedRegistros.sort((a, b) => {
         const dateA = parseDateTime(a.fecha, a.hora);
         const dateB = parseDateTime(b.fecha, b.hora);
         return dateB - dateA; // descendente
       });
-  
+
       setRegistros(sortedRegistros);
     } catch (error) {
       console.error("Error al cargar registros:", error);
     }
   };
-  
+
   // ------------------------------------------------------------------
   // CREAR REGISTRO (EJEMPLO SIMPLIFICADO)
   // ------------------------------------------------------------------
@@ -359,7 +359,7 @@ const SavedTables = () => {
 
   const handleEditRegistro = (registro) => {
     console.log("Registro a editar:", registro);
-  
+
     // Asegúrate de incluir todos los campos que el editor necesita.
     localStorage.setItem(
       "tableToEdit",
@@ -376,14 +376,10 @@ const SavedTables = () => {
         selectionList: registro.selectionList || [],
         // Agrega aquí cualquier otro campo que necesites,
         // como risk, descripción de evaluación, etc.
-      })
+      }),
     );
     navigate("/norma_17_editor");
-    
-    
   };
-  
-  
 
   // ... resto del componente SavedTables.jsx
 

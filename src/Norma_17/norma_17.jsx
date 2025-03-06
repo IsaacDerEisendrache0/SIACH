@@ -78,7 +78,6 @@ const RiskAssessmentTable = () => {
     },
   ]);
 
-
   const [isEditing, setIsEditing] = useState(false); // Estado para modo de edición
 
   const [hazards, setHazards] = useState({
@@ -239,13 +238,10 @@ const RiskAssessmentTable = () => {
       setPuestos([]);
     }
   };
-  
 
   const handlePuestoChange = (e) => {
     setPuestoSeleccionado(e.target.value);
   };
-
-
 
   const handleCheckboxChange = (event) => {
     const hazard = event.target.name;
@@ -453,15 +449,13 @@ const RiskAssessmentTable = () => {
       return;
     }
     const nuevosPuestos = puestos.filter(
-      (puesto) => !puestosSeleccionadosParaBorrar.includes(puesto)
+      (puesto) => !puestosSeleccionadosParaBorrar.includes(puesto),
     );
     setPuestos(nuevosPuestos);
     await updatePuestosInFirebase(nuevosPuestos);
     setPuestosSeleccionadosParaBorrar([]);
     setIsModalOpen(false);
   };
-  
-  
 
   const handleModalClose = () => {
     setIsModalOpen(false); // Cerrar el modal
@@ -493,49 +487,58 @@ const RiskAssessmentTable = () => {
       savedPuestos.includes("Puesto 2")
     ) {
       localStorage.removeItem(areaSeleccionadaKey);
-      setPuestos(areas.find((area) => area.nombre === areaSeleccionada)?.puestos || []);
+      setPuestos(
+        areas.find((area) => area.nombre === areaSeleccionada)?.puestos || [],
+      );
     } else if (savedPuestos && savedPuestos.length > 0) {
       setPuestos(savedPuestos);
     } else {
-      const puestosIniciales = areas.find((area) => area.nombre === areaSeleccionada)?.puestos || [];
+      const puestosIniciales =
+        areas.find((area) => area.nombre === areaSeleccionada)?.puestos || [];
       setPuestos(puestosIniciales);
-      localStorage.setItem(areaSeleccionadaKey, JSON.stringify(puestosIniciales));
+      localStorage.setItem(
+        areaSeleccionadaKey,
+        JSON.stringify(puestosIniciales),
+      );
     }
   }, [areaSeleccionada, areas]);
-  
 
-
- // Función para agregar un nuevo puesto y guardarlo en Firebase
- const handleAddPuestoClick = async () => {
-  const nuevoPuesto = prompt("Ingrese el nuevo puesto:");
-  if (nuevoPuesto && nuevoPuesto.trim() !== "") {
-    const newPuesto = nuevoPuesto.trim();
-    const updatedPuestos = [...puestos, newPuesto];
-    setPuestos(updatedPuestos);
-    await updatePuestosInFirebase(updatedPuestos);
-    setPuestoSeleccionado("");
-  }
-};
-
-// Función auxiliar: actualiza los puestos del área seleccionada en Firebase
-const updatePuestosInFirebase = async (newPuestos) => {
-  const selectedAreaObj = areas.find((area) => area.nombre === areaSeleccionada);
-  if (selectedAreaObj && selectedAreaObj.id) {
-    try {
-      await updateDoc(doc(db, "areas", selectedAreaObj.id), { puestos: newPuestos });
-      console.log("Puestos actualizados en Firebase");
-    } catch (error) {
-      console.error("Error actualizando puestos en Firebase:", error);
+  // Función para agregar un nuevo puesto y guardarlo en Firebase
+  const handleAddPuestoClick = async () => {
+    const nuevoPuesto = prompt("Ingrese el nuevo puesto:");
+    if (nuevoPuesto && nuevoPuesto.trim() !== "") {
+      const newPuesto = nuevoPuesto.trim();
+      const updatedPuestos = [...puestos, newPuesto];
+      setPuestos(updatedPuestos);
+      await updatePuestosInFirebase(updatedPuestos);
+      setPuestoSeleccionado("");
     }
-  } else {
-    console.error("No se encontró el área en Firebase para actualizar puestos.");
-  }
-};
+  };
 
+  // Función auxiliar: actualiza los puestos del área seleccionada en Firebase
+  const updatePuestosInFirebase = async (newPuestos) => {
+    const selectedAreaObj = areas.find(
+      (area) => area.nombre === areaSeleccionada,
+    );
+    if (selectedAreaObj && selectedAreaObj.id) {
+      try {
+        await updateDoc(doc(db, "areas", selectedAreaObj.id), {
+          puestos: newPuestos,
+        });
+        console.log("Puestos actualizados en Firebase");
+      } catch (error) {
+        console.error("Error actualizando puestos en Firebase:", error);
+      }
+    } else {
+      console.error(
+        "No se encontró el área en Firebase para actualizar puestos.",
+      );
+    }
+  };
 
-const handleDeletePuestoClick = () => {
-  setIsModalOpen(true);
-};
+  const handleDeletePuestoClick = () => {
+    setIsModalOpen(true);
+  };
 
   const handleImageSelect = (image) => {
     // Asociar la imagen seleccionada con el peligro actual
@@ -559,8 +562,6 @@ const handleDeletePuestoClick = () => {
     setIsImageModalOpen(false);
   };
 
-
-  
   const saveTable = async (empresaId, normaId) => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -591,7 +592,6 @@ const handleDeletePuestoClick = () => {
       selectedMainOption,
       nombreEmpresa: empresaSeleccionada,
       selectionList,
-      
     };
 
     try {
@@ -603,7 +603,13 @@ const handleDeletePuestoClick = () => {
       alert("Tabla guardada con éxito en Firestore.");
 
       // Actualizar el resumen correspondiente si es necesario (este bloque se mantiene igual)
-      const resumenRef = doc(db, "resumen_17", empresaSeleccionada, "areas", areaSeleccionada);
+      const resumenRef = doc(
+        db,
+        "resumen_17",
+        empresaSeleccionada,
+        "areas",
+        areaSeleccionada,
+      );
       const resumenSnapshot = await getDoc(resumenRef);
 
       let newResumenData = {
@@ -631,11 +637,7 @@ const handleDeletePuestoClick = () => {
       };
 
       // AGREGA directamente el nuevo puesto
-newResumenData.puestos = [
-  ...newResumenData.puestos,
-  puestoRiesgo
-];
-
+      newResumenData.puestos = [...newResumenData.puestos, puestoRiesgo];
 
       newResumenData.tolerable += puestoRiesgo.tolerable;
       newResumenData.moderado += puestoRiesgo.moderado;
@@ -664,14 +666,13 @@ newResumenData.puestos = [
       descripcionActividad2,
       selectedOptionEquipoUtilizado,
       selectedOptionProteccionSugerida,
-      selectedMainOption,           // Equipo principal
+      selectedMainOption, // Equipo principal
       tiempoExposicion,
       norma: "N-017",
       fecha,
       hora,
       nombreEmpresa: empresaSeleccionada, // Nombre de la empresa
     };
-    
 
     try {
       if (!tableId) {
@@ -690,7 +691,13 @@ newResumenData.puestos = [
       await updateDoc(docRef, updatedTable);
 
       // Actualizar el resumen (este bloque se mantiene igual)
-      const resumenRef = doc(db, "resumen_17", empresaSeleccionada, "areas", areaSeleccionada);
+      const resumenRef = doc(
+        db,
+        "resumen_17",
+        empresaSeleccionada,
+        "areas",
+        areaSeleccionada,
+      );
       const resumenSnapshot = await getDoc(resumenRef);
       let areaData = resumenSnapshot.exists()
         ? resumenSnapshot.data()
@@ -782,8 +789,7 @@ newResumenData.puestos = [
       localStorage.removeItem("tableToEdit");
       setSelectedMainOption(tableToEdit.selectedMainOption || "");
       setEmpresaSeleccionada(tableToEdit.nombreEmpresa || "");
-      setSelectionList(tableToEdit.selectionList || []);  // <--- Aquí
-
+      setSelectionList(tableToEdit.selectionList || []); // <--- Aquí
     }
   }, []);
 
@@ -804,7 +810,11 @@ newResumenData.puestos = [
           puestos: [], // Inicialmente sin puestos
         });
         // Actualiza el estado agregando el nuevo documento
-        const newArea = { id: docRef.id, nombre: nuevaArea.trim(), puestos: [] };
+        const newArea = {
+          id: docRef.id,
+          nombre: nuevaArea.trim(),
+          puestos: [],
+        };
         setAreas((prevAreas) => [...prevAreas, newArea]);
         setAreaSeleccionada(newArea.nombre);
       } catch (error) {
@@ -813,7 +823,6 @@ newResumenData.puestos = [
     }
   };
 
-  
   const [selectedMainOption, setSelectedMainOption] = useState(""); // Estado para la opción principal
   const [selectedSubOption, setSelectedSubOption] = useState(""); // Estado para la subcategoría seleccionada
   const [showSubDropdown, setShowSubDropdown] = useState(false); // Estado para mostrar u ocultar el segundo menú
@@ -1033,8 +1042,6 @@ newResumenData.puestos = [
 
   const [hideButtons] = useState(false);
 
-  
-
   document.addEventListener("DOMContentLoaded", () => {
     const tableContainer = document.querySelector(".table-container");
 
@@ -1055,8 +1062,8 @@ newResumenData.puestos = [
     tableContainer.addEventListener("touchmove", (e) => {
       // Si hay más de un dedo tocando la pantalla,
       // lo más probable es que sea un pinch-zoom y NO un drag horizontal.
-      if (e.touches.length > 1) return; 
-    
+      if (e.touches.length > 1) return;
+
       // Ahora sí, si solo hay 1 dedo, hacemos el drag
       if (!isDragging) return;
       e.preventDefault(); // Se evita scroll del body, pero no pinch
@@ -1064,7 +1071,6 @@ newResumenData.puestos = [
       const walk = (x - startX) * 2;
       tableContainer.scrollLeft = scrollLeft - walk;
     });
-    
   });
 
   const handleDeleteSelection = (indexToDelete) => {
@@ -1337,12 +1343,12 @@ newResumenData.puestos = [
       alert("Selecciona al menos un área para eliminar.");
       return;
     }
-  
+
     const confirmDelete = window.confirm(
-      `¿Seguro que deseas eliminar las siguientes áreas?\n${areasSeleccionadasParaBorrar.join(", ")}`
+      `¿Seguro que deseas eliminar las siguientes áreas?\n${areasSeleccionadasParaBorrar.join(", ")}`,
     );
     if (!confirmDelete) return;
-  
+
     // Para cada área seleccionada, buscamos su objeto (que debe tener su id) y la eliminamos en Firebase
     for (const areaName of areasSeleccionadasParaBorrar) {
       const areaToDelete = areas.find((area) => area.nombre === areaName);
@@ -1350,7 +1356,7 @@ newResumenData.puestos = [
         await deleteAreaFromFirebase(areaToDelete.id);
       }
     }
-  
+
     // Volvemos a cargar las áreas desde Firebase para actualizar el estado
     try {
       const querySnapshot = await getDocs(collection(db, "areas"));
@@ -1373,134 +1379,138 @@ newResumenData.puestos = [
     setIsAreaModalOpen(false);
   };
 
-
   const risk = calculateRisk();
 
-
   // Estados para el modal y selección de empresas a borrar
-const [isEmpresaModalOpen, setIsEmpresaModalOpen] = useState(false);
-const [empresasSeleccionadasParaBorrar, setEmpresasSeleccionadasParaBorrar] = useState([]);
-const STORAGE_KEY_EMPRESAS = "empresasList";
-const [empresas, setEmpresas] = useState(() => {
-  const savedEmpresas = localStorage.getItem(STORAGE_KEY_EMPRESAS);
-  return savedEmpresas ? JSON.parse(savedEmpresas) : ["Maxion", "Safran", "Soisa", "Bafar"];
-});
+  const [isEmpresaModalOpen, setIsEmpresaModalOpen] = useState(false);
+  const [empresasSeleccionadasParaBorrar, setEmpresasSeleccionadasParaBorrar] =
+    useState([]);
+  const STORAGE_KEY_EMPRESAS = "empresasList";
+  const [empresas, setEmpresas] = useState(() => {
+    const savedEmpresas = localStorage.getItem(STORAGE_KEY_EMPRESAS);
+    return savedEmpresas
+      ? JSON.parse(savedEmpresas)
+      : ["Maxion", "Safran", "Soisa", "Bafar"];
+  });
 
-useEffect(() => {
-  localStorage.setItem(STORAGE_KEY_EMPRESAS, JSON.stringify(empresas));
-}, [empresas]);
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY_EMPRESAS, JSON.stringify(empresas));
+  }, [empresas]);
 
-
-// Función para abrir el modal
-const openEmpresaModal = () => {
-  setIsEmpresaModalOpen(true);
-};
-
-// Función para cerrar el modal
-const closeEmpresaModal = () => {
-  setIsEmpresaModalOpen(false);
-  setEmpresasSeleccionadasParaBorrar([]);
-};
-
-// Manejo del cambio en la selección de checkbox
-const handleEmpresaSelectionChange = (event) => {
-  const value = event.target.value;
-  setEmpresasSeleccionadasParaBorrar((prev) =>
-    prev.includes(value)
-      ? prev.filter((empresa) => empresa !== value)
-      : [...prev, value]
-  );
-};
-
-// Función para borrar las empresas seleccionadas
-const handleDeleteSelectedEmpresas = () => {
-  if (empresasSeleccionadasParaBorrar.length === 0) {
-    alert("Seleccione al menos una empresa para borrar.");
-    return;
-  }
-  const confirmDelete = window.confirm(
-    `¿Seguro que deseas eliminar las siguientes empresas?\n${empresasSeleccionadasParaBorrar.join(
-      ", "
-    )}`
-  );
-  if (confirmDelete) {
-    setEmpresas(empresas.filter((empresa) => !empresasSeleccionadasParaBorrar.includes(empresa)));
-    // Si la empresa borrada era la seleccionada, reiniciamos el valor
-    if (empresasSeleccionadasParaBorrar.includes(empresaSeleccionada)) {
-      setEmpresaSeleccionada("");
-    }
-    closeEmpresaModal();
-  }
-};
-
-const handleAddEmpresa = async () => {
-  const nuevaEmpresa = prompt("Ingrese el nombre de la nueva empresa:");
-  if (nuevaEmpresa && !empresas.includes(nuevaEmpresa)) {
-    try {
-      // Agrega un nuevo documento a la colección Empresas_17 con el campo "nombre"
-      await addDoc(collection(db, "Empresas_17"), { nombre: nuevaEmpresa });
-      // Actualiza el estado para incluir la nueva empresa
-      setEmpresas(prev => [...prev, nuevaEmpresa]);
-    } catch (error) {
-      console.error("Error al agregar la nueva empresa:", error);
-    }
-  }
-};
-
-
-// Dentro de tu componente:
-useEffect(() => {
-  const loadCompanies = async () => {
-    try {
-      const companiesRef = collection(db, "Empresas_17");
-      const querySnapshot = await getDocs(companiesRef);
-      // Extraemos el campo "nombre" de cada documento
-      const companiesList = querySnapshot.docs.map(doc => doc.data().nombre);
-      setEmpresas(companiesList);
-    } catch (error) {
-      console.error("Error al cargar empresas desde Firebase:", error);
-    }
+  // Función para abrir el modal
+  const openEmpresaModal = () => {
+    setIsEmpresaModalOpen(true);
   };
 
-  loadCompanies();
-}, []);
+  // Función para cerrar el modal
+  const closeEmpresaModal = () => {
+    setIsEmpresaModalOpen(false);
+    setEmpresasSeleccionadasParaBorrar([]);
+  };
 
- // Cargar áreas reales desde Firebase
- useEffect(() => {
-  const fetchAreas = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, "areas"));
-      const areasData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setAreas(areasData);
-      if (areasData.length > 0) {
-        setAreaSeleccionada(areasData[0].nombre);
-        setPuestos(areasData[0].puestos || []);
+  // Manejo del cambio en la selección de checkbox
+  const handleEmpresaSelectionChange = (event) => {
+    const value = event.target.value;
+    setEmpresasSeleccionadasParaBorrar((prev) =>
+      prev.includes(value)
+        ? prev.filter((empresa) => empresa !== value)
+        : [...prev, value],
+    );
+  };
+
+  // Función para borrar las empresas seleccionadas
+  const handleDeleteSelectedEmpresas = () => {
+    if (empresasSeleccionadasParaBorrar.length === 0) {
+      alert("Seleccione al menos una empresa para borrar.");
+      return;
+    }
+    const confirmDelete = window.confirm(
+      `¿Seguro que deseas eliminar las siguientes empresas?\n${empresasSeleccionadasParaBorrar.join(
+        ", ",
+      )}`,
+    );
+    if (confirmDelete) {
+      setEmpresas(
+        empresas.filter(
+          (empresa) => !empresasSeleccionadasParaBorrar.includes(empresa),
+        ),
+      );
+      // Si la empresa borrada era la seleccionada, reiniciamos el valor
+      if (empresasSeleccionadasParaBorrar.includes(empresaSeleccionada)) {
+        setEmpresaSeleccionada("");
       }
-    } catch (error) {
-      console.error("Error al cargar áreas desde Firebase:", error);
+      closeEmpresaModal();
     }
   };
-  fetchAreas();
-}, []);
 
-const deleteAreaFromFirebase = async (areaId) => {
-  try {
-    await deleteDoc(doc(db, "areas", areaId));
-    console.log("Área eliminada de Firebase");
-  } catch (error) {
-    console.error("Error eliminando área en Firebase:", error);
-  }
-};
+  const handleAddEmpresa = async () => {
+    const nuevaEmpresa = prompt("Ingrese el nombre de la nueva empresa:");
+    if (nuevaEmpresa && !empresas.includes(nuevaEmpresa)) {
+      try {
+        // Agrega un nuevo documento a la colección Empresas_17 con el campo "nombre"
+        await addDoc(collection(db, "Empresas_17"), { nombre: nuevaEmpresa });
+        // Actualiza el estado para incluir la nueva empresa
+        setEmpresas((prev) => [...prev, nuevaEmpresa]);
+      } catch (error) {
+        console.error("Error al agregar la nueva empresa:", error);
+      }
+    }
+  };
+
+  // Dentro de tu componente:
+  useEffect(() => {
+    const loadCompanies = async () => {
+      try {
+        const companiesRef = collection(db, "Empresas_17");
+        const querySnapshot = await getDocs(companiesRef);
+        // Extraemos el campo "nombre" de cada documento
+        const companiesList = querySnapshot.docs.map(
+          (doc) => doc.data().nombre,
+        );
+        setEmpresas(companiesList);
+      } catch (error) {
+        console.error("Error al cargar empresas desde Firebase:", error);
+      }
+    };
+
+    loadCompanies();
+  }, []);
+
+  // Cargar áreas reales desde Firebase
+  useEffect(() => {
+    const fetchAreas = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "areas"));
+        const areasData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setAreas(areasData);
+        if (areasData.length > 0) {
+          setAreaSeleccionada(areasData[0].nombre);
+          setPuestos(areasData[0].puestos || []);
+        }
+      } catch (error) {
+        console.error("Error al cargar áreas desde Firebase:", error);
+      }
+    };
+    fetchAreas();
+  }, []);
+
+  const deleteAreaFromFirebase = async (areaId) => {
+    try {
+      await deleteDoc(doc(db, "areas", areaId));
+      console.log("Área eliminada de Firebase");
+    } catch (error) {
+      console.error("Error eliminando área en Firebase:", error);
+    }
+  };
 
   return (
     <div class="main-table">
       <table
         class="custom-table"
         className="table-container"
-        
         style={{ backgroundColor: "white" }}
       >
         <thead>
@@ -1757,9 +1767,12 @@ const deleteAreaFromFirebase = async (areaId) => {
               </div>
               {!hideButtons && (
                 <>
-                  <button className="btn-agregar" onClick={handleAddPuestoClick}>
-                Agregar
-              </button>
+                  <button
+                    className="btn-agregar"
+                    onClick={handleAddPuestoClick}
+                  >
+                    Agregar
+                  </button>
                   <button
                     className="btn-borrar"
                     onClick={handleDeletePuestoClick}
@@ -1935,45 +1948,47 @@ const deleteAreaFromFirebase = async (areaId) => {
                 <tbody>
                   {/* Fila de Empresa */}
                   <tr>
-  <td className="label-cell">Empresa:</td>
-  <td className="input-cell" colSpan="2">
-    <select
-      id="empresa"
-      value={empresaSeleccionada}
-      onChange={(e) => setEmpresaSeleccionada(e.target.value)}
-      className="large-text-dropdown"
-    >
-      <option value="">Seleccione una empresa</option>
-      {empresas.map((empresa, index) => (
-        <option key={index} value={empresa}>
-          {empresa}
-        </option>
-      ))}
-    </select>
-  </td>
-</tr>
-
+                    <td className="label-cell">Empresa:</td>
+                    <td className="input-cell" colSpan="2">
+                      <select
+                        id="empresa"
+                        value={empresaSeleccionada}
+                        onChange={(e) => setEmpresaSeleccionada(e.target.value)}
+                        className="large-text-dropdown"
+                      >
+                        <option value="">Seleccione una empresa</option>
+                        {empresas.map((empresa, index) => (
+                          <option key={index} value={empresa}>
+                            {empresa}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                  </tr>
 
                   {/* Fila de Área */}
-          <tr>
-            <td className="label-cell">Área:</td>
-            <td className="input-cell">
-              <div className="cell-container">
-              <select id="area" value={areaSeleccionada} onChange={handleAreaChange}>
-        {areas.length > 0 ? (
-          areas.map((area) => (
-            <option key={area.id} value={area.nombre}>
-              {area.nombre}
-            </option>
-          ))
-        ) : (
-          <option value="">Cargando áreas...</option>
-        )}
-      </select>
-              </div>
-            </td>
-          </tr>
-
+                  <tr>
+                    <td className="label-cell">Área:</td>
+                    <td className="input-cell">
+                      <div className="cell-container">
+                        <select
+                          id="area"
+                          value={areaSeleccionada}
+                          onChange={handleAreaChange}
+                        >
+                          {areas.length > 0 ? (
+                            areas.map((area) => (
+                              <option key={area.id} value={area.nombre}>
+                                {area.nombre}
+                              </option>
+                            ))
+                          ) : (
+                            <option value="">Cargando áreas...</option>
+                          )}
+                        </select>
+                      </div>
+                    </td>
+                  </tr>
 
                   {/* Resto de tu tabla (modal de borrar áreas, fecha de inspección, etc.) */}
                   <tr>
@@ -2030,39 +2045,44 @@ const deleteAreaFromFirebase = async (areaId) => {
             </td>
 
             {/* Modal para borrar empresas */}
-<Modal
-  isOpen={isEmpresaModalOpen}
-  onRequestClose={closeEmpresaModal}
-  className="modal-container"
->
-  <h2>Eliminar Empresas</h2>
-  <p>Selecciona las empresas que deseas eliminar:</p>
-  <div className="empresa-selection-list">
-    {empresas.length > 0 ? (
-      empresas.map((empresa) => (
-        <label key={empresa} className="checkbox-label">
-          <input
-            type="checkbox"
-            value={empresa}
-            checked={empresasSeleccionadasParaBorrar.includes(empresa)}
-            onChange={handleEmpresaSelectionChange}
-          />
-          {empresa}
-        </label>
-      ))
-    ) : (
-      <p>No hay empresas disponibles.</p>
-    )}
-  </div>
-  <div className="modal-buttons">
-    <button onClick={handleDeleteSelectedEmpresas} className="confirm-button">
-      Confirmar Eliminación
-    </button>
-    <button onClick={closeEmpresaModal} className="cancel-button">
-      Cancelar
-    </button>
-  </div>
-</Modal>
+            <Modal
+              isOpen={isEmpresaModalOpen}
+              onRequestClose={closeEmpresaModal}
+              className="modal-container"
+            >
+              <h2>Eliminar Empresas</h2>
+              <p>Selecciona las empresas que deseas eliminar:</p>
+              <div className="empresa-selection-list">
+                {empresas.length > 0 ? (
+                  empresas.map((empresa) => (
+                    <label key={empresa} className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        value={empresa}
+                        checked={empresasSeleccionadasParaBorrar.includes(
+                          empresa,
+                        )}
+                        onChange={handleEmpresaSelectionChange}
+                      />
+                      {empresa}
+                    </label>
+                  ))
+                ) : (
+                  <p>No hay empresas disponibles.</p>
+                )}
+              </div>
+              <div className="modal-buttons">
+                <button
+                  onClick={handleDeleteSelectedEmpresas}
+                  className="confirm-button"
+                >
+                  Confirmar Eliminación
+                </button>
+                <button onClick={closeEmpresaModal} className="cancel-button">
+                  Cancelar
+                </button>
+              </div>
+            </Modal>
 
             <Modal
               isOpen={isImageModalOpen}
@@ -2471,26 +2491,25 @@ const deleteAreaFromFirebase = async (areaId) => {
         </tbody>
       </table>
       <div style={{ display: "flex", alignItems: "center" }}>
-  {/* Botones que se mantienen a la izquierda */}
-  <div>
-    <button onClick={downloadImage} className="download-button">
-      Descargar PDF
-    </button>
-    <button onClick={openFolderModal} className="save-button">
-      Guardar Tabla
-    </button>
-    <button onClick={handleReset} className="reset-button">
-      Reiniciar Tabla
-    </button>
-  </div>
+        {/* Botones que se mantienen a la izquierda */}
+        <div>
+          <button onClick={downloadImage} className="download-button">
+            Descargar PDF
+          </button>
+          <button onClick={openFolderModal} className="save-button">
+            Guardar Tabla
+          </button>
+          <button onClick={handleReset} className="reset-button">
+            Reiniciar Tabla
+          </button>
+        </div>
 
-  {/* Botones que se moverán a la derecha */}
-  <div style={{ marginLeft: "auto" }}>
-    <button onClick={handleAddEmpresa}>Agregar Empresa</button>
-    <button onClick={openEmpresaModal}>Borrar Empresa</button>
-  </div>
-</div>
-
+        {/* Botones que se moverán a la derecha */}
+        <div style={{ marginLeft: "auto" }}>
+          <button onClick={handleAddEmpresa}>Agregar Empresa</button>
+          <button onClick={openEmpresaModal}>Borrar Empresa</button>
+        </div>
+      </div>
     </div>
   );
 };
