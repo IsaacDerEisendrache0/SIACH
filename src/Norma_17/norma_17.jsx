@@ -10,6 +10,7 @@ import {
   doc,
   getDoc,
   setDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebase"; // Importar la configuración de Firebase
 import logo from "../logos/logo.png";
@@ -20,6 +21,7 @@ import { getAuth } from "firebase/auth";
 const RiskAssessmentTable = () => {
   const [areas, setAreas] = useState([
     {
+      id: "dummy-id-1", // Este id se reemplazará con el real de Firebase
       nombre: "Producción",
       puestos: [
         "Ayudante de empaque y envase",
@@ -48,6 +50,7 @@ const RiskAssessmentTable = () => {
       ],
     },
     {
+      id: "dummy-id-2",
       nombre: "Operación",
       puestos: [
         "Ayudante de almacén",
@@ -58,6 +61,7 @@ const RiskAssessmentTable = () => {
       ],
     },
     {
+      id: "dummy-id-3",
       nombre: "Envase y empaque",
       puestos: [
         "Envasador",
@@ -68,10 +72,12 @@ const RiskAssessmentTable = () => {
       ],
     },
     {
+      id: "dummy-id-4",
       nombre: "Ventas",
       puestos: ["Estibador", "Repartidor", "Chofer"],
     },
   ]);
+
 
   const [isEditing, setIsEditing] = useState(false); // Estado para modo de edición
 
@@ -210,9 +216,9 @@ const RiskAssessmentTable = () => {
   const STORAGE_KEY = "riskAssessmentData_v1";
 
   // Coloca los hooks dentro del componente funcional
-  const [areaSeleccionada, setAreaSeleccionada] = useState(areas[0].nombre);
+  const [areaSeleccionada, setAreaSeleccionada] = useState("");
   const [puestoSeleccionado, setPuestoSeleccionado] = useState("");
-  const [puestos, setPuestos] = useState(areas[0].puestos);
+  const [puestos, setPuestos] = useState([]); // Se poblará con el campo "puestos" del área seleccionada
   const [descripcionActividad1, setDescripcionActividad1] = useState("");
   const [descripcionActividad2, setDescripcionActividad2] = useState("");
 
@@ -221,16 +227,16 @@ const RiskAssessmentTable = () => {
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
   const [fechaActual, setFechaActual] = useState("");
 
+  // Al cambiar de área, actualizamos el estado local (ya sin localStorage)
   const handleAreaChange = (e) => {
     const selectedName = e.target.value;
     const selectedArea = areas.find((area) => area.nombre === selectedName);
-    
     if (selectedArea) {
       setAreaSeleccionada(selectedArea.nombre);
-      setPuestos(selectedArea.puestos);
-      setPuestoSeleccionado("");
+      setPuestos(selectedArea.puestos || []);
     } else {
       console.error("No se encontró el área seleccionada:", selectedName);
+      setPuestos([]);
     }
   };
   
@@ -238,6 +244,8 @@ const RiskAssessmentTable = () => {
   const handlePuestoChange = (e) => {
     setPuestoSeleccionado(e.target.value);
   };
+
+
 
   const handleCheckboxChange = (event) => {
     const hazard = event.target.name;
@@ -439,9 +447,21 @@ const RiskAssessmentTable = () => {
       });
   };
 
-  const handleDeletePuestoClick = () => {
-    setIsModalOpen(true); // Abrir el modal cuando se presiona "Borrar"
+  const handleDeleteSelectedPuestos = async () => {
+    if (puestosSeleccionadosParaBorrar.length === 0) {
+      alert("Selecciona al menos un puesto para borrar.");
+      return;
+    }
+    const nuevosPuestos = puestos.filter(
+      (puesto) => !puestosSeleccionadosParaBorrar.includes(puesto)
+    );
+    setPuestos(nuevosPuestos);
+    await updatePuestosInFirebase(nuevosPuestos);
+    setPuestosSeleccionadosParaBorrar([]);
+    setIsModalOpen(false);
   };
+  
+  
 
   const handleModalClose = () => {
     setIsModalOpen(false); // Cerrar el modal
@@ -464,78 +484,58 @@ const RiskAssessmentTable = () => {
   };
 
   useEffect(() => {
-    // Creamos una clave específica para el área seleccionada
     const areaSeleccionadaKey = `puestos_${areaSeleccionada}`;
-
     const savedPuestos = JSON.parse(localStorage.getItem(areaSeleccionadaKey));
-
-    // Verificamos si los datos en localStorage son válidos
     if (
       savedPuestos &&
       savedPuestos.length > 0 &&
       savedPuestos.includes("Puesto 1") &&
       savedPuestos.includes("Puesto 2")
     ) {
-      // Si los valores guardados son incorrectos, los eliminamos
       localStorage.removeItem(areaSeleccionadaKey);
-      setPuestos(
-        areas.find((area) => area.nombre === areaSeleccionada).puestos,
-      ); // Inicializa con los puestos del área seleccionada
+      setPuestos(areas.find((area) => area.nombre === areaSeleccionada)?.puestos || []);
     } else if (savedPuestos && savedPuestos.length > 0) {
-      setPuestos(savedPuestos); // Si los datos son válidos, los cargamos
+      setPuestos(savedPuestos);
     } else {
-      setPuestos(
-        areas.find((area) => area.nombre === areaSeleccionada).puestos,
-      ); // Inicializa con los puestos del área seleccionada
-      localStorage.setItem(
-        areaSeleccionadaKey,
-        JSON.stringify(
-          areas.find((area) => area.nombre === areaSeleccionada).puestos,
-        ),
-      ); // Guardamos los valores iniciales en localStorage
+      const puestosIniciales = areas.find((area) => area.nombre === areaSeleccionada)?.puestos || [];
+      setPuestos(puestosIniciales);
+      localStorage.setItem(areaSeleccionadaKey, JSON.stringify(puestosIniciales));
     }
-  }, [areaSeleccionada]);
+  }, [areaSeleccionada, areas]);
+  
 
-  // Función para agregar un nuevo puesto
-  const handleAddPuestoClick = () => {
-    const nuevoPuesto = prompt("Ingrese el nuevo puesto:");
-    if (nuevoPuesto && nuevoPuesto.trim() !== "") {
-      const updatedPuestos = [...puestos, nuevoPuesto.trim()];
-      setPuestos(updatedPuestos); // Actualizamos el estado con el nuevo puesto
 
-      // Guardamos los puestos actualizados en localStorage para el área seleccionada
-      const areaSeleccionadaKey = `puestos_${areaSeleccionada}`;
-      localStorage.setItem(areaSeleccionadaKey, JSON.stringify(updatedPuestos));
+ // Función para agregar un nuevo puesto y guardarlo en Firebase
+ const handleAddPuestoClick = async () => {
+  const nuevoPuesto = prompt("Ingrese el nuevo puesto:");
+  if (nuevoPuesto && nuevoPuesto.trim() !== "") {
+    const newPuesto = nuevoPuesto.trim();
+    const updatedPuestos = [...puestos, newPuesto];
+    setPuestos(updatedPuestos);
+    await updatePuestosInFirebase(updatedPuestos);
+    setPuestoSeleccionado("");
+  }
+};
 
-      setPuestoSeleccionado(""); // Limpiar la selección del dropdown después de agregar
+// Función auxiliar: actualiza los puestos del área seleccionada en Firebase
+const updatePuestosInFirebase = async (newPuestos) => {
+  const selectedAreaObj = areas.find((area) => area.nombre === areaSeleccionada);
+  if (selectedAreaObj && selectedAreaObj.id) {
+    try {
+      await updateDoc(doc(db, "areas", selectedAreaObj.id), { puestos: newPuestos });
+      console.log("Puestos actualizados en Firebase");
+    } catch (error) {
+      console.error("Error actualizando puestos en Firebase:", error);
     }
+  } else {
+    console.error("No se encontró el área en Firebase para actualizar puestos.");
+  }
+};
 
-    if (puestoSeleccionado && !puestos.includes(puestoSeleccionado)) {
-      const updatedPuestos = [...puestos, puestoSeleccionado];
-      setPuestos(updatedPuestos); // Agregar el puesto seleccionado al array
 
-      // Guardamos los puestos actualizados en localStorage para el área seleccionada
-      const areaSeleccionadaKey = `puestos_${areaSeleccionada}`;
-      localStorage.setItem(areaSeleccionadaKey, JSON.stringify(updatedPuestos));
-
-      setPuestoSeleccionado(""); // Limpiar la selección del dropdown después de agregar
-    }
-  };
-
-  // Función para borrar los puestos seleccionados
-  const handleDeleteSelectedPuestos = () => {
-    const nuevosPuestos = puestos.filter(
-      (puesto) => !puestosSeleccionadosParaBorrar.includes(puesto),
-    );
-    setPuestos(nuevosPuestos); // Actualiza los puestos eliminando los seleccionados
-
-    // Guardamos los puestos actualizados en localStorage para el área seleccionada
-    const areaSeleccionadaKey = `puestos_${areaSeleccionada}`;
-    localStorage.setItem(areaSeleccionadaKey, JSON.stringify(nuevosPuestos));
-
-    setPuestosSeleccionadosParaBorrar([]); // Limpiar la selección
-    setIsModalOpen(false); // Cerrar el modal
-  };
+const handleDeletePuestoClick = () => {
+  setIsModalOpen(true);
+};
 
   const handleImageSelect = (image) => {
     // Asociar la imagen seleccionada con el peligro actual
@@ -793,29 +793,27 @@ newResumenData.puestos = [
     );
   };
 
-  const handleAddAreaClick = () => {
+  // Función para agregar un área nueva a Firebase (en lugar de usar localStorage)
+  const handleAddAreaClick = async () => {
     const nuevaArea = prompt("Ingrese el nombre de la nueva área:");
     if (nuevaArea && nuevaArea.trim() !== "") {
-      const updatedAreas = [
-        ...areas,
-        { nombre: nuevaArea.trim(), puestos: [] },
-      ];
-      setAreas(updatedAreas);
-
-      // Guardamos el área en localStorage
-      localStorage.setItem("areas", JSON.stringify(updatedAreas));
-      setAreaSeleccionada(nuevaArea.trim()); // Cambia a la nueva área
+      try {
+        // Agrega la nueva área a la colección "areas"
+        const docRef = await addDoc(collection(db, "areas"), {
+          nombre: nuevaArea.trim(),
+          puestos: [], // Inicialmente sin puestos
+        });
+        // Actualiza el estado agregando el nuevo documento
+        const newArea = { id: docRef.id, nombre: nuevaArea.trim(), puestos: [] };
+        setAreas((prevAreas) => [...prevAreas, newArea]);
+        setAreaSeleccionada(newArea.nombre);
+      } catch (error) {
+        console.error("Error al agregar el área a Firebase:", error);
+      }
     }
   };
 
-  useEffect(() => {
-    // Intenta cargar las áreas desde localStorage
-    const savedAreas = JSON.parse(localStorage.getItem("areas"));
-    if (savedAreas && savedAreas.length > 0) {
-      setAreas(savedAreas); // Si existen áreas guardadas, las carga en el estado
-    }
-  }, []);
-
+  
   const [selectedMainOption, setSelectedMainOption] = useState(""); // Estado para la opción principal
   const [selectedSubOption, setSelectedSubOption] = useState(""); // Estado para la subcategoría seleccionada
   const [showSubDropdown, setShowSubDropdown] = useState(false); // Estado para mostrar u ocultar el segundo menú
@@ -1334,27 +1332,47 @@ newResumenData.puestos = [
     );
   };
 
-  const handleDeleteSelectedAreas = () => {
+  const handleDeleteSelectedAreas = async () => {
     if (areasSeleccionadasParaBorrar.length === 0) {
       alert("Selecciona al menos un área para eliminar.");
       return;
     }
-
+  
     const confirmDelete = window.confirm(
-      `¿Seguro que deseas eliminar las siguientes áreas?\n${areasSeleccionadasParaBorrar.join(", ")}`,
+      `¿Seguro que deseas eliminar las siguientes áreas?\n${areasSeleccionadasParaBorrar.join(", ")}`
     );
     if (!confirmDelete) return;
-
-    const updatedAreas = areas.filter(
-      (area) => !areasSeleccionadasParaBorrar.includes(area.nombre),
-    );
-    setAreas(updatedAreas);
-    localStorage.setItem("areas", JSON.stringify(updatedAreas));
-
+  
+    // Para cada área seleccionada, buscamos su objeto (que debe tener su id) y la eliminamos en Firebase
+    for (const areaName of areasSeleccionadasParaBorrar) {
+      const areaToDelete = areas.find((area) => area.nombre === areaName);
+      if (areaToDelete && areaToDelete.id) {
+        await deleteAreaFromFirebase(areaToDelete.id);
+      }
+    }
+  
+    // Volvemos a cargar las áreas desde Firebase para actualizar el estado
+    try {
+      const querySnapshot = await getDocs(collection(db, "areas"));
+      const areasData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setAreas(areasData);
+      if (areasData.length > 0) {
+        setAreaSeleccionada(areasData[0].nombre);
+        setPuestos(areasData[0].puestos || []);
+      } else {
+        setAreaSeleccionada("");
+        setPuestos([]);
+      }
+    } catch (error) {
+      console.error("Error al recargar áreas desde Firebase:", error);
+    }
     setAreasSeleccionadasParaBorrar([]);
     setIsAreaModalOpen(false);
-    alert("Áreas eliminadas con éxito.");
   };
+
 
   const risk = calculateRisk();
 
@@ -1447,7 +1465,35 @@ useEffect(() => {
   loadCompanies();
 }, []);
 
+ // Cargar áreas reales desde Firebase
+ useEffect(() => {
+  const fetchAreas = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "areas"));
+      const areasData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setAreas(areasData);
+      if (areasData.length > 0) {
+        setAreaSeleccionada(areasData[0].nombre);
+        setPuestos(areasData[0].puestos || []);
+      }
+    } catch (error) {
+      console.error("Error al cargar áreas desde Firebase:", error);
+    }
+  };
+  fetchAreas();
+}, []);
 
+const deleteAreaFromFirebase = async (areaId) => {
+  try {
+    await deleteDoc(doc(db, "areas", areaId));
+    console.log("Área eliminada de Firebase");
+  } catch (error) {
+    console.error("Error eliminando área en Firebase:", error);
+  }
+};
 
   return (
     <div class="main-table">
@@ -1711,12 +1757,9 @@ useEffect(() => {
               </div>
               {!hideButtons && (
                 <>
-                  <button
-                    className="btn-agregar"
-                    onClick={handleAddPuestoClick}
-                  >
-                    Agregar
-                  </button>
+                  <button className="btn-agregar" onClick={handleAddPuestoClick}>
+                Agregar
+              </button>
                   <button
                     className="btn-borrar"
                     onClick={handleDeletePuestoClick}
@@ -1912,25 +1955,24 @@ useEffect(() => {
 
 
                   {/* Fila de Área */}
-                  <tr>
-  <td className="label-cell">Área:</td>
-  <td className="input-cell">
-    <div className="cell-container">
-      <select
-        id="area"
-        value={areaSeleccionada}
-        onChange={handleAreaChange}
-        className="large-text-dropdown"
-      >
-        {areas.map((area, index) => (
-          <option key={index} value={area.nombre}>
-            {area.nombre}
-          </option>
-        ))}
+          <tr>
+            <td className="label-cell">Área:</td>
+            <td className="input-cell">
+              <div className="cell-container">
+              <select id="area" value={areaSeleccionada} onChange={handleAreaChange}>
+        {areas.length > 0 ? (
+          areas.map((area) => (
+            <option key={area.id} value={area.nombre}>
+              {area.nombre}
+            </option>
+          ))
+        ) : (
+          <option value="">Cargando áreas...</option>
+        )}
       </select>
-    </div>
-  </td>
-</tr>
+              </div>
+            </td>
+          </tr>
 
 
                   {/* Resto de tu tabla (modal de borrar áreas, fecha de inspección, etc.) */}

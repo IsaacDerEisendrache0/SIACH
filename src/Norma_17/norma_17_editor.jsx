@@ -441,8 +441,9 @@ const RiskAssessmentTableEditor = () => {
   };
 
   const handleDeletePuestoClick = () => {
-    setIsModalOpen(true); // Abrir el modal cuando se presiona "Borrar"
+    setIsModalOpen(true);
   };
+  
 
   const handleModalClose = () => {
     setIsModalOpen(false); // Cerrar el modal
