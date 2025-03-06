@@ -223,15 +223,17 @@ const RiskAssessmentTable = () => {
 
   const handleAreaChange = (e) => {
     const selectedName = e.target.value;
-    // Aquí siempre habrá un "selectedArea" porque el <select>
-    // solo tiene options que coinciden con `areas`.
     const selectedArea = areas.find((area) => area.nombre === selectedName);
-
-    // Como no hay opción inválida, no tememos undefined
-    setAreaSeleccionada(selectedArea.nombre);
-    setPuestos(selectedArea.puestos);
-    setPuestoSeleccionado("");
+    
+    if (selectedArea) {
+      setAreaSeleccionada(selectedArea.nombre);
+      setPuestos(selectedArea.puestos);
+      setPuestoSeleccionado("");
+    } else {
+      console.error("No se encontró el área seleccionada:", selectedName);
+    }
   };
+  
 
   const handlePuestoChange = (e) => {
     setPuestoSeleccionado(e.target.value);
@@ -1413,12 +1415,38 @@ const handleDeleteSelectedEmpresas = () => {
   }
 };
 
-const handleAddEmpresa = () => {
+const handleAddEmpresa = async () => {
   const nuevaEmpresa = prompt("Ingrese el nombre de la nueva empresa:");
   if (nuevaEmpresa && !empresas.includes(nuevaEmpresa)) {
-    setEmpresas([...empresas, nuevaEmpresa]);
+    try {
+      // Agrega un nuevo documento a la colección Empresas_17 con el campo "nombre"
+      await addDoc(collection(db, "Empresas_17"), { nombre: nuevaEmpresa });
+      // Actualiza el estado para incluir la nueva empresa
+      setEmpresas(prev => [...prev, nuevaEmpresa]);
+    } catch (error) {
+      console.error("Error al agregar la nueva empresa:", error);
+    }
   }
 };
+
+
+// Dentro de tu componente:
+useEffect(() => {
+  const loadCompanies = async () => {
+    try {
+      const companiesRef = collection(db, "Empresas_17");
+      const querySnapshot = await getDocs(companiesRef);
+      // Extraemos el campo "nombre" de cada documento
+      const companiesList = querySnapshot.docs.map(doc => doc.data().nombre);
+      setEmpresas(companiesList);
+    } catch (error) {
+      console.error("Error al cargar empresas desde Firebase:", error);
+    }
+  };
+
+  loadCompanies();
+}, []);
+
 
 
   return (
@@ -1879,30 +1907,31 @@ const handleAddEmpresa = () => {
         </option>
       ))}
     </select>
-    
   </td>
 </tr>
 
+
                   {/* Fila de Área */}
                   <tr>
-                    <td className="label-cell">Área:</td>
-                    <td className="input-cell">
-                      <div className="cell-container">
-                        <select
-                          id="area"
-                          value={areaSeleccionada}
-                          onChange={handleAreaChange}
-                          className="large-text-dropdown"
-                        >
-                          {areas.map((area, index) => (
-                            <option key={index} value={area.nombre}>
-                              {area.nombre}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </td>
-                  </tr>
+  <td className="label-cell">Área:</td>
+  <td className="input-cell">
+    <div className="cell-container">
+      <select
+        id="area"
+        value={areaSeleccionada}
+        onChange={handleAreaChange}
+        className="large-text-dropdown"
+      >
+        {areas.map((area, index) => (
+          <option key={index} value={area.nombre}>
+            {area.nombre}
+          </option>
+        ))}
+      </select>
+    </div>
+  </td>
+</tr>
+
 
                   {/* Resto de tu tabla (modal de borrar áreas, fecha de inspección, etc.) */}
                   <tr>
