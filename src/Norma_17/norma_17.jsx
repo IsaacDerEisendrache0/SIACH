@@ -1506,6 +1506,8 @@ const RiskAssessmentTable = () => {
     }
   };
 
+  const riskColor = getRiskColor(risk);
+
   return (
     <div class="main-table">
       <table
@@ -2415,11 +2417,11 @@ const RiskAssessmentTable = () => {
                     </td>
 
                     <td
-                      className="blueberry-risk"
-                      style={{ backgroundColor: getRiskColor(calculateRisk()) }}
-                    >
-                      {calculateRisk().toFixed(2)}
-                    </td>
+    className={`blueberry-risk ${riskColor === 'yellow' ? 'yellow-bg' : ''}`}
+    style={{ backgroundColor: riskColor }}
+  >
+    {risk.toFixed(2)}
+  </td>
                   </tr>
                 </tbody>
               </table>
@@ -2431,61 +2433,53 @@ const RiskAssessmentTable = () => {
               </div>
 
               <table className="risk-magnitude-table">
-                <tbody>
-                  <tr>
-                    <td className="risk-label-cell">Magnitud del Riesgo:</td>
-                    <td
-                      className="risk-value-cell"
-                      style={{
-                        backgroundColor: getRiskColor(risk),
-                        color: "white",
-                      }}
-                    >
-                      {risk.toFixed(2)}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="risk-label-cell">Clasificación:</td>
-                    <td
-                      className="risk-classification-cell"
-                      style={{
-                        backgroundColor: getRiskColor(risk),
-                        color: "white",
-                      }}
-                    >
-                      {risk > 400
-                        ? "Muy Alto"
-                        : risk > 200
-                          ? "Alto"
-                          : risk > 70
-                            ? "Notable"
-                            : risk > 20
-                              ? "Moderado"
-                              : "Bajo o Aceptable"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="risk-label-cell">Acción:</td>
-                    <td
-                      className="risk-action-cell"
-                      style={{
-                        backgroundColor: getRiskColor(risk),
-                        color: "white",
-                      }}
-                    >
-                      {risk > 400
-                        ? "Detención inmediata"
-                        : risk > 200
-                          ? "Corrección inmediata"
-                          : risk > 70
-                            ? "Corrección urgente"
-                            : risk > 20
-                              ? "Requiere atención"
-                              : "Tolerable"}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+  <tbody>
+    <tr>
+      <td className="risk-label-cell">Magnitud del Riesgo:</td>
+      <td
+        className={`risk-value-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
+        style={{ backgroundColor: riskColor }}
+      >
+        {risk.toFixed(2)}
+      </td>
+    </tr>
+    <tr>
+      <td className="risk-label-cell">Clasificación:</td>
+      <td
+        className={`risk-classification-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
+        style={{ backgroundColor: riskColor }}
+      >
+        {risk > 400
+          ? "Muy Alto"
+          : risk > 200
+            ? "Alto"
+            : risk > 70
+              ? "Notable"
+              : risk > 20
+                ? "Moderado"
+                : "Bajo o Aceptable"}
+      </td>
+    </tr>
+    <tr>
+      <td className="risk-label-cell">Acción:</td>
+      <td
+        className={`risk-action-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
+        style={{ backgroundColor: riskColor }}
+      >
+        {risk > 400
+          ? "Detención inmediata"
+          : risk > 200
+            ? "Corrección inmediata"
+            : risk > 70
+              ? "Corrección urgente"
+              : risk > 20
+                ? "Requiere atención"
+                : "Tolerable"}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
             </td>
           </tr>
         </tbody>

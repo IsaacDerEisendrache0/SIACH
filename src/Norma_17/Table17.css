@@ -771,6 +771,8 @@ button {
   font-size: 20px; /* Aumenta el tamaño de los valores */
   font-weight: bold; /* Hace que los valores sean más llamativos */
   text-align: center !important; /* Centra el texto */
+  color: white; /* Color por defecto */
+
 }
 
 /* Ajustes para el título de la sección */
@@ -955,12 +957,17 @@ button {
 }
 
 .blueberry-risk {
-  font-size: 24px !important; /* Aumenta el tamaño del texto y evita sobrescrituras */
-  font-weight: bold; /* Hace que el texto sea prominente */
-  text-align: center; /* Centra el contenido en la celda */
-  color: white !important; /* Texto blanco para contraste */
-  background-color: inherit; /* El color de fondo dinámico se mantiene */
+  font-size: 24px !important;
+  font-weight: bold;
+  text-align: center;
+  color: white !important; /* Por defecto el texto es blanco */
+  background-color: inherit;
 }
+
+.yellow-bg {
+  color: black !important; /* Cuando el fondo es amarillo, el texto es negro */
+}
+
 
 .epp-container {
   padding: 0px;
