@@ -13,6 +13,7 @@ import SavedTables from "./Norma_17/SavedTables";
 import Resumen from "./ResumenTabla/resumen";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import "./dashboard.css";
+import "./App.css";
 import {
   FaRegFileAlt,
   FaRegChartBar,

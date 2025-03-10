@@ -1,15 +1,30 @@
 /* src/componentes/Login.css */
+
+/* Fondo general con un degradado y animación de aparición */
 .login-container {
   position: relative;
   overflow: hidden;
   height: 100vh;
-  display: flex; /* Usar flexbox para centrar */
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #74ebd5, #acb6e5);
+  animation: fadeInBackground 2s ease;
 }
 
+/* Animación para el fondo */
+@keyframes fadeInBackground {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Video de fondo centrado, con un ligero filtro para atenuarlo */
 .video-background {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   min-width: 100%;
@@ -18,10 +33,137 @@
   height: auto;
   z-index: -1;
   transform: translate(-50%, -50%);
+  filter: brightness(0.7);
+  opacity: 0.9;
 }
 
+/* Imagen decorativa (opcional) con animación pulse */
 .welder-image {
-  width: 100px; /* Ajusta el tamaño según tus necesidades */
+  width: 100px;
   height: auto;
   margin-bottom: 20px;
+  border-radius: 50%;
+  border: 2px solid #007bff;
+  animation: pulse 2s infinite;
 }
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Contenedor del formulario con fondo semitransparente, blur y animación slide */
+.form-signin {
+  width: 320px;
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px 40px;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  animation: slideDown 0.8s ease-out;
+  backdrop-filter: blur(5px);
+}
+
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Encabezado del formulario con tipografía moderna y espaciado */
+.form-signin h1 {
+  color: #007bff;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  letter-spacing: 1px;
+}
+
+/* Estilos para los inputs: sin bordes laterales, con transición en el borde inferior */
+.form-signin .form-control {
+  border: none;
+  border-bottom: 2px solid #007bff;
+  border-radius: 0;
+  box-shadow: none;
+  transition: border-color 0.3s ease;
+}
+
+.form-signin .form-control:focus {
+  border-bottom-color: #0056b3;
+}
+
+/* Botón de inicio de sesión con transición y efecto hover */
+.btn {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: #fff;
+  padding: 10px 0;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* Mensaje de error con animación shake para llamar la atención */
+.text-danger {
+  color: #dc3545;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Texto secundario centrado y con un tono gris suave */
+.text-muted {
+  font-size: 0.875em;
+  text-align: center;
+  margin-top: 20px;
+  color: #6c757d;
+}
+
+
+/* src/componentes/Login.css */
+.login-container {
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Utiliza variables CSS para la posición del degradado, con valores por defecto centrados */
+  background: radial-gradient(circle at var(--bg-x, 50%) var(--bg-y, 50%), #74ebd5, #acb6e5);
+  animation: fadeInBackground 2s ease;
+  transition: background 0.2s ease;
+}
+
+/* Resto de estilos... */
