@@ -395,11 +395,17 @@ const RiskAssessmentTable = () => {
     const nuevosPuestos = puestos.filter(
       (puesto) => !puestosSeleccionadosParaBorrar.includes(puesto),
     );
+  
     setPuestos(nuevosPuestos);
+    
+    // IMPORTANTE: Actualiza localStorage
+    updateLocalStoragePuestos(areaSeleccionada, nuevosPuestos);
+  
     await updatePuestosInFirebase(nuevosPuestos);
     setPuestosSeleccionadosParaBorrar([]);
     setIsModalOpen(false);
   };
+  
 
   const handleModalClose = () => {
     setIsModalOpen(false); // Cerrar el modal
@@ -432,7 +438,7 @@ const RiskAssessmentTable = () => {
     ) {
       localStorage.removeItem(areaSeleccionadaKey);
       setPuestos(
-        areas.find((area) => area.nombre === areaSeleccionada)?.puestos || [],
+        areas.find((area) => area.nombre === areaSeleccionada)?.puestos || []
       );
     } else if (savedPuestos && savedPuestos.length > 0) {
       setPuestos(savedPuestos);
@@ -440,13 +446,16 @@ const RiskAssessmentTable = () => {
       const puestosIniciales =
         areas.find((area) => area.nombre === areaSeleccionada)?.puestos || [];
       setPuestos(puestosIniciales);
-      localStorage.setItem(
-        areaSeleccionadaKey,
-        JSON.stringify(puestosIniciales),
-      );
+      localStorage.setItem(areaSeleccionadaKey, JSON.stringify(puestosIniciales));
     }
   }, [areaSeleccionada, areas]);
-
+  
+  const updateLocalStoragePuestos = (area, newPuestos) => {
+    const key = `puestos_${area}`;
+    localStorage.setItem(key, JSON.stringify(newPuestos));
+  };
+  
+  
   // Función para agregar un nuevo puesto y guardarlo en Firebase
   const handleAddPuestoClick = async () => {
     const nuevoPuesto = prompt("Ingrese el nuevo puesto:");
@@ -454,10 +463,12 @@ const RiskAssessmentTable = () => {
       const newPuesto = nuevoPuesto.trim();
       const updatedPuestos = [...puestos, newPuesto];
       setPuestos(updatedPuestos);
+      updateLocalStoragePuestos(updatedPuestos);
       await updatePuestosInFirebase(updatedPuestos);
       setPuestoSeleccionado("");
     }
   };
+  
 
   // Función auxiliar: actualiza los puestos del área seleccionada en Firebase
   const updatePuestosInFirebase = async (newPuestos) => {
@@ -1293,7 +1304,7 @@ const RiskAssessmentTable = () => {
     );
     if (!confirmDelete) return;
   
-    // Para cada área seleccionada, si está en Firebase, se elimina.
+    // Borrar cada área de Firebase
     for (const areaName of areasSeleccionadasParaBorrar) {
       const areaToDelete = areas.find((area) => area.nombre === areaName);
       if (areaToDelete && areaToDelete.id) {
@@ -1301,12 +1312,15 @@ const RiskAssessmentTable = () => {
       }
     }
   
-    // Vuelve a cargar las áreas de Firebase (si tienes definida la función fetchAreas)
-    // await fetchAreas();
+    // Actualiza el estado local eliminando las áreas borradas
+    setAreas(prevAreas =>
+      prevAreas.filter(area => !areasSeleccionadasParaBorrar.includes(area.nombre))
+    );
   
     setAreasSeleccionadasParaBorrar([]);
     setIsAreaModalOpen(false);
   };
+  
   
   
 
