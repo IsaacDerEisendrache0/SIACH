@@ -484,7 +484,7 @@ function Dashboard() {
               {tablasPorNorma[selectedNorma]}
             </div>
           ) : (
-            <div className="placeholder"></div>
+            <div></div>
           )}
         </main>
       </div>
