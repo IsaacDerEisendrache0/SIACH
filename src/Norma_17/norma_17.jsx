@@ -19,64 +19,8 @@ import safran from "../logos/safran.jpeg";
 import { getAuth } from "firebase/auth";
 
 const RiskAssessmentTable = () => {
-  const [areas, setAreas] = useState([
-    {
-      id: "dummy-id-1", // Este id se reemplazará con el real de Firebase
-      nombre: "Producción",
-      puestos: [
-        "Ayudante de empaque y envase",
-        "Ayudante de limpieza",
-        "Operador de peletizadora",
-        "Dosificador de micros",
-        "Operador de rolado",
-        "Operador de molino",
-        "Dosificador de mezclas",
-        "Coordinador de mantenimiento",
-        "Ayudante de mantenimiento",
-        "Operador de caldera",
-        "Ayudante de mantenimiento soldadura",
-        "Ayudante de mantenimiento eléctrico",
-        "Ayudante de mantenimiento mecánico",
-        "Embolsador",
-        "Auxiliar de calidad",
-        "Ayudante de albañil",
-        "Supervisor de planta",
-        "Recibidor de granos",
-        "Coordinador de empaque",
-        "Coordinador de seguridad e higiene",
-        "MVZ. Responsable",
-        "Superintendente de producción",
-        "Ingeniero en proyectos",
-      ],
-    },
-    {
-      id: "dummy-id-2",
-      nombre: "Operación",
-      puestos: [
-        "Ayudante de almacén",
-        "Almacenista",
-        "Montacarguista",
-        "Operador de enmelazadora",
-        "Investigación y desarrollo",
-      ],
-    },
-    {
-      id: "dummy-id-3",
-      nombre: "Envase y empaque",
-      puestos: [
-        "Envasador",
-        "Ayudante de empaque, envase (Cosedor)",
-        "Estibadores",
-        "Ayudante de empaque, envase (Circulante)",
-        "Ayudante de empaque, envase (amarrador)",
-      ],
-    },
-    {
-      id: "dummy-id-4",
-      nombre: "Ventas",
-      puestos: ["Estibador", "Repartidor", "Chofer"],
-    },
-  ]);
+  
+  const [areas, setAreas] = useState([]);
 
   const [isEditing, setIsEditing] = useState(false); // Estado para modo de edición
 
@@ -1349,28 +1293,21 @@ const RiskAssessmentTable = () => {
     );
     if (!confirmDelete) return;
   
-    // Para cada área seleccionada, si es un área que se guardó en Firebase, se elimina.
+    // Para cada área seleccionada, si está en Firebase, se elimina.
     for (const areaName of areasSeleccionadasParaBorrar) {
       const areaToDelete = areas.find((area) => area.nombre === areaName);
       if (areaToDelete && areaToDelete.id) {
-        // Puedes condicionar si no quieres borrar las áreas predefinidas.
-        // Por ejemplo, si deseas evitar borrar áreas predefinidas:
-        const isDefault = defaultAreas.some(
-          (defaultArea) => defaultArea.nombre === areaToDelete.nombre
-        );
-        if (!isDefault) {
-          await deleteAreaFromFirebase(areaToDelete.id);
-        }
+        await deleteAreaFromFirebase(areaToDelete.id);
       }
     }
   
-    // Vuelve a cargar las áreas (realizando el merge) para que aparezcan las predefinidas junto con las demás
-    await fetchAreas();
+    // Vuelve a cargar las áreas de Firebase (si tienes definida la función fetchAreas)
+    // await fetchAreas();
   
-    // Limpia la selección y cierra el modal
     setAreasSeleccionadasParaBorrar([]);
     setIsAreaModalOpen(false);
   };
+  
   
 
   const risk = calculateRisk();
@@ -1470,117 +1407,28 @@ const RiskAssessmentTable = () => {
     loadCompanies();
   }, []);
 
-  // Áreas predefinidas (default)
-const defaultAreas = [
-  {
-    id: "dummy-id-1",
-    nombre: "Producción",
-    puestos: [
-      "Ayudante de empaque y envase",
-      "Ayudante de limpieza",
-      "Operador de peletizadora",
-      "Dosificador de micros",
-      "Operador de rolado",
-      "Operador de molino",
-      "Dosificador de mezclas",
-      "Coordinador de mantenimiento",
-      "Ayudante de mantenimiento",
-      "Operador de caldera",
-      "Ayudante de mantenimiento soldadura",
-      "Ayudante de mantenimiento eléctrico",
-      "Ayudante de mantenimiento mecánico",
-      "Embolsador",
-      "Auxiliar de calidad",
-      "Ayudante de albañil",
-      "Supervisor de planta",
-      "Recibidor de granos",
-      "Coordinador de empaque",
-      "Coordinador de seguridad e higiene",
-      "MVZ. Responsable",
-      "Superintendente de producción",
-      "Ingeniero en proyectos",
-    ],
-  },
-  {
-    id: "dummy-id-2",
-    nombre: "Operación",
-    puestos: [
-      "Ayudante de almacén",
-      "Almacenista",
-      "Montacarguista",
-      "Operador de enmelazadora",
-      "Investigación y desarrollo",
-    ],
-  },
-  {
-    id: "dummy-id-3",
-    nombre: "Envase y empaque",
-    puestos: [
-      "Envasador",
-      "Ayudante de empaque, envase (Cosedor)",
-      "Estibadores",
-      "Ayudante de empaque, envase (Circulante)",
-      "Ayudante de empaque, envase (amarrador)",
-    ],
-  },
-  {
-    id: "dummy-id-4",
-    nombre: "Ventas",
-    puestos: ["Estibador", "Repartidor", "Chofer"],
-  },
-];
+  
 
 
   // Cargar áreas reales desde Firebase
-  const fetchAreas = async () => {
-    try {
-      // Cargar áreas de Firebase
-      const querySnapshot = await getDocs(collection(db, "areas"));
-      const dbAreas = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-  
-      // Fusionar las áreas predefinidas con las de Firebase para las que coinciden por nombre
-      const mergedPredefinedAreas = defaultAreas.map((defaultArea) => {
-        const dbArea = dbAreas.find(
-          (area) => area.nombre === defaultArea.nombre
-        );
-        return {
-          ...defaultArea,
-          // Si existe el área en Firebase, combinamos sus puestos sin duplicados
-          puestos: dbArea
-            ? Array.from(new Set([...defaultArea.puestos, ...(dbArea.puestos || [])]))
-            : defaultArea.puestos,
-        };
-      });
-  
-      // Incluir también aquellas áreas que están en Firebase pero NO en defaultAreas
-      const extraDbAreas = dbAreas.filter(
-        (dbArea) =>
-          !defaultAreas.some(
-            (defaultArea) => defaultArea.nombre === dbArea.nombre
-          )
-      );
-  
-      // Combinar ambas listas
-      const mergedAreas = [...mergedPredefinedAreas, ...extraDbAreas];
-  
-      // Actualizar el estado
-      setAreas(mergedAreas);
-      if (mergedAreas.length > 0) {
-        setAreaSeleccionada(mergedAreas[0].nombre);
-        setPuestos(mergedAreas[0].puestos || []);
-      }
-    } catch (error) {
-      console.error("Error al cargar áreas desde Firebase:", error);
-    }
-  };
-  
-  
   useEffect(() => {
+    const fetchAreas = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "areas"));
+        const dbAreas = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        // dbAreas debería lucir como [{ id: "12aDLx...", nombre: "...", puestos: ["..."] }, ...]
+        setAreas(dbAreas);
+      } catch (error) {
+        console.error("Error al cargar áreas desde Firebase:", error);
+      }
+    };
+  
     fetchAreas();
   }, []);
+  
   
 
   const deleteAreaFromFirebase = async (areaId) => {
