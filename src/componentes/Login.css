@@ -88,7 +88,7 @@
   color: #007bff;
   margin-bottom: 1.5rem;
   text-align: center;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   letter-spacing: 1px;
 }
 
@@ -111,7 +111,9 @@
   border-color: #007bff;
   color: #fff;
   padding: 10px 0;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .btn:hover {
@@ -151,7 +153,6 @@
   color: #6c757d;
 }
 
-
 /* src/componentes/Login.css */
 .login-container {
   position: relative;
@@ -161,7 +162,11 @@
   justify-content: center;
   align-items: center;
   /* Utiliza variables CSS para la posición del degradado, con valores por defecto centrados */
-  background: radial-gradient(circle at var(--bg-x, 50%) var(--bg-y, 50%), #74ebd5, #acb6e5);
+  background: radial-gradient(
+    circle at var(--bg-x, 50%) var(--bg-y, 50%),
+    #74ebd5,
+    #acb6e5
+  );
   animation: fadeInBackground 2s ease;
   transition: background 0.2s ease;
 }

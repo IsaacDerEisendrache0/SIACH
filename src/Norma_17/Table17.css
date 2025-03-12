@@ -772,7 +772,6 @@ button {
   font-weight: bold; /* Hace que los valores sean más llamativos */
   text-align: center !important; /* Centra el texto */
   color: white; /* Color por defecto */
-
 }
 
 /* Ajustes para el título de la sección */
@@ -967,7 +966,6 @@ button {
 .yellow-bg {
   color: black !important; /* Cuando el fondo es amarillo, el texto es negro */
 }
-
 
 .epp-container {
   padding: 0px;

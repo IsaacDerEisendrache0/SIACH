@@ -32,7 +32,11 @@ function Login() {
     e.preventDefault();
     setError("");
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
       const userEmail = userCredential.user.email;
       const userId = userCredential.user.uid;
       localStorage.setItem("userEmail", userEmail);

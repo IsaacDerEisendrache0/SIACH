@@ -54,7 +54,10 @@ body {
   margin: 10px 0;
   cursor: pointer;
   color: #ecf0f1; /* Texto claro por defecto */
-  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease;
 }
 
 /* ADDED OR UPDATED: Al hacer hover, se pone el fondo azul (#3498db) y el texto blanco (#ffffff) */
@@ -145,15 +148,17 @@ body {
 .btn {
   background-color: #2c3e50; /* Azul oscuro */
   color: #ffffff; /* Texto blanco */
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Hover y focus */
 .btn:hover,
 .btn:focus {
   background-color: #3498db; /* Azul más claro */
-  color: #ffffff;            /* Mantén el texto en blanco */
-  outline: none;             /* Quita contorno por defecto (opcional) */
+  color: #ffffff; /* Mantén el texto en blanco */
+  outline: none; /* Quita contorno por defecto (opcional) */
 }
 
 /* Estado active */

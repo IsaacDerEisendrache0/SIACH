@@ -19,7 +19,6 @@ import safran from "../logos/safran.jpeg";
 import { getAuth } from "firebase/auth";
 
 const RiskAssessmentTable = () => {
-  
   const [areas, setAreas] = useState([]);
 
   const [isEditing, setIsEditing] = useState(false); // Estado para modo de edición
@@ -324,13 +323,10 @@ const RiskAssessmentTable = () => {
     option15: "/body/lvl3_all.png", // Todas las Extremidades
   };
 
-
-
-
   const downloadImage = () => {
     // Selecciona todos los botones que deben ocultarse
     const buttons = document.querySelectorAll(
-      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra"
+      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra",
     );
 
     // Oculta los botones temporalmente
@@ -398,17 +394,16 @@ const RiskAssessmentTable = () => {
     const nuevosPuestos = puestos.filter(
       (puesto) => !puestosSeleccionadosParaBorrar.includes(puesto),
     );
-  
+
     setPuestos(nuevosPuestos);
-    
+
     // IMPORTANTE: Actualiza localStorage
     updateLocalStoragePuestos(areaSeleccionada, nuevosPuestos);
-  
+
     await updatePuestosInFirebase(nuevosPuestos);
     setPuestosSeleccionadosParaBorrar([]);
     setIsModalOpen(false);
   };
-  
 
   const handleModalClose = () => {
     setIsModalOpen(false); // Cerrar el modal
@@ -441,7 +436,7 @@ const RiskAssessmentTable = () => {
     ) {
       localStorage.removeItem(areaSeleccionadaKey);
       setPuestos(
-        areas.find((area) => area.nombre === areaSeleccionada)?.puestos || []
+        areas.find((area) => area.nombre === areaSeleccionada)?.puestos || [],
       );
     } else if (savedPuestos && savedPuestos.length > 0) {
       setPuestos(savedPuestos);
@@ -449,16 +444,18 @@ const RiskAssessmentTable = () => {
       const puestosIniciales =
         areas.find((area) => area.nombre === areaSeleccionada)?.puestos || [];
       setPuestos(puestosIniciales);
-      localStorage.setItem(areaSeleccionadaKey, JSON.stringify(puestosIniciales));
+      localStorage.setItem(
+        areaSeleccionadaKey,
+        JSON.stringify(puestosIniciales),
+      );
     }
   }, [areaSeleccionada, areas]);
-  
+
   const updateLocalStoragePuestos = (area, newPuestos) => {
     const key = `puestos_${area}`;
     localStorage.setItem(key, JSON.stringify(newPuestos));
   };
-  
-  
+
   // Función para agregar un nuevo puesto y guardarlo en Firebase
   const handleAddPuestoClick = async () => {
     const nuevoPuesto = prompt("Ingrese el nuevo puesto:");
@@ -471,7 +468,6 @@ const RiskAssessmentTable = () => {
       setPuestoSeleccionado("");
     }
   };
-  
 
   // Función auxiliar: actualiza los puestos del área seleccionada en Firebase
   const updatePuestosInFirebase = async (newPuestos) => {
@@ -1301,12 +1297,12 @@ const RiskAssessmentTable = () => {
       alert("Selecciona al menos un área para eliminar.");
       return;
     }
-  
+
     const confirmDelete = window.confirm(
-      `¿Seguro que deseas eliminar las siguientes áreas?\n${areasSeleccionadasParaBorrar.join(", ")}`
+      `¿Seguro que deseas eliminar las siguientes áreas?\n${areasSeleccionadasParaBorrar.join(", ")}`,
     );
     if (!confirmDelete) return;
-  
+
     // Borrar cada área de Firebase
     for (const areaName of areasSeleccionadasParaBorrar) {
       const areaToDelete = areas.find((area) => area.nombre === areaName);
@@ -1314,18 +1310,17 @@ const RiskAssessmentTable = () => {
         await deleteAreaFromFirebase(areaToDelete.id);
       }
     }
-  
+
     // Actualiza el estado local eliminando las áreas borradas
-    setAreas(prevAreas =>
-      prevAreas.filter(area => !areasSeleccionadasParaBorrar.includes(area.nombre))
+    setAreas((prevAreas) =>
+      prevAreas.filter(
+        (area) => !areasSeleccionadasParaBorrar.includes(area.nombre),
+      ),
     );
-  
+
     setAreasSeleccionadasParaBorrar([]);
     setIsAreaModalOpen(false);
   };
-  
-  
-  
 
   const risk = calculateRisk();
 
@@ -1424,15 +1419,12 @@ const RiskAssessmentTable = () => {
     loadCompanies();
   }, []);
 
-  
-
-
   // Cargar áreas reales desde Firebase
   useEffect(() => {
     const fetchAreas = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "areas"));
-        const dbAreas = querySnapshot.docs.map(doc => ({
+        const dbAreas = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
@@ -1442,11 +1434,9 @@ const RiskAssessmentTable = () => {
         console.error("Error al cargar áreas desde Firebase:", error);
       }
     };
-  
+
     fetchAreas();
   }, []);
-  
-  
 
   const deleteAreaFromFirebase = async (areaId) => {
     try {
@@ -2368,11 +2358,11 @@ const RiskAssessmentTable = () => {
                     </td>
 
                     <td
-    className={`blueberry-risk ${riskColor === 'yellow' ? 'yellow-bg' : ''}`}
-    style={{ backgroundColor: riskColor }}
-  >
-    {risk.toFixed(2)}
-  </td>
+                      className={`blueberry-risk ${riskColor === "yellow" ? "yellow-bg" : ""}`}
+                      style={{ backgroundColor: riskColor }}
+                    >
+                      {risk.toFixed(2)}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -2384,53 +2374,52 @@ const RiskAssessmentTable = () => {
               </div>
 
               <table className="risk-magnitude-table">
-  <tbody>
-    <tr>
-      <td className="risk-label-cell">Magnitud del Riesgo:</td>
-      <td
-        className={`risk-value-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
-        style={{ backgroundColor: riskColor }}
-      >
-        {risk.toFixed(2)}
-      </td>
-    </tr>
-    <tr>
-      <td className="risk-label-cell">Clasificación:</td>
-      <td
-        className={`risk-classification-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
-        style={{ backgroundColor: riskColor }}
-      >
-        {risk > 400
-          ? "Muy Alto"
-          : risk > 200
-            ? "Alto"
-            : risk > 70
-              ? "Notable"
-              : risk > 20
-                ? "Moderado"
-                : "Bajo o Aceptable"}
-      </td>
-    </tr>
-    <tr>
-      <td className="risk-label-cell">Acción:</td>
-      <td
-        className={`risk-action-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
-        style={{ backgroundColor: riskColor }}
-      >
-        {risk > 400
-          ? "Detención inmediata"
-          : risk > 200
-            ? "Corrección inmediata"
-            : risk > 70
-              ? "Corrección urgente"
-              : risk > 20
-                ? "Requiere atención"
-                : "Tolerable"}
-      </td>
-    </tr>
-  </tbody>
-</table>
-
+                <tbody>
+                  <tr>
+                    <td className="risk-label-cell">Magnitud del Riesgo:</td>
+                    <td
+                      className={`risk-value-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
+                      style={{ backgroundColor: riskColor }}
+                    >
+                      {risk.toFixed(2)}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="risk-label-cell">Clasificación:</td>
+                    <td
+                      className={`risk-classification-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
+                      style={{ backgroundColor: riskColor }}
+                    >
+                      {risk > 400
+                        ? "Muy Alto"
+                        : risk > 200
+                          ? "Alto"
+                          : risk > 70
+                            ? "Notable"
+                            : risk > 20
+                              ? "Moderado"
+                              : "Bajo o Aceptable"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="risk-label-cell">Acción:</td>
+                    <td
+                      className={`risk-action-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
+                      style={{ backgroundColor: riskColor }}
+                    >
+                      {risk > 400
+                        ? "Detención inmediata"
+                        : risk > 200
+                          ? "Corrección inmediata"
+                          : risk > 70
+                            ? "Corrección urgente"
+                            : risk > 20
+                              ? "Requiere atención"
+                              : "Tolerable"}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </td>
           </tr>
         </tbody>
@@ -2451,10 +2440,13 @@ const RiskAssessmentTable = () => {
 
         {/* Botones que se moverán a la derecha */}
         <div style={{ marginLeft: "auto" }}>
-          <button className="btn-extra" onClick={handleAddEmpresa}>Agregar Empresa</button>
-          <button className="btn-extra" onClick={openEmpresaModal}>Borrar Empresa</button>
+          <button className="btn-extra" onClick={handleAddEmpresa}>
+            Agregar Empresa
+          </button>
+          <button className="btn-extra" onClick={openEmpresaModal}>
+            Borrar Empresa
+          </button>
         </div>
-
       </div>
     </div>
   );

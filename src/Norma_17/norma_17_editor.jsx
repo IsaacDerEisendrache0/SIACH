@@ -21,7 +21,6 @@ import { useNavigate } from "react-router-dom";
 const RiskAssessmentTableEditor = () => {
   const [areas, setAreas] = useState([]);
 
-
   const [isEditing, setIsEditing] = useState(false); // Estado para modo de edición
 
   const [hazards, setHazards] = useState({
@@ -159,10 +158,10 @@ const RiskAssessmentTableEditor = () => {
   const STORAGE_KEY = "riskAssessmentData_editor";
 
   // Coloca los hooks dentro del componente funcional
-  const [areaSeleccionada, setAreaSeleccionada] = useState('');
-    const [puestoSeleccionado, setPuestoSeleccionado] = useState("");
-    const [puestos, setPuestos] = useState([]);
-      const [descripcionActividad1, setDescripcionActividad1] = useState("");
+  const [areaSeleccionada, setAreaSeleccionada] = useState("");
+  const [puestoSeleccionado, setPuestoSeleccionado] = useState("");
+  const [puestos, setPuestos] = useState([]);
+  const [descripcionActividad1, setDescripcionActividad1] = useState("");
   const [descripcionActividad2, setDescripcionActividad2] = useState("");
 
   // **Estados para Carpetas y Modal**
@@ -1407,36 +1406,31 @@ const RiskAssessmentTableEditor = () => {
     }
   };
 
-  
-  
   useEffect(() => {
     loadAreas();
   }, []);
-  
+
   // DECLARAMOS FUERA
-const loadEmpresas = async () => {
-  try {
-    const snapshot = await getDocs(collection(db, "Empresas_17"));
-    // ...
-        const empresasList = snapshot.docs.map(doc => doc.data().nombre);
-    setEmpresas(empresasList);
-  } catch (error) {
-    console.error("Error al cargar las empresas:", error);
-  }
-};
+  const loadEmpresas = async () => {
+    try {
+      const snapshot = await getDocs(collection(db, "Empresas_17"));
+      // ...
+      const empresasList = snapshot.docs.map((doc) => doc.data().nombre);
+      setEmpresas(empresasList);
+    } catch (error) {
+      console.error("Error al cargar las empresas:", error);
+    }
+  };
 
-useEffect(() => {
-  loadEmpresas(); // Puede llamarse aquí
-}, []);
-
-
-
+  useEffect(() => {
+    loadEmpresas(); // Puede llamarse aquí
+  }, []);
 
   const loadAreas = async () => {
     try {
       const snapshot = await getDocs(collection(db, "areas"));
       // Cada doc en 'areas' podría tener { nombre: "Producción", puestos: [...] }
-      const areaList = snapshot.docs.map(doc => ({
+      const areaList = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
@@ -1446,29 +1440,26 @@ useEffect(() => {
     }
   };
 
-  
-  
-    
-// useEffect que carga las áreas
-useEffect(() => {
-  async function fetchAreas() {
-    const snapshot = await getDocs(collection(db, "areas"));
-    const list = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    setAreas(list);
+  // useEffect que carga las áreas
+  useEffect(() => {
+    async function fetchAreas() {
+      const snapshot = await getDocs(collection(db, "areas"));
+      const list = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setAreas(list);
 
-    // Si deseas seleccionar por defecto la primera área al terminar de cargar:
-    if (list.length > 0) {
-      setAreaSeleccionada(list[0].nombre);
-      // Y asignar sus puestos a 'puestos'
-      setPuestos(list[0].puestos || []);
+      // Si deseas seleccionar por defecto la primera área al terminar de cargar:
+      if (list.length > 0) {
+        setAreaSeleccionada(list[0].nombre);
+        // Y asignar sus puestos a 'puestos'
+        setPuestos(list[0].puestos || []);
+      }
     }
-  }
 
-  fetchAreas();
-}, []);
+    fetchAreas();
+  }, []);
 
   return (
     <div class="main-table">
@@ -1919,19 +1910,17 @@ useEffect(() => {
                   <tr>
                     <td className="label-cell">Empresa:</td>
                     <td className="input-cell" colSpan="2">
-                    <select
-  value={empresaSeleccionada}
-  onChange={(e) => setEmpresaSeleccionada(e.target.value)}
->
-  <option value="">-- Selecciona una empresa --</option>
-  {empresas.map((emp, index) => (
-    <option key={index} value={emp}>
-      {emp}
-    </option>
-  ))}
-</select>
-
-
+                      <select
+                        value={empresaSeleccionada}
+                        onChange={(e) => setEmpresaSeleccionada(e.target.value)}
+                      >
+                        <option value="">-- Selecciona una empresa --</option>
+                        {empresas.map((emp, index) => (
+                          <option key={index} value={emp}>
+                            {emp}
+                          </option>
+                        ))}
+                      </select>
                     </td>
                   </tr>
 
@@ -1940,14 +1929,17 @@ useEffect(() => {
                     <td className="label-cell">Área:</td>
                     <td className="input-cell">
                       <div className="cell-container">
-                      <select id="area" value={areaSeleccionada} onChange={handleAreaChange}>
-  {areas.map((area) => (
-    <option key={area.id} value={area.nombre}>
-      {area.nombre}
-    </option>
-  ))}
-</select>
-
+                        <select
+                          id="area"
+                          value={areaSeleccionada}
+                          onChange={handleAreaChange}
+                        >
+                          {areas.map((area) => (
+                            <option key={area.id} value={area.nombre}>
+                              {area.nombre}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                     </td>
                   </tr>
