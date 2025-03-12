@@ -324,10 +324,13 @@ const RiskAssessmentTable = () => {
     option15: "/body/lvl3_all.png", // Todas las Extremidades
   };
 
+
+
+
   const downloadImage = () => {
     // Selecciona todos los botones que deben ocultarse
     const buttons = document.querySelectorAll(
-      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button",
+      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra"
     );
 
     // Oculta los botones temporalmente
@@ -2448,9 +2451,10 @@ const RiskAssessmentTable = () => {
 
         {/* Botones que se moverán a la derecha */}
         <div style={{ marginLeft: "auto" }}>
-          <button onClick={handleAddEmpresa}>Agregar Empresa</button>
-          <button onClick={openEmpresaModal}>Borrar Empresa</button>
+          <button className="btn-extra" onClick={handleAddEmpresa}>Agregar Empresa</button>
+          <button className="btn-extra" onClick={openEmpresaModal}>Borrar Empresa</button>
         </div>
+
       </div>
     </div>
   );
