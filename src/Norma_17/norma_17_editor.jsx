@@ -19,60 +19,8 @@ import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 const RiskAssessmentTableEditor = () => {
-  const [areas, setAreas] = useState([
-    {
-      nombre: "Producción",
-      puestos: [
-        "Ayudante de empaque y envase",
-        "Ayudante de limpieza",
-        "Operador de peletizadora",
-        "Dosificador de micros",
-        "Operador de rolado",
-        "Operador de molino",
-        "Dosificador de mezclas",
-        "Coordinador de mantenimiento",
-        "Ayudante de mantenimiento",
-        "Operador de caldera",
-        "Ayudante de mantenimiento soldadura",
-        "Ayudante de mantenimiento eléctrico",
-        "Ayudante de mantenimiento mecánico",
-        "Embolsador",
-        "Auxiliar de calidad",
-        "Ayudante de albañil",
-        "Supervisor de planta",
-        "Recibidor de granos",
-        "Coordinador de empaque",
-        "Coordinador de seguridad e higiene",
-        "MVZ. Responsable",
-        "Superintendente de producción",
-        "Ingeniero en proyectos",
-      ],
-    },
-    {
-      nombre: "Operación",
-      puestos: [
-        "Ayudante de almacén",
-        "Almacenista",
-        "Montacarguista",
-        "Operador de enmelazadora",
-        "Investigación y desarrollo",
-      ],
-    },
-    {
-      nombre: "Envase y empaque",
-      puestos: [
-        "Envasador",
-        "Ayudante de empaque, envase (Cosedor)",
-        "Estibadores",
-        "Ayudante de empaque, envase (Circulante)",
-        "Ayudante de empaque, envase (amarrador)",
-      ],
-    },
-    {
-      nombre: "Ventas",
-      puestos: ["Estibador", "Repartidor", "Chofer"],
-    },
-  ]);
+  const [areas, setAreas] = useState([]);
+
 
   const [isEditing, setIsEditing] = useState(false); // Estado para modo de edición
 
@@ -211,10 +159,10 @@ const RiskAssessmentTableEditor = () => {
   const STORAGE_KEY = "riskAssessmentData_editor";
 
   // Coloca los hooks dentro del componente funcional
-  const [areaSeleccionada, setAreaSeleccionada] = useState(areas[0].nombre);
-  const [puestoSeleccionado, setPuestoSeleccionado] = useState("");
-  const [puestos, setPuestos] = useState(areas[0].puestos);
-  const [descripcionActividad1, setDescripcionActividad1] = useState("");
+  const [areaSeleccionada, setAreaSeleccionada] = useState('');
+    const [puestoSeleccionado, setPuestoSeleccionado] = useState("");
+    const [puestos, setPuestos] = useState([]);
+      const [descripcionActividad1, setDescripcionActividad1] = useState("");
   const [descripcionActividad2, setDescripcionActividad2] = useState("");
 
   // **Estados para Carpetas y Modal**
@@ -1432,12 +1380,7 @@ const RiskAssessmentTableEditor = () => {
   const risk = calculateRisk();
 
   // Define el estado inicial de las empresas
-  const [empresas, setEmpresas] = useState([
-    "Maxion",
-    "Safran",
-    "Soisa",
-    "Bafar",
-  ]);
+  const [empresas, setEmpresas] = useState([]);
 
   // Función para agregar una nueva empresa
   const handleAddEmpresa = () => {
@@ -1463,6 +1406,69 @@ const RiskAssessmentTableEditor = () => {
       setEmpresaSeleccionada("");
     }
   };
+
+  
+  
+  useEffect(() => {
+    loadAreas();
+  }, []);
+  
+  // DECLARAMOS FUERA
+const loadEmpresas = async () => {
+  try {
+    const snapshot = await getDocs(collection(db, "Empresas_17"));
+    // ...
+        const empresasList = snapshot.docs.map(doc => doc.data().nombre);
+    setEmpresas(empresasList);
+  } catch (error) {
+    console.error("Error al cargar las empresas:", error);
+  }
+};
+
+useEffect(() => {
+  loadEmpresas(); // Puede llamarse aquí
+}, []);
+
+
+
+
+  const loadAreas = async () => {
+    try {
+      const snapshot = await getDocs(collection(db, "areas"));
+      // Cada doc en 'areas' podría tener { nombre: "Producción", puestos: [...] }
+      const areaList = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setAreas(areaList);
+    } catch (error) {
+      console.error("Error al cargar áreas:", error);
+    }
+  };
+
+  
+  
+    
+// useEffect que carga las áreas
+useEffect(() => {
+  async function fetchAreas() {
+    const snapshot = await getDocs(collection(db, "areas"));
+    const list = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setAreas(list);
+
+    // Si deseas seleccionar por defecto la primera área al terminar de cargar:
+    if (list.length > 0) {
+      setAreaSeleccionada(list[0].nombre);
+      // Y asignar sus puestos a 'puestos'
+      setPuestos(list[0].puestos || []);
+    }
+  }
+
+  fetchAreas();
+}, []);
 
   return (
     <div class="main-table">
@@ -1913,19 +1919,19 @@ const RiskAssessmentTableEditor = () => {
                   <tr>
                     <td className="label-cell">Empresa:</td>
                     <td className="input-cell" colSpan="2">
-                      <select
-                        id="empresa"
-                        value={empresaSeleccionada}
-                        onChange={(e) => setEmpresaSeleccionada(e.target.value)}
-                        className="large-text-dropdown"
-                      >
-                        {/* Opciones de empresa */}
-                        <option value="seleccione una empresa">
-                          seleccione una empresa
-                        </option>
-                        <option value="Maxion">Maxion</option>
-                        <option value="Safran">Safran</option>
-                      </select>
+                    <select
+  value={empresaSeleccionada}
+  onChange={(e) => setEmpresaSeleccionada(e.target.value)}
+>
+  <option value="">-- Selecciona una empresa --</option>
+  {empresas.map((emp, index) => (
+    <option key={index} value={emp}>
+      {emp}
+    </option>
+  ))}
+</select>
+
+
                     </td>
                   </tr>
 
@@ -1934,18 +1940,14 @@ const RiskAssessmentTableEditor = () => {
                     <td className="label-cell">Área:</td>
                     <td className="input-cell">
                       <div className="cell-container">
-                        <select
-                          id="area"
-                          value={areaSeleccionada}
-                          onChange={handleAreaChange}
-                          className="large-text-dropdown"
-                        >
-                          {areas.map((area, index) => (
-                            <option key={index} value={area.nombre}>
-                              {area.nombre}
-                            </option>
-                          ))}
-                        </select>
+                      <select id="area" value={areaSeleccionada} onChange={handleAreaChange}>
+  {areas.map((area) => (
+    <option key={area.id} value={area.nombre}>
+      {area.nombre}
+    </option>
+  ))}
+</select>
+
                       </div>
                     </td>
                   </tr>
