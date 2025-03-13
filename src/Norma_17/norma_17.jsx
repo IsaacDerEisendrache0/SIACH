@@ -398,7 +398,6 @@ const RiskAssessmentTable = () => {
     setPuestos(nuevosPuestos);
 
     // IMPORTANTE: Actualiza localStorage
-    updateLocalStoragePuestos(areaSeleccionada, nuevosPuestos);
 
     await updatePuestosInFirebase(nuevosPuestos);
     setPuestosSeleccionadosParaBorrar([]);
@@ -426,35 +425,13 @@ const RiskAssessmentTable = () => {
   };
 
   useEffect(() => {
-    const areaSeleccionadaKey = `puestos_${areaSeleccionada}`;
-    const savedPuestos = JSON.parse(localStorage.getItem(areaSeleccionadaKey));
-    if (
-      savedPuestos &&
-      savedPuestos.length > 0 &&
-      savedPuestos.includes("Puesto 1") &&
-      savedPuestos.includes("Puesto 2")
-    ) {
-      localStorage.removeItem(areaSeleccionadaKey);
-      setPuestos(
-        areas.find((area) => area.nombre === areaSeleccionada)?.puestos || [],
-      );
-    } else if (savedPuestos && savedPuestos.length > 0) {
-      setPuestos(savedPuestos);
-    } else {
-      const puestosIniciales =
-        areas.find((area) => area.nombre === areaSeleccionada)?.puestos || [];
-      setPuestos(puestosIniciales);
-      localStorage.setItem(
-        areaSeleccionadaKey,
-        JSON.stringify(puestosIniciales),
-      );
-    }
+    const selectedArea = areas.find(a => a.nombre === areaSeleccionada);
+    setPuestos(selectedArea ? selectedArea.puestos : []);
   }, [areaSeleccionada, areas]);
+  
+  
 
-  const updateLocalStoragePuestos = (area, newPuestos) => {
-    const key = `puestos_${area}`;
-    localStorage.setItem(key, JSON.stringify(newPuestos));
-  };
+  
 
   // Función para agregar un nuevo puesto y guardarlo en Firebase
   const handleAddPuestoClick = async () => {
@@ -463,7 +440,6 @@ const RiskAssessmentTable = () => {
       const newPuesto = nuevoPuesto.trim();
       const updatedPuestos = [...puestos, newPuesto];
       setPuestos(updatedPuestos);
-      updateLocalStoragePuestos(updatedPuestos);
       await updatePuestosInFirebase(updatedPuestos);
       setPuestoSeleccionado("");
     }
