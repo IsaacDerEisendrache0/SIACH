@@ -86,17 +86,15 @@ const TablaResumen = () => {
     // Convertimos a minúsculas para evitar errores de comparación
     const normaNombre = selectedNorma.nombre.toLowerCase();
 
-    if (normaNombre === "norma_17") {
+    if (normaNombre === "norma_17" || normaNombre === "nom_17") {
       collectionName = "resumen_17";
-    } else if (normaNombre === "norma_04") {
+    } else if (normaNombre === "norma_04" || normaNombre === "nom_04") {
       collectionName = "resumen_004";
     } else {
-      console.warn(
-        "⚠️ La norma seleccionada no es válida:",
-        selectedNorma.nombre,
-      );
+      console.warn("⚠️ La norma seleccionada no es válida:", selectedNorma.nombre);
       return;
     }
+    
 
     console.log("📌 Cargando datos desde la colección:", collectionName);
 

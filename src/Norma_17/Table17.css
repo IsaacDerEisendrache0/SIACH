@@ -976,12 +976,12 @@ button {
 
 .dropdown-label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 1px;
   font-size: 16px;
   font-weight: bold;
   color: #333;
 }
-
+  
 .epp-dropdown,
 .epp-sub-dropdown {
   width: 100%;
@@ -1038,13 +1038,7 @@ button {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.dropdown-label {
-  display: block;
-  margin-bottom: 0px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #333;
-}
+
 
 .epp-dropdown,
 .epp-sub-dropdown {
@@ -1463,4 +1457,59 @@ button.btn-icon {
   display: flex;
   justify-content: flex-end;
   gap: 10px; /* opcional */
+}
+
+
+
+/* Asegúrate de que el td se alinee arriba */
+.epp-component-right-section {
+  vertical-align: top;
+  /* No uses display:flex en <td> para evitar recortes con tablas */
+}
+
+/* Título y menú "Seleccione EPP" en columna */
+.epp-component-title-select {
+  font-weight: bold;
+  
+  font-size: 22px;
+
+  /* Para que "EPP Recomendado" y el <select> estén en columna */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Un poco de margen entre el texto y el <select> */
+.epp-select {
+  margin-top: 0.5rem;
+}
+
+/* Recuadro para la lista de EPP seleccionados */
+.epp-recommended-box {
+  margin-top: 3.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  padding: 0.5rem;
+  min-height: 10px;
+}
+
+/* Las imágenes seleccionadas */
+.epp-component-image {
+  max-width: 60px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+/* Mensaje de "No hay EPP" */
+.epp-component-no-epp {
+  color: #777;
+}
+
+/* Ajusta si quieres bordes para .epp-container */
+.epp-container {
+  /* Opcional:
+  border: 1px solid #ccc;
+  padding: 1rem; 
+  margin-top: 1rem;
+  */
 }

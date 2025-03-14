@@ -97,63 +97,7 @@ const RiskAssessmentTable = () => {
     ],
   };
 
-  const protectionImages = {
-    "Caídas de Altura": ["/images/10.png", "/images/34.png", "/images/4.png"], // Reemplaza con la ruta real de la imagen
-    "Exposición a Temperaturas": [
-      "/images/6.png",
-      "/images/21.png",
-      "/images/14.png",
-      "/images/1.png",
-      "/images/36.png",
-    ],
-    "Exposición a Electricidad Estática": [
-      "/images/6.png",
-      "/images/4.png",
-      "/images/9.png",
-      "/images/10.png",
-    ],
-    "Exposición a Sustancias Químicas": [
-      "/images/7.png",
-      "/images/13.png",
-      "/images/6.png",
-      "/images/17.png",
-    ],
-    "Exposición a Radiaciones": ["/images/16.png"],
-    "Exposición agentes Biológicos": [
-      "/images/18.png",
-      "/images/16.png",
-      "/images/35.png",
-    ],
-    "Exposición a Ruido": ["/images/19.png", "/images/5.png"],
-    "Exposición a Vibraciones": [
-      "/images/19.png",
-      "/images/6.png",
-      "/images/4.png",
-    ],
-    "Superficies cortantes": [
-      "/images/6.png",
-      "/images/1.png",
-      "/images/21.png",
-      "/images/14.png",
-    ],
-    "Caídas a nivel o desnivel": ["/images/4.png", "/images/34.png"],
-    "Calentamiento de materia prima, subproducto o producto": [
-      "/images/6.png",
-      "/images/15.png",
-      "/images/9.png",
-      "/images/4.png",
-      "/images/21.png",
-    ],
-    "Protección de material o herramienta": [
-      "/images/7.png",
-      "/images/1.png",
-      "/images/21.png",
-      "/images/14.png",
-      "/images/6.png",
-      "/images/4.png",
-      "/images/35.png",
-    ],
-  };
+  
 
   const STORAGE_KEY = "riskAssessmentData_v1";
 
@@ -186,59 +130,7 @@ const RiskAssessmentTable = () => {
     setPuestoSeleccionado(e.target.value);
   };
 
-  const handleCheckboxChange = (event) => {
-    const hazard = event.target.name;
-    const isChecked = event.target.checked;
-
-    // Actualizamos el estado del checkbox
-    setHazards({
-      ...hazards,
-      [hazard]: isChecked,
-    });
-
-    // Lógica específica para "Exposición a Ruido"
-    if (hazard === "Exposición a Ruido") {
-      if (isChecked && protectionImages[hazard].length > 1) {
-        // Abre el modal solo si hay más de una imagen asociada a "Exposición a Ruido"
-        setSelectedImagesForHazard(protectionImages[hazard]);
-        setHazardWithImages(hazard);
-        setIsImageModalOpen(true);
-      } else if (isChecked && protectionImages[hazard].length === 1) {
-        // Si solo hay una imagen, la selecciona directamente
-        const image = protectionImages[hazard][0];
-        if (!selectedImages.includes(image)) {
-          setSelectedImages((prevSelectedImages) => [
-            ...prevSelectedImages,
-            image,
-          ]);
-        }
-      } else {
-        // Si se deselecciona "Exposición a Ruido", elimina las imágenes asociadas
-        setSelectedImages((prevSelectedImages) =>
-          prevSelectedImages.filter(
-            (image) => !protectionImages[hazard].includes(image),
-          ),
-        );
-      }
-    } else {
-      // Para otros peligros
-      if (isChecked) {
-        // Añade todas las imágenes asociadas directamente al seleccionarlo
-        const newImages = protectionImages[hazard] || [];
-        setSelectedImages((prevSelectedImages) => [
-          ...prevSelectedImages,
-          ...newImages.filter((image) => !prevSelectedImages.includes(image)),
-        ]);
-      } else {
-        // Elimina las imágenes asociadas si se deselecciona
-        setSelectedImages((prevSelectedImages) =>
-          prevSelectedImages.filter(
-            (image) => !protectionImages[hazard].includes(image),
-          ),
-        );
-      }
-    }
-  };
+  
 
   const getAffectedBodyParts = () => {
     const affectedParts = new Set();
@@ -283,9 +175,6 @@ const RiskAssessmentTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar si el modal está abierto o cerrado
   const [puestosSeleccionadosParaBorrar, setPuestosSeleccionadosParaBorrar] =
     useState([]); // Estado para almacenar los puestos seleccionados para borrar
-  const [selectedImagesForHazard, setSelectedImagesForHazard] = useState([]); // Estado para las imágenes del peligro seleccionado
-  const [isImageModalOpen, setIsImageModalOpen] = useState(false); // Estado para abrir o cerrar el modal de selección de imagen
-  const [hazardWithImages, setHazardWithImages] = useState("");
   const [selectedHazardImages, setSelectedHazardImages] = useState({}); // Para almacenar las imágenes seleccionadas por peligro
   const [selectedImages, setSelectedImages] = useState([]); // Para almacenar las imágenes seleccionadas para "Equipo de protección personal sugerido"
 
@@ -470,27 +359,7 @@ const RiskAssessmentTable = () => {
     setIsModalOpen(true);
   };
 
-  const handleImageSelect = (image) => {
-    // Asociar la imagen seleccionada con el peligro actual
-    setSelectedHazardImages({
-      ...selectedHazardImages,
-      [hazardWithImages]: image, // Asociamos la imagen seleccionada con el peligro
-    });
-
-    // Actualizar el estado de las imágenes sugeridas
-    setSelectedImages((prevSelectedImages) => {
-      return [...prevSelectedImages, image]; // Agregar la imagen seleccionada a la lista de imágenes sugeridas
-    });
-
-    // Marcar el checkbox del peligro seleccionado
-    setHazards({
-      ...hazards,
-      [hazardWithImages]: true, // Marcamos el checkbox
-    });
-
-    // Cerrar el modal
-    setIsImageModalOpen(false);
-  };
+  
 
   const saveTable = async (empresaId, normaId) => {
     const auth = getAuth();
@@ -838,101 +707,8 @@ const RiskAssessmentTable = () => {
   };
 
   // Estado para manejar opciones seleccionadas automáticamente
-  const [autoSelectedOptions, setAutoSelectedOptions] = useState([]);
 
-  // Nuevo useEffect para actualizar el menú basado en la selección de imágenes de EPP
-  useEffect(() => {
-    const newAutoSelectedOptions = [];
-
-    // Verificar si la imagen del casco (10) está seleccionada
-    if (
-      selectedImages.includes("/images/10.png") ||
-      selectedImages.includes("/images/10.jpg")
-    ) {
-      newAutoSelectedOptions.push("Casco");
-    }
-    if (
-      selectedImages.includes("/images/4.png") ||
-      selectedImages.includes("/images/4.jpg")
-    ) {
-      newAutoSelectedOptions.push("Botas");
-    }
-    if (
-      selectedImages.includes("/images/6.png") ||
-      selectedImages.includes("/images/6.jpg")
-    ) {
-      newAutoSelectedOptions.push("Guantes");
-    }
-    if (
-      selectedImages.includes("/images/3.png") ||
-      selectedImages.includes("/images/3.jpg") ||
-      selectedImages.includes("/images/7.png") ||
-      selectedImages.includes("/images/7.jpg")
-    ) {
-      newAutoSelectedOptions.push("Gafas de Protección");
-    }
-    if (
-      selectedImages.includes("/images/1.png") ||
-      selectedImages.includes("/images/1.jpg") ||
-      selectedImages.includes("/images/9.png") ||
-      selectedImages.includes("/images/9.jpg")
-    ) {
-      newAutoSelectedOptions.push("Mandil");
-    }
-    if (
-      selectedImages.includes("/images/34.png") ||
-      selectedImages.includes("/images/34.jpg")
-    ) {
-      newAutoSelectedOptions.push("Arnés");
-    }
-    if (
-      selectedImages.includes("/images/21.png") ||
-      selectedImages.includes("/images/21.jpg")
-    ) {
-      newAutoSelectedOptions.push("Mangas");
-    }
-
-    if (
-      selectedImages.includes("/images/14.png") ||
-      selectedImages.includes("/images/14.jpg") ||
-      selectedImages.includes("/images/15.png") ||
-      selectedImages.includes("/images/15.jpg")
-    ) {
-      newAutoSelectedOptions.push("Protección Facial");
-    }
-
-    if (
-      selectedImages.includes("/images/19.png") ||
-      selectedImages.includes("/images/19.jpg") ||
-      selectedImages.includes("/images/5.png") ||
-      selectedImages.includes("/images/5.jpg")
-    ) {
-      newAutoSelectedOptions.push("Equipo de Audición");
-    }
-
-    if (
-      selectedImages.includes("/images/35.png") ||
-      selectedImages.includes("/images/35.jpg") ||
-      selectedImages.includes("/images/17.png") ||
-      selectedImages.includes("/images/17.jpg")
-    ) {
-      newAutoSelectedOptions.push("Respiradores");
-    }
-
-    if (
-      selectedImages.includes("/images/16.png") ||
-      selectedImages.includes("/images/16.jpg") ||
-      selectedImages.includes("/images/13.png") ||
-      selectedImages.includes("/images/13.jpg") ||
-      selectedImages.includes("/images/36.png") ||
-      selectedImages.includes("/images/36.jpg")
-    ) {
-      newAutoSelectedOptions.push("Ropa de Protección");
-    }
-
-    console.log("Opciones automáticas detectadas:", newAutoSelectedOptions); // Verificar opciones detectadas
-    setAutoSelectedOptions(newAutoSelectedOptions); // Actualizar opciones automáticas
-  }, [selectedImages]); // Ejecutar cada vez que cambian las imágenes seleccionadas
+  
 
   const handleMainOptionChange = (e) => {
     const value = e.target.value;
@@ -1376,6 +1152,17 @@ const RiskAssessmentTable = () => {
     }
   };
 
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target; 
+    // 'name' es el key del objeto hazards, 
+    // 'checked' es true/false si el checkbox está marcado
+  
+    setHazards((prevHazards) => ({
+      ...prevHazards,
+      [name]: checked, // Actualiza el valor booleano
+    }));
+  };
+  
   // Dentro de tu componente:
   useEffect(() => {
     const loadCompanies = async () => {
@@ -1424,6 +1211,46 @@ const RiskAssessmentTable = () => {
   };
 
   const riskColor = getRiskColor(risk);
+
+
+
+  const eppNames = {
+    "/images/1.png":  "Mandil",
+    "/images/2.png":  "",
+    "/images/3.png":  "Gafas con filtro UV",
+    "/images/4.png":  "Botas",
+    "/images/5.png":  "Tapones de oido",
+    "/images/6.png":  "Guantes",
+    "/images/7.png":  "Gafas contra sustancias",
+    "/images/8.png":  "Mandil",
+    "/images/9.png":  "Casco",
+    "/images/10.png": "Cubre bocas",
+    "/images/11.png": "Chaleco reflectante",
+    "/images/12.png": "Bata de laboratorio",
+    "/images/13.png": "Careta",
+    "/images/14.png": "Careta de soldador",
+    "/images/15.png": "",
+    "/images/16.png": "",
+    "/images/17.png": "Respirador",
+    "/images/18.png": "",
+    "/images/19.png": "",
+    "/images/20.png": "",
+    "/images/21.png": "",
+    "/images/22.png": "",
+    "/images/23.png": "",
+    "/images/24.png": "",
+    "/images/25.png": ""
+  };
+  
+  const eppImagesList = Object.keys(eppNames);
+
+  const handleAddEPPImage = (event) => {
+    const selectedImage = event.target.value;
+    if (selectedImage) {
+      setSelectedImages((prevImages) => [...prevImages, selectedImage]);
+    }
+  };
+  
 
   return (
     <div class="main-table">
@@ -1944,24 +1771,25 @@ const RiskAssessmentTable = () => {
 
         <tbody>
           <tr>
-            <td colSpan="3" className="left-section">
-              <div className="text1">Identificación de peligros</div>
-              <ul className="hazard-list">
-                {Object.keys(hazards).map((hazard) => (
-                  <li key={hazard} className="hazard-item">
-                    <span>{hazard}</span> {/* Texto del peligro */}
-                    <label className="hazard-checkbox">
-                      <input
-                        type="checkbox"
-                        name={hazard}
-                        checked={hazards[hazard]}
-                        onChange={handleCheckboxChange}
-                      />
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </td>
+          <td colSpan="3" className="left-section">
+  <div className="text1">Identificación de peligros</div>
+  <ul className="hazard-list">
+    {Object.keys(hazards).map((hazard) => (
+      <li key={hazard} className="hazard-item">
+        <span>{hazard}</span>
+        <label className="hazard-checkbox">
+          <input
+            type="checkbox"
+            name={hazard}
+            checked={hazards[hazard]}
+            onChange={handleCheckboxChange} // <-- Añade esta línea
+          />
+        </label>
+      </li>
+    ))}
+  </ul>
+</td>
+
 
             {/* Modal para borrar empresas */}
             <Modal
@@ -2003,31 +1831,7 @@ const RiskAssessmentTable = () => {
               </div>
             </Modal>
 
-            <Modal
-              isOpen={isImageModalOpen}
-              onRequestClose={() => setIsImageModalOpen(false)}
-              className="modal-container"
-            >
-              <h3 style={{ fontSize: "16px", marginBottom: "10px" }}>
-                Selecciona una imagen para {hazardWithImages}
-              </h3>
-              <div className="image-selection-container">
-                {selectedImagesForHazard.map((image, index) => (
-                  <div key={index} className="image-option">
-                    <img
-                      src={image}
-                      alt={`Opción ${index}`}
-                      onClick={() => handleImageSelect(image)}
-                    />
-                  </div>
-                ))}
-              </div>
-              <div className="button-group">
-                <button onClick={() => setIsImageModalOpen(false)}>
-                  Cerrar
-                </button>
-              </div>
-            </Modal>
+          
 
             <td
               colSpan="2"
@@ -2117,122 +1921,130 @@ const RiskAssessmentTable = () => {
             </td>
 
             <td colSpan="2" className="epp-component-right-section">
-              {/* Título de EPP Recomendado */}
-              <div className="epp-component-title">EPP Recomendado</div>
+  {/* Título de EPP Recomendado + Menú para "Seleccione EPP" */}
+  <div className="epp-component-title-select">
+    EPP Recomendado
 
-              {/* Contenedor para las imágenes de EPP */}
-              <div className="epp-component-hazard-images">
-                {selectedImages.length > 0 ? (
-                  selectedImages.map((image, index) => (
-                    <img
-                      key={index}
-                      src={image}
-                      alt={`Protección ${index}`}
-                      className="epp-component-image"
-                      onClick={() => handleImageRemove(image)}
-                    />
-                  ))
-                ) : (
-                  <div className="epp-component-no-epp">
-                    No hay EPP seleccionado
-                  </div>
-                )}
-              </div>
+    <select className="custom-select epp-select" onChange={handleAddEPPImage}>
+      <option value="">Seleccione EPP</option>
+      {eppImagesList
+        .map((img) => ({ image: img, name: eppNames[img] || img }))
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((obj, i) => (
+          <option key={i} value={obj.image}>
+            {obj.name}
+          </option>
+        ))}
+    </select>
+  </div>
 
-              <div className="epp-container">
-                {/* Contenedor del menú principal */}
-                <div className="epp-dropdown-container">
-                  <label htmlFor="main-epp-select" className="dropdown-label">
-                    Selecciona el equipo principal:
-                  </label>
-                  <select
-                    id="main-epp-select"
-                    value={selectedMainOption}
-                    onChange={handleMainOptionChange}
-                    className="epp-dropdown large-text-dropdown" // Se combinan ambas clases
+  {/* Contenedor para las imágenes de EPP */}
+  <div className="epp-component-hazard-images epp-recommended-box">
+    {selectedImages.length > 0 ? (
+      selectedImages.map((image, index) => (
+        <img
+          key={index}
+          src={image}
+          alt={`Protección ${index}`}
+          className="epp-component-image"
+          onClick={() => handleImageRemove(image)}
+        />
+      ))
+    ) : (
+      <div className="epp-component-no-epp">No hay EPP seleccionado</div>
+    )}
+  </div>
+
+  {/* NO MOVER nada de aquí en adelante */}
+  <div className="epp-container">
+    {/* Contenedor del menú principal */}
+    <div className="epp-dropdown-container">
+      <label htmlFor="main-epp-select" className="dropdown-label">
+        Selecciona el equipo principal:
+      </label>
+      <select
+        id="main-epp-select"
+        value={selectedMainOption}
+        onChange={handleMainOptionChange}
+        className="epp-dropdown large-text-dropdown"
+      >
+        <option value="" disabled>
+          Selecciona el equipo
+        </option>
+        {Object.keys(eppOptions).map((option, index) => (
+          <option key={index} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    {showSubDropdown && selectedMainOption && (
+      <div className="epp-sub-dropdown-container">
+        <label htmlFor="sub-epp-select" className="dropdown-label">
+          Selecciona el tipo de {selectedMainOption.toLowerCase()}:
+        </label>
+        <select
+          id="sub-epp-select"
+          value={selectedSubOption}
+          onChange={handleSubOptionChange}
+          className="large-text-dropdown"
+        >
+          <option value="" disabled>
+            Selecciona el tipo
+          </option>
+          {eppOptions[selectedMainOption]?.map((subOption, idx) => (
+            <option key={idx} value={subOption}>
+              {subOption}
+            </option>
+          ))}
+        </select>
+      </div>
+    )}
+
+    <div className="epp-selection-list-container">
+      {selectionList.length > 0 ? (
+        selectionList
+          .reduce((rows, key, index) => {
+            // Agrupa elementos en pares
+            if (index % 2 === 0) rows.push([selectionList[index]]);
+            else rows[rows.length - 1].push(selectionList[index]);
+            return rows;
+          }, [])
+          .map((row, rowIndex) => (
+            <div key={rowIndex} className="epp-selection-row">
+              {row.map((selection, idx) => (
+                <div key={idx} className="epp-selection-item">
+                  {selection.slice(selection.indexOf("-") + 2)}
+                  <button
+                    className="delete-button"
+                    onClick={() =>
+                      handleDeleteSelection(selectionList.indexOf(selection))
+                    }
                   >
-                    <option value="" disabled>
-                      Selecciona el equipo
-                    </option>
-                    {Object.keys(eppOptions)
-                      .filter((option) => autoSelectedOptions.includes(option)) // Mostrar solo las opciones detectadas
-                      .map((option, index) => (
-                        <option key={index} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-
-                {showSubDropdown && selectedMainOption && (
-                  <div className="epp-sub-dropdown-container">
-                    <label htmlFor="sub-epp-select" className="dropdown-label">
-                      Selecciona el tipo de {selectedMainOption.toLowerCase()}:
-                    </label>
-                    <select
-                      id="sub-epp-select"
-                      value={selectedSubOption}
-                      onChange={handleSubOptionChange}
-                      className="large-text-dropdown"
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="white"
+                      width="20px"
+                      height="20px"
+                      className="delete-icon"
                     >
-                      <option value="" disabled>
-                        Selecciona el tipo
-                      </option>
-                      {eppOptions[selectedMainOption]?.map(
-                        (subOption, index) => (
-                          <option key={index} value={subOption}>
-                            {subOption}
-                          </option>
-                        ),
-                      )}
-                    </select>
-                  </div>
-                )}
-
-                <div className="epp-selection-list-container">
-                  {selectionList.length > 0 ? (
-                    selectionList
-                      .reduce((rows, key, index) => {
-                        // Agrupa los elementos en pares
-                        if (index % 2 === 0) rows.push([selectionList[index]]);
-                        else rows[rows.length - 1].push(selectionList[index]);
-                        return rows;
-                      }, [])
-                      .map((row, rowIndex) => (
-                        <div key={rowIndex} className="epp-selection-row">
-                          {row.map((selection, index) => (
-                            <div key={index} className="epp-selection-item">
-                              {selection.slice(selection.indexOf("-") + 2)}{" "}
-                              {/* Elimina el prefijo */}
-                              <button
-                                className="delete-button"
-                                onClick={() =>
-                                  handleDeleteSelection(
-                                    selectionList.indexOf(selection),
-                                  )
-                                }
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 24 24"
-                                  fill="white"
-                                  width="20px"
-                                  height="20px"
-                                  className="delete-icon"
-                                >
-                                  <path d="M3 6h18v2H3V6zm2 2v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V8H5zm7 4v6h2v-6h-2zm-4 0v6h2v-6H8zm8 0v6h2v-6h-2zM7 4h10v2H7V4z" />
-                                </svg>
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      ))
-                  ) : (
-                    <p className="no-selection-message">No hay selecciones</p>
-                  )}
+                      <path d="M3 6h18v2H3V6zm2 2v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V8H5zm7 4v6h2v-6h-2zm-4 0v6h2v-6H8zm8 0v6h2v-6h-2zM7 4h10v2H7V4z" />
+                    </svg>
+                  </button>
                 </div>
-              </div>
-            </td>
+              ))}
+            </div>
+          ))
+      ) : (
+        <p className="no-selection-message">No hay selecciones</p>
+      )}
+    </div>
+  </div>
+</td>
+
+
           </tr>
           <td colSpan={8}>
             <span></span>
