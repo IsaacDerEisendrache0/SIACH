@@ -11,6 +11,9 @@ import {
   getDoc,
   setDoc,
   deleteDoc,
+  query, 
+  where,
+  serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../firebase"; // Importar la configuración de Firebase
 import logo from "../logos/logo.png";
@@ -953,8 +956,20 @@ const RiskAssessmentTable = () => {
   // Función para cargar las empresas desde Firestore
   const loadFolders = async () => {
     try {
-      // Se lee de la colección "empresas" en lugar de "carpetas"
-      const querySnapshot = await getDocs(collection(db, "empresas"));
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (!user) {
+        console.warn("No hay usuario autenticado, no se pueden cargar empresas.");
+        return;
+      }
+  
+      // Filtramos la colección "empresas" por el UID del usuario
+      const q = query(
+        collection(db, "empresas"),
+        where("uid", "==", user.uid)
+      );
+  
+      const querySnapshot = await getDocs(q);
       const fetchedFolders = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         nombre: doc.data().nombre,
@@ -964,7 +979,6 @@ const RiskAssessmentTable = () => {
       console.error("Error al cargar las empresas:", error);
     }
   };
-
   useEffect(() => {
     loadFolders();
   }, []);
@@ -1138,19 +1152,27 @@ const RiskAssessmentTable = () => {
     }
   };
 
-  const handleAddEmpresa = async () => {
-    const nuevaEmpresa = prompt("Ingrese el nombre de la nueva empresa:");
-    if (nuevaEmpresa && !empresas.includes(nuevaEmpresa)) {
-      try {
-        // Agrega un nuevo documento a la colección Empresas_17 con el campo "nombre"
-        await addDoc(collection(db, "Empresas_17"), { nombre: nuevaEmpresa });
-        // Actualiza el estado para incluir la nueva empresa
-        setEmpresas((prev) => [...prev, nuevaEmpresa]);
-      } catch (error) {
-        console.error("Error al agregar la nueva empresa:", error);
-      }
-    }
-  };
+  // Ejemplo de creación de empresa (si aplica en tu caso):
+const handleAddEmpresa = async () => {
+  const nuevaEmpresa = prompt("Ingrese el nombre de la nueva empresa:");
+  if (!nuevaEmpresa) return;
+
+  // Necesitas el usuario
+  const auth = getAuth();
+  const user = auth.currentUser;
+  if (!user) {
+    alert("No estás autenticado.");
+    return;
+  }
+
+  // Guarda el doc con el campo "uid"
+  await addDoc(collection(db, "empresas"), {
+    nombre: nuevaEmpresa,
+    uid: user.uid, // <--- guardamos el UID
+    fechaCreacion: serverTimestamp(),
+  });
+};
+
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target; 
@@ -1501,7 +1523,7 @@ const RiskAssessmentTable = () => {
                   onChange={handlePuestoChange}
                   className="select-puesto"
                 >
-                  <option value="" disabled className="option-item">
+                  <option value="" disabled className="option-item">  
                     Seleccione un puesto
                   </option>
                   {puestos.map((puesto, index) => (
