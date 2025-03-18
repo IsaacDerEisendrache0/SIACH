@@ -9,6 +9,7 @@ import {
   doc,
   serverTimestamp,
   writeBatch,
+  onSnapshot, // ← Importamos onSnapshot para actualizaciones en tiempo real
 } from "firebase/firestore";
 import { db } from "../firebase";
 import "./SavedTables.css";
@@ -35,6 +36,10 @@ const SavedTables = () => {
 
   // 3) REGISTROS
   const [registros, setRegistros] = useState([]);
+
+  // Estado para paginación de registros
+  const [currentPage, setCurrentPage] = useState(1);
+  const registrosPorPagina = 15;
 
   // ------------------------------------------------------------------
   // CARGA DE EMPRESAS AL MONTAR EL COMPONENTE
@@ -84,14 +89,14 @@ const SavedTables = () => {
   // ------------------------------------------------------------------
   const handleDeleteEmpresa = async (empresaId) => {
     const confirmDelete = window.confirm(
-      "¿Estás seguro de que deseas borrar esta empresa? Esto eliminará también todas sus normas y registros.",
+      "¿Estás seguro de que deseas borrar esta empresa? Esto eliminará también todas sus normas y registros."
     );
     if (!confirmDelete) return;
 
     try {
       // 1. Cargar todas las normas de la empresa
       const normasSnap = await getDocs(
-        collection(db, "empresas", empresaId, "normas"),
+        collection(db, "empresas", empresaId, "normas")
       );
 
       for (let normaDoc of normasSnap.docs) {
@@ -99,7 +104,7 @@ const SavedTables = () => {
 
         // 2. Cargar todos los registros de cada norma
         const registrosSnap = await getDocs(
-          collection(db, "empresas", empresaId, "normas", normaId, "registros"),
+          collection(db, "empresas", empresaId, "normas", normaId, "registros")
         );
 
         // Usamos un batch para eliminar todos los registros de la norma
@@ -113,8 +118,8 @@ const SavedTables = () => {
               "normas",
               normaId,
               "registros",
-              regDoc.id,
-            ),
+              regDoc.id
+            )
           );
         });
         await batch.commit();
@@ -152,7 +157,7 @@ const SavedTables = () => {
   const loadNormas = async (empresaId) => {
     try {
       const snapshot = await getDocs(
-        collection(db, "empresas", empresaId, "normas"),
+        collection(db, "empresas", empresaId, "normas")
       );
       const fetchedNormas = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -180,7 +185,7 @@ const SavedTables = () => {
         {
           nombre: newNormaName,
           fechaCreacion: serverTimestamp(),
-        },
+        }
       );
       setNormas([...normas, { id: docRef.id, nombre: newNormaName }]);
       setNewNormaName("");
@@ -195,7 +200,7 @@ const SavedTables = () => {
   // ------------------------------------------------------------------
   const handleDeleteNorma = async (normaId) => {
     const confirmDelete = window.confirm(
-      "¿Estás seguro de que deseas borrar esta norma? Esto eliminará también todos sus registros.",
+      "¿Estás seguro de que deseas borrar esta norma? Esto eliminará también todos sus registros."
     );
     if (!confirmDelete) return;
 
@@ -208,8 +213,8 @@ const SavedTables = () => {
           selectedEmpresa.id,
           "normas",
           normaId,
-          "registros",
-        ),
+          "registros"
+        )
       );
       const batch = writeBatch(db);
       registrosSnap.forEach((regDoc) => {
@@ -221,15 +226,15 @@ const SavedTables = () => {
             "normas",
             normaId,
             "registros",
-            regDoc.id,
-          ),
+            regDoc.id
+          )
         );
       });
       await batch.commit();
 
       // Borrar la norma
       await deleteDoc(
-        doc(db, "empresas", selectedEmpresa.id, "normas", normaId),
+        doc(db, "empresas", selectedEmpresa.id, "normas", normaId)
       );
 
       // Actualizar estado local
@@ -250,75 +255,91 @@ const SavedTables = () => {
   // ------------------------------------------------------------------
   const handleEnterNorma = (norma) => {
     setSelectedNorma(norma);
+    // Reiniciamos la página a 1 al entrar a registros
+    setCurrentPage(1);
     loadRegistros(selectedEmpresa.id, norma.id);
   };
 
-  const loadRegistros = async (empresaId, normaId) => {
-    try {
-      const registrosSnap = await getDocs(
-        collection(db, "empresas", empresaId, "normas", normaId, "tablas"),
-      );
-      const fetchedRegistros = registrosSnap.docs.map((doc) => ({
+  // Función para parsear fecha y hora en formato válido para new Date()
+  // Parsea "14/3/2025" y "11:43:45 AM" a un objeto Date de JS
+function parseDateTime(fecha, hora) {
+  // 1) Separar día, mes y año
+  const [day, month, year] = fecha.split("/").map(num => parseInt(num, 10));
+
+  // 2) Separar hora, minutos, segundos y AM/PM
+  //    asumiendo que la hora viene como "HH:MM:SS AM" o "HH:MM:SS PM"
+  let [time, ampm] = hora.split(" ");         // p.ej. "11:43:45" y "AM"
+  let [hh, mm, ss] = time.split(":").map(num => parseInt(num, 10));
+
+  // 3) Ajustar la hora según AM/PM (formato 12h → 24h)
+  if (ampm === "PM" && hh < 12) {
+    hh += 12;
+  }
+  if (ampm === "AM" && hh === 12) {
+    hh = 0;
+  }
+
+  // 4) Crear objeto Date. Ojo: el mes en Date es base 0 (0 = enero)
+  const dateObj = new Date(year, month - 1, day, hh, mm, ss);
+
+  return dateObj;
+}
+
+
+  // ------------------------------------------------------------------
+  // CARGAR REGISTROS CON ACTUALIZACIÓN EN TIEMPO REAL
+  // ------------------------------------------------------------------
+  const loadRegistros = (empresaId, normaId) => {
+    const registrosRef = collection(
+      db,
+      "empresas",
+      empresaId,
+      "normas",
+      normaId,
+      "tablas" // Aseguramos que esta sea la colección correcta
+    );
+
+    // Usamos onSnapshot para que se actualice en tiempo real
+    onSnapshot(registrosRef, (snapshot) => {
+      const fetchedRegistros = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
 
-      // Función para parsear fecha y hora en formato válido para new Date()
-      const parseDateTime = (fecha, hora) => {
-        // 1. Reemplaza "a.m." por "AM" y "p.m." por "PM"
-        let horaNormalizada = hora
-          .replace("a.m.", "AM")
-          .replace("p.m.", "PM")
-          .trim();
-
-        // 2. Crea un string combinando fecha y hora que sea compatible con new Date()
-        //    Asumiendo que 'fecha' es "5/3/2025" y 'horaNormalizada' es "10:53:28 AM"
-        //    Esto debería ser interpretable en la mayoría de entornos en formato "MM/DD/YYYY HH:MM:SS AM/PM"
-        const dateTimeString = `${fecha} ${horaNormalizada}`;
-
-        // 3. Retorna el objeto Date
-        return new Date(dateTimeString);
-      };
-
-      // Ordenar en el cliente: del registro más reciente al más antiguo
+      // Ordenar los registros de forma descendente por fecha y hora
       const sortedRegistros = fetchedRegistros.sort((a, b) => {
         const dateA = parseDateTime(a.fecha, a.hora);
         const dateB = parseDateTime(b.fecha, b.hora);
-        return dateB - dateA; // descendente
+        return dateB - dateA;
       });
 
       setRegistros(sortedRegistros);
-    } catch (error) {
+    }, (error) => {
       console.error("Error al cargar registros:", error);
-    }
+    });
   };
-
-  // ------------------------------------------------------------------
-  // CREAR REGISTRO (EJEMPLO SIMPLIFICADO)
-  // ------------------------------------------------------------------
 
   // ------------------------------------------------------------------
   // ELIMINAR REGISTRO
   // ------------------------------------------------------------------
   const handleDeleteRegistro = async (registroId) => {
     const confirmDelete = window.confirm(
-      "¿Estás seguro de que deseas borrar este registro?",
+      "¿Estás seguro de que deseas borrar este registro?"
     );
     if (!confirmDelete) return;
 
     try {
-      // REFERENCIA CORRECTA AL DOCUMENTO EN FIREBASE
       const registroRef = doc(
         db,
         "empresas",
         selectedEmpresa.id,
         "normas",
         selectedNorma.id,
-        "tablas", // 🔹 Asegura que esta sea la colección correcta en Firestore
-        registroId,
+        "tablas", // Aseguramos que esta sea la colección correcta
+        registroId
       );
 
-      // 🔹 Verificar si el documento existe antes de eliminar
+      // Verificar si el documento existe
       const docSnapshot = await getDocs(
         collection(
           db,
@@ -326,8 +347,8 @@ const SavedTables = () => {
           selectedEmpresa.id,
           "normas",
           selectedNorma.id,
-          "tablas",
-        ),
+          "tablas"
+        )
       );
       const docExists = docSnapshot.docs.some((doc) => doc.id === registroId);
 
@@ -336,15 +357,10 @@ const SavedTables = () => {
         return;
       }
 
-      // 🔹 Eliminar el documento
       await deleteDoc(registroRef);
-      console.log(
-        `✅ Registro ${registroId} eliminado de Firebase correctamente`,
-      );
+      console.log(`✅ Registro ${registroId} eliminado de Firebase correctamente`);
 
-      // 🔹 Recargar registros después de eliminar
-      loadRegistros(selectedEmpresa.id, selectedNorma.id);
-
+      // Al usar onSnapshot, la lista se actualizará automáticamente
       alert("Registro borrado con éxito.");
     } catch (error) {
       console.error("❌ Error al borrar el registro en Firebase:", error);
@@ -355,12 +371,8 @@ const SavedTables = () => {
   // ------------------------------------------------------------------
   // EDITAR REGISTRO
   // ------------------------------------------------------------------
-  // ... resto de imports y código
-
   const handleEditRegistro = (registro) => {
     console.log("Registro a editar:", registro);
-
-    // Asegúrate de incluir todos los campos que el editor necesita.
     localStorage.setItem(
       "tableToEdit",
       JSON.stringify({
@@ -374,14 +386,10 @@ const SavedTables = () => {
         selectedMainOption: registro.selectedMainOption || "",
         nombreEmpresa: registro.nombreEmpresa || "",
         selectionList: registro.selectionList || [],
-        // Agrega aquí cualquier otro campo que necesites,
-        // como risk, descripción de evaluación, etc.
-      }),
+      })
     );
     navigate("/norma_17_editor");
   };
-
-  // ... resto del componente SavedTables.jsx
 
   // ------------------------------------------------------------------
   // BOTONES PARA REGRESAR DE UN NIVEL AL ANTERIOR
@@ -399,35 +407,23 @@ const SavedTables = () => {
   };
 
   // ------------------------------------------------------------------
-  // (A) Estados para Filtros (Empresa, Norma)
+  // FILTROS y menú hamburger (código sin cambios)
   // ------------------------------------------------------------------
   const [selectedFilterEmpresa, setSelectedFilterEmpresa] = useState("");
   const [selectedFilterNorma, setSelectedFilterNorma] = useState("");
-
-  // (B) Variables filtradas
   const displayedEmpresas = selectedFilterEmpresa
     ? empresas.filter((emp) => emp.nombre === selectedFilterEmpresa)
     : empresas;
-
   const displayedNormas = selectedFilterNorma
     ? normas.filter((norm) => norm.nombre === selectedFilterNorma)
     : normas;
-
-  // ------------------------------------------------------------------
-  // (C) Estado para controlar la visibilidad del menú (Hamburger)
-  // ------------------------------------------------------------------
   const [showFilterMenu, setShowFilterMenu] = useState(false);
-
-  // ------------------------------------------------------------------
-  // D) Estado previo "searchTerm" (sin uso actual)
-  // ------------------------------------------------------------------
-
-  const menuRef = useRef(null); // Referencia para detectar clics fuera
+  const menuRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setShowFilterMenu(false); // Cierra el menú si se hace clic fuera
+        setShowFilterMenu(false);
       }
     };
 
@@ -437,21 +433,21 @@ const SavedTables = () => {
     };
   }, []);
 
-  // Estado para controlar la visibilidad del menú de filtros de área
   const [showAreaFilterMenu, setShowAreaFilterMenu] = useState(false);
-
-  // Estado para filtrar registros por área
   const [selectedFilterArea, setSelectedFilterArea] = useState("");
-
-  // Obtener áreas únicas de los registros disponibles
-  const uniqueAreas = [
-    ...new Set(registros.map((reg) => reg.areaSeleccionada)),
-  ];
-
-  // Aplicar filtro de área a los registros mostrados
+  const uniqueAreas = [...new Set(registros.map((reg) => reg.areaSeleccionada))];
   const filteredRegistros = registros.filter((reg) =>
-    selectedFilterArea ? reg.areaSeleccionada === selectedFilterArea : true,
+    selectedFilterArea ? reg.areaSeleccionada === selectedFilterArea : true
   );
+
+  // Cálculo para la paginación
+  const indexOfLastRegistro = currentPage * registrosPorPagina;
+  const indexOfFirstRegistro = indexOfLastRegistro - registrosPorPagina;
+  const currentRegistros = filteredRegistros.slice(
+    indexOfFirstRegistro,
+    indexOfLastRegistro
+  );
+  const totalPages = Math.ceil(filteredRegistros.length / registrosPorPagina);
 
   return (
     <div className="saved-tables-container">
@@ -462,9 +458,7 @@ const SavedTables = () => {
         </button>
       </div>
 
-      {/* =========================
-    FILTRO DE EMPRESA Y NORMA (SOLO EN EMPRESAS Y NORMAS)
-   ========================= */}
+      {/* FILTROS de EMPRESA y NORMA */}
       {(!selectedEmpresa || (selectedEmpresa && !selectedNorma)) && (
         <div className="hamburger-menu-container" ref={menuRef}>
           <button
@@ -473,11 +467,7 @@ const SavedTables = () => {
           >
             ☰
           </button>
-
-          {/* Menú de filtros con clases condicionales */}
-          <div
-            className={`filter-container ${showFilterMenu ? "show" : "hide"}`}
-          >
+          <div className={`filter-container ${showFilterMenu ? "show" : "hide"}`}>
             <label>
               <strong>Empresa:</strong>
             </label>
@@ -515,12 +505,7 @@ const SavedTables = () => {
         </div>
       )}
 
-      {/* =========================
-    FILTRO POR ÁREA (SOLO EN REGISTROS)
-   ========================= */}
-      {/* =========================
-    FILTRO DE ÁREA (SOLO EN REGISTROS)
-   ========================= */}
+      {/* FILTRO POR ÁREA (SOLO EN REGISTROS) */}
       {selectedNorma && registros.length > 0 && (
         <div className="hamburger-menu-container" ref={menuRef}>
           <button
@@ -529,11 +514,7 @@ const SavedTables = () => {
           >
             ☰
           </button>
-
-          {/* Menú de filtros con clases condicionales */}
-          <div
-            className={`filter-container ${showAreaFilterMenu ? "show" : "hide"}`}
-          >
+          <div className={`filter-container ${showAreaFilterMenu ? "show" : "hide"}`}>
             <label>
               <strong>Filtrar por Área:</strong>
             </label>
@@ -552,11 +533,7 @@ const SavedTables = () => {
         </div>
       )}
 
-      {/* FIN BLOQUE BOTÓN HAMBURGER/FILTROS */}
-
-      {/* =========================
-          VISTA DE EMPRESAS
-         ========================= */}
+      {/* VISTA DE EMPRESAS */}
       {!selectedEmpresa && (
         <>
           <h2>Empresas</h2>
@@ -575,10 +552,6 @@ const SavedTables = () => {
 
           {empresas.length > 0 ? (
             <div className="folders-list">
-              {/* 
-                Se muestra la lista de empresas 
-                según el filtro "selectedFilterEmpresa"
-              */}
               {displayedEmpresas.map((empresa) => (
                 <div key={empresa.id} className="folder-item">
                   <span
@@ -602,9 +575,7 @@ const SavedTables = () => {
         </>
       )}
 
-      {/* =========================
-          VISTA DE NORMAS
-         ========================= */}
+      {/* VISTA DE NORMAS */}
       {selectedEmpresa && !selectedNorma && (
         <>
           <div className="back-to-home">
@@ -613,7 +584,6 @@ const SavedTables = () => {
             </button>
           </div>
           <h2>Normas de la empresa: {selectedEmpresa.nombre}</h2>
-
           <form onSubmit={handleAddNorma} className="add-folder-form">
             <input
               type="text"
@@ -652,9 +622,7 @@ const SavedTables = () => {
         </>
       )}
 
-      {/* =========================
-          VISTA DE REGISTROS
-         ========================= */}
+      {/* VISTA DE REGISTROS */}
       {selectedNorma && (
         <>
           <div className="back-to-home">
@@ -664,8 +632,8 @@ const SavedTables = () => {
           </div>
           <h2>Registros de la Norma: {selectedNorma.nombre}</h2>
 
-          {filteredRegistros.length > 0 ? (
-            filteredRegistros.map((registro) => (
+          {currentRegistros.length > 0 ? (
+            currentRegistros.map((registro) => (
               <div key={registro.id} className="saved-table">
                 <p>
                   <strong>Empresa:</strong> {registro.nombreEmpresa}
@@ -704,6 +672,27 @@ const SavedTables = () => {
             ))
           ) : (
             <p>No hay registros en esta norma.</p>
+          )}
+
+          {/* Controles de paginación */}
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+                disabled={currentPage === 1}
+              >
+                Anterior
+              </button>
+              <span>
+                Página {currentPage} de {totalPages}
+              </span>
+              <button
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Siguiente
+              </button>
+            </div>
           )}
         </>
       )}
