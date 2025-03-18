@@ -9,6 +9,7 @@ import {
   where,
   serverTimestamp,
   getDocs,
+  getDoc,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
@@ -36,7 +37,7 @@ const TablaResumen = () => {
   /* ================================
      SISTEMA DE CARPETAS
   ================================ */
-  // Cargar Empresas (desde la colección "resumenes")
+  // Cargar Empresas (desde la colección "resumenes") filtradas por UID
   useEffect(() => {
     if (!uid) return;
     const q = query(collection(db, "resumenes"), where("uid", "==", uid));
@@ -50,12 +51,12 @@ const TablaResumen = () => {
     return () => unsubscribe();
   }, [uid]);
 
-  // Al seleccionar una empresa, cargar Normas (subcolección "normas")
+  // Al seleccionar una empresa, cargar Normas (subcolección "normas") filtradas por UID
   useEffect(() => {
     if (selectedEmpresa) {
       const q = query(
         collection(db, "resumenes", selectedEmpresa.id, "normas"),
-        where("uid", "==", uid),
+        where("uid", "==", uid)
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
         const norms = snapshot.docs.map((doc) => ({
@@ -71,11 +72,11 @@ const TablaResumen = () => {
     }
   }, [selectedEmpresa, uid]);
 
-  // Al seleccionar una norma, cargar la tabla de resumen
+  // Al seleccionar una norma, cargar la tabla de resumen (áreas) filtradas por UID
   useEffect(() => {
     if (!selectedNorma || !selectedEmpresa || !uid) {
       console.warn(
-        "⚠️ No se han seleccionado norma o empresa aún, esperando...",
+        "⚠️ No se han seleccionado norma o empresa aún, esperando..."
       );
       return;
     }
@@ -94,21 +95,24 @@ const TablaResumen = () => {
       console.warn("⚠️ La norma seleccionada no es válida:", selectedNorma.nombre);
       return;
     }
-    
 
     console.log("📌 Cargando datos desde la colección:", collectionName);
 
-    // Solo si hay empresa y norma seleccionadas, usamos la ruta que incluye el nombre de la empresa
+    // Se asume que en Firestore, en la colección de resumen, cada documento en "areas"
+    // tiene un campo uid que indica el dueño. Se filtra la consulta por uid.
     const empresaFolder = selectedEmpresa.nombre; // Se asume que el documento en Firestore se llama igual a la empresa
     unsubscribe = onSnapshot(
-      collection(db, collectionName, empresaFolder, "areas"),
+      query(
+        collection(db, collectionName, empresaFolder, "areas"),
+        where("uid", "==", uid)
+      ),
       (snapshot) => {
         if (snapshot.empty) {
           console.warn(
             "⚠️ No hay documentos en la subcolección:",
             empresaFolder,
             "en",
-            collectionName,
+            collectionName
           );
           setData([]); // Limpiar la tabla si no hay datos
           return;
@@ -133,6 +137,9 @@ const TablaResumen = () => {
         setData(areasData);
         console.log("📊 Datos actualizados en el estado:", areasData);
       },
+      (error) => {
+        console.error("Error al cargar áreas:", error);
+      }
     );
 
     return () => {
@@ -143,15 +150,14 @@ const TablaResumen = () => {
   // Función para eliminar una empresa con confirmación
   const deleteEmpresa = async (empresaId) => {
     const confirmDelete = window.confirm(
-      "¿Estás seguro de que deseas eliminar esta empresa? Se eliminarán también todas sus normas.",
+      "¿Estás seguro de que deseas eliminar esta empresa? Se eliminarán también todas sus normas."
     );
-
     if (!confirmDelete) return;
 
     try {
       // Obtener todas las normas dentro de la empresa y eliminarlas primero
       const normasSnapshot = await getDocs(
-        collection(db, "resumenes", empresaId, "normas"),
+        collection(db, "resumenes", empresaId, "normas")
       );
       normasSnapshot.forEach(async (normaDoc) => {
         await deleteDoc(doc(db, "resumenes", empresaId, "normas", normaDoc.id));
@@ -170,13 +176,13 @@ const TablaResumen = () => {
   // Función para eliminar una norma con confirmación
   const deleteNorma = async (normaId) => {
     const confirmDelete = window.confirm(
-      "¿Estás seguro de que deseas eliminar esta norma?",
+      "¿Estás seguro de que deseas eliminar esta norma?"
     );
     if (!confirmDelete) return;
 
     try {
       await deleteDoc(
-        doc(db, "resumenes", selectedEmpresa.id, "normas", normaId),
+        doc(db, "resumenes", selectedEmpresa.id, "normas", normaId)
       );
       setNormas((prev) => prev.filter((norma) => norma.id !== normaId));
       alert("Norma eliminada con éxito.");
@@ -217,7 +223,7 @@ const TablaResumen = () => {
     e.preventDefault();
     if (!newNormaName.trim() || !selectedEmpresa) {
       alert(
-        "El nombre de la norma no puede estar vacío y se debe seleccionar una empresa.",
+        "El nombre de la norma no puede estar vacío y se debe seleccionar una empresa."
       );
       return;
     }
@@ -234,7 +240,7 @@ const TablaResumen = () => {
     }
   };
 
-  // Función para eliminar un registro de resumen
+  // Función para eliminar un registro de resumen (área)
   const deleteArea = async (areaId, collectionName, empresaName) => {
     if (!collectionName || !empresaName) {
       alert("No se cuenta con la información necesaria para eliminar el área.");
@@ -261,7 +267,7 @@ const TablaResumen = () => {
     setExpandedAreas((prevExpandedAreas) =>
       prevExpandedAreas.includes(areaId)
         ? prevExpandedAreas.filter((id) => id !== areaId)
-        : [...prevExpandedAreas, areaId],
+        : [...prevExpandedAreas, areaId]
     );
   };
 
@@ -274,7 +280,7 @@ const TablaResumen = () => {
       elevado: acc.elevado + (row.elevado || 0),
       grave: acc.grave + (row.grave || 0),
     }),
-    { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 },
+    { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 }
   );
 
   return (
@@ -412,7 +418,7 @@ const TablaResumen = () => {
                             deleteArea(
                               row.area,
                               row.collectionName,
-                              row.nombreEmpresa, // <-- IMPORTANTE: pasamos también el nombre de la empresa
+                              row.nombreEmpresa // Se pasa también el nombre de la empresa
                             )
                           }
                           className="boton-eliminar"
@@ -439,7 +445,7 @@ const TablaResumen = () => {
               </tbody>
             </table>
 
-            {/* Tabla(s) separada(s) para los puestos de cada área expandida */}
+            {/* Tablas separadas para los puestos de cada área expandida */}
             {data.map((row) =>
               expandedAreas.includes(row.area) &&
               row.puestos &&
@@ -474,7 +480,7 @@ const TablaResumen = () => {
                     </tbody>
                   </table>
                 </div>
-              ) : null,
+              ) : null
             )}
           </div>
         </>
