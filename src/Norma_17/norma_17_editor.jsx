@@ -116,14 +116,18 @@ const RiskAssessmentTableEditor = () => {
 
   const handleAreaChange = (e) => {
     const selectedName = e.target.value;
-    const selectedArea = areas.find((area) => area.nombre === selectedName);
-
+    setAreaSeleccionada(selectedName);
+  
+    // Buscar la definición del área en el arreglo areas
+    const selectedArea = areas.find((a) => a.nombre === selectedName);
     if (selectedArea) {
-      setAreaSeleccionada(selectedArea.nombre);
-      setPuestos(selectedArea.puestos);
-      setPuestoSeleccionado(""); // Reiniciar puesto al cambiar área
+      setPuestos(selectedArea.puestos || []);
+    } else {
+      setPuestos([]);
     }
   };
+  
+  
 
   const handlePuestoChange = (e) => {
     setPuestoSeleccionado(e.target.value);
@@ -321,30 +325,39 @@ const RiskAssessmentTableEditor = () => {
   }, [areaSeleccionada, areas]);
 
   // Función para agregar un nuevo puesto
-  const handleAddPuestoClick = () => {
+  const handleAddPuestoClick = async () => {
     const nuevoPuesto = prompt("Ingrese el nuevo puesto:");
     if (nuevoPuesto && nuevoPuesto.trim() !== "") {
       const updatedPuestos = [...puestos, nuevoPuesto.trim()];
-      setPuestos(updatedPuestos); // Actualizamos el estado con el nuevo puesto
-
-      // Guardamos los puestos actualizados en localStorage para el área seleccionada
-      const areaSeleccionadaKey = `puestos_${areaSeleccionada}`;
-      localStorage.setItem(areaSeleccionadaKey, JSON.stringify(updatedPuestos));
-
-      setPuestoSeleccionado(""); // Limpiar la selección del dropdown después de agregar
-    }
-
-    if (puestoSeleccionado && !puestos.includes(puestoSeleccionado)) {
-      const updatedPuestos = [...puestos, puestoSeleccionado];
-      setPuestos(updatedPuestos); // Agregar el puesto seleccionado al array
-
-      // Guardamos los puestos actualizados en localStorage para el área seleccionada
-      const areaSeleccionadaKey = `puestos_${areaSeleccionada}`;
-      localStorage.setItem(areaSeleccionadaKey, JSON.stringify(updatedPuestos));
-
-      setPuestoSeleccionado(""); // Limpiar la selección del dropdown después de agregar
+      setPuestos(updatedPuestos);
+      setPuestoSeleccionado("");
+      const selectedAreaObj = areas.find(
+        (area) =>
+          area.nombre.trim().toLowerCase() ===
+          areaSeleccionada.trim().toLowerCase()
+      );
+      if (!selectedAreaObj || !selectedEmpresaId) {
+        console.error("No se encontró el área o la empresa no está seleccionada.", {
+          selectedEmpresaId,
+          areaSeleccionada,
+          areas,
+        });
+        alert("No se pudo agregar el puesto: selecciona una empresa y un área.");
+        return;
+      }
+      try {
+        await updateDoc(
+          doc(db, "Empresas_17", selectedEmpresaId, "areas", selectedAreaObj.id),
+          { puestos: updatedPuestos }
+        );
+        console.log("Puesto agregado y actualizado en Firebase");
+      } catch (error) {
+        console.error("Error actualizando puestos en Firebase:", error);
+        alert("Error al agregar el puesto, revisa la consola.");
+      }
     }
   };
+  
 
   // Función para borrar los puestos seleccionados
   const handleDeleteSelectedPuestos = () => {
@@ -1182,21 +1195,38 @@ const RiskAssessmentTableEditor = () => {
     }
   };
 
-  useEffect(() => {
-    loadAreas();
-  }, []);
+  const handleEmpresaChange = (e) => {
+    const selectedId = e.target.value;
+    setSelectedEmpresaId(selectedId);
+  
+    // Opcional: guardar en otro estado el nombre de la empresa
+    const selected = empresas.find((emp) => emp.id === selectedId);
+    setEmpresaSeleccionada(selected ? selected.nombre : "");
+  
+    // Limpia áreas y puestos mientras se carga la nueva información
+    setAreas([]);
+    setAreaSeleccionada("");
+    setPuestos([]);
+    setPuestoSeleccionado("");
+  };
+  
+  
 
   // DECLARAMOS FUERA
   const loadEmpresas = async () => {
     try {
       const snapshot = await getDocs(collection(db, "Empresas_17"));
-      // ...
       const empresasList = snapshot.docs.map((doc) => doc.data().nombre);
       setEmpresas(empresasList);
     } catch (error) {
       console.error("Error al cargar las empresas:", error);
     }
   };
+  
+  useEffect(() => {
+    loadEmpresas(); // Se ejecuta al montar el componente
+  }, []);
+  
 
   useEffect(() => {
     loadEmpresas(); // Puede llamarse aquí
@@ -1218,24 +1248,30 @@ const RiskAssessmentTableEditor = () => {
 
   // useEffect que carga las áreas
   useEffect(() => {
-    async function fetchAreas() {
-      const snapshot = await getDocs(collection(db, "areas"));
-      const list = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setAreas(list);
-
-      // Si deseas seleccionar por defecto la primera área al terminar de cargar:
-      if (list.length > 0) {
-        setAreaSeleccionada(list[0].nombre);
-        // Y asignar sus puestos a 'puestos'
-        setPuestos(list[0].puestos || []);
+    if (!selectedEmpresaId) return; // si no hay empresa, no cargamos
+  
+    const fetchAreas = async () => {
+      try {
+        // Documento de la empresa
+        const empresaRef = doc(db, "Empresas_17", selectedEmpresaId);
+        // Subcolección "areas"
+        const areasRef = collection(empresaRef, "areas");
+        const querySnapshot = await getDocs(areasRef);
+  
+        const dbAreas = querySnapshot.docs.map((docItem) => ({
+          id: docItem.id,
+          ...docItem.data(),
+        }));
+  
+        setAreas(dbAreas); 
+      } catch (error) {
+        console.error("Error al cargar áreas desde Firebase:", error);
       }
-    }
-
+    };
+  
     fetchAreas();
-  }, []);
+  }, [selectedEmpresaId]);
+  
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target; 
@@ -1284,6 +1320,43 @@ const RiskAssessmentTableEditor = () => {
       setSelectedImages((prevImages) => [...prevImages, selectedImage]);
     }
   };
+
+
+  useEffect(() => {
+    if (!selectedEmpresaId) return;
+    const loadAreas = async () => {
+      const empresaRef = doc(db, "Empresas_17", selectedEmpresaId);
+      const areasRef = collection(empresaRef, "areas");
+      const querySnapshot = await getDocs(areasRef);
+      const loadedAreas = querySnapshot.docs.map((docItem) => ({
+        id: docItem.id,
+        ...docItem.data(),
+      }));
+      setAreas(loadedAreas);
+    };
+    loadAreas();
+  }, [selectedEmpresaId]);
+
+  useEffect(() => {
+    const loadCompanies = async () => {
+      try {
+        const companiesRef = collection(db, "Empresas_17");
+        const querySnapshot = await getDocs(companiesRef);
+        // Extraemos el campo "nombre" de cada documento
+        const companiesList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(), // doc.data().nombre, etc.
+        }));
+        setEmpresas(companiesList);
+      } catch (error) {
+        console.error("Error al cargar empresas desde Firebase:", error);
+      }
+    };
+  
+    loadCompanies();
+  }, []);
+  
+  
 
   return (
     <div class="main-table">
@@ -1533,21 +1606,19 @@ const RiskAssessmentTableEditor = () => {
               </label>
 
               <div className="puesto-con-botones">
-                <select
-                  id="puesto"
-                  value={puestoSeleccionado}
-                  onChange={handlePuestoChange}
-                  className="select-puesto"
-                >
-                  <option value="" disabled className="option-item">
-                    Seleccione un puesto
-                  </option>
-                  {puestos.map((puesto, index) => (
-                    <option key={index} value={puesto} className="option-item">
-                      {puesto}
-                    </option>
-                  ))}
-                </select>
+              <select
+  id="puesto"
+  value={puestoSeleccionado}
+  onChange={handlePuestoChange}
+>
+  <option value="">Seleccione un puesto</option>
+  {puestos.map((p) => (
+    <option key={p} value={p}>
+      {p}
+    </option>
+  ))}
+</select>
+
               </div>
               {!hideButtons && (
                 <>
@@ -1734,17 +1805,19 @@ const RiskAssessmentTableEditor = () => {
                   <tr>
                     <td className="label-cell">Empresa:</td>
                     <td className="input-cell" colSpan="2">
-                      <select
-                        value={empresaSeleccionada}
-                        onChange={(e) => setEmpresaSeleccionada(e.target.value)}
-                      >
-                        <option value="">-- Selecciona una empresa --</option>
-                        {empresas.map((emp, index) => (
-                          <option key={index} value={emp}>
-                            {emp}
-                          </option>
-                        ))}
-                      </select>
+                    <select
+  id="empresa"
+  value={selectedEmpresaId}
+  onChange={handleEmpresaChange}
+>
+  <option value="">Seleccione una empresa</option>
+  {empresas.map((empresa) => (
+    <option key={empresa.id} value={empresa.id}>
+      {empresa.nombre}
+    </option>
+  ))}
+</select>
+
                     </td>
                   </tr>
 
@@ -1753,17 +1826,22 @@ const RiskAssessmentTableEditor = () => {
                     <td className="label-cell">Área:</td>
                     <td className="input-cell">
                       <div className="cell-container">
-                        <select
-                          id="area"
-                          value={areaSeleccionada}
-                          onChange={handleAreaChange}
-                        >
-                          {areas.map((area) => (
-                            <option key={area.id} value={area.nombre}>
-                              {area.nombre}
-                            </option>
-                          ))}
-                        </select>
+                      <select
+  id="area"
+  value={areaSeleccionada}
+  onChange={handleAreaChange}
+>
+  {areas.length > 0 ? (
+    areas.map((area) => (
+      <option key={area.id} value={area.nombre}>
+        {area.nombre}
+      </option>
+    ))
+  ) : (
+    <option value="">Cargando áreas...</option>
+  )}
+</select>
+
                       </div>
                     </td>
                   </tr>
