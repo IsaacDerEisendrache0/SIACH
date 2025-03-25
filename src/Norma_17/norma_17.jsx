@@ -157,28 +157,22 @@ const RiskAssessmentTable = () => {
   
   const handleInjectAreas = async () => {
     try {
-      // 1. APUNTAR AL DOCUMENTO EXACTO de la empresa en "Empresas_17"
-      const empresaDocRef = doc(db, "Empresas_17", "3t0xMAPJ63eAymoxfaTfi");
-
-      // 2. PRIMERO: Crear o actualizar el campo nombre: "Maxion"
-      await setDoc(
-        empresaDocRef,
-        { nombre: "Maxion" },
-        { merge: true } // para no sobreescribir todo el doc
-      );
-      console.log("Campo 'nombre' = 'Maxion' creado/actualizado.");
-
-      // 3. DESPUÉS: Inyectar la subcolección "areas"
+      // 1. Apuntamos al documento EXACTO en "Empresas_17"
+      //    con id = "BOwQ6hFVylImBmxn5xyd"
+      const docRef = doc(db, "Empresas_17", "BOwQ6hFVylImBmxn5xyd");
+  
+      // 2. Recorremos el array de defaultAreas y creamos un documento
+      //    en la subcolección "areas" para cada elemento
       for (const area of defaultAreas) {
-        await addDoc(collection(empresaDocRef, "areas"), area);
+        await addDoc(collection(docRef, "areas"), area);
       }
-      alert("Campo 'nombre' creado y subcolección 'areas' inyectada con éxito.");
+  
+      alert("Subcolección 'areas' inyectada correctamente con los puestos predeterminados.");
     } catch (error) {
       console.error("Error al inyectar áreas:", error);
       alert("Error al inyectar áreas, revisa la consola.");
     }
   };
-
   
   const STORAGE_KEY = "riskAssessmentData_v1";
 
@@ -429,39 +423,55 @@ const RiskAssessmentTable = () => {
   
 
   // Función para agregar un nuevo puesto y guardarlo en Firebase
-  const handleAddPuestoClick = async () => {
-    const nuevoPuesto = prompt("Ingrese el nuevo puesto:");
-    if (nuevoPuesto && nuevoPuesto.trim() !== "") {
-      const newPuesto = nuevoPuesto.trim();
-      // Actualiza el arreglo local de puestos
-      const updatedPuestos = [...puestos, newPuesto];
-      setPuestos(updatedPuestos);
-      setPuestoSeleccionado(""); // Reinicia la selección de puesto
-  
-      // Busca el objeto del área seleccionada en el arreglo "areas"
-      const selectedAreaObj = areas.find(
-        (area) => area.nombre === areaSeleccionada
-      );
-  
-      if (!selectedAreaObj || !selectedEmpresaId) {
-        console.error("No se encontró el área o la empresa no está seleccionada.");
-        alert("No se pudo agregar el puesto: selecciona una empresa y un área.");
-        return;
-      }
-  
-      try {
-        // Actualiza el documento del área en la subcolección "areas" de la empresa seleccionada
-        await updateDoc(
-          doc(db, "Empresas_17", selectedEmpresaId, "areas", selectedAreaObj.id),
-          { puestos: updatedPuestos }
-        );
-        console.log("Puesto agregado y actualizado en Firebase");
-      } catch (error) {
-        console.error("Error actualizando puestos en Firebase:", error);
-        alert("Error al agregar el puesto, revisa la consola.");
-      }
+  // Asegúrate de tener el useEffect para asignar el área automáticamente:
+useEffect(() => {
+  if (areas.length > 0 && !areaSeleccionada) {
+    setAreaSeleccionada(areas[0].nombre);
+    setPuestos(areas[0].puestos || []);
+  }
+}, [areas]);
+
+const handleAddPuestoClick = async () => {
+  const nuevoPuesto = prompt("Ingrese el nuevo puesto:");
+  if (nuevoPuesto && nuevoPuesto.trim() !== "") {
+    const newPuesto = nuevoPuesto.trim();
+    const updatedPuestos = [...puestos, newPuesto];
+    setPuestos(updatedPuestos);
+    setPuestoSeleccionado("");
+
+    // Buscar el objeto del área seleccionada en el arreglo "areas"
+    const selectedAreaObj = areas.find(
+      (area) =>
+        area.nombre.trim().toLowerCase() ===
+        areaSeleccionada.trim().toLowerCase()
+    );
+    console.log("Área encontrada:", selectedAreaObj);
+
+    // Verificación para asegurarnos de que tanto la empresa como el área estén seleccionados
+    if (!selectedAreaObj || !selectedEmpresaId) {
+      console.error("No se encontró el área o la empresa no está seleccionada.", {
+        selectedEmpresaId,
+        areaSeleccionada,
+        areas,
+      });
+      alert("No se pudo agregar el puesto: selecciona una empresa y un área.");
+      return;
     }
-  };
+
+    try {
+      await updateDoc(
+        doc(db, "Empresas_17", selectedEmpresaId, "areas", selectedAreaObj.id),
+        { puestos: updatedPuestos }
+      );
+      console.log("Puesto agregado y actualizado en Firebase");
+    } catch (error) {
+      console.error("Error actualizando puestos en Firebase:", error);
+      alert("Error al agregar el puesto, revisa la consola.");
+    }
+  }
+};
+
+
   
 
   // Función auxiliar: actualiza los puestos del área seleccionada en Firebase
@@ -1265,29 +1275,43 @@ const RiskAssessmentTable = () => {
   };
 
   // Función para borrar las empresas seleccionadas
-  const handleDeleteSelectedEmpresas = () => {
+  const handleDeleteSelectedEmpresas = async () => {
     if (empresasSeleccionadasParaBorrar.length === 0) {
       alert("Seleccione al menos una empresa para borrar.");
       return;
     }
+    
     const confirmDelete = window.confirm(
-      `¿Seguro que deseas eliminar las siguientes empresas?\n${empresasSeleccionadasParaBorrar.join(
-        ", ",
-      )}`,
+      `¿Seguro que deseas eliminar las siguientes empresas?\n${empresasSeleccionadasParaBorrar.join(", ")}`
     );
-    if (confirmDelete) {
-      setEmpresas(
-        empresas.filter(
-          (empresa) => !empresasSeleccionadasParaBorrar.includes(empresa),
-        ),
-      );
-      // Si la empresa borrada era la seleccionada, reiniciamos el valor
-      if (empresasSeleccionadasParaBorrar.includes(empresaSeleccionada)) {
-        setEmpresaSeleccionada("");
+    if (!confirmDelete) return;
+  
+    try {
+      // Para cada empresa seleccionada, borramos primero la subcolección "areas"
+      for (const empresaId of empresasSeleccionadasParaBorrar) {
+        // Obtenemos todos los documentos de la subcolección "areas" de esta empresa
+        const areasSnapshot = await getDocs(collection(db, "Empresas_17", empresaId, "areas"));
+        for (const areaDoc of areasSnapshot.docs) {
+          // Borramos cada documento de la subcolección "areas"
+          await deleteDoc(areaDoc.ref);
+        }
+        // Una vez borradas todas las áreas, borramos el documento de la empresa
+        await deleteDoc(doc(db, "Empresas_17", empresaId));
       }
+  
+      // Actualizamos el estado local para eliminar las empresas borradas
+      setEmpresas(prevEmpresas =>
+        prevEmpresas.filter(emp => !empresasSeleccionadasParaBorrar.includes(emp.id))
+      );
+      setEmpresasSeleccionadasParaBorrar([]);
       closeEmpresaModal();
+      alert("Empresas eliminadas con éxito.");
+    } catch (error) {
+      console.error("Error al borrar empresas:", error);
+      alert("Ocurrió un error al borrar las empresas. Revisa la consola.");
     }
   };
+
 
   // Ejemplo de creación de empresa (si aplica en tu caso):
   const handleAddEmpresa = async () => {
@@ -2024,22 +2048,21 @@ const RiskAssessmentTable = () => {
               <p>Selecciona las empresas que deseas eliminar:</p>
               <div className="empresa-selection-list">
                 {empresas.length > 0 ? (
-                  empresas.map((empresa) => (
-                    <label key={empresa} className="checkbox-label">
-                      <input
-                        type="checkbox"
-                        value={empresa}
-                        checked={empresasSeleccionadasParaBorrar.includes(
-                          empresa,
-                        )}
-                        onChange={handleEmpresaSelectionChange}
-                      />
-                      {empresa}
-                    </label>
-                  ))
-                ) : (
-                  <p>No hay empresas disponibles.</p>
-                )}
+  empresas.map((empresa) => (
+    <label key={empresa.id} className="checkbox-label">
+      <input
+        type="checkbox"
+        value={empresa.id}  // <-- Guardas el ID del doc
+        checked={empresasSeleccionadasParaBorrar.includes(empresa.id)}
+        onChange={handleEmpresaSelectionChange}
+      />
+      {empresa.nombre}  {/* Muestras el nombre de la empresa */}
+    </label>
+  ))
+) : (
+  <p>No hay empresas disponibles.</p>
+)}
+
               </div>
               <div className="modal-buttons">
                 <button
