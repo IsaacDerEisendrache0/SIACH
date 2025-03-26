@@ -795,7 +795,7 @@ const handleAddPuestoClick = async () => {
     ],
     "Gafas de Protección": [
       "Goggles",
-      "Gafas con Filtro UV",
+      "Gafas de Proteccion",
       "Gafas Antiempañantes",
       "Gafas de Impacto",
     ],
