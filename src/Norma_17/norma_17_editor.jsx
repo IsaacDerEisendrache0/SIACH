@@ -218,8 +218,10 @@ const RiskAssessmentTableEditor = () => {
   const downloadImage = () => {
     // Selecciona todos los botones que deben ocultarse
     const buttons = document.querySelectorAll(
-      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button",
+      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-exit-editor"
     );
+    
+    
 
     // Oculta los botones temporalmente
     buttons.forEach((button) => button.classList.add("hidden-buttons"));
@@ -1356,7 +1358,8 @@ const RiskAssessmentTableEditor = () => {
     loadCompanies();
   }, []);
   
-  
+  const riskColor = getRiskColor(risk);
+
 
   return (
     <div class="main-table">
@@ -2213,11 +2216,17 @@ const RiskAssessmentTableEditor = () => {
                     </td>
 
                     <td
-                      className="blueberry-risk"
-                      style={{ backgroundColor: getRiskColor(calculateRisk()) }}
-                    >
-                      {calculateRisk().toFixed(2)}
-                    </td>
+  style={{
+    backgroundColor: getRiskColor(calculateRisk()),
+    color: getRiskColor(calculateRisk()) === "yellow" ? "black" : "white",
+    fontSize: "24px",
+    fontWeight: "bold",
+    textAlign: "center",
+  }}
+>
+  {calculateRisk().toFixed(2)}
+</td>
+
                   </tr>
                 </tbody>
               </table>
@@ -2233,54 +2242,49 @@ const RiskAssessmentTableEditor = () => {
                   <tr>
                     <td className="risk-label-cell">Magnitud del Riesgo:</td>
                     <td
-                      className="risk-value-cell"
-                      style={{
-                        backgroundColor: getRiskColor(risk),
-                        color: "white",
-                      }}
-                    >
-                      {risk.toFixed(2)}
-                    </td>
+  className="risk-value-cell"
+  style={{
+    backgroundColor: riskColor,
+    color: riskColor === "yellow" ? "black" : "white",
+  }}
+>
+  {risk.toFixed(2)}
+</td>
+
                   </tr>
                   <tr>
                     <td className="risk-label-cell">Clasificación:</td>
                     <td
-                      className="risk-classification-cell"
-                      style={{
-                        backgroundColor: getRiskColor(risk),
-                        color: "white",
-                      }}
-                    >
-                      {risk > 400
-                        ? "Muy Alto"
-                        : risk > 200
-                          ? "Alto"
-                          : risk > 70
-                            ? "Notable"
-                            : risk > 20
-                              ? "Moderado"
-                              : "Bajo o Aceptable"}
-                    </td>
+  className={`risk-classification-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
+  style={{ backgroundColor: riskColor }}
+>
+  {risk > 400
+    ? "Muy Alto"
+    : risk > 200
+    ? "Alto"
+    : risk > 70
+    ? "Notable"
+    : risk > 20
+    ? "Moderado"
+    : "Bajo o Aceptable"}
+</td>
                   </tr>
                   <tr>
                     <td className="risk-label-cell">Acción:</td>
                     <td
-                      className="risk-action-cell"
-                      style={{
-                        backgroundColor: getRiskColor(risk),
-                        color: "white",
-                      }}
-                    >
-                      {risk > 400
-                        ? "Detención inmediata"
-                        : risk > 200
-                          ? "Corrección inmediata"
-                          : risk > 70
-                            ? "Corrección urgente"
-                            : risk > 20
-                              ? "Requiere atención"
-                              : "Tolerable"}
-                    </td>
+  className={`risk-action-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
+  style={{ backgroundColor: riskColor }}
+>
+  {risk > 400
+    ? "Detención inmediata"
+    : risk > 200
+    ? "Corrección inmediata"
+    : risk > 70
+    ? "Corrección urgente"
+    : risk > 20
+    ? "Requiere atención"
+    : "Tolerable"}
+</td> 
                   </tr>
                 </tbody>
               </table>
@@ -2303,8 +2307,7 @@ const RiskAssessmentTableEditor = () => {
         >
           Reiniciar Tabla
         </button>
-        <button onClick={handleAddEmpresa}>Agregar</button>
-        <button onClick={handleDeleteEmpresa}>Borrar</button>
+        
       </div>
     </div>
   );

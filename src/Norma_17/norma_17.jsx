@@ -1132,8 +1132,12 @@ const handleAddPuestoClick = async () => {
 
   // Abrir el modal
   const openFolderModal = () => {
+    setSelectedEmpresaId("");
+    setSelectedNormaId("");
+    setNormas([]); // Opcional, para reiniciar la lista de normas
     setIsFolderModalOpen(true);
   };
+  
 
   // Cerrar el modal
   const closeFolderModal = () => {
@@ -1414,26 +1418,29 @@ const handleAddPuestoClick = async () => {
 
 
   const eppNames = {
-    "/images/1.png":  "Mandil",
-    "/images/2.png":  "Mascara filtro",
-    "/images/3.png":  "Gafas con filtro UV",
+    "/images/1.png":  "Mandil de temperaturas",
+    "/images/2.png":  "Respirador",
+    "/images/3.png":  "Anteojos de proteccion",
     "/images/4.png":  "Botas",
     "/images/5.png":  "Tapones de oido",
     "/images/6.png":  "Guantes",
     "/images/7.png":  "Gafas contra sustancias",
+    "/images/8.png":  "Cubierta de frio",
     "/images/9.png":  "Mandil",
     "/images/10.png": "Casco",
-    "/images/11.png": "Cubre bocas",
+    "/images/11.png": "Mascarilla",
     "/images/12.png": "Chaleco reflectante",
     "/images/13.png": "Bata de laboratorio",
-    "/images/14.png": "Careta",
+    "/images/14.png": "Pantalla facial",
     "/images/15.png": "Careta soldador",
-    "/images/16.png": "Traje antiradacion",
+    "/images/16.png": "Tanque respirador",
     "/images/17.png": "Respirador",
     "/images/18.png": "Cofia",
     "/images/19.png": "Conchas",
     "/images/21.png": "Mangas",
     "/images/23.png": "Arnes",
+    "/images/24.png": "Overol",
+
   
   };
   
@@ -2413,7 +2420,7 @@ const handleAddPuestoClick = async () => {
                     <td className="risk-label-cell">Magnitud del Riesgo:</td>
                     <td
                       className={`risk-value-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
-                      style={{ backgroundColor: riskColor }}
+                      style={{  }}
                     >
                       {risk.toFixed(2)}
                     </td>

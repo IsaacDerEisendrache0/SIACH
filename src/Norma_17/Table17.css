@@ -959,7 +959,7 @@ button {
   font-size: 24px !important;
   font-weight: bold;
   text-align: center;
-  color: white !important; /* Por defecto el texto es blanco */
+  color: white; /* Por defecto el texto es blanco */
   background-color: inherit;
 }
 
