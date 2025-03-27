@@ -19,6 +19,7 @@ import { db } from "../firebase"; // Importar la configuración de Firebase
 import logo from "../logos/logo.png";
 import maxion from "../logos/maxion.jpeg";
 import safran from "../logos/safran.jpeg";
+import cimarron from "../logos/cimarron.png";
 import { getAuth } from "firebase/auth";
 
 const RiskAssessmentTable = () => {
@@ -292,7 +293,7 @@ const RiskAssessmentTable = () => {
   const downloadImage = () => {
     // Selecciona todos los botones que deben ocultarse
     const buttons = document.querySelectorAll(
-      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra",
+      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra, .remove-logo-button, .btn-agregar-empresa",
     );
 
     // Oculta los botones temporalmente
@@ -870,6 +871,8 @@ const handleAddPuestoClick = async () => {
   const logos = [
     { nombre: "Safran", url: safran },
     { nombre: "Maxion", url: maxion },
+    { nombre: "Cimarron", url: cimarron },
+
   ];
 
   // Estado para almacenar el logo seleccionado

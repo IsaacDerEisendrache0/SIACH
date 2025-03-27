@@ -20,7 +20,8 @@ import { useNavigate } from "react-router-dom";
 
 const RiskAssessmentTableEditor = () => {
   const [areas, setAreas] = useState([]);
-
+  const [empresas, setEmpresas] = useState([]);
+  const [selectedEmpresaId, setSelectedEmpresaId] = useState("");
   const [isEditing, setIsEditing] = useState(false); // Estado para modo de edición
 
   const [hazards, setHazards] = useState({
@@ -675,34 +676,87 @@ const RiskAssessmentTableEditor = () => {
     setTableToEdit(storedData);
   }, []); // Se ejecuta una vez al montar el componente
 
-  useEffect(() => {
-    if (tableToEdit) {
-      console.log("Datos recuperados en el editor:", tableToEdit);
+  
+// ...
 
-      setAreaSeleccionada(tableToEdit.areaSeleccionada || "");
-      setPuestoSeleccionado(tableToEdit.puestoSeleccionado || "");
-      setSelectedOptionEquipoUtilizado(
-        tableToEdit.selectedOptionEquipoUtilizado || "",
-      );
-      setSelectedOptionProteccionSugerida(
-        tableToEdit.selectedOptionProteccionSugerida || "",
-      );
-      setSelectedImages(tableToEdit.selectedImages || []);
-      setHazards(tableToEdit.hazards || {});
-      setConsequence(tableToEdit.consequence || 1);
-      setExposure(tableToEdit.exposure || 1);
-      setProbability(tableToEdit.probability || 0.1);
-      setDescripcionActividad1(tableToEdit.descripcionActividad1 || "");
-      setDescripcionActividad2(tableToEdit.descripcionActividad2 || "");
-      setTiempoExposicion(tableToEdit.tiempoExposicion || "8hrs");
-      setFecha(tableToEdit.fecha || new Date().toLocaleDateString());
-      setHora(tableToEdit.hora || new Date().toLocaleTimeString());
-      setTableId(tableToEdit.id || null);
-      setSelectedMainOption(tableToEdit.selectedMainOption || "");
-      setEmpresaSeleccionada(tableToEdit.nombreEmpresa || "");
-      setSelectionList(tableToEdit.selectionList || []); // <--- Aquí
+
+useEffect(() => {
+  if (!tableToEdit) return;
+
+  console.log("Datos recuperados en el editor:", tableToEdit);
+
+  // 1. Datos generales que ya tenías
+  setAreaSeleccionada(tableToEdit.areaSeleccionada || "");
+  setPuestoSeleccionado(tableToEdit.puestoSeleccionado || "");
+  setSelectedOptionEquipoUtilizado(tableToEdit.selectedOptionEquipoUtilizado || "");
+  setSelectedOptionProteccionSugerida(tableToEdit.selectedOptionProteccionSugerida || "");
+  setSelectedImages(tableToEdit.selectedImages || []);
+  setHazards(tableToEdit.hazards || {});
+  setConsequence(tableToEdit.consequence || 1);
+  setExposure(tableToEdit.exposure || 1);
+  setProbability(tableToEdit.probability || 0.1);
+  setDescripcionActividad1(tableToEdit.descripcionActividad1 || "");
+  setDescripcionActividad2(tableToEdit.descripcionActividad2 || "");
+  setTiempoExposicion(tableToEdit.tiempoExposicion || "8hrs");
+
+  // En vez de poner new Date(), asignas directamente la fecha guardada
+  setFecha(parseDdMmYyyyToIso(tableToEdit.fecha));
+
+  // Si no hay hora guardada, usas la actual
+  setHora(tableToEdit.hora || new Date().toLocaleTimeString());
+
+  setTableId(tableToEdit.id || null);
+  setSelectedMainOption(tableToEdit.selectedMainOption || "");
+  setEmpresaSeleccionada(tableToEdit.nombreEmpresa || "");
+  setSelectionList(tableToEdit.selectionList || []);
+
+  // 2. Sincronizar la EMPRESA guardada con la lista "empresas"
+  if (empresas.length > 0 && tableToEdit.nombreEmpresa) {
+    const matchedEmpresa = empresas.find(
+      (emp) => emp.nombre === tableToEdit.nombreEmpresa
+    );
+    if (matchedEmpresa) {
+      setSelectedEmpresaId(matchedEmpresa.id);
+      setEmpresaSeleccionada(matchedEmpresa.nombre);
+    } else {
+      // Creamos una empresa "temporal"
+      const tempId = "temp-" + Date.now();
+      const tempEmpresa = { id: tempId, nombre: tableToEdit.nombreEmpresa };
+      setEmpresas((prev) => [...prev, tempEmpresa]);
+      setSelectedEmpresaId(tempId);
+      setEmpresaSeleccionada(tableToEdit.nombreEmpresa);
     }
-  }, [tableToEdit]); // Se ejecuta cada vez que `tableToEdit` cambia
+  }
+
+  // 3. Sincronizar el ÁREA guardada con la lista "areas"
+  if (areas.length > 0 && tableToEdit.areaSeleccionada) {
+    const matchedArea = areas.find(
+      (a) => a.nombre === tableToEdit.areaSeleccionada
+    );
+    if (matchedArea) {
+      setAreaSeleccionada(matchedArea.nombre);
+    } else {
+      const tempAreaId = "temp-" + Date.now();
+      const tempArea = {
+        id: tempAreaId,
+        nombre: tableToEdit.areaSeleccionada,
+        puestos: [],
+      };
+      setAreas((prev) => [...prev, tempArea]);
+      setAreaSeleccionada(tempArea.nombre);
+    }
+  }
+}, [tableToEdit, empresas, areas]);
+
+  
+
+function parseDdMmYyyyToIso(fechaStr) {
+  if (!fechaStr) return "";
+  const [dd, mm, yyyy] = fechaStr.split("/");
+  if (!dd || !mm || !yyyy) return "";
+  return `${yyyy}-${mm.padStart(2,"0")}-${dd.padStart(2,"0")}`;
+}
+
 
   const handleImageRemove = (imageToRemove) => {
     setSelectedImages((prevSelectedImages) =>
@@ -1089,7 +1143,6 @@ const RiskAssessmentTableEditor = () => {
   }, []);
 
   // Estado para la empresa seleccionada (anteriormente selectedFolderId)
-  const [selectedEmpresaId, setSelectedEmpresaId] = useState("");
 
   // Estado para la norma seleccionada dentro de la empresa
   const [selectedNormaId, setSelectedNormaId] = useState("");
@@ -1170,7 +1223,6 @@ const RiskAssessmentTableEditor = () => {
   const risk = calculateRisk();
 
   // Define el estado inicial de las empresas
-  const [empresas, setEmpresas] = useState([]);
 
   // Función para agregar una nueva empresa
   const handleAddEmpresa = () => {
@@ -1820,6 +1872,7 @@ const RiskAssessmentTableEditor = () => {
   ))}
 </select>
 
+
                     </td>
                   </tr>
 
@@ -1852,13 +1905,14 @@ const RiskAssessmentTableEditor = () => {
                   <tr>
                     <td className="label-cell">Fecha de inspección:</td>
                     <td colSpan="2" className="input-cell">
-                      <input
-                        type="date"
-                        id="fechaInspeccion"
-                        value={fechaActual} // Establece la fecha actual como valor
-                        onChange={(e) => setFechaActual(e.target.value)} // Permite modificar la fecha manualmente
-                        className="date-input"
-                      />
+                    <input
+  type="date"
+  id="fechaInspeccion"
+  value={fecha} // <--- usas tu state "fecha"
+  onChange={(e) => setFecha(e.target.value)}
+  className="date-input"
+/>
+
                     </td>
                   </tr>
                   <tr>

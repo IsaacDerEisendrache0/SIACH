@@ -28,6 +28,7 @@ td {
   border-collapse: collapse;
 }
 
+
 .custom-table td,
 .custom-table th {
   padding: 8px; /* Espaciado interno en las celdas */
@@ -870,9 +871,27 @@ button {
 
 /* Estilo específico para la fila sin bordes */
 .no-border-row td {
-  border: none !important; /* Fuerza la eliminación de cualquier borde en las celdas de esta fila */
-  padding: 10px; /* Ajusta el padding según tus necesidades */
+  border: none !important;
+  border-bottom: none !important;
+  background-color: white !important;
+  box-shadow: none !important;
 }
+
+.no-border-row td,
+.no-border-row th {
+  border: none !important;
+  background-color: white !important;
+}
+
+.no-border-row {
+  border: none !important;
+}
+
+.main-table .no-border-row td,
+.custom-table .no-border-row td {
+  border: none !important;
+}
+
 
 /* Contenedor para posicionar el botón sobre la imagen */
 .logo-container {
