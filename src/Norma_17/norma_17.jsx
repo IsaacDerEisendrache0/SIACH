@@ -795,7 +795,7 @@ const handleAddPuestoClick = async () => {
     ],
     "Gafas de Protección": [
       "Goggles",
-      "Gafas de Proteccion",
+      "Anteojos de Proteccion",
       "Gafas Antiempañantes",
       "Gafas de Impacto",
     ],
@@ -2419,11 +2419,15 @@ const handleAddPuestoClick = async () => {
                   <tr>
                     <td className="risk-label-cell">Magnitud del Riesgo:</td>
                     <td
-                      className={`risk-value-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
-                      style={{  }}
-                    >
-                      {risk.toFixed(2)}
-                    </td>
+  className="risk-value-cell"
+  style={{
+    backgroundColor: riskColor,
+    color: riskColor === "yellow" ? "black" : "white"
+  }}
+>
+  {risk.toFixed(2)}
+</td>
+
                   </tr>
                   <tr>
                     <td className="risk-label-cell">Clasificación:</td>
@@ -2477,9 +2481,7 @@ const handleAddPuestoClick = async () => {
           <button onClick={handleReset} className="reset-button">
             Reiniciar Tabla
           </button>
-          <button onClick={handleInjectAreas}>
-      Inyectar Áreas para Maxion
-    </button>
+          
         </div>
 
         
