@@ -151,8 +151,9 @@ const RiskAssessmentTableEditor = () => {
   const downloadImage = () => {
     // Selecciona todos los botones que deben ocultarse
     const buttons = document.querySelectorAll(
-      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-exit-editor"
+      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra, .remove-logo-button, .btn-agregar-empresa,.epp-dropdown, .btn-add-empresa",
     );
+
     
     
 
@@ -727,7 +728,7 @@ function parseDdMmYyyyToIso(fechaStr) {
   // Opciones principales y sus subcategorías
   const eppOptions = {
     Casco: [
-      "Casco Dielectrico",
+      "Casco Dieléctrico",
       "Casco de Seguridad",
       "Casco con Visera",
       "Casco contra Impacto",
@@ -742,7 +743,7 @@ function parseDdMmYyyyToIso(fechaStr) {
     ],
     "Gafas de Protección": [
       "Goggles",
-      "Gafas de Proteccion",
+      "Anteojos de Protección",
       "Gafas Antiempañantes",
       "Gafas de Impacto",
     ],
@@ -763,10 +764,11 @@ function parseDdMmYyyyToIso(fechaStr) {
       "Bata",
     ],
     // Nuevas clasificaciones
-    "Equipo de Audición": ["Conchas Acústicas", "tapones Auditivos"],
+    "Equipo de Audición": ["Conchas Acústicas", "Tapones Auditivos"],
     Respiradores: [
       "Respirador contra Gases y Vapores",
       "Respirador contra Partículas",
+      "Mascarilla",
     ],
     "Protección Facial": [
       "Careta para Soldador",
@@ -783,7 +785,7 @@ function parseDdMmYyyyToIso(fechaStr) {
     "Equipos Especiales": [
       "Equipo de Protección contra Caídas de Altura",
       "Equipo de Respiración Autónomo",
-      "Equipo para Brigadista contra Incendio",
+      "Equipo para brigadistas contra incendios",
     ],
     Mangas: ["Mangas"],
     Arnés: ["Arnés"],

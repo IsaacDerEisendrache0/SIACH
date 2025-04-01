@@ -237,7 +237,7 @@ const RiskAssessmentTable = () => {
   const downloadImage = () => {
     // Selecciona todos los botones que deben ocultarse
     const buttons = document.querySelectorAll(
-      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra, .remove-logo-button, .btn-agregar-empresa",
+      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra, .remove-logo-button, .btn-agregar-empresa,.epp-dropdown, .btn-add-empresa",
     );
 
     // Oculta los botones temporalmente
@@ -252,7 +252,7 @@ const RiskAssessmentTable = () => {
     const originalMargin = tableElement.style.margin;
 
     // Ajusta temporalmente el tamaño de la tabla para capturarla más amplia
-    tableElement.style.width = "1900px"; // Cambia a un tamaño más grande para estirar
+    tableElement.style.width = "1800px"; // Cambia a un tamaño más grande para estirar
     tableElement.style.transform = "scale(1)"; // Asegura que no esté encogida
     tableElement.style.margin = "auto"; // Centra la tabla
 
@@ -723,69 +723,71 @@ const handleAddPuestoClick = async () => {
   const [selectionList, setSelectionList] = useState([]); // Lista acumulativa de selecciones
 
   // Opciones principales y sus subcategorías
-  const eppOptions = {
-    Casco: [
-      "Casco Dielectrico",
-      "Casco de Seguridad",
-      "Casco con Visera",
-      "Casco contra Impacto",
-    ],
-    Guantes: [
-      "Guantes de Látex",
-      "Guantes de Nitrilo",
-      "Guantes de Cuero",
-      "Guantes contra Sustancias Químicas",
-      "Guantes contra Temperaturas Extremas",
-      "Guantes Dieléctricos",
-    ],
-    "Gafas de Protección": [
-      "Goggles",
-      "Anteojos de Proteccion",
-      "Gafas Antiempañantes",
-      "Gafas de Impacto",
-    ],
-    Botas: [
-      "Botas de Seguridad",
-      "Botas Impermeables",
-      "Botas Aislantes",
-      "Calzado Conductivo",
-      "Calzado contra Impacto",
-      "Calzado contra Sustancias Químicas",
-      "Calzado Dieléctrico",
-      "Calzado Ocupacional",
-    ],
-    Mandil: [
-      "Mandil contra Altas Temperaturas",
-      "Mandil contra Sustancias Químicas",
-      "Oberol",
-      "Bata",
-    ],
-    // Nuevas clasificaciones
-    "Equipo de Audición": ["Conchas Acústicas", "tapones Auditivos"],
-    Respiradores: [
-      "Respirador contra Gases y Vapores",
-      "Respirador contra Partículas",
-    ],
-    "Protección Facial": [
-      "Careta para Soldador",
-      "Pantalla Facial",
-      "Capuchas",
-      "Anteojos de Protección",
-    ],
-    "Ropa de Protección": [
-      "Overol",
-      "Bata",
-      "Ropa contra Sustancias Peligrosas",
-      "Polainas",
-    ],
-    "Equipos Especiales": [
-      "Equipo de Protección contra Caídas de Altura",
-      "Equipo de Respiración Autónomo",
-      "Equipo para Brigadista contra Incendio",
-    ],
-    Mangas: ["Mangas"],
-    Arnés: ["Arnés"],
-  };
+const eppOptions = {
+  Casco: [
+    "Casco Dieléctrico",
+    "Casco de Seguridad",
+    "Casco con Visera",
+    "Casco contra Impacto",
+  ],
+  Guantes: [
+    "Guantes de Látex",
+    "Guantes de Nitrilo",
+    "Guantes de Cuero",
+    "Guantes contra Sustancias Químicas",
+    "Guantes contra Temperaturas Extremas",
+    "Guantes Dieléctricos",
+  ],
+  "Gafas de Protección": [
+    "Goggles",
+    "Anteojos de Protección",
+    "Gafas Antiempañantes",
+    "Gafas de Impacto",
+  ],
+  Botas: [
+    "Botas de Seguridad",
+    "Botas Impermeables",
+    "Botas Aislantes",
+    "Calzado Conductivo",
+    "Calzado contra Impacto",
+    "Calzado contra Sustancias Químicas",
+    "Calzado Dieléctrico",
+    "Calzado Ocupacional",
+  ],
+  Mandil: [
+    "Mandil contra Altas Temperaturas",
+    "Mandil contra Sustancias Químicas",
+    "Oberol",
+    "Bata",
+  ],
+  // Nuevas clasificaciones
+  "Equipo de Audición": ["Conchas Acústicas", "Tapones Auditivos"],
+  Respiradores: [
+    "Respirador contra Gases y Vapores",
+    "Respirador contra Partículas",
+    "Mascarilla",
+  ],
+  "Protección Facial": [
+    "Careta para Soldador",
+    "Pantalla Facial",
+    "Capuchas",
+    "Anteojos de Protección",
+  ],
+  "Ropa de Protección": [
+    "Overol",
+    "Bata",
+    "Ropa contra Sustancias Peligrosas",
+    "Polainas",
+  ],
+  "Equipos Especiales": [
+    "Equipo de Protección contra Caídas de Altura",
+    "Equipo de Respiración Autónomo",
+    "Equipo para brigadistas contra incendios",
+  ],
+  Mangas: ["Mangas"],
+  Arnés: ["Arnés"],
+};
+
 
   // Maneja la selección de subcategoría, agrega a la lista y oculta el menú
   const handleSubOptionChange = (e) => {
@@ -2433,7 +2435,7 @@ const handleAddPuestoClick = async () => {
 
         {/* Botones que se moverán a la derecha */}
         <div style={{ marginLeft: "auto" }}>
-        <button onClick={handleAddEmpresa}>Agregar Empresa</button>
+        <button onClick={handleAddEmpresa} className="btn-add-empresa">Agregar Empresa</button>
 
           <button className="btn-extra" onClick={openEmpresaModal}>
             Borrar Empresa
