@@ -252,7 +252,7 @@ const RiskAssessmentTable = () => {
     const originalMargin = tableElement.style.margin;
 
     // Ajusta temporalmente el tamaño de la tabla para capturarla más amplia
-    tableElement.style.width = "1500px"; // Cambia a un tamaño más grande para estirar
+    tableElement.style.width = "1900px"; // Cambia a un tamaño más grande para estirar
     tableElement.style.transform = "scale(1)"; // Asegura que no esté encogida
     tableElement.style.margin = "auto"; // Centra la tabla
 
@@ -1730,14 +1730,16 @@ const handleAddPuestoClick = async () => {
                   Descripción de la actividad:
                 </label>
                 <textarea
-                  id="descripcion-actividad-1"
-                  name="descripcion-actividad-1"
-                  cols="50"
-                  className="textarea-descripcion"
-                  placeholder="Escribe aquí la descripción de la actividad "
-                  value={descripcionActividad1}
-                  onChange={(e) => setDescripcionActividad1(e.target.value)}
-                ></textarea>
+  id="descripcion-actividad-1"
+  className="textarea-descripcion"
+  placeholder="Escribe aquí la descripción de la actividad"
+  value={descripcionActividad1}
+  onChange={(e) => setDescripcionActividad1(e.target.value)}
+/>
+    
+
+
+
               </div>
             </td>
 
@@ -2248,8 +2250,7 @@ const handleAddPuestoClick = async () => {
             <textarea
               id="descripcion-actividad-2"
               name="descripcion-actividad-2"
-              cols="50"
-              className="textarea-descripcion"
+              className=""
               placeholder="Escribe aquí la descripción de EPP"
               value={descripcionActividad2}
               onChange={(e) => setDescripcionActividad2(e.target.value)}
