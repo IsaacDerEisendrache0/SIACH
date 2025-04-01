@@ -38,65 +38,7 @@ const RiskAssessmentTableEditor = () => {
     "Calentamiento de materia prima, subproducto o producto": false,
   });
 
-  const bodyParts = {
-    "Caídas de Altura": [
-      "Cabeza y Oídos",
-      "Brazos y Manos",
-      "Tronco",
-      "Extremidades inferiores",
-    ],
-    "Exposición a Temperaturas": ["Ojos y Cara", "Brazos y Manos", "Tronco"],
-    "Exposición a Electricidad Estática": ["Brazos y Manos", "Tronco"],
-    "Exposición a Sustancias Químicas": [
-      "Cabeza y Oídos",
-      "Ojos y Cara",
-      "Brazos y Manos",
-      "Tronco",
-      "Sistema respiratorio",
-      "Extremidades inferiores",
-    ],
-    "Exposición a Radiaciones": [
-      "Cabeza y Oídos",
-      "Ojos y Cara",
-      "Tronco",
-      "Extremidades inferiores",
-    ],
-    "Exposición agentes Biológicos": [
-      "Ojos y Cara",
-      "Tronco",
-      "Sistema respiratorio",
-      "Extremidades inferiores",
-    ],
-    "Exposición a Ruido": ["Cabeza y Oídos"],
-    "Exposición a Vibraciones": [
-      "Brazos y Manos",
-      "Tronco",
-      "Extremidades inferiores",
-    ],
-    "Superficies cortantes": [
-      "Ojos y Cara",
-      "Brazos y Manos",
-      "Extremidades inferiores",
-    ],
-    "Caídas a nivel o desnivel": [
-      "Cabeza y Oídos",
-      "Ojos y Cara",
-      "Brazos y Manos",
-      "Tronco",
-      "Extremidades inferiores",
-    ],
-    "Calentamiento de materia prima, subproducto o producto": [
-      "Ojos y Cara",
-      "Brazos y Manos",
-      "Tronco",
-      "Extremidades inferiores",
-    ],
-    "Protección de material o herramienta": [
-      "Ojos y Cara",
-      "Brazos y Manos",
-      "Tronco",
-    ],
-  };
+  
 
   
 
@@ -136,17 +78,7 @@ const RiskAssessmentTableEditor = () => {
 
   
 
-  const getAffectedBodyParts = () => {
-    const affectedParts = new Set();
-    for (const [hazard, isChecked] of Object.entries(hazards)) {
-      if (isChecked) {
-        bodyParts[hazard].forEach((part) => affectedParts.add(part));
-      }
-    }
-    return Array.from(affectedParts);
-  };
-
-  const affectedBodyParts = getAffectedBodyParts(); // Generar dinámicamente
+  
 
   // Estados para los valores de Consecuencia, Exposición y Probabilidad
   const [consequence, setConsequence] = useState(1);
@@ -857,6 +789,17 @@ function parseDdMmYyyyToIso(fechaStr) {
     Arnés: ["Arnés"],
   };
 
+  // Estado que controla qué partes del cuerpo están marcadas con “X”
+const [bodyPartsSelected, setBodyPartsSelected] = useState({
+  "Cabeza y Oídos": false,
+  "Ojos y Cara": false,
+  "Sistema respiratorio": false,
+  "Tronco": false,
+  "Brazos y Manos": false,
+  "Extremidades inferiores": false
+});
+
+
   // Maneja la selección de subcategoría, agrega a la lista y oculta el menú
   const handleSubOptionChange = (e) => {
     const subOption = e.target.value;
@@ -966,21 +909,15 @@ function parseDdMmYyyyToIso(fechaStr) {
 
   // Función para alternar la selección de una parte del cuerpo
   const toggleBodyPart = (part) => {
-    setRemovedParts(
-      (prev) =>
-        prev.includes(part)
-          ? prev.filter((p) => p !== part) // Si ya estaba en removedParts, se elimina (se vuelve a mostrar)
-          : [...prev, part], // Si no estaba, se agrega (se oculta)
-    );
+    setBodyPartsSelected((prev) => ({
+      ...prev,
+      [part]: !prev[part],
+    }));
   };
+  
 
   // Determinar si mostrar "X" (si está en affectedBodyParts y no en removedParts)
-  const shouldShowX = (part) => {
-    const isAutoSelected = affectedBodyParts.includes(part);
-    const isManuallyRemoved = removedParts.includes(part);
-
-    return isAutoSelected !== isManuallyRemoved;
-  };
+  
 
   useEffect(() => {
     if (!isEditing) {
@@ -1755,13 +1692,13 @@ function parseDdMmYyyyToIso(fechaStr) {
               <table className="body-parts-table">
                 <tbody>
                   <tr>
-                    <td className="risk-label-cell">Cabeza y Oídos</td>
+                  <td className="risk-label-cell">Cabeza y Oídos</td>
                     <td
                       className="risk-mark-cell"
                       onClick={() => toggleBodyPart("Cabeza y Oídos")}
                       style={{ cursor: "pointer", textAlign: "center" }}
                     >
-                      {shouldShowX("Cabeza y Oídos") ? "X" : ""}
+                      {bodyPartsSelected["Cabeza y Oídos"] ? "X" : ""}
                     </td>
                     <td className="risk-label-cell">Tronco</td>
                     <td
@@ -1769,8 +1706,10 @@ function parseDdMmYyyyToIso(fechaStr) {
                       onClick={() => toggleBodyPart("Tronco")}
                       style={{ cursor: "pointer", textAlign: "center" }}
                     >
-                      {shouldShowX("Tronco") ? "X" : ""}
+                      {bodyPartsSelected["Tronco"] ? "X" : ""}
                     </td>
+
+
                   </tr>
                   <tr>
                     <td className="risk-label-cell">Ojos y Cara</td>
@@ -1779,7 +1718,7 @@ function parseDdMmYyyyToIso(fechaStr) {
                       onClick={() => toggleBodyPart("Ojos y Cara")}
                       style={{ cursor: "pointer", textAlign: "center" }}
                     >
-                      {shouldShowX("Ojos y Cara") ? "X" : ""}
+                      {bodyPartsSelected["Ojos y Cara"] ? "X" : ""}
                     </td>
                     <td className="risk-label-cell">Sistema respiratorio</td>
                     <td
@@ -1787,7 +1726,7 @@ function parseDdMmYyyyToIso(fechaStr) {
                       onClick={() => toggleBodyPart("Sistema respiratorio")}
                       style={{ cursor: "pointer", textAlign: "center" }}
                     >
-                      {shouldShowX("Sistema respiratorio") ? "X" : ""}
+                      {bodyPartsSelected["Sistema respiratorio"] ? "X" : ""}
                     </td>
                   </tr>
                   <tr>
@@ -1797,7 +1736,7 @@ function parseDdMmYyyyToIso(fechaStr) {
                       onClick={() => toggleBodyPart("Brazos y Manos")}
                       style={{ cursor: "pointer", textAlign: "center" }}
                     >
-                      {shouldShowX("Brazos y Manos") ? "X" : ""}
+                      {bodyPartsSelected["Brazos y Manos"] ? "X" : ""}
                     </td>
                     <td className="risk-label-cell">Extremidades inferiores</td>
                     <td
@@ -1805,7 +1744,7 @@ function parseDdMmYyyyToIso(fechaStr) {
                       onClick={() => toggleBodyPart("Extremidades inferiores")}
                       style={{ cursor: "pointer", textAlign: "center" }}
                     >
-                      {shouldShowX("Extremidades inferiores") ? "X" : ""}
+                      {bodyPartsSelected["Extremidades inferiores"] ? "X" : ""}
                     </td>
                   </tr>
                 </tbody>
