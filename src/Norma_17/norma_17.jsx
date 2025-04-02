@@ -530,6 +530,8 @@ const handleAddPuestoClick = async () => {
       newResumenData.grave += puestoRiesgo.grave;
 
       await setDoc(resumenRef, newResumenData);
+      setDescripcionActividad1(""); // <- limpia el campo de descripción
+
     } catch (error) {
       console.error("Error al guardar en Firestore:", error);
       alert("Error al guardar la tabla.");
@@ -1085,10 +1087,12 @@ const eppOptions = {
   // Cerrar el modal
   const closeFolderModal = () => {
     setIsFolderModalOpen(false);
-    setSelectedEmpresaId("");
-    setSelectedNormaId("");
-    setNormas([]);
+    // 🔒 Comentamos estas líneas para no perder la selección:
+    // setSelectedEmpresaId("");
+    // setSelectedNormaId("");
+    // setNormas([]);
   };
+  
 
   useEffect(() => {
     const hoy = new Date().toISOString().split("T")[0]; // Obtiene la fecha actual en formato YYYY-MM-DD
