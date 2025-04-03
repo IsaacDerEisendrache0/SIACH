@@ -38,10 +38,6 @@ const RiskAssessmentTableEditor = () => {
     "Calentamiento de materia prima, subproducto o producto": false,
   });
 
-  
-
-  
-
   const STORAGE_KEY = "riskAssessmentData_editor";
 
   // Coloca los hooks dentro del componente funcional
@@ -60,7 +56,7 @@ const RiskAssessmentTableEditor = () => {
   const handleAreaChange = (e) => {
     const selectedName = e.target.value;
     setAreaSeleccionada(selectedName);
-  
+
     // Buscar la definición del área en el arreglo areas
     const selectedArea = areas.find((a) => a.nombre === selectedName);
     if (selectedArea) {
@@ -69,16 +65,10 @@ const RiskAssessmentTableEditor = () => {
       setPuestos([]);
     }
   };
-  
-  
 
   const handlePuestoChange = (e) => {
     setPuestoSeleccionado(e.target.value);
   };
-
-  
-
-  
 
   // Estados para los valores de Consecuencia, Exposición y Probabilidad
   const [consequence, setConsequence] = useState(1);
@@ -111,7 +101,7 @@ const RiskAssessmentTableEditor = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar si el modal está abierto o cerrado
   const [puestosSeleccionadosParaBorrar, setPuestosSeleccionadosParaBorrar] =
     useState([]); // Estado para almacenar los puestos seleccionados para borrar
- // Para almacenar las imágenes seleccionadas por peligro
+  // Para almacenar las imágenes seleccionadas por peligro
   const [selectedImages, setSelectedImages] = useState([]); // Para almacenar las imágenes seleccionadas para "Equipo de protección personal sugerido"
 
   const [selectedOptionEquipoUtilizado, setSelectedOptionEquipoUtilizado] =
@@ -153,9 +143,6 @@ const RiskAssessmentTableEditor = () => {
     const buttons = document.querySelectorAll(
       ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra, .remove-logo-button, .btn-agregar-empresa,.epp-dropdown, .btn-add-empresa",
     );
-
-    
-    
 
     // Oculta los botones temporalmente
     buttons.forEach((button) => button.classList.add("hidden-buttons"));
@@ -270,21 +257,32 @@ const RiskAssessmentTableEditor = () => {
       const selectedAreaObj = areas.find(
         (area) =>
           area.nombre.trim().toLowerCase() ===
-          areaSeleccionada.trim().toLowerCase()
+          areaSeleccionada.trim().toLowerCase(),
       );
       if (!selectedAreaObj || !selectedEmpresaId) {
-        console.error("No se encontró el área o la empresa no está seleccionada.", {
-          selectedEmpresaId,
-          areaSeleccionada,
-          areas,
-        });
-        alert("No se pudo agregar el puesto: selecciona una empresa y un área.");
+        console.error(
+          "No se encontró el área o la empresa no está seleccionada.",
+          {
+            selectedEmpresaId,
+            areaSeleccionada,
+            areas,
+          },
+        );
+        alert(
+          "No se pudo agregar el puesto: selecciona una empresa y un área.",
+        );
         return;
       }
       try {
         await updateDoc(
-          doc(db, "Empresas_17", selectedEmpresaId, "areas", selectedAreaObj.id),
-          { puestos: updatedPuestos }
+          doc(
+            db,
+            "Empresas_17",
+            selectedEmpresaId,
+            "areas",
+            selectedAreaObj.id,
+          ),
+          { puestos: updatedPuestos },
         );
         console.log("Puesto agregado y actualizado en Firebase");
       } catch (error) {
@@ -293,7 +291,6 @@ const RiskAssessmentTableEditor = () => {
       }
     }
   };
-  
 
   // Función para borrar los puestos seleccionados
   const handleDeleteSelectedPuestos = () => {
@@ -310,7 +307,6 @@ const RiskAssessmentTableEditor = () => {
     setIsModalOpen(false); // Cerrar el modal
   };
 
-  
   /*
   const saveTable = async (empresaId, normaId) => {
     const auth = getAuth();
@@ -609,87 +605,86 @@ const RiskAssessmentTableEditor = () => {
     setTableToEdit(storedData);
   }, []); // Se ejecuta una vez al montar el componente
 
-  
-// ...
+  // ...
 
+  useEffect(() => {
+    if (!tableToEdit) return;
 
-useEffect(() => {
-  if (!tableToEdit) return;
+    console.log("Datos recuperados en el editor:", tableToEdit);
 
-  console.log("Datos recuperados en el editor:", tableToEdit);
-
-  // 1. Datos generales que ya tenías
-  setAreaSeleccionada(tableToEdit.areaSeleccionada || "");
-  setPuestoSeleccionado(tableToEdit.puestoSeleccionado || "");
-  setSelectedOptionEquipoUtilizado(tableToEdit.selectedOptionEquipoUtilizado || "");
-  setSelectedOptionProteccionSugerida(tableToEdit.selectedOptionProteccionSugerida || "");
-  setSelectedImages(tableToEdit.selectedImages || []);
-  setHazards(tableToEdit.hazards || {});
-  setConsequence(tableToEdit.consequence || 1);
-  setExposure(tableToEdit.exposure || 1);
-  setProbability(tableToEdit.probability || 0.1);
-  setDescripcionActividad1(tableToEdit.descripcionActividad1 || "");
-  setDescripcionActividad2(tableToEdit.descripcionActividad2 || "");
-  setTiempoExposicion(tableToEdit.tiempoExposicion || "8hrs");
-
-  // En vez de poner new Date(), asignas directamente la fecha guardada
-  setFecha(parseDdMmYyyyToIso(tableToEdit.fecha));
-
-  // Si no hay hora guardada, usas la actual
-  setHora(tableToEdit.hora || new Date().toLocaleTimeString());
-
-  setTableId(tableToEdit.id || null);
-  setSelectedMainOption(tableToEdit.selectedMainOption || "");
-  setEmpresaSeleccionada(tableToEdit.nombreEmpresa || "");
-  setSelectionList(tableToEdit.selectionList || []);
-
-  // 2. Sincronizar la EMPRESA guardada con la lista "empresas"
-  if (empresas.length > 0 && tableToEdit.nombreEmpresa) {
-    const matchedEmpresa = empresas.find(
-      (emp) => emp.nombre === tableToEdit.nombreEmpresa
+    // 1. Datos generales que ya tenías
+    setAreaSeleccionada(tableToEdit.areaSeleccionada || "");
+    setPuestoSeleccionado(tableToEdit.puestoSeleccionado || "");
+    setSelectedOptionEquipoUtilizado(
+      tableToEdit.selectedOptionEquipoUtilizado || "",
     );
-    if (matchedEmpresa) {
-      setSelectedEmpresaId(matchedEmpresa.id);
-      setEmpresaSeleccionada(matchedEmpresa.nombre);
-    } else {
-      // Creamos una empresa "temporal"
-      const tempId = "temp-" + Date.now();
-      const tempEmpresa = { id: tempId, nombre: tableToEdit.nombreEmpresa };
-      setEmpresas((prev) => [...prev, tempEmpresa]);
-      setSelectedEmpresaId(tempId);
-      setEmpresaSeleccionada(tableToEdit.nombreEmpresa);
-    }
-  }
-
-  // 3. Sincronizar el ÁREA guardada con la lista "areas"
-  if (areas.length > 0 && tableToEdit.areaSeleccionada) {
-    const matchedArea = areas.find(
-      (a) => a.nombre === tableToEdit.areaSeleccionada
+    setSelectedOptionProteccionSugerida(
+      tableToEdit.selectedOptionProteccionSugerida || "",
     );
-    if (matchedArea) {
-      setAreaSeleccionada(matchedArea.nombre);
-    } else {
-      const tempAreaId = "temp-" + Date.now();
-      const tempArea = {
-        id: tempAreaId,
-        nombre: tableToEdit.areaSeleccionada,
-        puestos: [],
-      };
-      setAreas((prev) => [...prev, tempArea]);
-      setAreaSeleccionada(tempArea.nombre);
+    setSelectedImages(tableToEdit.selectedImages || []);
+    setHazards(tableToEdit.hazards || {});
+    setConsequence(tableToEdit.consequence || 1);
+    setExposure(tableToEdit.exposure || 1);
+    setProbability(tableToEdit.probability || 0.1);
+    setDescripcionActividad1(tableToEdit.descripcionActividad1 || "");
+    setDescripcionActividad2(tableToEdit.descripcionActividad2 || "");
+    setTiempoExposicion(tableToEdit.tiempoExposicion || "8hrs");
+
+    // En vez de poner new Date(), asignas directamente la fecha guardada
+    setFecha(parseDdMmYyyyToIso(tableToEdit.fecha));
+
+    // Si no hay hora guardada, usas la actual
+    setHora(tableToEdit.hora || new Date().toLocaleTimeString());
+
+    setTableId(tableToEdit.id || null);
+    setSelectedMainOption(tableToEdit.selectedMainOption || "");
+    setEmpresaSeleccionada(tableToEdit.nombreEmpresa || "");
+    setSelectionList(tableToEdit.selectionList || []);
+
+    // 2. Sincronizar la EMPRESA guardada con la lista "empresas"
+    if (empresas.length > 0 && tableToEdit.nombreEmpresa) {
+      const matchedEmpresa = empresas.find(
+        (emp) => emp.nombre === tableToEdit.nombreEmpresa,
+      );
+      if (matchedEmpresa) {
+        setSelectedEmpresaId(matchedEmpresa.id);
+        setEmpresaSeleccionada(matchedEmpresa.nombre);
+      } else {
+        // Creamos una empresa "temporal"
+        const tempId = "temp-" + Date.now();
+        const tempEmpresa = { id: tempId, nombre: tableToEdit.nombreEmpresa };
+        setEmpresas((prev) => [...prev, tempEmpresa]);
+        setSelectedEmpresaId(tempId);
+        setEmpresaSeleccionada(tableToEdit.nombreEmpresa);
+      }
     }
+
+    // 3. Sincronizar el ÁREA guardada con la lista "areas"
+    if (areas.length > 0 && tableToEdit.areaSeleccionada) {
+      const matchedArea = areas.find(
+        (a) => a.nombre === tableToEdit.areaSeleccionada,
+      );
+      if (matchedArea) {
+        setAreaSeleccionada(matchedArea.nombre);
+      } else {
+        const tempAreaId = "temp-" + Date.now();
+        const tempArea = {
+          id: tempAreaId,
+          nombre: tableToEdit.areaSeleccionada,
+          puestos: [],
+        };
+        setAreas((prev) => [...prev, tempArea]);
+        setAreaSeleccionada(tempArea.nombre);
+      }
+    }
+  }, [tableToEdit, empresas, areas]);
+
+  function parseDdMmYyyyToIso(fechaStr) {
+    if (!fechaStr) return "";
+    const [dd, mm, yyyy] = fechaStr.split("/");
+    if (!dd || !mm || !yyyy) return "";
+    return `${yyyy}-${mm.padStart(2, "0")}-${dd.padStart(2, "0")}`;
   }
-}, [tableToEdit, empresas, areas]);
-
-  
-
-function parseDdMmYyyyToIso(fechaStr) {
-  if (!fechaStr) return "";
-  const [dd, mm, yyyy] = fechaStr.split("/");
-  if (!dd || !mm || !yyyy) return "";
-  return `${yyyy}-${mm.padStart(2,"0")}-${dd.padStart(2,"0")}`;
-}
-
 
   const handleImageRemove = (imageToRemove) => {
     setSelectedImages((prevSelectedImages) =>
@@ -792,15 +787,14 @@ function parseDdMmYyyyToIso(fechaStr) {
   };
 
   // Estado que controla qué partes del cuerpo están marcadas con “X”
-const [bodyPartsSelected, setBodyPartsSelected] = useState({
-  "Cabeza y Oídos": false,
-  "Ojos y Cara": false,
-  "Sistema respiratorio": false,
-  "Tronco": false,
-  "Brazos y Manos": false,
-  "Extremidades inferiores": false
-});
-
+  const [bodyPartsSelected, setBodyPartsSelected] = useState({
+    "Cabeza y Oídos": false,
+    "Ojos y Cara": false,
+    "Sistema respiratorio": false,
+    Tronco: false,
+    "Brazos y Manos": false,
+    "Extremidades inferiores": false,
+  });
 
   // Maneja la selección de subcategoría, agrega a la lista y oculta el menú
   const handleSubOptionChange = (e) => {
@@ -819,7 +813,6 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
   // Estado para manejar opciones seleccionadas automáticamente
 
   // Nuevo useEffect para actualizar el menú basado en la selección de imágenes de EPP
-  
 
   const handleMainOptionChange = (e) => {
     const value = e.target.value;
@@ -916,10 +909,8 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
       [part]: !prev[part],
     }));
   };
-  
 
   // Determinar si mostrar "X" (si está en affectedBodyParts y no en removedParts)
-  
 
   useEffect(() => {
     if (!isEditing) {
@@ -1191,19 +1182,17 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
   const handleEmpresaChange = (e) => {
     const selectedId = e.target.value;
     setSelectedEmpresaId(selectedId);
-  
+
     // Opcional: guardar en otro estado el nombre de la empresa
     const selected = empresas.find((emp) => emp.id === selectedId);
     setEmpresaSeleccionada(selected ? selected.nombre : "");
-  
+
     // Limpia áreas y puestos mientras se carga la nueva información
     setAreas([]);
     setAreaSeleccionada("");
     setPuestos([]);
     setPuestoSeleccionado("");
   };
-  
-  
 
   // DECLARAMOS FUERA
   const loadEmpresas = async () => {
@@ -1215,11 +1204,10 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
       console.error("Error al cargar las empresas:", error);
     }
   };
-  
+
   useEffect(() => {
     loadEmpresas(); // Se ejecuta al montar el componente
   }, []);
-  
 
   useEffect(() => {
     loadEmpresas(); // Puede llamarse aquí
@@ -1242,7 +1230,7 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
   // useEffect que carga las áreas
   useEffect(() => {
     if (!selectedEmpresaId) return; // si no hay empresa, no cargamos
-  
+
     const fetchAreas = async () => {
       try {
         // Documento de la empresa
@@ -1250,43 +1238,42 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
         // Subcolección "areas"
         const areasRef = collection(empresaRef, "areas");
         const querySnapshot = await getDocs(areasRef);
-  
+
         const dbAreas = querySnapshot.docs.map((docItem) => ({
           id: docItem.id,
           ...docItem.data(),
         }));
-  
-        setAreas(dbAreas); 
+
+        setAreas(dbAreas);
       } catch (error) {
         console.error("Error al cargar áreas desde Firebase:", error);
       }
     };
-  
+
     fetchAreas();
   }, [selectedEmpresaId]);
-  
 
   const handleCheckboxChange = (event) => {
-    const { name, checked } = event.target; 
-    // 'name' es el key del objeto hazards, 
+    const { name, checked } = event.target;
+    // 'name' es el key del objeto hazards,
     // 'checked' es true/false si el checkbox está marcado
-  
+
     setHazards((prevHazards) => ({
       ...prevHazards,
       [name]: checked, // Actualiza el valor booleano
     }));
   };
-  
+
   const eppNames = {
-    "/images/1.png":  "Mandil de temperaturas",
-    "/images/2.png":  "Respirador",
-    "/images/3.png":  "Anteojos de proteccion",
-    "/images/4.png":  "Botas",
-    "/images/5.png":  "Tapones de oido",
-    "/images/6.png":  "Guantes",
-    "/images/7.png":  "Gafas contra sustancias",
-    "/images/8.png":  "Cubierta de frio",
-    "/images/9.png":  "Mandil",
+    "/images/1.png": "Mandil de temperaturas",
+    "/images/2.png": "Respirador",
+    "/images/3.png": "Anteojos de proteccion",
+    "/images/4.png": "Botas",
+    "/images/5.png": "Tapones de oido",
+    "/images/6.png": "Guantes",
+    "/images/7.png": "Gafas contra sustancias",
+    "/images/8.png": "Cubierta de frio",
+    "/images/9.png": "Mandil",
     "/images/10.png": "Casco",
     "/images/11.png": "Cubre Bocas",
     "/images/12.png": "Chaleco reflectante",
@@ -1300,10 +1287,8 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
     "/images/21.png": "Mangas",
     "/images/23.png": "Arnes",
     "/images/24.png": "Overol",
-
-  
   };
-  
+
   const eppImagesList = Object.keys(eppNames);
 
   const handleAddEPPImage = (event) => {
@@ -1312,7 +1297,6 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
       setSelectedImages((prevImages) => [...prevImages, selectedImage]);
     }
   };
-
 
   useEffect(() => {
     if (!selectedEmpresaId) return;
@@ -1344,12 +1328,11 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
         console.error("Error al cargar empresas desde Firebase:", error);
       }
     };
-  
+
     loadCompanies();
   }, []);
-  
-  const riskColor = getRiskColor(risk);
 
+  const riskColor = getRiskColor(risk);
 
   return (
     <div class="main-table">
@@ -1599,19 +1582,18 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
               </label>
 
               <div className="puesto-con-botones">
-              <select
-  id="puesto"
-  value={puestoSeleccionado}
-  onChange={handlePuestoChange}
->
-  <option value="">Seleccione un puesto</option>
-  {puestos.map((p) => (
-    <option key={p} value={p}>
-      {p}
-    </option>
-  ))}
-</select>
-
+                <select
+                  id="puesto"
+                  value={puestoSeleccionado}
+                  onChange={handlePuestoChange}
+                >
+                  <option value="">Seleccione un puesto</option>
+                  {puestos.map((p) => (
+                    <option key={p} value={p}>
+                      {p}
+                    </option>
+                  ))}
+                </select>
               </div>
               {!hideButtons && (
                 <>
@@ -1694,7 +1676,7 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
               <table className="body-parts-table">
                 <tbody>
                   <tr>
-                  <td className="risk-label-cell">Cabeza y Oídos</td>
+                    <td className="risk-label-cell">Cabeza y Oídos</td>
                     <td
                       className="risk-mark-cell"
                       onClick={() => toggleBodyPart("Cabeza y Oídos")}
@@ -1710,8 +1692,6 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
                     >
                       {bodyPartsSelected["Tronco"] ? "X" : ""}
                     </td>
-
-
                   </tr>
                   <tr>
                     <td className="risk-label-cell">Ojos y Cara</td>
@@ -1800,20 +1780,18 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
                   <tr>
                     <td className="label-cell">Empresa:</td>
                     <td className="input-cell" colSpan="2">
-                    <select
-  id="empresa"
-  value={selectedEmpresaId}
-  onChange={handleEmpresaChange}
->
-  <option value="">Seleccione una empresa</option>
-  {empresas.map((empresa) => (
-    <option key={empresa.id} value={empresa.id}>
-      {empresa.nombre}
-    </option>
-  ))}
-</select>
-
-
+                      <select
+                        id="empresa"
+                        value={selectedEmpresaId}
+                        onChange={handleEmpresaChange}
+                      >
+                        <option value="">Seleccione una empresa</option>
+                        {empresas.map((empresa) => (
+                          <option key={empresa.id} value={empresa.id}>
+                            {empresa.nombre}
+                          </option>
+                        ))}
+                      </select>
                     </td>
                   </tr>
 
@@ -1822,22 +1800,21 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
                     <td className="label-cell">Área:</td>
                     <td className="input-cell">
                       <div className="cell-container">
-                      <select
-  id="area"
-  value={areaSeleccionada}
-  onChange={handleAreaChange}
->
-  {areas.length > 0 ? (
-    areas.map((area) => (
-      <option key={area.id} value={area.nombre}>
-        {area.nombre}
-      </option>
-    ))
-  ) : (
-    <option value="">Cargando áreas...</option>
-  )}
-</select>
-
+                        <select
+                          id="area"
+                          value={areaSeleccionada}
+                          onChange={handleAreaChange}
+                        >
+                          {areas.length > 0 ? (
+                            areas.map((area) => (
+                              <option key={area.id} value={area.nombre}>
+                                {area.nombre}
+                              </option>
+                            ))
+                          ) : (
+                            <option value="">Cargando áreas...</option>
+                          )}
+                        </select>
                       </div>
                     </td>
                   </tr>
@@ -1846,14 +1823,13 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
                   <tr>
                     <td className="label-cell">Fecha de inspección:</td>
                     <td colSpan="2" className="input-cell">
-                    <input
-  type="date"
-  id="fechaInspeccion"
-  value={fecha} // <--- usas tu state "fecha"
-  onChange={(e) => setFecha(e.target.value)}
-  className="date-input"
-/>
-
+                      <input
+                        type="date"
+                        id="fechaInspeccion"
+                        value={fecha} // <--- usas tu state "fecha"
+                        onChange={(e) => setFecha(e.target.value)}
+                        className="date-input"
+                      />
                     </td>
                   </tr>
                   <tr>
@@ -1878,27 +1854,25 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
 
         <tbody>
           <tr>
-          <td colSpan="3" className="left-section">
-  <div className="text1">Identificación de peligros</div>
-  <ul className="hazard-list">
-    {Object.keys(hazards).map((hazard) => (
-      <li key={hazard} className="hazard-item">
-        <span>{hazard}</span>
-        <label className="hazard-checkbox">
-          <input
-            type="checkbox"
-            name={hazard}
-            checked={hazards[hazard]}
-            onChange={handleCheckboxChange} // <-- Añade esta línea
-          />
-        </label>
-      </li>
-    ))}
-  </ul>
-</td>
+            <td colSpan="3" className="left-section">
+              <div className="text1">Identificación de peligros</div>
+              <ul className="hazard-list">
+                {Object.keys(hazards).map((hazard) => (
+                  <li key={hazard} className="hazard-item">
+                    <span>{hazard}</span>
+                    <label className="hazard-checkbox">
+                      <input
+                        type="checkbox"
+                        name={hazard}
+                        checked={hazards[hazard]}
+                        onChange={handleCheckboxChange} // <-- Añade esta línea
+                      />
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </td>
 
-
-            
             <td
               colSpan="2"
               className="right-section right-aligned"
@@ -1987,128 +1961,134 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
             </td>
 
             <td colSpan="2" className="epp-component-right-section">
-  {/* Título de EPP Recomendado + Menú para "Seleccione EPP" */}
-  <div className="epp-component-title-select">
-    EPP Recomendado
+              {/* Título de EPP Recomendado + Menú para "Seleccione EPP" */}
+              <div className="epp-component-title-select">
+                EPP Recomendado
+                <select
+                  className="custom-select epp-select"
+                  onChange={handleAddEPPImage}
+                >
+                  <option value="">Seleccione EPP</option>
+                  {eppImagesList
+                    .map((img) => ({ image: img, name: eppNames[img] || img }))
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((obj, i) => (
+                      <option key={i} value={obj.image}>
+                        {obj.name}
+                      </option>
+                    ))}
+                </select>
+              </div>
 
-    <select className="custom-select epp-select" onChange={handleAddEPPImage}>
-      <option value="">Seleccione EPP</option>
-      {eppImagesList
-        .map((img) => ({ image: img, name: eppNames[img] || img }))
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map((obj, i) => (
-          <option key={i} value={obj.image}>
-            {obj.name}
-          </option>
-        ))}
-    </select>
-  </div>
+              {/* Contenedor para las imágenes de EPP */}
+              <div className="epp-component-hazard-images epp-recommended-box">
+                {selectedImages.length > 0 ? (
+                  selectedImages.map((image, index) => (
+                    <img
+                      key={index}
+                      src={image}
+                      alt={`Protección ${index}`}
+                      className="epp-component-image"
+                      onClick={() => handleImageRemove(image)}
+                    />
+                  ))
+                ) : (
+                  <div className="epp-component-no-epp">
+                    No hay EPP seleccionado
+                  </div>
+                )}
+              </div>
 
-  {/* Contenedor para las imágenes de EPP */}
-  <div className="epp-component-hazard-images epp-recommended-box">
-    {selectedImages.length > 0 ? (
-      selectedImages.map((image, index) => (
-        <img
-          key={index}
-          src={image}
-          alt={`Protección ${index}`}
-          className="epp-component-image"
-          onClick={() => handleImageRemove(image)}
-        />
-      ))
-    ) : (
-      <div className="epp-component-no-epp">No hay EPP seleccionado</div>
-    )}
-  </div>
-
-  {/* NO MOVER nada de aquí en adelante */}
-  <div className="epp-container">
-    {/* Contenedor del menú principal */}
-    <div className="epp-dropdown-container">
-      <label htmlFor="main-epp-select" className="dropdown-label">
-        Selecciona el equipo principal:
-      </label>
-      <select
-        id="main-epp-select"
-        value={selectedMainOption}
-        onChange={handleMainOptionChange}
-        className="epp-dropdown large-text-dropdown"
-      >
-        <option value="" disabled>
-          Selecciona el equipo
-        </option>
-        {Object.keys(eppOptions).map((option, index) => (
-          <option key={index} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-    </div>
-
-    {showSubDropdown && selectedMainOption && (
-      <div className="epp-sub-dropdown-container">
-        <label htmlFor="sub-epp-select" className="dropdown-label">
-          Selecciona el tipo de {selectedMainOption.toLowerCase()}:
-        </label>
-        <select
-          id="sub-epp-select"
-          value={selectedSubOption}
-          onChange={handleSubOptionChange}
-          className="large-text-dropdown"
-        >
-          <option value="" disabled>
-            Selecciona el tipo
-          </option>
-          {eppOptions[selectedMainOption]?.map((subOption, idx) => (
-            <option key={idx} value={subOption}>
-              {subOption}
-            </option>
-          ))}
-        </select>
-      </div>
-    )}
-
-    <div className="epp-selection-list-container">
-      {selectionList.length > 0 ? (
-        selectionList
-          .reduce((rows, key, index) => {
-            // Agrupa elementos en pares
-            if (index % 2 === 0) rows.push([selectionList[index]]);
-            else rows[rows.length - 1].push(selectionList[index]);
-            return rows;
-          }, [])
-          .map((row, rowIndex) => (
-            <div key={rowIndex} className="epp-selection-row">
-              {row.map((selection, idx) => (
-                <div key={idx} className="epp-selection-item">
-                  {selection.slice(selection.indexOf("-") + 2)}
-                  <button
-                    className="delete-button"
-                    onClick={() =>
-                      handleDeleteSelection(selectionList.indexOf(selection))
-                    }
+              {/* NO MOVER nada de aquí en adelante */}
+              <div className="epp-container">
+                {/* Contenedor del menú principal */}
+                <div className="epp-dropdown-container">
+                  <label htmlFor="main-epp-select" className="dropdown-label">
+                    Selecciona el equipo principal:
+                  </label>
+                  <select
+                    id="main-epp-select"
+                    value={selectedMainOption}
+                    onChange={handleMainOptionChange}
+                    className="epp-dropdown large-text-dropdown"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="white"
-                      width="20px"
-                      height="20px"
-                      className="delete-icon"
-                    >
-                      <path d="M3 6h18v2H3V6zm2 2v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V8H5zm7 4v6h2v-6h-2zm-4 0v6h2v-6H8zm8 0v6h2v-6h-2zM7 4h10v2H7V4z" />
-                    </svg>
-                  </button>
+                    <option value="" disabled>
+                      Selecciona el equipo
+                    </option>
+                    {Object.keys(eppOptions).map((option, index) => (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-              ))}
-            </div>
-          ))
-      ) : (
-        <p className="no-selection-message">No hay selecciones</p>
-      )}
-    </div>
-  </div>
-</td>
+
+                {showSubDropdown && selectedMainOption && (
+                  <div className="epp-sub-dropdown-container">
+                    <label htmlFor="sub-epp-select" className="dropdown-label">
+                      Selecciona el tipo de {selectedMainOption.toLowerCase()}:
+                    </label>
+                    <select
+                      id="sub-epp-select"
+                      value={selectedSubOption}
+                      onChange={handleSubOptionChange}
+                      className="large-text-dropdown"
+                    >
+                      <option value="" disabled>
+                        Selecciona el tipo
+                      </option>
+                      {eppOptions[selectedMainOption]?.map((subOption, idx) => (
+                        <option key={idx} value={subOption}>
+                          {subOption}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                <div className="epp-selection-list-container">
+                  {selectionList.length > 0 ? (
+                    selectionList
+                      .reduce((rows, key, index) => {
+                        // Agrupa elementos en pares
+                        if (index % 2 === 0) rows.push([selectionList[index]]);
+                        else rows[rows.length - 1].push(selectionList[index]);
+                        return rows;
+                      }, [])
+                      .map((row, rowIndex) => (
+                        <div key={rowIndex} className="epp-selection-row">
+                          {row.map((selection, idx) => (
+                            <div key={idx} className="epp-selection-item">
+                              {selection.slice(selection.indexOf("-") + 2)}
+                              <button
+                                className="delete-button"
+                                onClick={() =>
+                                  handleDeleteSelection(
+                                    selectionList.indexOf(selection),
+                                  )
+                                }
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 24 24"
+                                  fill="white"
+                                  width="20px"
+                                  height="20px"
+                                  className="delete-icon"
+                                >
+                                  <path d="M3 6h18v2H3V6zm2 2v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V8H5zm7 4v6h2v-6h-2zm-4 0v6h2v-6H8zm8 0v6h2v-6h-2zM7 4h10v2H7V4z" />
+                                </svg>
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      ))
+                  ) : (
+                    <p className="no-selection-message">No hay selecciones</p>
+                  )}
+                </div>
+              </div>
+            </td>
           </tr>
           <td colSpan={8}>
             <span></span>
@@ -2210,17 +2190,19 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
                     </td>
 
                     <td
-  style={{
-    backgroundColor: getRiskColor(calculateRisk()),
-    color: getRiskColor(calculateRisk()) === "yellow" ? "black" : "white",
-    fontSize: "24px",
-    fontWeight: "bold",
-    textAlign: "center",
-  }}
->
-  {calculateRisk().toFixed(2)}
-</td>
-
+                      style={{
+                        backgroundColor: getRiskColor(calculateRisk()),
+                        color:
+                          getRiskColor(calculateRisk()) === "yellow"
+                            ? "black"
+                            : "white",
+                        fontSize: "24px",
+                        fontWeight: "bold",
+                        textAlign: "center",
+                      }}
+                    >
+                      {calculateRisk().toFixed(2)}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -2236,49 +2218,48 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
                   <tr>
                     <td className="risk-label-cell">Magnitud del Riesgo:</td>
                     <td
-  className="risk-value-cell"
-  style={{
-    backgroundColor: riskColor,
-    color: riskColor === "yellow" ? "black" : "white",
-  }}
->
-  {risk.toFixed(2)}
-</td>
-
+                      className="risk-value-cell"
+                      style={{
+                        backgroundColor: riskColor,
+                        color: riskColor === "yellow" ? "black" : "white",
+                      }}
+                    >
+                      {risk.toFixed(2)}
+                    </td>
                   </tr>
                   <tr>
                     <td className="risk-label-cell">Clasificación:</td>
                     <td
-  className={`risk-classification-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
-  style={{ backgroundColor: riskColor }}
->
-  {risk > 400
-    ? "Muy Alto"
-    : risk > 200
-    ? "Alto"
-    : risk > 70
-    ? "Notable"
-    : risk > 20
-    ? "Moderado"
-    : "Bajo o Aceptable"}
-</td>
+                      className={`risk-classification-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
+                      style={{ backgroundColor: riskColor }}
+                    >
+                      {risk > 400
+                        ? "Muy Alto"
+                        : risk > 200
+                          ? "Alto"
+                          : risk > 70
+                            ? "Notable"
+                            : risk > 20
+                              ? "Moderado"
+                              : "Bajo o Aceptable"}
+                    </td>
                   </tr>
                   <tr>
                     <td className="risk-label-cell">Acción:</td>
                     <td
-  className={`risk-action-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
-  style={{ backgroundColor: riskColor }}
->
-  {risk > 400
-    ? "Detención inmediata"
-    : risk > 200
-    ? "Corrección inmediata"
-    : risk > 70
-    ? "Corrección urgente"
-    : risk > 20
-    ? "Requiere atención"
-    : "Tolerable"}
-</td> 
+                      className={`risk-action-cell ${riskColor === "yellow" ? "yellow-bg" : ""}`}
+                      style={{ backgroundColor: riskColor }}
+                    >
+                      {risk > 400
+                        ? "Detención inmediata"
+                        : risk > 200
+                          ? "Corrección inmediata"
+                          : risk > 70
+                            ? "Corrección urgente"
+                            : risk > 20
+                              ? "Requiere atención"
+                              : "Tolerable"}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -2301,7 +2282,6 @@ const [bodyPartsSelected, setBodyPartsSelected] = useState({
         >
           Reiniciar Tabla
         </button>
-        
       </div>
     </div>
   );

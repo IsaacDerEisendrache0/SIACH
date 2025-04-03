@@ -28,7 +28,6 @@ td {
   border-collapse: collapse;
 }
 
-
 .custom-table td,
 .custom-table th {
   padding: 8px; /* Espaciado interno en las celdas */
@@ -892,7 +891,6 @@ button {
   border: none !important;
 }
 
-
 /* Contenedor para posicionar el botón sobre la imagen */
 .logo-container {
   position: relative;
@@ -1000,7 +998,7 @@ button {
   font-weight: bold;
   color: #333;
 }
-  
+
 .epp-dropdown,
 .epp-sub-dropdown {
   width: 100%;
@@ -1056,8 +1054,6 @@ button {
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-
 
 .epp-dropdown,
 .epp-sub-dropdown {
@@ -1478,8 +1474,6 @@ button.btn-icon {
   gap: 10px; /* opcional */
 }
 
-
-
 /* Asegúrate de que el td se alinee arriba */
 .epp-component-right-section {
   vertical-align: top;
@@ -1489,7 +1483,7 @@ button.btn-icon {
 /* Título y menú "Seleccione EPP" en columna */
 .epp-component-title-select {
   font-weight: bold;
-  
+
   font-size: 22px;
 
   /* Para que "EPP Recomendado" y el <select> estén en columna */

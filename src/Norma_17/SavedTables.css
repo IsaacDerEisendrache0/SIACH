@@ -241,7 +241,6 @@
   width: 100%; /* Hacer que el select ocupe el ancho disponible */
 }
 
-
 .pagination {
   display: flex;
   justify-content: center;

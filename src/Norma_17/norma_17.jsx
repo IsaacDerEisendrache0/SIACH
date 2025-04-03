@@ -11,7 +11,7 @@ import {
   getDoc,
   setDoc,
   deleteDoc,
-  query, 
+  query,
   where,
   serverTimestamp,
 } from "firebase/firestore";
@@ -41,7 +41,6 @@ const RiskAssessmentTable = () => {
     "Calentamiento de materia prima, subproducto o producto": false,
   });
 
-  
   const defaultAreas = [
     {
       nombre: "Producción",
@@ -96,38 +95,37 @@ const RiskAssessmentTable = () => {
       puestos: ["Estibador", "Repartidor", "Chofer"],
     },
   ];
-  
+
   const [bodyPartsSelected, setBodyPartsSelected] = useState({
     "Cabeza y Oídos": false,
     "Ojos y Cara": false,
     "Sistema respiratorio": false,
-    "Tronco": false,
+    Tronco: false,
     "Brazos y Manos": false,
-    "Extremidades inferiores": false
+    "Extremidades inferiores": false,
   });
-  
-  
-
 
   const handleInjectAreas = async () => {
     try {
       // 1. Apuntamos al documento EXACTO en "Empresas_17"
       //    con id = "BOwQ6hFVylImBmxn5xyd"
       const docRef = doc(db, "Empresas_17", "BOwQ6hFVylImBmxn5xyd");
-  
+
       // 2. Recorremos el array de defaultAreas y creamos un documento
       //    en la subcolección "areas" para cada elemento
       for (const area of defaultAreas) {
         await addDoc(collection(docRef, "areas"), area);
       }
-  
-      alert("Subcolección 'areas' inyectada correctamente con los puestos predeterminados.");
+
+      alert(
+        "Subcolección 'areas' inyectada correctamente con los puestos predeterminados.",
+      );
     } catch (error) {
       console.error("Error al inyectar áreas:", error);
       alert("Error al inyectar áreas, revisa la consola.");
     }
   };
-  
+
   const STORAGE_KEY = "riskAssessmentData_v1";
 
   // Coloca los hooks dentro del componente funcional
@@ -146,7 +144,7 @@ const RiskAssessmentTable = () => {
   const handleAreaChange = (e) => {
     const selectedName = e.target.value;
     setAreaSeleccionada(selectedName);
-  
+
     const selectedArea = areas.find((a) => a.nombre === selectedName);
     if (selectedArea) {
       setPuestos(selectedArea.puestos || []);
@@ -154,17 +152,10 @@ const RiskAssessmentTable = () => {
       setPuestos([]);
     }
   };
-  
-  
 
   const handlePuestoChange = (e) => {
     setPuestoSeleccionado(e.target.value);
   };
-
-  
-
-  
-
 
   // Estados para los valores de Consecuencia, Exposición y Probabilidad
   const [consequence, setConsequence] = useState(1);
@@ -302,41 +293,42 @@ const RiskAssessmentTable = () => {
       alert("Selecciona al menos un puesto para borrar.");
       return;
     }
-  
+
     // Filtrar el arreglo de puestos para remover los puestos seleccionados
     const nuevosPuestos = puestos.filter(
-      (puesto) => !puestosSeleccionadosParaBorrar.includes(puesto)
+      (puesto) => !puestosSeleccionadosParaBorrar.includes(puesto),
     );
     setPuestos(nuevosPuestos);
-  
+
     // Buscar el área actual
     const selectedAreaObj = areas.find(
-      (area) => area.nombre === areaSeleccionada
+      (area) => area.nombre === areaSeleccionada,
     );
-  
+
     if (!selectedAreaObj || !selectedEmpresaId) {
-      console.error("No se encontró el área o la empresa no está seleccionada.");
+      console.error(
+        "No se encontró el área o la empresa no está seleccionada.",
+      );
       alert("No se pudo borrar el puesto: selecciona una empresa y un área.");
       return;
     }
-  
+
     try {
       // Actualiza el documento del área con el nuevo arreglo de puestos
       await updateDoc(
         doc(db, "Empresas_17", selectedEmpresaId, "areas", selectedAreaObj.id),
-        { puestos: nuevosPuestos }
+        { puestos: nuevosPuestos },
       );
       console.log("Puestos actualizados tras borrar");
     } catch (error) {
       console.error("Error al borrar puestos en Firebase:", error);
       alert("Error al borrar el puesto, revisa la consola.");
     }
-  
+
     // Limpia la selección de puestos para borrar y cierra el modal
     setPuestosSeleccionadosParaBorrar([]);
     setIsModalOpen(false);
   };
-  
 
   const handleModalClose = () => {
     setIsModalOpen(false); // Cerrar el modal
@@ -359,65 +351,69 @@ const RiskAssessmentTable = () => {
   };
 
   useEffect(() => {
-    const selectedArea = areas.find(a => a.nombre === areaSeleccionada);
+    const selectedArea = areas.find((a) => a.nombre === areaSeleccionada);
     setPuestos(selectedArea ? selectedArea.puestos : []);
   }, [areaSeleccionada, areas]);
-  
-  
-
-  
 
   // Función para agregar un nuevo puesto y guardarlo en Firebase
   // Asegúrate de tener el useEffect para asignar el área automáticamente:
-useEffect(() => {
-  if (areas.length > 0 && !areaSeleccionada) {
-    setAreaSeleccionada(areas[0].nombre);
-    setPuestos(areas[0].puestos || []);
-  }
-}, [areas]);
-
-const handleAddPuestoClick = async () => {
-  const nuevoPuesto = prompt("Ingrese el nuevo puesto:");
-  if (nuevoPuesto && nuevoPuesto.trim() !== "") {
-    const newPuesto = nuevoPuesto.trim();
-    const updatedPuestos = [...puestos, newPuesto];
-    setPuestos(updatedPuestos);
-    setPuestoSeleccionado("");
-
-    // Buscar el objeto del área seleccionada en el arreglo "areas"
-    const selectedAreaObj = areas.find(
-      (area) =>
-        area.nombre.trim().toLowerCase() ===
-        areaSeleccionada.trim().toLowerCase()
-    );
-    console.log("Área encontrada:", selectedAreaObj);
-
-    // Verificación para asegurarnos de que tanto la empresa como el área estén seleccionados
-    if (!selectedAreaObj || !selectedEmpresaId) {
-      console.error("No se encontró el área o la empresa no está seleccionada.", {
-        selectedEmpresaId,
-        areaSeleccionada,
-        areas,
-      });
-      alert("No se pudo agregar el puesto: selecciona una empresa y un área.");
-      return;
+  useEffect(() => {
+    if (areas.length > 0 && !areaSeleccionada) {
+      setAreaSeleccionada(areas[0].nombre);
+      setPuestos(areas[0].puestos || []);
     }
+  }, [areas]);
 
-    try {
-      await updateDoc(
-        doc(db, "Empresas_17", selectedEmpresaId, "areas", selectedAreaObj.id),
-        { puestos: updatedPuestos }
+  const handleAddPuestoClick = async () => {
+    const nuevoPuesto = prompt("Ingrese el nuevo puesto:");
+    if (nuevoPuesto && nuevoPuesto.trim() !== "") {
+      const newPuesto = nuevoPuesto.trim();
+      const updatedPuestos = [...puestos, newPuesto];
+      setPuestos(updatedPuestos);
+      setPuestoSeleccionado("");
+
+      // Buscar el objeto del área seleccionada en el arreglo "areas"
+      const selectedAreaObj = areas.find(
+        (area) =>
+          area.nombre.trim().toLowerCase() ===
+          areaSeleccionada.trim().toLowerCase(),
       );
-      console.log("Puesto agregado y actualizado en Firebase");
-    } catch (error) {
-      console.error("Error actualizando puestos en Firebase:", error);
-      alert("Error al agregar el puesto, revisa la consola.");
+      console.log("Área encontrada:", selectedAreaObj);
+
+      // Verificación para asegurarnos de que tanto la empresa como el área estén seleccionados
+      if (!selectedAreaObj || !selectedEmpresaId) {
+        console.error(
+          "No se encontró el área o la empresa no está seleccionada.",
+          {
+            selectedEmpresaId,
+            areaSeleccionada,
+            areas,
+          },
+        );
+        alert(
+          "No se pudo agregar el puesto: selecciona una empresa y un área.",
+        );
+        return;
+      }
+
+      try {
+        await updateDoc(
+          doc(
+            db,
+            "Empresas_17",
+            selectedEmpresaId,
+            "areas",
+            selectedAreaObj.id,
+          ),
+          { puestos: updatedPuestos },
+        );
+        console.log("Puesto agregado y actualizado en Firebase");
+      } catch (error) {
+        console.error("Error actualizando puestos en Firebase:", error);
+        alert("Error al agregar el puesto, revisa la consola.");
+      }
     }
-  }
-};
-
-
-  
+  };
 
   // Función auxiliar: actualiza los puestos del área seleccionada en Firebase
   const updatePuestosInFirebase = async (newPuestos) => {
@@ -443,8 +439,6 @@ const handleAddPuestoClick = async () => {
   const handleDeletePuestoClick = () => {
     setIsModalOpen(true);
   };
-
-  
 
   const saveTable = async (empresaId, normaId) => {
     const auth = getAuth();
@@ -531,7 +525,6 @@ const handleAddPuestoClick = async () => {
 
       await setDoc(resumenRef, newResumenData);
       setDescripcionActividad1(""); // <- limpia el campo de descripción
-
     } catch (error) {
       console.error("Error al guardar en Firestore:", error);
       alert("Error al guardar la tabla.");
@@ -692,7 +685,7 @@ const handleAddPuestoClick = async () => {
       alert("Selecciona una empresa antes de agregar un área.");
       return;
     }
-  
+
     const nuevaArea = prompt("Ingrese el nombre de la nueva área:");
     if (nuevaArea && nuevaArea.trim() !== "") {
       try {
@@ -703,10 +696,14 @@ const handleAddPuestoClick = async () => {
         // Crea el nuevo documento en la subcolección "areas"
         const docRef = await addDoc(areasRef, {
           nombre: nuevaArea.trim(),
-          puestos: [] // Inicialmente sin puestos
+          puestos: [], // Inicialmente sin puestos
         });
         // Actualiza el estado local para incluir el nuevo área
-        const newArea = { id: docRef.id, nombre: nuevaArea.trim(), puestos: [] };
+        const newArea = {
+          id: docRef.id,
+          nombre: nuevaArea.trim(),
+          puestos: [],
+        };
         setAreas((prevAreas) => [...prevAreas, newArea]);
         setAreaSeleccionada(newArea.nombre);
         alert("Área agregada correctamente.");
@@ -716,8 +713,6 @@ const handleAddPuestoClick = async () => {
       }
     }
   };
-  
-  
 
   const [selectedMainOption, setSelectedMainOption] = useState(""); // Estado para la opción principal
   const [selectedSubOption, setSelectedSubOption] = useState(""); // Estado para la subcategoría seleccionada
@@ -725,71 +720,70 @@ const handleAddPuestoClick = async () => {
   const [selectionList, setSelectionList] = useState([]); // Lista acumulativa de selecciones
 
   // Opciones principales y sus subcategorías
-const eppOptions = {
-  Casco: [
-    "Casco Dieléctrico",
-    "Casco de Seguridad",
-    "Casco con Visera",
-    "Casco contra Impacto",
-  ],
-  Guantes: [
-    "Guantes de Látex",
-    "Guantes de Nitrilo",
-    "Guantes de Cuero",
-    "Guantes contra Sustancias Químicas",
-    "Guantes contra Temperaturas Extremas",
-    "Guantes Dieléctricos",
-  ],
-  "Gafas de Protección": [
-    "Goggles",
-    "Anteojos de Protección",
-    "Gafas Antiempañantes",
-    "Gafas de Impacto",
-  ],
-  Botas: [
-    "Botas de Seguridad",
-    "Botas Impermeables",
-    "Botas Aislantes",
-    "Calzado Conductivo",
-    "Calzado contra Impacto",
-    "Calzado contra Sustancias Químicas",
-    "Calzado Dieléctrico",
-    "Calzado Ocupacional",
-  ],
-  Mandil: [
-    "Mandil contra Altas Temperaturas",
-    "Mandil contra Sustancias Químicas",
-    "Oberol",
-    "Bata",
-  ],
-  // Nuevas clasificaciones
-  "Equipo de Audición": ["Conchas Acústicas", "Tapones Auditivos"],
-  Respiradores: [
-    "Respirador contra Gases y Vapores",
-    "Respirador contra Partículas",
-    "Mascarilla",
-  ],
-  "Protección Facial": [
-    "Careta para Soldador",
-    "Pantalla Facial",
-    "Capuchas",
-    "Anteojos de Protección",
-  ],
-  "Ropa de Protección": [
-    "Overol",
-    "Bata",
-    "Ropa contra Sustancias Peligrosas",
-    "Polainas",
-  ],
-  "Equipos Especiales": [
-    "Equipo de Protección contra Caídas de Altura",
-    "Equipo de Respiración Autónomo",
-    "Equipo para brigadistas contra incendios",
-  ],
-  Mangas: ["Mangas"],
-  Arnés: ["Arnés"],
-};
-
+  const eppOptions = {
+    Casco: [
+      "Casco Dieléctrico",
+      "Casco de Seguridad",
+      "Casco con Visera",
+      "Casco contra Impacto",
+    ],
+    Guantes: [
+      "Guantes de Látex",
+      "Guantes de Nitrilo",
+      "Guantes de Cuero",
+      "Guantes contra Sustancias Químicas",
+      "Guantes contra Temperaturas Extremas",
+      "Guantes Dieléctricos",
+    ],
+    "Gafas de Protección": [
+      "Goggles",
+      "Anteojos de Protección",
+      "Gafas Antiempañantes",
+      "Gafas de Impacto",
+    ],
+    Botas: [
+      "Botas de Seguridad",
+      "Botas Impermeables",
+      "Botas Aislantes",
+      "Calzado Conductivo",
+      "Calzado contra Impacto",
+      "Calzado contra Sustancias Químicas",
+      "Calzado Dieléctrico",
+      "Calzado Ocupacional",
+    ],
+    Mandil: [
+      "Mandil contra Altas Temperaturas",
+      "Mandil contra Sustancias Químicas",
+      "Oberol",
+      "Bata",
+    ],
+    // Nuevas clasificaciones
+    "Equipo de Audición": ["Conchas Acústicas", "Tapones Auditivos"],
+    Respiradores: [
+      "Respirador contra Gases y Vapores",
+      "Respirador contra Partículas",
+      "Mascarilla",
+    ],
+    "Protección Facial": [
+      "Careta para Soldador",
+      "Pantalla Facial",
+      "Capuchas",
+      "Anteojos de Protección",
+    ],
+    "Ropa de Protección": [
+      "Overol",
+      "Bata",
+      "Ropa contra Sustancias Peligrosas",
+      "Polainas",
+    ],
+    "Equipos Especiales": [
+      "Equipo de Protección contra Caídas de Altura",
+      "Equipo de Respiración Autónomo",
+      "Equipo para brigadistas contra incendios",
+    ],
+    Mangas: ["Mangas"],
+    Arnés: ["Arnés"],
+  };
 
   // Maneja la selección de subcategoría, agrega a la lista y oculta el menú
   const handleSubOptionChange = (e) => {
@@ -807,8 +801,6 @@ const eppOptions = {
 
   // Estado para manejar opciones seleccionadas automáticamente
 
-  
-
   const handleMainOptionChange = (e) => {
     const value = e.target.value;
     setSelectedMainOption(value);
@@ -820,7 +812,6 @@ const eppOptions = {
     { nombre: "Safran", url: safran },
     { nombre: "Maxion", url: maxion },
     { nombre: "Cimarron", url: cimarron },
-
   ];
 
   // Estado para almacenar el logo seleccionado
@@ -906,16 +897,14 @@ const eppOptions = {
 
   // Función para alternar la selección de una parte del cuerpo
   function toggleBodyPart(part) {
-    setBodyPartsSelected(prevState => ({
+    setBodyPartsSelected((prevState) => ({
       ...prevState,
       [part]: !prevState[part],
     }));
   }
-  
-  
 
   // Determinar si mostrar "X" (si está en affectedBodyParts y no en removedParts)
-  
+
   useEffect(() => {
     const savedData = localStorage.getItem(STORAGE_KEY);
     if (savedData) {
@@ -1051,16 +1040,15 @@ const eppOptions = {
       const auth = getAuth();
       const user = auth.currentUser;
       if (!user) {
-        console.warn("No hay usuario autenticado, no se pueden cargar empresas.");
+        console.warn(
+          "No hay usuario autenticado, no se pueden cargar empresas.",
+        );
         return;
       }
-  
+
       // Filtramos la colección "empresas" por el UID del usuario
-      const q = query(
-        collection(db, "empresas"),
-        where("uid", "==", user.uid)
-      );
-  
+      const q = query(collection(db, "empresas"), where("uid", "==", user.uid));
+
       const querySnapshot = await getDocs(q);
       const fetchedFolders = querySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -1082,7 +1070,6 @@ const eppOptions = {
     setNormas([]); // Opcional, para reiniciar la lista de normas
     setIsFolderModalOpen(true);
   };
-  
 
   // Cerrar el modal
   const closeFolderModal = () => {
@@ -1092,7 +1079,6 @@ const eppOptions = {
     // setSelectedNormaId("");
     // setNormas([]);
   };
-  
 
   useEffect(() => {
     const hoy = new Date().toISOString().split("T")[0]; // Obtiene la fecha actual en formato YYYY-MM-DD
@@ -1231,17 +1217,19 @@ const eppOptions = {
       alert("Seleccione al menos una empresa para borrar.");
       return;
     }
-    
+
     const confirmDelete = window.confirm(
-      `¿Seguro que deseas eliminar las siguientes empresas?\n${empresasSeleccionadasParaBorrar.join(", ")}`
+      `¿Seguro que deseas eliminar las siguientes empresas?\n${empresasSeleccionadasParaBorrar.join(", ")}`,
     );
     if (!confirmDelete) return;
-  
+
     try {
       // Para cada empresa seleccionada, borramos primero la subcolección "areas"
       for (const empresaId of empresasSeleccionadasParaBorrar) {
         // Obtenemos todos los documentos de la subcolección "areas" de esta empresa
-        const areasSnapshot = await getDocs(collection(db, "Empresas_17", empresaId, "areas"));
+        const areasSnapshot = await getDocs(
+          collection(db, "Empresas_17", empresaId, "areas"),
+        );
         for (const areaDoc of areasSnapshot.docs) {
           // Borramos cada documento de la subcolección "areas"
           await deleteDoc(areaDoc.ref);
@@ -1249,10 +1237,12 @@ const eppOptions = {
         // Una vez borradas todas las áreas, borramos el documento de la empresa
         await deleteDoc(doc(db, "Empresas_17", empresaId));
       }
-  
+
       // Actualizamos el estado local para eliminar las empresas borradas
-      setEmpresas(prevEmpresas =>
-        prevEmpresas.filter(emp => !empresasSeleccionadasParaBorrar.includes(emp.id))
+      setEmpresas((prevEmpresas) =>
+        prevEmpresas.filter(
+          (emp) => !empresasSeleccionadasParaBorrar.includes(emp.id),
+        ),
       );
       setEmpresasSeleccionadasParaBorrar([]);
       closeEmpresaModal();
@@ -1263,19 +1253,18 @@ const eppOptions = {
     }
   };
 
-
   // Ejemplo de creación de empresa (si aplica en tu caso):
   const handleAddEmpresa = async () => {
     const nuevaEmpresa = prompt("Ingrese el nombre de la nueva empresa:");
     if (!nuevaEmpresa) return;
-  
+
     const auth = getAuth();
     const user = auth.currentUser;
     if (!user) {
       alert("No estás autenticado.");
       return;
     }
-  
+
     try {
       // Agrega la empresa a la colección "Empresas_17"
       await addDoc(collection(db, "Empresas_17"), {
@@ -1290,18 +1279,17 @@ const eppOptions = {
     }
   };
 
-
   const handleCheckboxChange = (event) => {
-    const { name, checked } = event.target; 
-    // 'name' es el key del objeto hazards, 
+    const { name, checked } = event.target;
+    // 'name' es el key del objeto hazards,
     // 'checked' es true/false si el checkbox está marcado
-  
+
     setHazards((prevHazards) => ({
       ...prevHazards,
       [name]: checked, // Actualiza el valor booleano
     }));
   };
-  
+
   // Dentro de tu componente:
   useEffect(() => {
     const loadCompanies = async () => {
@@ -1324,7 +1312,7 @@ const eppOptions = {
   useEffect(() => {
     // Solo cargar áreas si tenemos una empresa seleccionada
     if (!selectedEmpresaId) return;
-  
+
     const fetchAreas = async () => {
       try {
         // Apuntamos al documento de la empresa
@@ -1332,48 +1320,47 @@ const eppOptions = {
         // Subcolección "areas" de esa empresa
         const areasRef = collection(empresaRef, "areas");
         const querySnapshot = await getDocs(areasRef);
-  
+
         const dbAreas = querySnapshot.docs.map((docItem) => ({
           id: docItem.id,
           ...docItem.data(),
         }));
-  
+
         setAreas(dbAreas); // Ahora "areas" solo corresponde a la empresa elegida
       } catch (error) {
         console.error("Error al cargar áreas desde Firebase:", error);
       }
     };
-  
+
     fetchAreas();
   }, [selectedEmpresaId]);
-  
+
   const deleteAreaFromFirebase = async (areaId) => {
     if (!selectedEmpresaId) return; // Verifica que haya empresa seleccionada
-  
+
     try {
       // Borra el doc dentro de "Empresas_17" / selectedEmpresaId / "areas" / areaId
-      await deleteDoc(doc(db, "Empresas_17", selectedEmpresaId, "areas", areaId));
+      await deleteDoc(
+        doc(db, "Empresas_17", selectedEmpresaId, "areas", areaId),
+      );
       console.log("Área eliminada de Firebase");
     } catch (error) {
       console.error("Error eliminando área en Firebase:", error);
     }
   };
-  
 
   const riskColor = getRiskColor(risk);
 
-
-
   const eppNames = {
-    "/images/1.png":  "Mandil de temperaturas",
-    "/images/2.png":  "Respirador",
-    "/images/3.png":  "Anteojos de proteccion",
-    "/images/4.png":  "Botas",
-    "/images/5.png":  "Tapones de oido",
-    "/images/6.png":  "Guantes",
-    "/images/7.png":  "Gafas contra sustancias",
-    "/images/8.png":  "Cubierta de frio",
-    "/images/9.png":  "Mandil",
+    "/images/1.png": "Mandil de temperaturas",
+    "/images/2.png": "Respirador",
+    "/images/3.png": "Anteojos de proteccion",
+    "/images/4.png": "Botas",
+    "/images/5.png": "Tapones de oido",
+    "/images/6.png": "Guantes",
+    "/images/7.png": "Gafas contra sustancias",
+    "/images/8.png": "Cubierta de frio",
+    "/images/9.png": "Mandil",
     "/images/10.png": "Casco",
     "/images/11.png": "Cubre Bocas",
     "/images/12.png": "Chaleco reflectante",
@@ -1387,10 +1374,8 @@ const eppOptions = {
     "/images/21.png": "Mangas",
     "/images/23.png": "Arnes",
     "/images/24.png": "Overol",
-
-  
   };
-  
+
   const eppImagesList = Object.keys(eppNames);
 
   const handleAddEPPImage = (event) => {
@@ -1399,7 +1384,6 @@ const eppOptions = {
       setSelectedImages((prevImages) => [...prevImages, selectedImage]);
     }
   };
-  
 
   useEffect(() => {
     const loadEmpresas = async () => {
@@ -1414,7 +1398,6 @@ const eppOptions = {
     };
     loadEmpresas();
   }, []);
-  
 
   // ==========================================================
   // 2. Al seleccionar una empresa, guardar su ID y nombre y cargar sus áreas
@@ -1432,7 +1415,6 @@ const eppOptions = {
     setPuestoSeleccionado("");
   };
 
-
   useEffect(() => {
     if (!selectedEmpresaId) return;
     const loadAreas = async () => {
@@ -1447,8 +1429,6 @@ const eppOptions = {
     };
     loadAreas();
   }, [selectedEmpresaId]);
-  
-
 
   return (
     <div class="main-table">
@@ -1693,39 +1673,38 @@ const eppOptions = {
               </label>
 
               <div className="puesto-con-botones">
-              <select
-  id="puesto"
-  value={puestoSeleccionado}
-  onChange={handlePuestoChange}
-  className="select-puesto"
->
-  <option value="" disabled>
-    Seleccione un puesto
-  </option>
-  {puestos.map((puesto, index) => (
-    <option key={index} value={puesto}>
-      {puesto}
-    </option>
-  ))}
-</select>
-
+                <select
+                  id="puesto"
+                  value={puestoSeleccionado}
+                  onChange={handlePuestoChange}
+                  className="select-puesto"
+                >
+                  <option value="" disabled>
+                    Seleccione un puesto
+                  </option>
+                  {puestos.map((puesto, index) => (
+                    <option key={index} value={puesto}>
+                      {puesto}
+                    </option>
+                  ))}
+                </select>
               </div>
               {!hideButtons && (
-  <>
-    <button
-      className="btn-agregar"
-      onClick={handleAddPuestoClick}
-    >
-      Agregar
-    </button>
-    <button
-      className="btn-borrar"
-      onClick={handleDeletePuestoClick}
-    >
-      Borrar
-    </button>
-  </>
-)}
+                <>
+                  <button
+                    className="btn-agregar"
+                    onClick={handleAddPuestoClick}
+                  >
+                    Agregar
+                  </button>
+                  <button
+                    className="btn-borrar"
+                    onClick={handleDeletePuestoClick}
+                  >
+                    Borrar
+                  </button>
+                </>
+              )}
 
               {/* Área de descripción de actividad */}
               <div className="contenedor-descripcion">
@@ -1736,16 +1715,12 @@ const eppOptions = {
                   Descripción de la actividad:
                 </label>
                 <textarea
-  id="descripcion-actividad-1"
-  className="textarea-descripcion"
-  placeholder="Escribe aquí la descripción de la actividad"
-  value={descripcionActividad1}
-  onChange={(e) => setDescripcionActividad1(e.target.value)}
-/>
-    
-
-
-
+                  id="descripcion-actividad-1"
+                  className="textarea-descripcion"
+                  placeholder="Escribe aquí la descripción de la actividad"
+                  value={descripcionActividad1}
+                  onChange={(e) => setDescripcionActividad1(e.target.value)}
+                />
               </div>
             </td>
 
@@ -1793,7 +1768,7 @@ const eppOptions = {
               <table className="body-parts-table">
                 <tbody>
                   <tr>
-                  <td className="risk-label-cell">Cabeza y Oídos</td>
+                    <td className="risk-label-cell">Cabeza y Oídos</td>
                     <td
                       className="risk-mark-cell"
                       onClick={() => toggleBodyPart("Cabeza y Oídos")}
@@ -1809,8 +1784,6 @@ const eppOptions = {
                     >
                       {bodyPartsSelected["Tronco"] ? "X" : ""}
                     </td>
-
-
                   </tr>
                   <tr>
                     <td className="risk-label-cell">Ojos y Cara</td>
@@ -1899,20 +1872,19 @@ const eppOptions = {
                   <tr>
                     <td className="label-cell">Empresa:</td>
                     <td className="input-cell" colSpan="2">
-                    <select
-  id="empresa"
-  value={selectedEmpresaId}
-  onChange={handleEmpresaChange}
-  className="large-text-dropdown"
->
-  <option value="">Seleccione una empresa</option>
-  {empresas.map((empresa) => (
-    <option key={empresa.id} value={empresa.id}>
-      {empresa.nombre}
-    </option>
-  ))}
-</select>
-
+                      <select
+                        id="empresa"
+                        value={selectedEmpresaId}
+                        onChange={handleEmpresaChange}
+                        className="large-text-dropdown"
+                      >
+                        <option value="">Seleccione una empresa</option>
+                        {empresas.map((empresa) => (
+                          <option key={empresa.id} value={empresa.id}>
+                            {empresa.nombre}
+                          </option>
+                        ))}
+                      </select>
                     </td>
                   </tr>
 
@@ -1921,22 +1893,21 @@ const eppOptions = {
                     <td className="label-cell">Área:</td>
                     <td className="input-cell">
                       <div className="cell-container">
-                      <select
-  id="area"
-  value={areaSeleccionada}
-  onChange={handleAreaChange}
->
-  {areas.length > 0 ? (
-    areas.map((area) => (
-      <option key={area.id} value={area.nombre}>
-        {area.nombre}
-      </option>
-    ))
-  ) : (
-    <option value="">Cargando áreas...</option>
-  )}
-</select>
-
+                        <select
+                          id="area"
+                          value={areaSeleccionada}
+                          onChange={handleAreaChange}
+                        >
+                          {areas.length > 0 ? (
+                            areas.map((area) => (
+                              <option key={area.id} value={area.nombre}>
+                                {area.nombre}
+                              </option>
+                            ))
+                          ) : (
+                            <option value="">Cargando áreas...</option>
+                          )}
+                        </select>
                       </div>
                     </td>
                   </tr>
@@ -1976,26 +1947,24 @@ const eppOptions = {
 
         <tbody>
           <tr>
-          <td colSpan="3" className="left-section">
-  <div className="text1">Identificación de peligros</div>
-  <ul className="hazard-list">
-    {Object.keys(hazards).map((hazard) => (
-      <li key={hazard} className="hazard-item">
-        <span>{hazard}</span>
-        <label className="hazard-checkbox">
-          <input
-            type="checkbox"
-            name={hazard}
-            checked={hazards[hazard]}
-            onChange={handleCheckboxChange}
-          />
-        </label>
-      </li>
-    ))}
-  </ul>
-</td>
-
-
+            <td colSpan="3" className="left-section">
+              <div className="text1">Identificación de peligros</div>
+              <ul className="hazard-list">
+                {Object.keys(hazards).map((hazard) => (
+                  <li key={hazard} className="hazard-item">
+                    <span>{hazard}</span>
+                    <label className="hazard-checkbox">
+                      <input
+                        type="checkbox"
+                        name={hazard}
+                        checked={hazards[hazard]}
+                        onChange={handleCheckboxChange}
+                      />
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </td>
 
             {/* Modal para borrar empresas */}
             <Modal
@@ -2007,21 +1976,22 @@ const eppOptions = {
               <p>Selecciona las empresas que deseas eliminar:</p>
               <div className="empresa-selection-list">
                 {empresas.length > 0 ? (
-  empresas.map((empresa) => (
-    <label key={empresa.id} className="checkbox-label">
-      <input
-        type="checkbox"
-        value={empresa.id}  // <-- Guardas el ID del doc
-        checked={empresasSeleccionadasParaBorrar.includes(empresa.id)}
-        onChange={handleEmpresaSelectionChange}
-      />
-      {empresa.nombre}  {/* Muestras el nombre de la empresa */}
-    </label>
-  ))
-) : (
-  <p>No hay empresas disponibles.</p>
-)}
-
+                  empresas.map((empresa) => (
+                    <label key={empresa.id} className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        value={empresa.id} // <-- Guardas el ID del doc
+                        checked={empresasSeleccionadasParaBorrar.includes(
+                          empresa.id,
+                        )}
+                        onChange={handleEmpresaSelectionChange}
+                      />
+                      {empresa.nombre} {/* Muestras el nombre de la empresa */}
+                    </label>
+                  ))
+                ) : (
+                  <p>No hay empresas disponibles.</p>
+                )}
               </div>
               <div className="modal-buttons">
                 <button
@@ -2035,8 +2005,6 @@ const eppOptions = {
                 </button>
               </div>
             </Modal>
-
-          
 
             <td
               colSpan="2"
@@ -2126,130 +2094,134 @@ const eppOptions = {
             </td>
 
             <td colSpan="2" className="epp-component-right-section">
-  {/* Título de EPP Recomendado + Menú para "Seleccione EPP" */}
-  <div className="epp-component-title-select">
-    EPP Recomendado
+              {/* Título de EPP Recomendado + Menú para "Seleccione EPP" */}
+              <div className="epp-component-title-select">
+                EPP Recomendado
+                <select
+                  className="custom-select epp-select"
+                  onChange={handleAddEPPImage}
+                >
+                  <option value="">Seleccione EPP</option>
+                  {eppImagesList
+                    .map((img) => ({ image: img, name: eppNames[img] || img }))
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((obj, i) => (
+                      <option key={i} value={obj.image}>
+                        {obj.name}
+                      </option>
+                    ))}
+                </select>
+              </div>
 
-    <select className="custom-select epp-select" onChange={handleAddEPPImage}>
-      <option value="">Seleccione EPP</option>
-      {eppImagesList
-        .map((img) => ({ image: img, name: eppNames[img] || img }))
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map((obj, i) => (
-          <option key={i} value={obj.image}>
-            {obj.name}
-          </option>
-        ))}
-    </select>
-  </div>
+              {/* Contenedor para las imágenes de EPP */}
+              <div className="epp-component-hazard-images epp-recommended-box">
+                {selectedImages.length > 0 ? (
+                  selectedImages.map((image, index) => (
+                    <img
+                      key={index}
+                      src={image}
+                      alt={`Protección ${index}`}
+                      className="epp-component-image"
+                      onClick={() => handleImageRemove(image)}
+                    />
+                  ))
+                ) : (
+                  <div className="epp-component-no-epp">
+                    No hay EPP seleccionado
+                  </div>
+                )}
+              </div>
 
-  {/* Contenedor para las imágenes de EPP */}
-  <div className="epp-component-hazard-images epp-recommended-box">
-    {selectedImages.length > 0 ? (
-      selectedImages.map((image, index) => (
-        <img
-          key={index}
-          src={image}
-          alt={`Protección ${index}`}
-          className="epp-component-image"
-          onClick={() => handleImageRemove(image)}
-        />
-      ))
-    ) : (
-      <div className="epp-component-no-epp">No hay EPP seleccionado</div>
-    )}
-  </div>
-
-  {/* NO MOVER nada de aquí en adelante */}
-  <div className="epp-container">
-    {/* Contenedor del menú principal */}
-    <div className="epp-dropdown-container">
-      <label htmlFor="main-epp-select" className="dropdown-label">
-        Selecciona el equipo principal:
-      </label>
-      <select
-        id="main-epp-select"
-        value={selectedMainOption}
-        onChange={handleMainOptionChange}
-        className="epp-dropdown large-text-dropdown"
-      >
-        <option value="" disabled>
-          Selecciona el equipo
-        </option>
-        {Object.keys(eppOptions).map((option, index) => (
-          <option key={index} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-    </div>
-
-    {showSubDropdown && selectedMainOption && (
-      <div className="epp-sub-dropdown-container">
-        <label htmlFor="sub-epp-select" className="dropdown-label">
-          Selecciona el tipo de {selectedMainOption.toLowerCase()}:
-        </label>
-        <select
-          id="sub-epp-select"
-          value={selectedSubOption}
-          onChange={handleSubOptionChange}
-          className="large-text-dropdown"
-        >
-          <option value="" disabled>
-            Selecciona el tipo
-          </option>
-          {eppOptions[selectedMainOption]?.map((subOption, idx) => (
-            <option key={idx} value={subOption}>
-              {subOption}
-            </option>
-          ))}
-        </select>
-      </div>
-    )}
-
-    <div className="epp-selection-list-container">
-      {selectionList.length > 0 ? (
-        selectionList
-          .reduce((rows, key, index) => {
-            // Agrupa elementos en pares
-            if (index % 2 === 0) rows.push([selectionList[index]]);
-            else rows[rows.length - 1].push(selectionList[index]);
-            return rows;
-          }, [])
-          .map((row, rowIndex) => (
-            <div key={rowIndex} className="epp-selection-row">
-              {row.map((selection, idx) => (
-                <div key={idx} className="epp-selection-item">
-                  {selection.slice(selection.indexOf("-") + 2)}
-                  <button
-                    className="delete-button"
-                    onClick={() =>
-                      handleDeleteSelection(selectionList.indexOf(selection))
-                    }
+              {/* NO MOVER nada de aquí en adelante */}
+              <div className="epp-container">
+                {/* Contenedor del menú principal */}
+                <div className="epp-dropdown-container">
+                  <label htmlFor="main-epp-select" className="dropdown-label">
+                    Selecciona el equipo principal:
+                  </label>
+                  <select
+                    id="main-epp-select"
+                    value={selectedMainOption}
+                    onChange={handleMainOptionChange}
+                    className="epp-dropdown large-text-dropdown"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="white"
-                      width="20px"
-                      height="20px"
-                      className="delete-icon"
-                    >
-                      <path d="M3 6h18v2H3V6zm2 2v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V8H5zm7 4v6h2v-6h-2zm-4 0v6h2v-6H8zm8 0v6h2v-6h-2zM7 4h10v2H7V4z" />
-                    </svg>
-                  </button>
+                    <option value="" disabled>
+                      Selecciona el equipo
+                    </option>
+                    {Object.keys(eppOptions).map((option, index) => (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-              ))}
-            </div>
-          ))
-      ) : (
-        <p className="no-selection-message">No hay selecciones</p>
-      )}
-    </div>
-  </div>
-</td>
 
+                {showSubDropdown && selectedMainOption && (
+                  <div className="epp-sub-dropdown-container">
+                    <label htmlFor="sub-epp-select" className="dropdown-label">
+                      Selecciona el tipo de {selectedMainOption.toLowerCase()}:
+                    </label>
+                    <select
+                      id="sub-epp-select"
+                      value={selectedSubOption}
+                      onChange={handleSubOptionChange}
+                      className="large-text-dropdown"
+                    >
+                      <option value="" disabled>
+                        Selecciona el tipo
+                      </option>
+                      {eppOptions[selectedMainOption]?.map((subOption, idx) => (
+                        <option key={idx} value={subOption}>
+                          {subOption}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
 
+                <div className="epp-selection-list-container">
+                  {selectionList.length > 0 ? (
+                    selectionList
+                      .reduce((rows, key, index) => {
+                        // Agrupa elementos en pares
+                        if (index % 2 === 0) rows.push([selectionList[index]]);
+                        else rows[rows.length - 1].push(selectionList[index]);
+                        return rows;
+                      }, [])
+                      .map((row, rowIndex) => (
+                        <div key={rowIndex} className="epp-selection-row">
+                          {row.map((selection, idx) => (
+                            <div key={idx} className="epp-selection-item">
+                              {selection.slice(selection.indexOf("-") + 2)}
+                              <button
+                                className="delete-button"
+                                onClick={() =>
+                                  handleDeleteSelection(
+                                    selectionList.indexOf(selection),
+                                  )
+                                }
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 24 24"
+                                  fill="white"
+                                  width="20px"
+                                  height="20px"
+                                  className="delete-icon"
+                                >
+                                  <path d="M3 6h18v2H3V6zm2 2v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V8H5zm7 4v6h2v-6h-2zm-4 0v6h2v-6H8zm8 0v6h2v-6h-2zM7 4h10v2H7V4z" />
+                                </svg>
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      ))
+                  ) : (
+                    <p className="no-selection-message">No hay selecciones</p>
+                  )}
+                </div>
+              </div>
+            </td>
           </tr>
           <td colSpan={8}>
             <span></span>
@@ -2370,15 +2342,14 @@ const eppOptions = {
                   <tr>
                     <td className="risk-label-cell">Magnitud del Riesgo:</td>
                     <td
-  className="risk-value-cell"
-  style={{
-    backgroundColor: riskColor,
-    color: riskColor === "yellow" ? "black" : "white"
-  }}
->
-  {risk.toFixed(2)}
-</td>
-
+                      className="risk-value-cell"
+                      style={{
+                        backgroundColor: riskColor,
+                        color: riskColor === "yellow" ? "black" : "white",
+                      }}
+                    >
+                      {risk.toFixed(2)}
+                    </td>
                   </tr>
                   <tr>
                     <td className="risk-label-cell">Clasificación:</td>
@@ -2432,14 +2403,13 @@ const eppOptions = {
           <button onClick={handleReset} className="reset-button">
             Reiniciar Tabla
           </button>
-          
         </div>
-
-        
 
         {/* Botones que se moverán a la derecha */}
         <div style={{ marginLeft: "auto" }}>
-        <button onClick={handleAddEmpresa} className="btn-add-empresa">Agregar Empresa</button>
+          <button onClick={handleAddEmpresa} className="btn-add-empresa">
+            Agregar Empresa
+          </button>
 
           <button className="btn-extra" onClick={openEmpresaModal}>
             Borrar Empresa

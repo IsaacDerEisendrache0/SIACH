@@ -66,7 +66,7 @@ const SavedTables = () => {
   // Por ejemplo: const [currentUser, setCurrentUser] = useState(null);
   // y en un useEffect suscribirte a auth.onAuthStateChanged, etc.
   // En este ejemplo, se usa auth.currentUser directamente.
-  
+
   // ------------------------------------------------------------------
   // CARGA DE EMPRESAS (filtradas por UID)
   // ------------------------------------------------------------------
@@ -118,19 +118,19 @@ const SavedTables = () => {
   // ------------------------------------------------------------------
   const handleDeleteEmpresa = async (empresaId) => {
     const confirmDelete = window.confirm(
-      "¿Estás seguro de que deseas borrar esta empresa? Esto eliminará también todas sus normas y registros."
+      "¿Estás seguro de que deseas borrar esta empresa? Esto eliminará también todas sus normas y registros.",
     );
     if (!confirmDelete) return;
 
     try {
       const normasSnap = await getDocs(
-        collection(db, "empresas", empresaId, "normas")
+        collection(db, "empresas", empresaId, "normas"),
       );
 
       for (let normaDoc of normasSnap.docs) {
         const normaId = normaDoc.id;
         const registrosSnap = await getDocs(
-          collection(db, "empresas", empresaId, "normas", normaId, "registros")
+          collection(db, "empresas", empresaId, "normas", normaId, "registros"),
         );
 
         const batch = writeBatch(db);
@@ -143,8 +143,8 @@ const SavedTables = () => {
               "normas",
               normaId,
               "registros",
-              regDoc.id
-            )
+              regDoc.id,
+            ),
           );
         });
         await batch.commit();
@@ -180,7 +180,7 @@ const SavedTables = () => {
     try {
       const q = query(
         collection(db, "empresas", empresaId, "normas"),
-        where("uid", "==", user.uid)
+        where("uid", "==", user.uid),
       );
       const snapshot = await getDocs(q);
       const fetchedNormas = snapshot.docs.map((doc) => ({
@@ -209,7 +209,7 @@ const SavedTables = () => {
           nombre: newNormaName,
           fechaCreacion: serverTimestamp(),
           uid: user.uid,
-        }
+        },
       );
       setNormas([...normas, { id: docRef.id, nombre: newNormaName }]);
       setNewNormaName("");
@@ -224,7 +224,7 @@ const SavedTables = () => {
   // ------------------------------------------------------------------
   const handleDeleteNorma = async (normaId) => {
     const confirmDelete = window.confirm(
-      "¿Estás seguro de que deseas borrar esta norma? Esto eliminará también todos sus registros."
+      "¿Estás seguro de que deseas borrar esta norma? Esto eliminará también todos sus registros.",
     );
     if (!confirmDelete) return;
 
@@ -236,8 +236,8 @@ const SavedTables = () => {
           selectedEmpresa.id,
           "normas",
           normaId,
-          "registros"
-        )
+          "registros",
+        ),
       );
       const batch = writeBatch(db);
       registrosSnap.forEach((regDoc) => {
@@ -249,13 +249,15 @@ const SavedTables = () => {
             "normas",
             normaId,
             "registros",
-            regDoc.id
-          )
+            regDoc.id,
+          ),
         );
       });
       await batch.commit();
 
-      await deleteDoc(doc(db, "empresas", selectedEmpresa.id, "normas", normaId));
+      await deleteDoc(
+        doc(db, "empresas", selectedEmpresa.id, "normas", normaId),
+      );
 
       setNormas((prev) => prev.filter((n) => n.id !== normaId));
       if (selectedNorma && selectedNorma.id === normaId) {
@@ -282,9 +284,9 @@ const SavedTables = () => {
   // Parseo de fecha y hora
   // ------------------------------------------------------------------
   function parseDateTime(fecha, hora) {
-    const [day, month, year] = fecha.split("/").map(num => parseInt(num, 10));
+    const [day, month, year] = fecha.split("/").map((num) => parseInt(num, 10));
     let [time, ampm] = hora.split(" ");
-    let [hh, mm, ss] = time.split(":").map(num => parseInt(num, 10));
+    let [hh, mm, ss] = time.split(":").map((num) => parseInt(num, 10));
     if (ampm === "PM" && hh < 12) hh += 12;
     if (ampm === "AM" && hh === 12) hh = 0;
     return new Date(year, month - 1, day, hh, mm, ss);
@@ -300,25 +302,29 @@ const SavedTables = () => {
       empresaId,
       "normas",
       normaId,
-      "tablas"
+      "tablas",
     );
 
-    onSnapshot(registrosRef, (snapshot) => {
-      const fetchedRegistros = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+    onSnapshot(
+      registrosRef,
+      (snapshot) => {
+        const fetchedRegistros = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
 
-      const sortedRegistros = fetchedRegistros.sort((a, b) => {
-        const dateA = parseDateTime(a.fecha, a.hora);
-        const dateB = parseDateTime(b.fecha, b.hora);
-        return dateB - dateA;
-      });
+        const sortedRegistros = fetchedRegistros.sort((a, b) => {
+          const dateA = parseDateTime(a.fecha, a.hora);
+          const dateB = parseDateTime(b.fecha, b.hora);
+          return dateB - dateA;
+        });
 
-      setRegistros(sortedRegistros);
-    }, (error) => {
-      console.error("Error al cargar registros:", error);
-    });
+        setRegistros(sortedRegistros);
+      },
+      (error) => {
+        console.error("Error al cargar registros:", error);
+      },
+    );
   };
 
   // ------------------------------------------------------------------
@@ -326,7 +332,7 @@ const SavedTables = () => {
   // ------------------------------------------------------------------
   const handleDeleteRegistro = async (registroId) => {
     const confirmDelete = window.confirm(
-      "¿Estás seguro de que deseas borrar este registro?"
+      "¿Estás seguro de que deseas borrar este registro?",
     );
     if (!confirmDelete) return;
 
@@ -338,7 +344,7 @@ const SavedTables = () => {
         "normas",
         selectedNorma.id,
         "tablas",
-        registroId
+        registroId,
       );
 
       const docSnapshot = await getDocs(
@@ -348,8 +354,8 @@ const SavedTables = () => {
           selectedEmpresa.id,
           "normas",
           selectedNorma.id,
-          "tablas"
-        )
+          "tablas",
+        ),
       );
       const docExists = docSnapshot.docs.some((doc) => doc.id === registroId);
 
@@ -359,7 +365,9 @@ const SavedTables = () => {
       }
 
       await deleteDoc(registroRef);
-      console.log(`✅ Registro ${registroId} eliminado de Firebase correctamente`);
+      console.log(
+        `✅ Registro ${registroId} eliminado de Firebase correctamente`,
+      );
       alert("Registro borrado con éxito.");
     } catch (error) {
       console.error("❌ Error al borrar el registro en Firebase:", error);
@@ -385,7 +393,7 @@ const SavedTables = () => {
         selectedMainOption: registro.selectedMainOption || "",
         nombreEmpresa: registro.nombreEmpresa || "",
         selectionList: registro.selectionList || [],
-      })
+      }),
     );
     navigate("/norma_17_editor");
   };
@@ -414,16 +422,18 @@ const SavedTables = () => {
   const displayedNormas = selectedFilterNorma
     ? normas.filter((norm) => norm.nombre === selectedFilterNorma)
     : normas;
-  const uniqueAreas = [...new Set(registros.map((reg) => reg.areaSeleccionada))];
+  const uniqueAreas = [
+    ...new Set(registros.map((reg) => reg.areaSeleccionada)),
+  ];
   const filteredRegistros = registros.filter((reg) =>
-    selectedFilterArea ? reg.areaSeleccionada === selectedFilterArea : true
+    selectedFilterArea ? reg.areaSeleccionada === selectedFilterArea : true,
   );
 
   const indexOfLastRegistro = currentPage * registrosPorPagina;
   const indexOfFirstRegistro = indexOfLastRegistro - registrosPorPagina;
   const currentRegistros = filteredRegistros.slice(
     indexOfFirstRegistro,
-    indexOfLastRegistro
+    indexOfLastRegistro,
   );
   const totalPages = Math.ceil(filteredRegistros.length / registrosPorPagina);
 
@@ -453,7 +463,9 @@ const SavedTables = () => {
               >
                 ☰
               </button>
-              <div className={`filter-container ${showFilterMenu ? "show" : "hide"}`}>
+              <div
+                className={`filter-container ${showFilterMenu ? "show" : "hide"}`}
+              >
                 <label>
                   <strong>Empresa:</strong>
                 </label>
@@ -500,7 +512,9 @@ const SavedTables = () => {
               >
                 ☰
               </button>
-              <div className={`filter-container ${showAreaFilterMenu ? "show" : "hide"}`}>
+              <div
+                className={`filter-container ${showAreaFilterMenu ? "show" : "hide"}`}
+              >
                 <label>
                   <strong>Filtrar por Área:</strong>
                 </label>
@@ -565,7 +579,10 @@ const SavedTables = () => {
           {selectedEmpresa && !selectedNorma && (
             <>
               <div className="back-to-home">
-                <button onClick={handleGoBackToEmpresas} className="btn-back-home">
+                <button
+                  onClick={handleGoBackToEmpresas}
+                  className="btn-back-home"
+                >
                   ← Regresar a Empresas
                 </button>
               </div>
@@ -612,7 +629,10 @@ const SavedTables = () => {
           {selectedNorma && (
             <>
               <div className="back-to-home">
-                <button onClick={handleGoBackToNormas} className="btn-back-home">
+                <button
+                  onClick={handleGoBackToNormas}
+                  className="btn-back-home"
+                >
                   ← Regresar a Normas
                 </button>
               </div>
@@ -634,7 +654,8 @@ const SavedTables = () => {
                       <strong>Puesto:</strong> {registro.puestoSeleccionado}
                     </p>
                     <p>
-                      <strong>Fecha de creación:</strong> {registro.fecha} - {registro.hora}
+                      <strong>Fecha de creación:</strong> {registro.fecha} -{" "}
+                      {registro.hora}
                     </p>
                     <p>
                       <strong>Magnitud del Riesgo:</strong> {registro.risk}
