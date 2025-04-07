@@ -567,109 +567,115 @@ const RiskTable = () => {
       </div>
 
       <table className="risk-table" style={{ backgroundColor: "white" }}>
-        <thead>
-          <tr>
-            <th className="red">Nombre de la maquinaria</th>
-            <td colSpan="2">
-              <textarea
-                placeholder="Introduzca un nombre"
-                value={nombreMaquinaria}
-                onChange={(e) => setNombreMaquinaria(e.target.value)}
-                style={{ width: "100%" }}
-              />
-            </td>
-            <th className="red">Área:</th>
-            <td colSpan="2">
-              <select
-                name="areas"
-                value={area}
-                onChange={(e) => setArea(e.target.value)}
-                className="dropdown-puestos"
-              >
-                <option value="">Seleccione un área</option>
-                {areas
-                  .filter((ar) => ar && ar.nombre)
-                  .map((ar, index) => (
-                    <option key={index} value={ar.nombre}>
-                      {ar.nombre}
-                    </option>
-                  ))}
-              </select>
-            </td>
-            <th className="red">Empresa</th>
-            <td colSpan="2">
-              <select
-                value={empresaSeleccionada}
-                onChange={handleEmpresaChange}
-                className="dropdown-empresa"
-              >
-                <option value="">Seleccione una empresa</option>
-                {empresas.map((emp, index) => (
-                  <option key={index} value={emp.nombre}>
-                    {emp.nombre}
-                  </option>
-                ))}
-              </select>
-            </td>
-            <th className="red">POE:</th>
-            <td colSpan="2">
-              <input
-                placeholder="Introduzca el POE"
-                type="text"
-                value={poe}
-                onChange={(e) => setPoe(e.target.value)}
-              />
-            </td>
-            <th className="red">Tiempo de exposición:</th>
-            <td colSpan="1">
-              <textarea
-                placeholder="Introduzca el tiempo"
-                type="text"
-                value={tiempoExposicion}
-                onChange={(e) => setTiempoExposicion(e.target.value)}
-                style={{ width: "100%" }}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th className="red">Descripción de la maquinaria o equipo:</th>
-            <td colSpan="3">
-              <textarea
-                placeholder="Introduzca una descripción"
-                value={descripcion}
-                onChange={(e) => setDescripcion(e.target.value)}
-                style={{ width: "100%" }}
-              />
-            </td>
-            <th className="red">Fecha de inspección:</th>
-            <td colSpan="2">
-              <input
-                type="date"
-                value={fechaInspeccion}
-                onChange={(e) => setFechaInspeccion(e.target.value)}
-                style={{ width: "100%" }}
-              />
-            </td>
-            <th className="red">PUESTOS</th>
-            <td colSpan="3">
-              <select
-                name="puestos"
-                value={newPuesto}
-                onChange={(e) => setNewPuesto(e.target.value)}
-                className="dropdown-puestos"
-              >
-                <option value="">Seleccione un puesto</option>
-                {puestos
-                  .filter((p) => p && p.nombre)
-                  .map((p, index) => (
-                    <option key={index} value={p.nombre}>
-                      {p.nombre}
-                    </option>
-                  ))}
-              </select>
-            </td>
-          </tr>
-        </thead>
+        
+      <thead className="thead-responsive">
+  {/* Fila 1: Etiquetas */}
+  <tr>
+    <th className="red">NOMBRE DE LA MAQUINARIA</th>
+    <th className="red">ÁREA</th>
+    <th className="red">EMPRESA</th>
+    <th className="red">POE</th>
+    <th className="red">TIEMPO DE EXPOSICIÓN</th>
+    <th className="red">FECHA DE INSPECCIÓN</th>
+  </tr>
+
+  {/* Fila 2: Inputs */}
+  <tr>
+    <td>
+      <textarea
+        placeholder="Introduzca un nombre"
+        value={nombreMaquinaria}
+        onChange={(e) => setNombreMaquinaria(e.target.value)}
+        style={{ width: "100%" }}
+      />
+    </td>
+    <td>
+      <select
+        name="areas"
+        value={area}
+        onChange={(e) => setArea(e.target.value)}
+        className="dropdown-areas"
+      >
+        <option value="">Seleccione un área</option>
+        {areas.map((ar, index) => (
+          <option key={index} value={ar.nombre}>
+            {ar.nombre}
+          </option>
+        ))}
+      </select>
+    </td>
+    <td>
+      <select
+        value={empresaSeleccionada}
+        onChange={handleEmpresaChange}
+        className="dropdown-empresa"
+      >
+        <option value="">Seleccione una empresa</option>
+        {empresas.map((emp, index) => (
+          <option key={index} value={emp.nombre}>
+            {emp.nombre}
+          </option>
+        ))}
+      </select>
+    </td>
+    <td>
+      <input
+        placeholder="Introduzca el POE"
+        type="text"
+        value={poe}
+        onChange={(e) => setPoe(e.target.value)}
+        style={{ width: "100%" }}
+      />
+    </td>
+    <td>
+      <textarea
+        placeholder="Introduzca el tiempo"
+        value={tiempoExposicion}
+        onChange={(e) => setTiempoExposicion(e.target.value)}
+        style={{ width: "100%" }}
+      />
+    </td>
+    <td>
+      <input
+        type="date"
+        value={fechaInspeccion}
+        onChange={(e) => setFechaInspeccion(e.target.value)}
+        style={{ width: "100%" }}
+      />
+    </td>
+  </tr>
+
+  {/* Fila 3: Descripción y Puestos */}
+  <tr>
+    <th className="red">DESCRIPCIÓN DE LA MAQUINARIA O EQUIPO</th>
+    <td colSpan="3">
+      <textarea
+        placeholder="Introduzca una descripción"
+        value={descripcion}
+        onChange={(e) => setDescripcion(e.target.value)}
+        style={{ width: "100%" }}
+      />
+    </td>
+    <th className="red">PUESTOS</th>
+    <td>
+      <select
+        name="puestos"
+        value={newPuesto}
+        onChange={(e) => setNewPuesto(e.target.value)}
+        className="dropdown-puestos"
+      >
+        <option value="">Seleccione un puesto</option>
+        {puestos.map((p, index) => (
+          <option key={index} value={p.nombre}>
+            {p.nombre}
+          </option>
+        ))}
+      </select>
+    </td>
+  </tr>
+</thead>
+
+
         <tbody>
           <tr>
             <tr>

@@ -136,6 +136,32 @@ h4.red {
   margin-top: 20px;
 }
 
+  /* SOLO para thead responsive */
+.risk-table .thead-responsive {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.risk-table .thead-responsive th,
+.risk-table .thead-responsive td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+  vertical-align: middle;
+  max-width: 100%;
+}
+
+.risk-table .thead-responsive input,
+.risk-table .thead-responsive select,
+.risk-table .thead-responsive textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+
 .risk-selects .button,
 .safety-selects .button {
   align-self: flex-start;
