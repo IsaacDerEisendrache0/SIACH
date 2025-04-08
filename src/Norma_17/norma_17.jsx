@@ -100,10 +100,11 @@ const RiskAssessmentTable = () => {
     "Cabeza y Oídos": false,
     "Ojos y Cara": false,
     "Sistema respiratorio": false,
-    Tronco: false,
+    "Tronco": false,
     "Brazos y Manos": false,
     "Extremidades inferiores": false,
   });
+  
 
   const handleInjectAreas = async () => {
     try {
@@ -455,10 +456,12 @@ const RiskAssessmentTable = () => {
       puestoSeleccionado,
       hazards,
       consequence,
+      bodyPartsSelected,
       exposure,
       probability,
       risk: calculateRisk(),
       selectedImages,
+      logoSeleccionado,
       descripcionActividad1,
       descripcionActividad2,
       selectedOptionEquipoUtilizado,
@@ -815,18 +818,11 @@ const RiskAssessmentTable = () => {
   ];
 
   // Estado para almacenar el logo seleccionado
-  const [logoSeleccionado, setLogoSeleccionado] = useState(() => {
-    return localStorage.getItem("logoSeleccionado") || null;
-  });
+  const [logoSeleccionado, setLogoSeleccionado] = useState(null);
+
 
   // Persistir el logo en localStorage
-  useEffect(() => {
-    if (logoSeleccionado) {
-      localStorage.setItem("logoSeleccionado", logoSeleccionado);
-    } else {
-      localStorage.removeItem("logoSeleccionado");
-    }
-  }, [logoSeleccionado]);
+  
 
   // Maneja el cambio de selección en el menú desplegable
   const handleLogoChange = (event) => {

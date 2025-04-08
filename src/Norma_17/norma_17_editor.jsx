@@ -17,6 +17,8 @@ import maxion from "../logos/maxion.jpeg";
 import safran from "../logos/safran.jpeg";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import cimarron from "../logos/cimarron.png";
+
 
 const RiskAssessmentTableEditor = () => {
   const [areas, setAreas] = useState([]);
@@ -418,6 +420,7 @@ const RiskAssessmentTableEditor = () => {
       consequence,
       exposure,
       probability,
+      bodyPartsSelected,
       risk: calculateRisk(),
       selectedImages,
       descripcionActividad1,
@@ -629,6 +632,22 @@ const RiskAssessmentTableEditor = () => {
     setDescripcionActividad1(tableToEdit.descripcionActividad1 || "");
     setDescripcionActividad2(tableToEdit.descripcionActividad2 || "");
     setTiempoExposicion(tableToEdit.tiempoExposicion || "8hrs");
+    setLogoSeleccionado(tableToEdit.logoSeleccionado || null);
+
+    
+    setBodyPartsSelected({
+      "Cabeza y Oídos": false,
+      "Ojos y Cara": false,
+      "Sistema respiratorio": false,
+      "Tronco": false,
+      "Brazos y Manos": false,
+      "Extremidades inferiores": false,
+      ...(tableToEdit.bodyPartsSelected || {}),
+    });
+    
+    
+
+    
 
     // En vez de poner new Date(), asignas directamente la fecha guardada
     setFecha(parseDdMmYyyyToIso(tableToEdit.fecha));
@@ -822,23 +841,16 @@ const RiskAssessmentTableEditor = () => {
   };
 
   const logos = [
-    { nombre: "Safran", url: safran },
-    { nombre: "Maxion", url: maxion },
-  ];
+      { nombre: "Safran", url: safran },
+      { nombre: "Maxion", url: maxion },
+      { nombre: "Cimarron", url: cimarron },
+    ];
 
   // Estado para almacenar el logo seleccionado
-  const [logoSeleccionado, setLogoSeleccionado] = useState(() => {
-    return localStorage.getItem("logoSeleccionado") || null;
-  });
+  const [logoSeleccionado, setLogoSeleccionado] = useState(null);
 
-  // Persistir el logo en localStorage
-  useEffect(() => {
-    if (logoSeleccionado) {
-      localStorage.setItem("logoSeleccionado", logoSeleccionado);
-    } else {
-      localStorage.removeItem("logoSeleccionado");
-    }
-  }, [logoSeleccionado]);
+
+  
 
   // Maneja el cambio de selección en el menú desplegable
   const handleLogoChange = (event) => {
