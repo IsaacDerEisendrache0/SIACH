@@ -40,6 +40,21 @@ const RiskAssessmentTableEditor = () => {
     "Calentamiento de materia prima, subproducto o producto": false,
   });
 
+  const hazardOrder = [
+    "Caídas de Altura",
+    "Exposición a Temperaturas",
+    "Exposición a Electricidad Estática",
+    "Exposición a Sustancias Químicas",
+    "Exposición a Radiaciones",
+    "Exposición agentes Biológicos",
+    "Exposición a Ruido",
+    "Exposición a Vibraciones",
+    "Superficies cortantes",
+    "Caídas a nivel o desnivel",
+    "Calentamiento de materia prima, subproducto o producto",
+  ];
+  
+
   const STORAGE_KEY = "riskAssessmentData_editor";
 
   // Coloca los hooks dentro del componente funcional
@@ -1869,7 +1884,7 @@ const RiskAssessmentTableEditor = () => {
             <td colSpan="3" className="left-section">
               <div className="text1">Identificación de peligros</div>
               <ul className="hazard-list">
-                {Object.keys(hazards).map((hazard) => (
+                {hazardOrder.map((hazard) => (
                   <li key={hazard} className="hazard-item">
                     <span>{hazard}</span>
                     <label className="hazard-checkbox">

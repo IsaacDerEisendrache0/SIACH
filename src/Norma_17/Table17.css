@@ -1042,11 +1042,27 @@ button {
 
 .textarea-descripcion {
   height: auto; /* Permite la expansión vertical automática */
-  min-height: 5em; /* Altura mínima, para que no sea demasiado pequeño cuando esté vacío. Ajústalo según tus necesidades.*/
+  min-height: 4em; /* Altura mínima, para que no sea demasiado pequeño cuando esté vacío. Ajústalo según tus necesidades.*/
 
-  /* OPCIONAL - Permite al usuario redimensionar manualmente de forma vertical */
-  resize: vertical;
+  
 }
+
+.textarea-descripcion-div {
+  min-height: 100px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  outline: none;
+  font-family: Arial, sans-serif;
+  font-size: 18px; /* Tamaño legible */
+  line-height: 1.5;
+  background-color: white;
+  color: black; /* Color de texto corregido */
+  text-align: left; /* Alineación a la izquierda */
+}
+
 
 .epp-container {
   padding: 20px;

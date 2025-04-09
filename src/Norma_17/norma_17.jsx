@@ -1702,22 +1702,21 @@ const RiskAssessmentTable = () => {
                 </>
               )}
 
-              {/* Área de descripción de actividad */}
               <div className="contenedor-descripcion">
-                <label
-                  htmlFor="descripcion-actividad"
-                  className="titulo-descripcion"
-                >
+                <label htmlFor="descripcion-actividad" className="titulo-descripcion">
                   Descripción de la actividad:
                 </label>
-                <textarea
+                <div
                   id="descripcion-actividad-1"
-                  className="textarea-descripcion"
+                  className="textarea-descripcion-div"
+                  contentEditable
+                  suppressContentEditableWarning={true}
+                  onInput={(e) => setDescripcionActividad1(e.target.innerText)}
+                  dangerouslySetInnerHTML={{ __html: descripcionActividad1.replace(/\n/g, "<br/>") }}
                   placeholder="Escribe aquí la descripción de la actividad"
-                  value={descripcionActividad1}
-                  onChange={(e) => setDescripcionActividad1(e.target.value)}
                 />
               </div>
+
             </td>
 
             <Modal isOpen={isModalOpen} onRequestClose={handleModalClose}>
@@ -2224,7 +2223,8 @@ const RiskAssessmentTable = () => {
             <textarea
               id="descripcion-actividad-2"
               name="descripcion-actividad-2"
-              className=""
+              cols="50"
+              className="textarea-descripcion"
               placeholder="Escribe aquí la descripción de EPP"
               value={descripcionActividad2}
               onChange={(e) => setDescripcionActividad2(e.target.value)}
