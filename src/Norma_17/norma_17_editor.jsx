@@ -668,8 +668,9 @@ const RiskAssessmentTableEditor = () => {
 
     // En vez de poner new Date(), asignas directamente la fecha guardada
     if (tableToEdit.fecha) {
-      setFecha(tableToEdit.fecha.split(" - ")[0]); // solo "YYYY-MM-DD"
+      setFecha(parseDdMmYyyyToIso(tableToEdit.fecha));
     }
+    
     
     // Si no hay hora guardada, usas la actual
     setHora(tableToEdit.hora || new Date().toLocaleTimeString());
@@ -719,10 +720,20 @@ const RiskAssessmentTableEditor = () => {
 
   function parseDdMmYyyyToIso(fechaStr) {
     if (!fechaStr) return "";
+  
+    // Detectar si ya está en formato ISO
+    if (/^\d{4}-\d{2}-\d{2}$/.test(fechaStr)) {
+      return fechaStr;
+    }
+  
+    // Si viene en formato dd/mm/yyyy
     const [dd, mm, yyyy] = fechaStr.split("/");
     if (!dd || !mm || !yyyy) return "";
+  
     return `${yyyy}-${mm.padStart(2, "0")}-${dd.padStart(2, "0")}`;
   }
+  
+  
 
   const handleImageRemove = (imageToRemove) => {
     setSelectedImages((prevSelectedImages) =>
@@ -1860,13 +1871,14 @@ const RiskAssessmentTableEditor = () => {
                   <tr>
                     <td className="label-cell">Fecha de inspección:</td>
                     <td colSpan="2" className="input-cell">
-                      <input
-                        type="date"
-                        id="fechaInspeccion"
-                        value={fecha} // <--- usas tu state "fecha"
-                        onChange={(e) => setFecha(e.target.value)}
-                        className="date-input"
-                      />
+                    <input
+  type="date"
+  id="fechaInspeccion"
+  value={fecha}
+  onChange={(e) => setFecha(e.target.value)}
+  className="date-input"
+/>
+
                     </td>
                   </tr>
                   <tr>
