@@ -666,8 +666,10 @@ const RiskAssessmentTableEditor = () => {
     
 
     // En vez de poner new Date(), asignas directamente la fecha guardada
-    setFecha(parseDdMmYyyyToIso(tableToEdit.fecha));
-
+    if (tableToEdit.fecha) {
+      setFecha(tableToEdit.fecha.split(" - ")[0]); // solo "YYYY-MM-DD"
+    }
+    
     // Si no hay hora guardada, usas la actual
     setHora(tableToEdit.hora || new Date().toLocaleTimeString());
 
