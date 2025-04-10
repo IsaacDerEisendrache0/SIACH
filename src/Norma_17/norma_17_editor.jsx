@@ -434,6 +434,7 @@ const RiskAssessmentTableEditor = () => {
       puestoSeleccionado,
       hazards,
       consequence,
+      logoSeleccionado,
       exposure,
       probability,
       bodyPartsSelected,
@@ -1409,14 +1410,19 @@ const RiskAssessmentTableEditor = () => {
                 </div>
               ) : (
                 <div className="logo-upload-container">
-                  <select onChange={handleLogoChange} className="logo-dropdown">
-                    <option value="">Selecciona una empresa</option>
-                    {logos.map((logo, index) => (
-                      <option key={index} value={logo.url}>
-                        {logo.nombre}
-                      </option>
-                    ))}
-                  </select>
+                  <select
+                      value={logoSeleccionado || ""}
+                      onChange={handleLogoChange}
+                      className="logo-dropdown"
+                    >
+                      <option value="">Selecciona una empresa</option>
+                      {logos.map((logo, index) => (
+                        <option key={index} value={logo.url}>
+                          {logo.nombre}
+                        </option>
+                      ))}
+                    </select>
+
                   <label htmlFor="upload-logo" className="upload-button">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
