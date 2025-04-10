@@ -527,7 +527,6 @@ const RiskAssessmentTable = () => {
       newResumenData.grave += puestoRiesgo.grave;
 
       await setDoc(resumenRef, newResumenData);
-      setDescripcionActividad1(""); // <- limpia el campo de descripción
     } catch (error) {
       console.error("Error al guardar en Firestore:", error);
       alert("Error al guardar la tabla.");
@@ -1702,19 +1701,23 @@ const RiskAssessmentTable = () => {
                 </>
               )}
 
+              {/* Área de descripción de actividad */}
               <div className="contenedor-descripcion">
-                <label htmlFor="descripcion-actividad" className="titulo-descripcion">
+                <label
+                  htmlFor="descripcion-actividad"
+                  className="titulo-descripcion"
+                >
                   Descripción de la actividad:
                 </label>
-                <div
+                <textarea
                   id="descripcion-actividad-1"
-                  className="textarea-descripcion-div"
-                  placeholder="Escribe aquí la descripción de la actividad"
-                  contentEditable
-                  suppressContentEditableWarning={true}
-                  onInput={(e) => setDescripcionActividad1(e.target.innerText)}
-                  dangerouslySetInnerHTML={{ __html: descripcionActividad1.replace(/\n/g, "<br/>") }}
-                />
+                  name="descripcion-actividad-1"
+                  cols="50"
+                  className="textarea-descripcion"
+                  placeholder="Escribe aquí la descripción de la actividad "
+                  value={descripcionActividad1}
+                  onChange={(e) => setDescripcionActividad1(e.target.value)}
+                ></textarea>
               </div>
 
             </td>
