@@ -1709,11 +1709,11 @@ const RiskAssessmentTable = () => {
                 <div
                   id="descripcion-actividad-1"
                   className="textarea-descripcion-div"
+                  placeholder="Escribe aquí la descripción de la actividad"
                   contentEditable
                   suppressContentEditableWarning={true}
                   onInput={(e) => setDescripcionActividad1(e.target.innerText)}
                   dangerouslySetInnerHTML={{ __html: descripcionActividad1.replace(/\n/g, "<br/>") }}
-                  placeholder="Escribe aquí la descripción de la actividad"
                 />
               </div>
 

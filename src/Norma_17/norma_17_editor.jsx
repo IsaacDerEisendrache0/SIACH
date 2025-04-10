@@ -158,8 +158,9 @@ const RiskAssessmentTableEditor = () => {
   const downloadImage = () => {
     // Selecciona todos los botones que deben ocultarse
     const buttons = document.querySelectorAll(
-      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra, .remove-logo-button, .btn-agregar-empresa,.epp-dropdown, .btn-add-empresa",
+      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra, .remove-logo-button, .btn-agregar-empresa, .epp-dropdown, .btn-add-empresa, .hidden-during-capture"
     );
+    
 
     // Oculta los botones temporalmente
     buttons.forEach((button) => button.classList.add("hidden-buttons"));
@@ -1365,11 +1366,12 @@ const RiskAssessmentTableEditor = () => {
     <div class="main-table">
       {/* Botón para regresar a la pantalla de registros (por ejemplo: /savedTables) */}
       <button
-        onClick={() => navigate("/savedTables")}
-        className="btn-exit-editor"
-      >
-        ← Volver a los Registros
-      </button>
+  onClick={() => navigate("/savedTables")}
+  className="btn-exit-editor hidden-during-capture"
+>
+  ← Volver a los Registros
+</button>
+
       <table
         class="custom-table"
         className="table-container"
