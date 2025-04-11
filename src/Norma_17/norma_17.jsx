@@ -227,67 +227,93 @@ const RiskAssessmentTable = () => {
   };
 
   const downloadImage = () => {
-    // Selecciona todos los botones que deben ocultarse
+    const textarea = document.getElementById("descripcion-actividad-1");
+  
+    // Crear div temporal con el mismo contenido
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = textarea.value
+      .split("\n")
+      .map((line) => line || "<br>")
+      .join("<br>");
+  
+    // Copiar estilos del textarea
+    const styles = getComputedStyle(textarea);
+    tempDiv.style.cssText = `
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      background-color: ${styles.backgroundColor};
+      color: ${styles.color};
+      font-family: ${styles.fontFamily};
+      font-size: ${styles.fontSize};
+      padding: ${styles.padding};
+      border: ${styles.border};
+      width: ${textarea.offsetWidth}px;
+      height: ${textarea.offsetHeight}px;
+    `;
+
+  
+    tempDiv.className = textarea.className;
+    tempDiv.id = "descripcion-actividad-1-fake";
+  
+    // Insertar el div justo después del textarea
+    textarea.style.display = "none";
+    textarea.parentNode.insertBefore(tempDiv, textarea.nextSibling);
+  
+    // Oculta botones
     const buttons = document.querySelectorAll(
-      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra, .remove-logo-button, .btn-agregar-empresa,.epp-dropdown, .btn-add-empresa",
+      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra, .remove-logo-button, .btn-agregar-empresa,.epp-dropdown, .btn-add-empresa"
     );
-
-    // Oculta los botones temporalmente
     buttons.forEach((button) => button.classList.add("hidden-buttons"));
-
-    // Selecciona la tabla principal para capturar
+  
     const tableElement = document.querySelector(".main-table");
-
-    // Almacena los estilos originales para restaurarlos después
+  
+    // Guardar estilos originales
     const originalWidth = tableElement.style.width;
     const originalTransform = tableElement.style.transform;
     const originalMargin = tableElement.style.margin;
-
-    // Ajusta temporalmente el tamaño de la tabla para capturarla más amplia
-    tableElement.style.width = "1800px"; // Cambia a un tamaño más grande para estirar
-    tableElement.style.transform = "scale(1)"; // Asegura que no esté encogida
-    tableElement.style.margin = "auto"; // Centra la tabla
-
+  
+    // Ajuste temporal
+    tableElement.style.width = "1800px";
+    tableElement.style.transform = "scale(1)";
+    tableElement.style.margin = "auto";
+  
     html2canvas(tableElement, {
       scrollX: -window.scrollX,
       scrollY: -window.scrollY,
       windowWidth: tableElement.scrollWidth,
       windowHeight: tableElement.scrollHeight,
       useCORS: true,
-      backgroundColor: "#ffffff", // Fondo blanco explícito
-      scale: 2, // Mejora la calidad
+      backgroundColor: "#ffffff",
+      scale: 2,
     })
       .then((canvas) => {
         const imgData = canvas.toDataURL("image/png");
         const link = document.createElement("a");
         link.href = imgData;
         link.download = "tabla_herramientas_manual.png";
-
-        // Descargar la imagen
+  
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-
-        // Restaurar los estilos originales
-        tableElement.style.width = originalWidth;
-        tableElement.style.transform = originalTransform;
-        tableElement.style.margin = originalMargin;
-
-        // Restaurar los botones después de la captura
-        buttons.forEach((button) => button.classList.remove("hidden-buttons"));
       })
       .catch((error) => {
         console.error("Error al capturar la tabla:", error);
-
-        // Restaurar los estilos originales en caso de error
+      })
+      .finally(() => {
+        // Restaurar todo
+        textarea.style.display = "";
+        const fakeDiv = document.getElementById("descripcion-actividad-1-fake");
+        if (fakeDiv) fakeDiv.remove();
+  
         tableElement.style.width = originalWidth;
         tableElement.style.transform = originalTransform;
         tableElement.style.margin = originalMargin;
-
-        // Asegurarse de restaurar los botones incluso si ocurre un error
+  
         buttons.forEach((button) => button.classList.remove("hidden-buttons"));
       });
   };
+  
 
   const handleDeleteSelectedPuestos = async () => {
     if (puestosSeleccionadosParaBorrar.length === 0) {
@@ -527,6 +553,11 @@ const RiskAssessmentTable = () => {
       newResumenData.grave += puestoRiesgo.grave;
 
       await setDoc(resumenRef, newResumenData);
+
+      // Limpiar descripciones para el siguiente registro
+      setDescripcionActividad1("");
+      setDescripcionActividad2("");
+
     } catch (error) {
       console.error("Error al guardar en Firestore:", error);
       alert("Error al guardar la tabla.");
@@ -768,6 +799,8 @@ const RiskAssessmentTable = () => {
     ],
     "Protección Facial": [
       "Careta para Soldador",
+      "Cofia",
+      "Cubrebocas",
       "Pantalla Facial",
       "Capuchas",
       "Anteojos de Protección",
@@ -1425,6 +1458,14 @@ const RiskAssessmentTable = () => {
     loadAreas();
   }, [selectedEmpresaId]);
 
+
+  const autoResizeTextarea = (e) => {
+  const textarea = e.target;
+  textarea.style.height = "auto"; // Reinicia la altura
+  textarea.style.height = `${textarea.scrollHeight}px`; // Ajusta a contenido
+};
+
+
   return (
     <div class="main-table">
       <table
@@ -1702,23 +1743,29 @@ const RiskAssessmentTable = () => {
               )}
 
               {/* Área de descripción de actividad */}
-              <div className="contenedor-descripcion">
-                <label
-                  htmlFor="descripcion-actividad"
-                  className="titulo-descripcion"
-                >
-                  Descripción de la actividad:
-                </label>
-                <textarea
-                  id="descripcion-actividad-1"
-                  name="descripcion-actividad-1"
-                  cols="50"
-                  className="textarea-descripcion"
-                  placeholder="Escribe aquí la descripción de la actividad "
-                  value={descripcionActividad1}
-                  onChange={(e) => setDescripcionActividad1(e.target.value)}
-                ></textarea>
-              </div>
+<div className="contenedor-descripcion">
+  <label
+    htmlFor="descripcion-actividad"
+    className="titulo-descripcion"
+  >
+    Descripción de la actividad:
+  </label>
+  <textarea
+    id="descripcion-actividad-1"
+    name="descripcion-actividad-1"
+    cols="50"
+    className="textarea-descripcion"
+    placeholder="Escribe aquí la descripción de la actividad "
+    value={descripcionActividad1}
+    onChange={(e) => {
+      setDescripcionActividad1(e.target.value);
+      autoResizeTextarea(e);
+    }}
+    rows={3} // Altura mínima inicial
+    style={{ resize: "none", overflow: "hidden" }}
+  ></textarea>
+</div>
+
 
             </td>
 
@@ -2221,6 +2268,7 @@ const RiskAssessmentTable = () => {
               </div>
             </td>
           </tr>
+
           <td colSpan={8}>
             <span></span>
             <textarea
@@ -2233,6 +2281,7 @@ const RiskAssessmentTable = () => {
               onChange={(e) => setDescripcionActividad2(e.target.value)}
             ></textarea>
           </td>
+
           <tr>
             <td colSpan="7" className="right-aligned">
               <div className="banana-title">
