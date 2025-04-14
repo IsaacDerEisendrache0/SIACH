@@ -558,6 +558,12 @@ const RiskAssessmentTable = () => {
       setDescripcionActividad1("");
       setDescripcionActividad2("");
 
+      localStorage.setItem("empresaPersistente", empresaSeleccionada);
+      localStorage.setItem("empresaIdPersistente", empresaId);
+      localStorage.setItem("areaPersistente", areaSeleccionada);
+      localStorage.setItem("puestosPersistentes", JSON.stringify(puestos));
+      
+
     } catch (error) {
       console.error("Error al guardar en Firestore:", error);
       alert("Error al guardar la tabla.");
@@ -1102,22 +1108,24 @@ const RiskAssessmentTable = () => {
     loadFolders();
   }, []);
 
+  const [showNormasSection, setShowNormasSection] = useState(false);
+  const [empresaEnSeleccion, setEmpresaEnSeleccion] = useState("");
+
   // Abrir el modal
   const openFolderModal = () => {
-    setSelectedEmpresaId("");
-    setSelectedNormaId("");
-    setNormas([]); // Opcional, para reiniciar la lista de normas
     setIsFolderModalOpen(true);
+    setShowNormasSection(false); // 👈 fuerza a mostrar vista de empresa
   };
+  
+  
 
   // Cerrar el modal
   const closeFolderModal = () => {
     setIsFolderModalOpen(false);
-    // 🔒 Comentamos estas líneas para no perder la selección:
-    // setSelectedEmpresaId("");
-    // setSelectedNormaId("");
-    // setNormas([]);
+    // No resetees los estados si ya cargaste empresa y áreas
   };
+  
+  
 
   useEffect(() => {
     const hoy = new Date().toISOString().split("T")[0]; // Obtiene la fecha actual en formato YYYY-MM-DD
@@ -1150,9 +1158,13 @@ const RiskAssessmentTable = () => {
 
   const handleSelectEmpresa = (empresaId) => {
     setSelectedEmpresaId(empresaId);
-    // Cargar las normas correspondientes a la empresa seleccionada:
-    loadNormas(empresaId);
+  
+    const selectedEmpresa = folders.find((empresa) => empresa.id === empresaId);
+    setEmpresaSeleccionada(selectedEmpresa?.nombre || "");
+  
+    loadNormas(empresaId); // ✅ Cargar normas sin reiniciar otros estados
   };
+  
 
   const handleSelectNorma = (normaId) => {
     setSelectedNormaId(normaId);
@@ -1349,30 +1361,31 @@ const RiskAssessmentTable = () => {
   }, []);
 
   useEffect(() => {
-    // Solo cargar áreas si tenemos una empresa seleccionada
     if (!selectedEmpresaId) return;
-
+  
     const fetchAreas = async () => {
       try {
-        // Apuntamos al documento de la empresa
         const empresaRef = doc(db, "Empresas_17", selectedEmpresaId);
-        // Subcolección "areas" de esa empresa
         const areasRef = collection(empresaRef, "areas");
         const querySnapshot = await getDocs(areasRef);
-
+  
         const dbAreas = querySnapshot.docs.map((docItem) => ({
           id: docItem.id,
           ...docItem.data(),
         }));
-
-        setAreas(dbAreas); // Ahora "areas" solo corresponde a la empresa elegida
+  
+        // ✅ Evitar sobrescribir si ya hay áreas cargadas
+        if (areas.length === 0) {
+          setAreas(dbAreas);
+        }
       } catch (error) {
         console.error("Error al cargar áreas desde Firebase:", error);
       }
     };
-
+  
     fetchAreas();
   }, [selectedEmpresaId]);
+  
 
   const deleteAreaFromFirebase = async (areaId) => {
     if (!selectedEmpresaId) return; // Verifica que haya empresa seleccionada
@@ -1444,15 +1457,12 @@ const RiskAssessmentTable = () => {
   const handleEmpresaChange = (e) => {
     const selectedId = e.target.value;
     setSelectedEmpresaId(selectedId);
-    // Buscamos la empresa seleccionada para guardar su nombre
+  
+    // Guarda el nombre visible de la empresa
     const selected = empresas.find((emp) => emp.id === selectedId);
     setEmpresaSeleccionada(selected ? selected.nombre : "");
-    // Limpia áreas y puestos mientras se carga la nueva información
-    setAreas([]);
-    setAreaSeleccionada("");
-    setPuestos([]);
-    setPuestoSeleccionado("");
   };
+  
 
   useEffect(() => {
     if (!selectedEmpresaId) return;
@@ -1475,6 +1485,49 @@ const RiskAssessmentTable = () => {
   textarea.style.height = "auto"; // Reinicia la altura
   textarea.style.height = `${textarea.scrollHeight}px`; // Ajusta a contenido
 };
+
+useEffect(() => {
+  const storedData = JSON.parse(localStorage.getItem("tableToEdit"));
+
+  if (storedData) {
+    localStorage.setItem("empresaPersistente", storedData.nombreEmpresa || "");
+    localStorage.setItem("empresaIdPersistente", storedData.empresaId || "");
+    localStorage.setItem("areaPersistente", storedData.areaSeleccionada || "");
+    localStorage.setItem("puestosPersistentes", JSON.stringify(storedData.puestos || []));
+  }
+}, []);
+
+
+
+useEffect(() => {
+  const empresa = localStorage.getItem("empresaPersistente");
+  const empresaId = localStorage.getItem("empresaIdPersistente");
+  const area = localStorage.getItem("areaPersistente");
+  const puestosGuardados = JSON.parse(localStorage.getItem("puestosPersistentes") || "[]");
+
+  if (empresa && empresaId) {
+    setEmpresaSeleccionada(empresa);
+    setSelectedEmpresaId(empresaId);
+  }
+
+  if (area) {
+    setAreaSeleccionada(area);
+  }
+
+  if (puestosGuardados.length > 0) {
+    setPuestos(puestosGuardados);
+  }
+}, []);
+
+
+
+useEffect(() => {
+  localStorage.setItem("empresaPersistente", empresaSeleccionada);
+  localStorage.setItem("empresaIdPersistente", selectedEmpresaId);
+  localStorage.setItem("areaPersistente", areaSeleccionada);
+  localStorage.setItem("puestosPersistentes", JSON.stringify(puestos));
+}, [empresaSeleccionada, selectedEmpresaId, areaSeleccionada, puestos]);
+
 
 
   return (
@@ -1616,121 +1669,126 @@ const RiskAssessmentTable = () => {
           </Modal>
 
           <Modal
-            isOpen={isFolderModalOpen}
-            onRequestClose={closeFolderModal}
-            contentLabel="Seleccionar Empresa y Norma"
-            className="folder-modal"
-            overlayClassName="folder-modal-overlay"
-          >
-            {/* Si aún no se ha seleccionado la empresa, mostramos la lista de empresas */}
-            {!selectedEmpresaId && (
-              <>
-                <h2>Selecciona una Empresa</h2>
-                <div className="folder-selection">
-                  <h3>Empresas Existentes:</h3>
-                  {folders.length > 0 ? (
-                    <ul>
-                      {folders.map((empresa) => (
-                        <li key={empresa.id}>
-                          <label>
-                            <input
-                              type="radio"
-                              name="selectedEmpresa"
-                              value={empresa.id}
-                              checked={selectedEmpresaId === empresa.id}
-                              onChange={() => handleSelectEmpresa(empresa.id)}
-                            />
-                            {empresa.nombre}
-                          </label>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>No hay empresas existentes.</p>
-                  )}
-                </div>
-                <div className="modal-buttons">
-                  <button
-                    onClick={() => {
-                      if (selectedEmpresaId) {
-                        // Se cargan las normas, ya se hizo en handleSelectEmpresa
-                        // Ahora el modal cambiará a mostrar la lista de normas
-                      } else {
-                        alert("Por favor, selecciona una empresa.");
-                      }
-                    }}
-                    className="next-button"
-                  >
-                    Siguiente
-                  </button>
-                  <button onClick={closeFolderModal} className="cancel-button">
-                    Cancelar
-                  </button>
-                </div>
-              </>
-            )}
+  isOpen={isFolderModalOpen}
+  onRequestClose={closeFolderModal}
+  contentLabel="Seleccionar Empresa y Norma"
+  className="folder-modal"
+  overlayClassName="folder-modal-overlay"
+>
+  {/* VISTA 1: Seleccionar empresa */}
+  {!showNormasSection && (
+    <>
+      <h2>Selecciona una Empresa</h2>
+      <div className="folder-selection">
+        <h3>Empresas Existentes:</h3>
+        {folders.length > 0 ? (
+          <ul>
+            {folders.map((empresa) => (
+              <li key={empresa.id}>
+                <label>
+                  <input
+                    type="radio"
+                    name="selectedEmpresa"
+                    value={empresa.id}
+                    checked={empresaEnSeleccion === empresa.id}
+                    onChange={() => setEmpresaEnSeleccion(empresa.id)}
+                  />
+                  {empresa.nombre}
+                </label>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No hay empresas existentes.</p>
+        )}
+      </div>
+      <div className="modal-buttons">
+        <button
+          onClick={() => {
+            if (empresaEnSeleccion) {
+              setShowNormasSection(true);
+              loadNormas(empresaEnSeleccion); // ⬅ cargar normas aquí
+            } else {
+              alert("Por favor, selecciona una empresa.");
+            }
+          }}
+          className="next-button"
+        >
+          Siguiente
+        </button>
+        <button onClick={closeFolderModal} className="cancel-button">
+          Cancelar
+        </button>
+      </div>
+    </>
+  )}
 
-            {/* Si se ha seleccionado una empresa, mostramos la lista de normas para esa empresa */}
-            {selectedEmpresaId && (
-              <>
-                <h2>Selecciona una Norma</h2>
-                <div className="folder-selection">
-                  <h3>Normas Existentes:</h3>
-                  {normas.length > 0 ? (
-                    <ul>
-                      {normas.map((norma) => (
-                        <li key={norma.id}>
-                          <label>
-                            <input
-                              type="radio"
-                              name="selectedNorma"
-                              value={norma.id}
-                              checked={selectedNormaId === norma.id}
-                              onChange={() => handleSelectNorma(norma.id)}
-                            />
-                            {norma.nombre}
-                          </label>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>No hay normas existentes para esta empresa.</p>
-                  )}
-                </div>
-                <div className="modal-buttons">
-                  <button
-                    onClick={() => {
-                      if (selectedNormaId) {
-                        // Llamamos a la función de guardado o actualización usando ambos IDs
-                        if (isEditing) {
-                          updateTable(selectedEmpresaId, selectedNormaId);
-                        } else {
-                          saveTable(selectedEmpresaId, selectedNormaId);
-                        }
-                        closeFolderModal();
-                      } else {
-                        alert("Por favor, selecciona una norma.");
-                      }
-                    }}
-                    className="confirm-button"
-                  >
-                    Confirmar
-                  </button>
-                  <button
-                    onClick={() => {
-                      // Permite volver atrás para elegir otra empresa
-                      setSelectedEmpresaId("");
-                      setSelectedNormaId("");
-                      setNormas([]);
-                    }}
-                    className="back-button"
-                  >
-                    Volver a Empresas
-                  </button>
-                </div>
-              </>
-            )}
-          </Modal>
+  {/* VISTA 2: Seleccionar norma */}
+  {showNormasSection && (
+    <>
+      <h2>Selecciona una Norma</h2>
+      <div className="folder-selection">
+        <h3>Normas Existentes:</h3>
+        {normas.length > 0 ? (
+          <ul>
+            {normas.map((norma) => (
+              <li key={norma.id}>
+                <label>
+                  <input
+                    type="radio"
+                    name="selectedNorma"
+                    value={norma.id}
+                    checked={selectedNormaId === norma.id}
+                    onChange={() => handleSelectNorma(norma.id)}
+                  />
+                  {norma.nombre}
+                </label>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No hay normas existentes para esta empresa.</p>
+        )}
+      </div>
+      <div className="modal-buttons">
+        <button
+          onClick={() => {
+            if (selectedNormaId) {
+              // Guarda tabla
+              if (isEditing) {
+                updateTable(empresaEnSeleccion, selectedNormaId);
+              } else {
+                saveTable(empresaEnSeleccion, selectedNormaId);
+              }
+          
+              // ✅ Cierra solo el modal, no resetees estados
+              setIsFolderModalOpen(false);
+              // ⛔️ NO llames a setEmpresaSeleccionada("") ni setShowNormasSection(false)
+            } else {
+              alert("Por favor, selecciona una norma.");
+            }
+          }}
+          
+          className="confirm-button"
+        >
+          Confirmar
+        </button>
+        <button
+          onClick={() => {
+            setShowNormasSection(false);
+            setEmpresaEnSeleccion("");
+            setSelectedNormaId("");
+          }}
+          className="back-button"
+        >
+          Volver a Empresas
+        </button>
+      </div>
+    </>
+  )}
+</Modal>
+
+
 
           <tr>
             <td className="no-border-cell" colSpan="3">
