@@ -850,8 +850,19 @@ const RiskAssessmentTable = () => {
   ];
 
   // Estado para almacenar el logo seleccionado
-  const [logoSeleccionado, setLogoSeleccionado] = useState(null);
+  const [logoSeleccionado, setLogoSeleccionado] = useState(() => {
+    return localStorage.getItem("logoSeleccionado") || null;
+  });
+  
 
+  useEffect(() => {
+    if (logoSeleccionado) {
+      localStorage.setItem("logoSeleccionado", logoSeleccionado);
+    } else {
+      localStorage.removeItem("logoSeleccionado");
+    }
+  }, [logoSeleccionado]);
+  
 
   // Persistir el logo en localStorage
   
@@ -1503,38 +1514,60 @@ const RiskAssessmentTable = () => {
                 </div>
               ) : (
                 <div className="logo-upload-container">
-                  <select onChange={handleLogoChange} className="logo-dropdown">
-                    <option value="">Selecciona una empresa</option>
-                    {logos.map((logo, index) => (
-                      <option key={index} value={logo.url}>
-                        {logo.nombre}
-                      </option>
-                    ))}
-                  </select>
-                  <label htmlFor="upload-logo" className="upload-button">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="black"
-                      className="upload-icon"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M3 16.5V19a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 19v-2.5M16.5 12l-4.5-4.5m0 0L7.5 12m4.5-4.5V19"
-                      />
-                    </svg>
-                  </label>
-                  <input
-                    type="file"
-                    id="upload-logo"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={handleCustomLogoUpload}
-                  />
-                </div>
+  {logoSeleccionado ? (
+    <div className="logo-container">
+      <img
+        src={logoSeleccionado}
+        alt="Logo de la Empresa"
+        className="company-logo"
+      />
+      <button onClick={() => setLogoSeleccionado(null)} className="remove-logo-button">
+        ×
+      </button>
+    </div>
+  ) : (
+    <>
+      <select onChange={(e) => setLogoSeleccionado(e.target.value)} className="logo-dropdown">
+        <option value="">Selecciona una empresa</option>
+        {logos.map((logo, index) => (
+          <option key={index} value={logo.url}>
+            {logo.nombre}
+          </option>
+        ))}
+      </select>
+      <label htmlFor="upload-logo" className="upload-button">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="black"
+          className="upload-icon"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3 16.5V19a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 19v-2.5M16.5 12l-4.5-4.5m0 0L7.5 12m4.5-4.5V19"
+          />
+        </svg>
+      </label>
+      <input
+        type="file"
+        id="upload-logo"
+        accept="image/*"
+        style={{ display: "none" }}
+        onChange={(e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => setLogoSeleccionado(reader.result);
+          reader.readAsDataURL(file);
+        }}
+      />
+    </>
+  )}
+</div>
+
               )}
             </td>
           </tr>
