@@ -203,7 +203,7 @@ const RiskAssessmentTableEditor = () => {
     const originalMargin = tableElement.style.margin;
   
     // Ajuste temporal
-    tableElement.style.width = "1800px";
+    tableElement.style.width = "1730px";
     tableElement.style.transform = "scale(1)";
     tableElement.style.margin = "auto";
   
