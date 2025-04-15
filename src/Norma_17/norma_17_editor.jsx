@@ -190,8 +190,9 @@ const RiskAssessmentTableEditor = () => {
   
     // Oculta botones
     const buttons = document.querySelectorAll(
-      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra, .remove-logo-button, .btn-agregar-empresa,.epp-dropdown, .btn-add-empresa"
+      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra, .remove-logo-button, .btn-agregar-empresa, .epp-dropdown, .btn-add-empresa, .hidden-during-capture"
     );
+    
     buttons.forEach((button) => button.classList.add("hidden-buttons"));
   
     const tableElement = document.querySelector(".main-table");
