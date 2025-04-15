@@ -274,7 +274,7 @@ const RiskAssessmentTable = () => {
     const originalMargin = tableElement.style.margin;
   
     // Ajuste temporal
-    tableElement.style.width = "1800px";
+    tableElement.style.width = "1750px";
     tableElement.style.transform = "scale(1)";
     tableElement.style.margin = "auto";
   
@@ -2357,6 +2357,7 @@ useEffect(() => {
                   )}
                 </div>
               </div>
+
             </td>
           </tr>
 

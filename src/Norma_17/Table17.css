@@ -587,7 +587,7 @@ button {
 
 /* Contenedor para el menú */
 .epp-dropdown-container {
-  margin-top: 300px; /* Espacio para que el menú quede debajo del título */
+  margin-top: 180px; /* Espacio para que el menú quede debajo del título */
   padding: 20px;
 }
 
@@ -1015,11 +1015,7 @@ button {
   gap: 5px; /* Espaciado entre filas */
 }
 
-.epp-selection-row {
-  display: flex;
-  justify-content: space-between; /* Distribuye los elementos en fila */
-  gap: 10px; /* Espaciado entre elementos de la fila */
-}
+
 
 .selection-title {
   font-size: 16px;
@@ -1094,19 +1090,34 @@ button {
   margin: 0;
 }
 
-.epp-selection-item {
+.epp-selection-row {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #fff;
-  padding: 5px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 14px;
-  color: #333;
-  flex: 1;
-  max-width: calc(60% - 10px); /* Cada elemento ocupa la mitad del espacio */
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
 }
+
+.epp-selection-item {
+  flex: 0 0 160px; /* ancho fijo */
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 8px 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 15px;
+  color: #333;
+  white-space: normal;  /* Permitir salto de línea */
+  word-wrap: break-word;
+  text-align: left;
+  line-height: 1.2;
+  max-height: 60px;
+  overflow: hidden;
+  position: relative;
+}
+
 
 .delete-button {
   background: none;
