@@ -160,3 +160,63 @@ td {
     font-size: 16px;
   }
 }
+
+
+
+
+
+
+/* Mantienes un bloque para los botones .btn-add-folder y .btn-back-home */
+.btn-add-folder,
+.btn-back-home {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.btn-add-folder:hover,
+.btn-back-home:hover {
+  background: #0056b3;
+}
+
+/* Definir .btn-captura por separado */
+.btn-captura {
+  background: none;       /* o el color que prefieras */
+  color: inherit;         /* usa el color por defecto */
+  border: none;
+  border-radius: 4px;     /* ajusta si necesitas */
+  padding: 4px 8px;       /* ajusta si necesitas */
+  cursor: pointer;
+}
+
+/* Si lo quieres con hover distinto */
+.btn-captura:hover {
+  background: #e0e0e0;   /* un gris claro, p.ej */
+}
+
+
+.boton-eliminar { cursor:pointer; color:#d11a2a; }
+
+
+
+/* tablas */
+.tabla-container { margin-top:1rem; overflow-x:auto; }
+.tabla-header   { background:#d6d6d6; text-align:center; }
+.tabla-principal, .tabla-interna {
+  width:100%; border-collapse:collapse; margin-bottom:1rem;
+}
+.tabla-principal th, .tabla-principal td,
+.tabla-interna   th, .tabla-interna   td {
+  border:1px solid #ccc; padding:.35rem; text-align:center;
+}
+
+
+.puestos-separados-container { margin:1.5rem 0; }
+
+.fila-total-area th { background:#e9ecef; font-weight:bold; }
+
+/* botón oculto durante la captura */
+.captura-hide { display:none !important; }
