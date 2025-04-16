@@ -474,8 +474,8 @@ const RiskAssessmentTable = () => {
       alert("No estás autenticado.");
       return;
     }
-    const uid = user.uid; // Obtener UID del usuario
-
+    const uid = user.uid;
+  
     const tableData = {
       uid,
       areaSeleccionada,
@@ -500,27 +500,30 @@ const RiskAssessmentTable = () => {
       nombreEmpresa: empresaSeleccionada,
       selectionList,
     };
-
+  
     try {
-      // Guardar la tabla en la subcolección "tablas" de la norma seleccionada dentro de la empresa
+      // Guardar la tabla
       await addDoc(
         collection(db, "empresas", empresaId, "normas", normaId, "tablas"),
-        tableData,
+        tableData
       );
       alert("Tabla guardada con éxito en Firestore.");
-
-      // Actualizar el resumen correspondiente si es necesario (este bloque se mantiene igual)
+  
+      // 📌 ACTUALIZAR EL RESUMEN
       const resumenRef = doc(
         db,
         "resumen_17",
         empresaSeleccionada,
         "areas",
-        areaSeleccionada,
+        areaSeleccionada
       );
+  
+      console.log("📌 Guardando resumen en:", resumenRef.path);
+  
       const resumenSnapshot = await getDoc(resumenRef);
-
+  
       let newResumenData = {
-        uid,
+        uid, // NECESARIO para filtrarlo en TablaResumen.jsx
         tolerable: 0,
         moderado: 0,
         notable: 0,
@@ -528,12 +531,12 @@ const RiskAssessmentTable = () => {
         grave: 0,
         puestos: [],
       };
-
+  
       const risk = calculateRisk();
       if (resumenSnapshot.exists()) {
         newResumenData = resumenSnapshot.data();
       }
-
+  
       const puestoRiesgo = {
         nombre: puestoSeleccionado,
         tolerable: risk <= 20 ? 1 : 0,
@@ -542,33 +545,35 @@ const RiskAssessmentTable = () => {
         elevado: risk > 200 && risk <= 400 ? 1 : 0,
         grave: risk > 400 ? 1 : 0,
       };
-
-      // AGREGA directamente el nuevo puesto
-      newResumenData.puestos = [...newResumenData.puestos, puestoRiesgo];
-
+  
+      newResumenData.puestos.push(puestoRiesgo);
       newResumenData.tolerable += puestoRiesgo.tolerable;
       newResumenData.moderado += puestoRiesgo.moderado;
       newResumenData.notable += puestoRiesgo.notable;
       newResumenData.elevado += puestoRiesgo.elevado;
       newResumenData.grave += puestoRiesgo.grave;
-
-      await setDoc(resumenRef, newResumenData);
-
-      // Limpiar descripciones para el siguiente registro
+  
+      // 🟢 GUARDAR EL RESUMEN CON UID
+      await setDoc(resumenRef, {
+        ...newResumenData,
+        uid, // 🔐 Esto asegura que la tabla de resumen lo muestre
+      });
+  
+      // Limpiar campos
       setDescripcionActividad1("");
       setDescripcionActividad2("");
-
+  
+      // Persistencia en localStorage
       localStorage.setItem("empresaPersistente", empresaSeleccionada);
       localStorage.setItem("empresaIdPersistente", empresaId);
       localStorage.setItem("areaPersistente", areaSeleccionada);
       localStorage.setItem("puestosPersistentes", JSON.stringify(puestos));
-      
-
     } catch (error) {
-      console.error("Error al guardar en Firestore:", error);
+      console.error("❌ Error al guardar en Firestore:", error);
       alert("Error al guardar la tabla.");
     }
   };
+  
 
   const updateTable = async (empresaId, normaId) => {
     const updatedTable = {

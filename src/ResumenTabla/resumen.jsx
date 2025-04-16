@@ -484,7 +484,7 @@ const TablaResumen = () => {
                   </table>
                 </div>
               ) : null,
-            )}
+            )}  
           </div>
         </>
       )}
