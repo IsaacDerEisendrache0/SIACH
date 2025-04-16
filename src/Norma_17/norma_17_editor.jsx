@@ -471,8 +471,9 @@ const RiskAssessmentTableEditor = () => {
       selectedOptionProteccionSugerida,
       tiempoExposicion,
       norma: normaAuto,
-      fecha,
-      hora,
+      fecha: tableToEdit.fecha,
+      hora: tableToEdit.hora,
+
       nombreEmpresa: empresaSeleccionada,
       selectedMainOption,
       selectionList,

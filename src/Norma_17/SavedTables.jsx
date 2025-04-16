@@ -284,13 +284,27 @@ const SavedTables = () => {
   // Parseo de fecha y hora
   // ------------------------------------------------------------------
   function parseDateTime(fecha, hora) {
-    const [day, month, year] = fecha.split("/").map((num) => parseInt(num, 10));
-    let [time, ampm] = hora.split(" ");
-    let [hh, mm, ss] = time.split(":").map((num) => parseInt(num, 10));
+    // Ejemplo de fecha "15/4/2025" => day=15, month=4, year=2025
+    const [day, month, year] = fecha.split("/").map(num => parseInt(num, 10));
+    
+    // Ejemplo de hora "4:58:37 p.m."
+    let [time, ampm] = hora.split(" ");        
+    
+    // Normalizamos "p.m." => "PM", "a.m." => "AM" (quitamos puntos y subimos a mayúsculas)
+    if (ampm) {
+      ampm = ampm.replace(/\./g, "").toUpperCase(); // "p.m." -> "PM"
+    }
+    
+    // Separamos "4:58:37" en hh, mm, ss
+    let [hh, mm, ss] = time.split(":").map(num => parseInt(num, 10));
+    
+    // Ajuste AM/PM
     if (ampm === "PM" && hh < 12) hh += 12;
     if (ampm === "AM" && hh === 12) hh = 0;
+    
     return new Date(year, month - 1, day, hh, mm, ss);
   }
+  
 
   // ------------------------------------------------------------------
   // CARGAR REGISTROS CON ACTUALIZACIÓN EN TIEMPO REAL
@@ -305,22 +319,25 @@ const SavedTables = () => {
       "tablas",
     );
 
-    onSnapshot(
-      registrosRef,
-      (snapshot) => {
-        const fetchedRegistros = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        const sortedRegistros = fetchedRegistros.sort((a, b) => {
-          const dateA = parseDateTime(a.fecha, a.hora);
-          const dateB = parseDateTime(b.fecha, b.hora);
-          return dateB - dateA;
-        });
-
-        setRegistros(sortedRegistros);
-      },
+    onSnapshot(registrosRef, (snapshot) => {
+      const fetchedRegistros = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+    
+      // Orden DESCENDENTE (del más nuevo al más viejo):
+      const sortedRegistros = fetchedRegistros.sort((a, b) => {
+        const dateA = parseDateTime(a.fecha, a.hora);
+        const dateB = parseDateTime(b.fecha, b.hora);
+        return dateB - dateA;  // Descendente
+      });
+      
+      setRegistros(sortedRegistros);
+      
+    }, (error) => {
+      console.error("Error al cargar registros:", error);
+    },
+    
       (error) => {
         console.error("Error al cargar registros:", error);
       },
