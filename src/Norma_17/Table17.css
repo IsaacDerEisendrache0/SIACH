@@ -163,7 +163,7 @@ td {
 
 .hazard-list {
   list-style-type: none; /* Sin puntos de lista */
-  font-size: 17px; /* Tamaño del texto */
+  font-size: 22px; /* Tamaño del texto */
   padding: 0; /* Sin padding adicional */
   margin: 0; /* Sin margen adicional */
   text-align: left; /* Alineación izquierda del texto */
@@ -411,7 +411,6 @@ button {
 
 /* Estilos para el componente de EPP */
 .epp-component-right-section {
-  height: 300px;
   position: relative;
 }
 
@@ -587,8 +586,7 @@ button {
 
 /* Contenedor para el menú */
 .epp-dropdown-container {
-  margin-top: 180px; /* Espacio para que el menú quede debajo del título */
-  padding: 20px;
+  margin-top: 200px; /* Espacio para que el menú quede debajo del título */
 }
 
 .epp-dropdown,
