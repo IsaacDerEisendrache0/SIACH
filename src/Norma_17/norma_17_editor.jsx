@@ -5,7 +5,6 @@ import Modal from "react-modal";
 import {
   collection,
   getDocs,
-  addDoc,
   updateDoc,
   doc,
   getDoc,
@@ -643,7 +642,6 @@ const RiskAssessmentTableEditor = () => {
   const [tiempoExposicion, setTiempoExposicion] = useState("8hrs");
   const [hora, setHora] = useState(new Date().toLocaleTimeString());
   const [tableId, setTableId] = useState(null);
-  const [dataLoaded, setDataLoaded] = useState(false);
   console.log(JSON.parse(localStorage.getItem("tableToEdit")));
   const [tableToEdit, setTableToEdit] = useState(null);
   useEffect(() => {
@@ -1131,9 +1129,7 @@ const RiskAssessmentTableEditor = () => {
   }, []);
 
   // Abrir el modal
-  const openFolderModal = () => {
-    setIsFolderModalOpen(true);
-  };
+
 
   // Cerrar el modal
   const closeFolderModal = () => {
@@ -1231,29 +1227,10 @@ const RiskAssessmentTableEditor = () => {
   // Define el estado inicial de las empresas
 
   // Función para agregar una nueva empresa
-  const handleAddEmpresa = () => {
-    const nuevaEmpresa = prompt("Ingrese el nombre de la nueva empresa:");
-    if (nuevaEmpresa && !empresas.includes(nuevaEmpresa)) {
-      setEmpresas([...empresas, nuevaEmpresa]);
-    }
-  };
+  
 
   // Función para borrar la empresa seleccionada
-  const handleDeleteEmpresa = () => {
-    if (!empresaSeleccionada) {
-      alert("Seleccione una empresa para borrar");
-      return;
-    }
-    const confirmDelete = window.confirm(
-      `¿Está seguro de borrar la empresa ${empresaSeleccionada}?`,
-    );
-    if (confirmDelete) {
-      setEmpresas(
-        empresas.filter((empresa) => empresa !== empresaSeleccionada),
-      );
-      setEmpresaSeleccionada("");
-    }
-  };
+ 
 
   const handleEmpresaChange = (e) => {
     const selectedId = e.target.value;
@@ -1289,19 +1266,7 @@ const RiskAssessmentTableEditor = () => {
     loadEmpresas(); // Puede llamarse aquí
   }, []);
 
-  const loadAreas = async () => {
-    try {
-      const snapshot = await getDocs(collection(db, "areas"));
-      // Cada doc en 'areas' podría tener { nombre: "Producción", puestos: [...] }
-      const areaList = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setAreas(areaList);
-    } catch (error) {
-      console.error("Error al cargar áreas:", error);
-    }
-  };
+  
 
   // useEffect que carga las áreas
   useEffect(() => {

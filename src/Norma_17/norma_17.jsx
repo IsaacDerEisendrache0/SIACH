@@ -189,7 +189,6 @@ const RiskAssessmentTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar si el modal está abierto o cerrado
   const [puestosSeleccionadosParaBorrar, setPuestosSeleccionadosParaBorrar] =
     useState([]); // Estado para almacenar los puestos seleccionados para borrar
-  const [selectedHazardImages, setSelectedHazardImages] = useState({}); // Para almacenar las imágenes seleccionadas por peligro
   const [selectedImages, setSelectedImages] = useState([]); // Para almacenar las imágenes seleccionadas para "Equipo de protección personal sugerido"
 
   const [selectedOptionEquipoUtilizado, setSelectedOptionEquipoUtilizado] =
@@ -443,25 +442,7 @@ const RiskAssessmentTable = () => {
   };
 
   // Función auxiliar: actualiza los puestos del área seleccionada en Firebase
-  const updatePuestosInFirebase = async (newPuestos) => {
-    const selectedAreaObj = areas.find(
-      (area) => area.nombre === areaSeleccionada,
-    );
-    if (selectedAreaObj && selectedAreaObj.id) {
-      try {
-        await updateDoc(doc(db, "areas", selectedAreaObj.id), {
-          puestos: newPuestos,
-        });
-        console.log("Puestos actualizados en Firebase");
-      } catch (error) {
-        console.error("Error actualizando puestos en Firebase:", error);
-      }
-    } else {
-      console.error(
-        "No se encontró el área en Firebase para actualizar puestos.",
-      );
-    }
-  };
+  
 
   const handleDeletePuestoClick = () => {
     setIsModalOpen(true);
@@ -873,16 +854,8 @@ const RiskAssessmentTable = () => {
       localStorage.removeItem("logoSeleccionado");
     }
   }, [logoSeleccionado]);
+
   
-
-  // Persistir el logo en localStorage
-  
-
-  // Maneja el cambio de selección en el menú desplegable
-  const handleLogoChange = (event) => {
-    setLogoSeleccionado(event.target.value); // Guarda la URL del logo seleccionado
-  };
-
   // Maneja la eliminación del logo y muestra el menú desplegable nuevamente
   const handleRemoveLogo = () => {
     setLogoSeleccionado(null); // Elimina el logo seleccionado
@@ -931,16 +904,7 @@ const RiskAssessmentTable = () => {
     setSelectedSubOption("");
   };
 
-  const handleCustomLogoUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setLogoSeleccionado(reader.result); // Establece la imagen cargada como el logo seleccionado
-      };
-      reader.readAsDataURL(file); // Lee el archivo como una URL de datos
-    }
-  };
+
 
   // Estado para las partes desmarcadas manualmente
   const [removedParts, setRemovedParts] = useState([]); // Partes desmarcadas manualmente
@@ -1161,15 +1125,7 @@ const RiskAssessmentTable = () => {
     }
   };
 
-  const handleSelectEmpresa = (empresaId) => {
-    setSelectedEmpresaId(empresaId);
-  
-    const selectedEmpresa = folders.find((empresa) => empresa.id === empresaId);
-    setEmpresaSeleccionada(selectedEmpresa?.nombre || "");
-  
-    loadNormas(empresaId); // ✅ Cargar normas sin reiniciar otros estados
-  };
-  
+
 
   const handleSelectNorma = (normaId) => {
     setSelectedNormaId(normaId);
@@ -1766,9 +1722,9 @@ useEffect(() => {
                 saveTable(empresaEnSeleccion, selectedNormaId);
               }
           
-              // ✅ Cierra solo el modal, no resetees estados
+              //  Cierra solo el modal, no reseta estados
               setIsFolderModalOpen(false);
-              // ⛔️ NO llames a setEmpresaSeleccionada("") ni setShowNormasSection(false)
+              //  NO llames a setEmpresaSeleccionada("") ni setShowNormasSection(false)
             } else {
               alert("Por favor, selecciona una norma.");
             }
