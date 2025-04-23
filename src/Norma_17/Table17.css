@@ -586,7 +586,7 @@ button {
 
 /* Contenedor para el menú */
 .epp-dropdown-container {
-  margin-top: 200px; /* Espacio para que el menú quede debajo del título */
+  margin-top: 220px; /* Espacio para que el menú quede debajo del título */
 }
 
 .epp-dropdown,
@@ -1007,12 +1007,12 @@ button {
   font-size: 14px;
 }
 
-.epp-selection-list-container {
-  display: flex;
-  flex-direction: column;
-  gap: 5px; /* Espaciado entre filas */
+.epp-selection-list-container{
+  display:flex;
+  flex-direction:column;
+  align-items:center;          /* mantiene centrada TODA la lista */
+  gap:12px;                    /* separación entre filas           */
 }
-
 
 
 .selection-title {
@@ -1092,17 +1092,16 @@ button {
   margin: 0;
 }
 
-/* =====  SOLO AJUSTA ESTA REGLA  ===== */
 .epp-selection-row{
-  display: flex;
-  justify-content: flex-start;   /* antes: center */
-  gap: 10px;
-  margin-bottom: 10px;
+  display:grid;                
+  grid-template-columns: repeat(2, 160px);  /* 2 columnas del ancho de la tarjeta  */
+  gap:12px;                                  /* mismo hueco que usas entre tarjetas */
 }
 
 
+
 .epp-selection-item {
-  flex: 0 0 160px; /* ancho fijo */
+  flex:unset;                 /* grid ignora 'flex', pero por si acaso */
   height: auto;
   display: flex;
   align-items: center;
