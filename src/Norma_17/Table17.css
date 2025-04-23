@@ -1057,6 +1057,10 @@ button {
   text-align: left; /* Alineación a la izquierda */
 }
 
+.textarea-descripcion,
+.contenedor-descripcion td {       /* por si el <td> hereda text-align center */
+  text-align: left !important;
+}
 
 .epp-container {
   padding: 20px;
@@ -1105,7 +1109,7 @@ button {
   padding: 8px 10px;
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 15px;
+  font-size: 17px;
   color: #333;
   white-space: normal;  /* Permitir salto de línea */
   word-wrap: break-word;

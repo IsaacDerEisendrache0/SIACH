@@ -261,7 +261,7 @@ const RiskAssessmentTable = () => {
   
     // Oculta botones
     const buttons = document.querySelectorAll(
-      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra, .remove-logo-button, .btn-agregar-empresa,.epp-dropdown, .btn-add-empresa"
+      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra, .remove-logo-button, .btn-agregar-empresa,.epp-dropdown, .btn-add-empresa, .epp-select, .delete-button"
     );
     buttons.forEach((button) => button.classList.add("hidden-buttons"));
   
@@ -844,7 +844,7 @@ const RiskAssessmentTable = () => {
   // Estado para almacenar el logo seleccionado
   const [logoSeleccionado, setLogoSeleccionado] = useState(() => {
     return localStorage.getItem("logoSeleccionado") || null;
-  });
+  }); 
   
 
   useEffect(() => {
