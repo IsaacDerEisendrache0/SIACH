@@ -1092,12 +1092,14 @@ button {
   margin: 0;
 }
 
-.epp-selection-row {
+/* =====  SOLO AJUSTA ESTA REGLA  ===== */
+.epp-selection-row{
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;   /* antes: center */
   gap: 10px;
   margin-bottom: 10px;
 }
+
 
 .epp-selection-item {
   flex: 0 0 160px; /* ancho fijo */
