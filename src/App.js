@@ -496,7 +496,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [showInactivityMessage, setShowInactivityMessage] = useState(false); // Nuevo estado
   const navigate = useNavigate();
-  const INACTIVITY_LIMIT = 480000; // 8 minutos
+  const INACTIVITY_LIMIT = 1800000; // 30 minutos
 
   // Función para cerrar sesión por inactividad
   const handleLogout = useCallback(async () => {
