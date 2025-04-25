@@ -802,6 +802,7 @@ const RiskAssessmentTable = () => {
       "Bata",
       "Ropa contra Sustancias Peligrosas",
       "Polainas",
+      "Chaleco de proteccion",
     ],
     "Equipos Especiales": [
       "Equipo de Protección contra Caídas de Altura",
@@ -2032,7 +2033,7 @@ useEffect(() => {
                         placeholder="Ingrese tiempo en horas (e.g., 8hrs)"
                         value={tiempoExposicion}
                         onChange={(e) => setTiempoExposicion(e.target.value)}
-                      />
+                      />  
                     </td>
                   </tr>
                   {/* ...y así sucesivamente */}

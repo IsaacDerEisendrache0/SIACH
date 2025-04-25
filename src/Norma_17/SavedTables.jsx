@@ -217,7 +217,7 @@ const SavedTables = () => {
     } catch (error) {
       console.error("Error al crear la norma:", error);
     }
-  };
+  }; 
 
   // ------------------------------------------------------------------
   // ELIMINAR NORMA (Y SUS REGISTROS)
@@ -439,6 +439,7 @@ const SavedTables = () => {
   const displayedNormas = selectedFilterNorma
     ? normas.filter((norm) => norm.nombre === selectedFilterNorma)
     : normas;
+    
   const uniqueAreas = [
     ...new Set(registros.map((reg) => reg.areaSeleccionada)),
   ];
