@@ -1,59 +1,59 @@
 /* Contenedor principal de la tabla */
 .tabla-resumen-container {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-    width: 100%;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 /* Tabla principal */
 .risk-summary-table {
-    width: 95%; /* Tabla más ancha */
-    border-collapse: collapse;
-    font-size: 18px; /* Tamaño base */
-    text-align: center;
-    margin: 0 auto; /* Centrada horizontalmente */
-    border: 2px solid black;
+  width: 95%; /* Tabla más ancha */
+  border-collapse: collapse;
+  font-size: 18px; /* Tamaño base */
+  text-align: center;
+  margin: 0 auto; /* Centrada horizontalmente */
+  border: 2px solid black;
 }
 
 /* Encabezados */
 .risk-summary-table th {
-    padding: 15px;
-    background-color: #d3d3d3; /* Gris claro */
-    font-size: 20px; /* Tamaño de encabezado */
-    border: 2px solid black;
+  padding: 15px;
+  background-color: #d3d3d3; /* Gris claro */
+  font-size: 20px; /* Tamaño de encabezado */
+  border: 2px solid black;
 }
 
 /* Celdas generales */
 .risk-summary-table td {
-    padding: 12px; /* Espaciado interno */
-    font-size: 18px; /* Tamaño del texto */
-    font-weight: bold; /* Texto en negrita */
-    border: 2px solid black;
+  padding: 12px; /* Espaciado interno */
+  font-size: 18px; /* Tamaño del texto */
+  font-weight: bold; /* Texto en negrita */
+  border: 2px solid black;
 }
 
 /* Colores específicos para cada fila */
 .grave-row {
-    background-color: #ff6600; /* Naranja fuerte */
-    color: white;
+  background-color: #ff6600; /* Naranja fuerte */
+  color: white;
 }
 
 .elevado-row {
-    background-color: #ffcc00; /* Amarillo fuerte */
-    color: black;
+  background-color: #ffcc00; /* Amarillo fuerte */
+  color: black;
 }
 
 .notable-row {
-    background-color: #ffff66; /* Amarillo claro */
-    color: black;
+  background-color: #ffff66; /* Amarillo claro */
+  color: black;
 }
 
 .moderado-row {
-    background-color: #99cc00; /* Verde */
-    color: black;
+  background-color: #99cc00; /* Verde */
+  color: black;
 }
 
 .tolerable-row {
-    background-color: #66ccff; /* Azul claro */
-    color: black;
+  background-color: #66ccff; /* Azul claro */
+  color: black;
 }

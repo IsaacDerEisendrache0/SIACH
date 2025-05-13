@@ -1,209 +1,406 @@
 import React, { useState, useEffect } from "react";
-import { collection, onSnapshot, deleteDoc, doc, query, where } from "firebase/firestore";
+import html2canvas from "html2canvas";
+import {
+  collection, onSnapshot, addDoc, deleteDoc, doc,
+  query, where, serverTimestamp
+} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
 import { FaTrash } from "react-icons/fa";
 import "./TablaResumen.css";
 
 const TablaResumen = () => {
-  const [data, setData] = useState([]);
-  const [expandedAreas, setExpandedAreas] = useState([]); // Control de áreas expandidas
+  // ESTADOS
+  const [empresas, setEmpresas] = useState([]);
+  const [newEmpresaName, setNewEmpresaName] = useState("");
+  const [selectedEmpresa, setSelectedEmpresa] = useState(null);
 
+  const [normas, setNormas] = useState([]);
+  const [newNormaName, setNewNormaName] = useState("");
+  const [selectedNorma, setSelectedNorma] = useState(null);
+
+  const [data, setData] = useState([]);        // Áreas
+  const [expandedAreas, setExpandedAreas] = useState([]);
+
+  const auth = getAuth();
+  const uid = auth.currentUser ? auth.currentUser.uid : null;
+
+  // 1. Cargar Empresas
   useEffect(() => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-  
-    if (!user) {
-      console.error("No se encontró un usuario autenticado.");
-      return;
-    }
-  
-    const uid = user.uid;
-  
-    // Suscribirse a cambios en la colección "resumen_17"
-    const unsubscribe17 = onSnapshot(
-      query(collection(db, "resumen_17"), where("uid", "==", uid)),
-      (snapshot) => {
-        const areasData17 = snapshot.docs.map((doc) => ({
-          nombreEmpresa: doc.data().nombreEmpresa || "Sin empresa", // Asegúrate de capturar el campo
-          area: doc.id,
-          collectionName: "resumen_17",
-          puestos: doc.data().puestos || [],
-          tolerable: doc.data().tolerable || 0,
-          moderado: doc.data().moderado || 0,
-          notable: doc.data().notable || 0,
-          elevado: doc.data().elevado || 0,
-          grave: doc.data().grave || 0,
-        }));
-        setData((prevData) => [
-          ...prevData.filter((row) => row.collectionName !== "resumen_17"),
-          ...areasData17,
-        ]);
-      }
-    );
-    
-  
-    // Suscribirse a cambios en la colección "resumen"
-    const unsubscribe04 = onSnapshot(
-      query(collection(db, "resumen"), where("uid", "==", uid)),
-      (snapshot) => {
-        const areasData04 = snapshot.docs.map((doc) => ({
-          nombreEmpresa: doc.data().nombreEmpresa || "Sin empresa", // Asegúrate de capturar el campo
-          area: doc.id,
-          collectionName: "resumen",
-          puestos: doc.data().puestos || [],
-          tolerable: doc.data().tolerable || 0,
-          moderado: doc.data().moderado || 0,
-          notable: doc.data().notable || 0,
-          elevado: doc.data().elevado || 0,
-          grave: doc.data().grave || 0,
-        }));
-        setData((prevData) => [
-          ...prevData.filter((row) => row.collectionName !== "resumen"),
-          ...areasData04,
-        ]);
-      }
-    );
-    return () => {
-      unsubscribe17();
-      unsubscribe04();
-    };
-  }, []);
+    if (!uid) return;
+    const q = query(collection(db, "resumenes"), where("uid", "==", uid));
+    return onSnapshot(q, (snap) => {
+      setEmpresas(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+    });
+  }, [uid]);
 
-  // Función para eliminar un registro
-  const deleteArea = async (id, collectionName) => {
-    if (!collectionName) {
-      alert("Error: No se especificó la colección para eliminar el registro.");
+  // 2. Cargar Normas
+  useEffect(() => {
+    if (!selectedEmpresa) {
+      setNormas([]);
+      setSelectedNorma(null);
       return;
     }
+    const q = query(
+      collection(db, "resumenes", selectedEmpresa.id, "normas"),
+      where("uid", "==", uid)
+    );
+    return onSnapshot(q, (snap) => {
+      setNormas(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+    });
+  }, [selectedEmpresa, uid]);
+
+  // 3. Cargar Áreas
+  useEffect(() => {
+    if (!selectedEmpresa || !selectedNorma || !uid) return;
+    const n = selectedNorma.nombre.toLowerCase();
+    const collectionName =
+      n === "norma_17" || n === "nom_17"
+        ? "resumen_17"
+        : n === "norma_04" || n === "nom_04"
+        ? "resumen_004"
+        : null;
+    if (!collectionName) return;
+
+    const empresaFolder = selectedEmpresa.nombre;
+    const q = query(
+      collection(db, collectionName, empresaFolder, "areas"),
+      where("uid", "==", uid)
+    );
+
+    return onSnapshot(q, (snap) => {
+      const areas = snap.docs.map((docSnap) => {
+        const d = docSnap.data();
+        return {
+          area: docSnap.id,
+          collectionName,
+          nombreEmpresa: empresaFolder,
+          puestos: Array.isArray(d.puestos) ? d.puestos : [],
+          tolerable: d.tolerable ?? 0,
+          moderado: d.moderado ?? 0,
+          notable: d.notable ?? 0,
+          elevado: d.elevado ?? 0,
+          grave: d.grave ?? 0,
+        };
+      });
+      setData(areas);
+    });
+  }, [selectedEmpresa, selectedNorma, uid]);
+
+  // Toggle expandir area
+  const toggleExpandArea = (id) =>
+    setExpandedAreas((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+
+  // CAPTURAR ÁREA ESPECÍFICA
+  const capturarTablaArea = async (areaId) => {
+    const nodo = document.getElementById(`tabla-area-${areaId}`);
+    if (!nodo) {
+      alert("No se encontró la tabla");
+      return;
+    }
+    const btn = nodo.querySelector(".btn-captura");
+    if (btn) btn.classList.add("captura-hide");
 
     try {
-      // Eliminar el documento de Firestore
-      await deleteDoc(doc(db, collectionName, id));
-
-      // Actualizar el estado local eliminando el registro
-      setData((prevData) => prevData.filter((row) => row.area !== id));
-
-      alert("Registro eliminado con éxito.");
-    } catch (error) {
-      console.error("Error al eliminar el registro:", error);
-      alert("Error al eliminar el registro.");
+      const canvas = await html2canvas(nodo, { scale: 2, backgroundColor: "#fff" });
+      const link = document.createElement("a");
+      link.download = `Resumen_${areaId}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    } catch (e) {
+      console.error(e);
+      alert("Error al capturar la tabla.");
+    } finally {
+      if (btn) btn.classList.remove("captura-hide");
     }
   };
 
-  // Función para expandir o contraer los puestos de un área
-  const toggleExpandArea = (areaId) => {
-    setExpandedAreas((prevExpandedAreas) =>
-      prevExpandedAreas.includes(areaId)
-        ? prevExpandedAreas.filter((id) => id !== areaId)
-        : [...prevExpandedAreas, areaId]
-    );
+  // CAPTURAR TABLA COMPLETA
+  const capturarTablaCompleta = async () => {
+    const nodo = document.getElementById("tabla-completa");
+    if (!nodo) {
+      alert("No se encontró la tabla completa.");
+      return;
+    }
+    // Ocultar temporalmente todos los botones .btn-captura dentro de la tabla
+    const botones = nodo.querySelectorAll(".btn-captura");
+    botones.forEach((b) => b.classList.add("captura-hide"));
+
+    try {
+      const canvas = await html2canvas(nodo, { scale: 2, backgroundColor: "#fff" });
+      const link = document.createElement("a");
+      link.download = "Resumen_Completo.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    } catch (e) {
+      console.error(e);
+      alert("Error al capturar la tabla completa.");
+    } finally {
+      botones.forEach((b) => b.classList.remove("captura-hide"));
+    }
   };
 
-  // Calcular los totales acumulados
+  // Totales Globales
   const total = data.reduce(
-    (acc, row) => ({
-      tolerable: acc.tolerable + (row.tolerable || 0),
-      moderado: acc.moderado + (row.moderado || 0),
-      notable: acc.notable + (row.notable || 0),
-      elevado: acc.elevado + (row.elevado || 0),
-      grave: acc.grave + (row.grave || 0),
+    (acc, r) => ({
+      tolerable: acc.tolerable + r.tolerable,
+      moderado: acc.moderado + r.moderado,
+      notable: acc.notable + r.notable,
+      elevado: acc.elevado + r.elevado,
+      grave: acc.grave + r.grave,
     }),
     { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 }
   );
 
+  // RENDER
   return (
-    <div className="tabla-container">
-      <table className="tabla-principal">
-        <thead>
-          <tr>
-            <th rowSpan="2" className="tabla-header">Área</th>
-            <th colSpan="5" className="tabla-header">Magnitud de riesgo</th>
-            <th rowSpan="2" className="tabla-header">Acción</th>
-          </tr>
-          <tr>
-            <th className="tabla-riesgo tolerable">Tolerable</th>
-            <th className="tabla-riesgo moderado">Moderado</th>
-            <th className="tabla-riesgo notable">Notable</th>
-            <th className="tabla-riesgo elevado">Elevado</th>
-            <th className="tabla-riesgo grave">Grave</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((row, index) => (
-            <React.Fragment key={index}>  
-              <tr>
-                <td className="tabla-area">
-                  <button
-                    onClick={() => toggleExpandArea(row.area)}
-                    className="boton-expandir"
-                  >
-                    {expandedAreas.includes(row.area) ? "▼  " : "▶"}
-                  </button>
-                  {row.area}
-                </td>
-                <td>{row.tolerable || 0}</td>
-                <td>{row.moderado || 0}</td>
-                <td>{row.notable || 0}</td>
-                <td>{row.elevado || 0}</td>
-                <td>{row.grave || 0}</td>
-                <td>
-                  <FaTrash
-                    onClick={() =>
-                      deleteArea(row.area, row.collectionName || "resumen")
-                    }
-                    className="boton-eliminar"
-                  />
-                </td>
-              </tr>
-              {expandedAreas.includes(row.area) && row.puestos && (
-                <tr>
-                  <td colSpan="7" className="tabla-subtabla">
-                    <table className="tabla-interna">
-                      <thead>
-                        <tr>
-                          <th className="tabla-header">Puesto</th>
-                          <th className="tolerable">Tolerable</th>
-                          <th className="moderado">Moderado</th>
-                          <th className="notable">Notable</th>
-                          <th className="elevado">Elevado</th>
-                          <th className="grave">Grave</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {row.puestos.map((puesto, idx) => (
-                          <tr key={idx}>
-                            <td>{puesto.nombre}</td>
-                            <td>{puesto.tolerable || 0}</td>
-                            <td>{puesto.moderado || 0}</td>
-                            <td>{puesto.notable || 0}</td>
-                            <td>{puesto.elevado || 0}</td>
-                            <td>{puesto.grave || 0}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </td>
-                </tr>
-              )}
-            </React.Fragment>
-          ))}
-          <tr>
-            <th>TOTAL</th>
-            <th>{total.tolerable}</th>
-            <th>{total.moderado}</th>
-            <th>{total.notable}</th>
-            <th>{total.elevado}</th>
-            <th>{total.grave}</th>
-            <th></th>
-          </tr>
-        </tbody>
-      </table>
+    <div className="saved-tables-container">
+      {/* Listado de Empresas */}
+      {!selectedEmpresa && (
+        <>
+          <h2>Empresas</h2>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!newEmpresaName.trim()) return;
+              addDoc(collection(db, "resumenes"), {
+                nombre: newEmpresaName,
+                uid,
+                fechaCreacion: serverTimestamp(),
+              });
+              setNewEmpresaName("");
+            }}
+            className="add-folder-form"
+          >
+            <input
+              className="input-folder-name"
+              placeholder="Nombre de la nueva empresa"
+              value={newEmpresaName}
+              onChange={(e) => setNewEmpresaName(e.target.value)}
+            />
+            <button className="btn-add-folder">Agregar Empresa</button>
+          </form>
 
-          
-      
+          <div className="folders-list">
+            {empresas.map((emp) => (
+              <div key={emp.id} className="folder-item">
+                <span
+                  className="folder-name"
+                  onClick={() => setSelectedEmpresa(emp)}
+                >
+                  {emp.nombre}
+                </span>
+                <FaTrash
+                  className="boton-eliminar"
+                  onClick={() => deleteDoc(doc(db, "resumenes", emp.id))}
+                />
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Listado de Normas */}
+      {selectedEmpresa && !selectedNorma && (
+        <>
+          <button onClick={() => setSelectedEmpresa(null)} className="btn-back-home">
+            ← Regresar a Empresas
+          </button>
+          <h2>Normas de {selectedEmpresa.nombre}</h2>
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!newNormaName.trim()) return;
+              addDoc(collection(db, "resumenes", selectedEmpresa.id, "normas"), {
+                nombre: newNormaName,
+                uid,
+                fechaCreacion: serverTimestamp(),
+              });
+              setNewNormaName("");
+            }}
+            className="add-folder-form"
+          >
+            <input
+              className="input-folder-name"
+              placeholder="Nombre de la nueva norma"
+              value={newNormaName}
+              onChange={(e) => setNewNormaName(e.target.value)}
+            />
+            <button className="btn-add-folder">Agregar Norma</button>
+          </form>
+
+          <div className="folders-list">
+            {normas.map((n) => (
+              <div key={n.id} className="folder-item">
+                <span className="folder-name" onClick={() => setSelectedNorma(n)}>
+                  {n.nombre}
+                </span>
+                <FaTrash
+                  className="boton-eliminar"
+                  onClick={() =>
+                    deleteDoc(doc(db, "resumenes", selectedEmpresa.id, "normas", n.id))
+                  }
+                />
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Tabla de Resumen */}
+      {selectedEmpresa && selectedNorma && (
+        <>
+          <button onClick={() => setSelectedNorma(null)} className="btn-back-home">
+            ← Regresar a Normas
+          </button>
+          <h2>Tabla de Resumen de {selectedNorma.nombre}</h2>
+
+          {/* Botón para capturar toda la tabla de golpe */}
+          <button className="btn-captura" onClick={capturarTablaCompleta}>
+            📸 Capturar Tabla Completa
+          </button>
+
+          {/* contenedor con id para la tabla principal y sub-tablas */}
+          <div className="tabla-container" id="tabla-completa">
+            <table className="tabla-principal">
+            <thead>
+  <tr>
+    <th rowSpan="2" className="tabla-header">Área</th>
+    <th colSpan="5" className="tabla-header">Magnitud de riesgo</th>
+    <th rowSpan="2" className="tabla-header btn-captura">
+      Acción
+    </th>
+  </tr>
+  <tr>
+    <th className="tabla-riesgo tolerable">Tolerable</th>
+    <th className="tabla-riesgo moderado">Moderado</th>
+    <th className="tabla-riesgo notable">Notable</th>
+    <th className="tabla-riesgo elevado">Elevado</th>
+    <th className="tabla-riesgo grave">Grave</th>
+  </tr>
+</thead>
+<tbody>
+  {data.length ? (
+    data.map((r) => (
+      <tr key={r.area}>
+        <td className="tabla-area">
+          <button
+            className="boton-expandir"
+            onClick={() => toggleExpandArea(r.area)}
+          >
+            {expandedAreas.includes(r.area) ? "▼" : "▶"}
+          </button>
+          {r.area}
+        </td>
+        <td>{r.tolerable}</td>
+        <td>{r.moderado}</td>
+        <td>{r.notable}</td>
+        <td>{r.elevado}</td>
+        <td>{r.grave}</td>
+        {/* Celda de Acción con la clase .btn-captura */}
+        <td className="btn-captura">
+          <FaTrash
+            className="boton-eliminar"
+            onClick={() =>
+              deleteDoc(doc(db, r.collectionName, r.nombreEmpresa, "areas", r.area))
+            }
+          />
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="7" style={{ textAlign: "center" }}>
+        No hay registros de resumen en esta norma.
+      </td>
+    </tr>
+  )}
+  <tr>
+    <th>TOTAL</th>
+    <th>{total.tolerable}</th>
+    <th>{total.moderado}</th>
+    <th>{total.notable}</th>
+    <th>{total.elevado}</th>
+    <th>{total.grave}</th>
+    {/* No olvides aquí también si deseas*/}
+    <th className="btn-captura" />
+  </tr>
+</tbody>
+
+            </table>
+
+            {/* Subtablas (puestos) */}
+            {data.map((r) =>
+              expandedAreas.includes(r.area) && r.puestos.length > 0 ? (
+                <div
+                  key={r.area}
+                  id={`tabla-area-${r.area}`}
+                  className="puestos-separados-container"
+                >
+                  <h3>Puestos en {r.area}</h3>
+
+                  <button className="btn-captura" onClick={() => capturarTablaArea(r.area)}>
+                    📸 Capturar PNG
+                  </button>
+
+                  <table className="tabla-interna">
+                    <thead>
+                      <tr>
+                        <th className="tabla-header">Puesto</th>
+                        <th className="tolerable">Tolerable</th>
+                        <th className="moderado">Moderado</th>
+                        <th className="notable">Notable</th>
+                        <th className="elevado">Elevado</th>
+                        <th className="grave">Grave</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {r.puestos.map((p, i) => (
+                        <tr key={i}>
+                          <td>{p.nombre}</td>
+                          <td>{p.tolerable}</td>
+                          <td>{p.moderado}</td>
+                          <td>{p.notable}</td>
+                          <td>{p.elevado}</td>
+                          <td>{p.grave}</td>
+                        </tr>
+                      ))}
+
+                      {(() => {
+                        const t = r.puestos.reduce(
+                          (a, p) => ({
+                            tolerable: a.tolerable + p.tolerable,
+                            moderado: a.moderado + p.moderado,
+                            notable: a.notable + p.notable,
+                            elevado: a.elevado + p.elevado,
+                            grave: a.grave + p.grave,
+                          }),
+                          { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 }
+                        );
+                        return (
+                          <tr className="fila-total-area">
+                            <th>Total</th>
+                            <th>{t.tolerable}</th>
+                            <th>{t.moderado}</th>
+                            <th>{t.notable}</th>
+                            <th>{t.elevado}</th>
+                            <th>{t.grave}</th>
+                          </tr>
+                        );
+                      })()}
+                    </tbody>
+                  </table>
+                </div>
+              ) : null
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };
 
-export default TablaResumen; 
+export default TablaResumen;

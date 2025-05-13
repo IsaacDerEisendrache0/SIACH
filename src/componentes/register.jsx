@@ -1,31 +1,35 @@
 // src/Register.js
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from 'react-router-dom';
-import { auth } from './firebaseConfig';  // Importar la configuración de Firebase
-import './Register.css'; 
+import { useNavigate } from "react-router-dom";
+import { auth } from "./firebaseConfig"; // Importar la configuración de Firebase
+import "./Register.css";
 
 function Register() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate(); 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      setError('Las contraseñas no coinciden');
+      setError("Las contraseñas no coinciden");
       return;
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
       const user = userCredential.user;
-      navigate('/login');  // Redirigir al login
+      navigate("/login"); // Redirigir al login
     } catch (error) {
-      setError('Error al registrarse');
+      setError("Error al registrarse");
     }
   };
 
@@ -61,7 +65,9 @@ function Register() {
               required
             />
           </div>
-          <button type="submit" className="register-btn">Registrarse</button>
+          <button type="submit" className="register-btn">
+            Registrarse
+          </button>
           {error && <p className="error-msg">{error}</p>}
         </form>
       </div>

@@ -1,7 +1,7 @@
 // src/context/AuthContext.js
-import React, { createContext, useContext, useState } from 'react';
-import { auth } from '../firebaseConfigc'; // Ajusta la ruta si es necesario
-import { signOut } from 'firebase/auth';
+import React, { createContext, useContext, useState } from "react";
+import { auth } from "../firebaseConfigc"; // Ajusta la ruta si es necesario
+import { signOut } from "firebase/auth";
 
 const AuthContext = createContext();
 
@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
       await signOut(auth);
       setUser(null); // Limpiar el estado del usuario
     } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+      console.error("Error al cerrar sesión:", error);
     }
   };
 

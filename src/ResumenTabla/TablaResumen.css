@@ -1,86 +1,222 @@
-/* Estilo para la tabla principal */
-.tabla-principal {
-    border-collapse: collapse;
-    width: 100%;
-    margin: 10px auto; /* Centrar y dar margen */
-    font-size: 16px; /* Tamaño base para toda la tabla */
-    text-align: center;
+/* ===============================
+   Estilos para la Tabla de Resumen
+================================ */
+
+/* Contenedor principal de la tabla */
+.tabla-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+/* Media query para pantallas menores a 1024px */
+@media (max-width: 1024px) {
+  .tabla-container {
+    overflow-x: auto; /* Permite scroll horizontal si es necesario */
+  }
+
+  .tabla-principal {
+    transform: scale(0.8);
+    transform-origin: top left; /* Asegura que la escala se realice desde la esquina superior izquierda */
+  }
+  th,
+  td {
+    padding: 8px; /* Ajusta el padding para ahorrar espacio */
+    font-size: 14px; /* Reduce el tamaño de fuente en celdas */
+  }
+}
+
+.puestos-separados-container {
+  margin-top: 20px; /* Espacio entre la tabla principal y la de puestos */
+  background: #ffffff; /* Fondo blanco para coherencia */
+  padding: 10px; /* Algo de padding interno */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para resaltar */
+}
+
+.puestos-separados-container h3 {
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+@media (max-width: 1024px) {
+  /* Aplica el escalado solo a la tabla interna dentro del contenedor de puestos */
+  .puestos-separados-container .tabla-interna {
+    transform: scale(0.8);
+    transform-origin: top left;
+    /* Opcional: ajustar el ancho para evitar que se desborde */
+    width: 125%;
+  }
+}
+
+/* Tabla principal */
+.tabla-principal {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 8px;
+  font-size: 18px;
+  text-align: center;
+  border: 2px solid #ddd;
+}
+
+/* Encabezados */
 .tabla-header {
-    border: 1px solid black;
-    background-color: #d3d3d3; /* Fondo gris en encabezado */
-    font-size: 18px; /* Aumentar tamaño en encabezados */
-    padding: 10px; /* Espacio más amplio */
+  background-color: #d3d3d3;
+  font-size: 20px;
+  padding: 12px;
+  border: 2px solid #000;
+  text-transform: uppercase;
+}
+
+/* Ajustar tamaño de columnas */
+th,
+td {
+  padding: 15px;
+  border: 2px solid #ddd;
+  font-size: 18px;
 }
 
 /* Colores específicos para Magnitud de Riesgo */
 .tolerable {
-    background-color: #00bfff !important; /* Azul */
-    color: black;
-    font-weight: bold;
+  background-color: #00bfff !important; /* Azul */
+  color: black;
+  font-weight: bold;
 }
 
 .moderado {
-    background-color: #90ee90 !important; /* Verde */
-    color: black;
-    font-weight: bold;
+  background-color: #90ee90 !important; /* Verde */
+  color: black;
+  font-weight: bold;
 }
 
 .notable {
-    background-color: #ffff99 !important; /* Amarillo */
-    color: black;
-    font-weight: bold;
+  background-color: #ffff99 !important; /* Amarillo */
+  color: black;
+  font-weight: bold;
 }
 
 .elevado {
-    background-color: #ffa07a !important; /* Naranja */
-    color: black;
-    font-weight: bold;
+  background-color: #ffa07a !important; /* Naranja */
+  color: black;
+  font-weight: bold;
 }
 
 .grave {
-    background-color: #ff4500 !important; /* Rojo */
-    color: white; /* Texto en blanco */
-    font-weight: bold;
+  background-color: #ff4500 !important; /* Rojo */
+  color: white; /* Texto en blanco */
+  font-weight: bold;
 }
 
-/* Ajustes específicos para los números */
+/* Ajustes específicos para las celdas */
 .tabla-principal td {
-    font-size: 16px; /* Tamaño específico de números */
-    padding: 8px; /* Espacio uniforme en números */
-    text-align: center;
+  font-size: 18px;
+  padding: 12px;
+  text-align: center;
 }
 
-/* Colores aplicados a las celdas de magnitud */
-.tabla-riesgo.tolerable,
-.tabla-riesgo.moderado,
-.tabla-riesgo.notable,
-.tabla-riesgo.elevado,
-.tabla-riesgo.grave {
-    font-weight: bold;
-    padding: 8px;
-}
-
-/* Estilo especial para la fila TOTAL */
+/* Ajuste para la fila de totales */
 .tabla-principal tr:last-child th,
 .tabla-principal tr:last-child td {
-    font-size: 18px; /* Tamaño más grande para el total */
-    font-weight: bold;
-    background-color: #e9ecef; /* Fondo gris claro */
+  font-size: 20px;
+  font-weight: bold;
+  background-color: #e9ecef;
 }
 
 /* Botón de expandir */
 .boton-expandir {
-    background: none;
-    border: none;
-    font-size: 14px; /* Sin cambios en tamaño */
-    cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #000;
+  font-weight: bold;
 }
 
 /* Botón de eliminar */
 .boton-eliminar {
-    color: #ff4500;
-    cursor: pointer;
-    font-size: 16px; /* Icono de tamaño controlado */
+  color: #ff4500;
+  cursor: pointer;
+  font-size: 20px;
+  transition: color 0.3s ease;
 }
+
+.boton-eliminar:hover {
+  color: #c82333;
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 768px) {
+  .tabla-principal {
+    font-size: 16px;
+  }
+
+  th,
+  td {
+    padding: 10px;
+    font-size: 16px;
+  }
+}
+
+
+
+
+
+
+/* Mantienes un bloque para los botones .btn-add-folder y .btn-back-home */
+.btn-add-folder,
+.btn-back-home {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.btn-add-folder:hover,
+.btn-back-home:hover {
+  background: #0056b3;
+}
+
+/* Definir .btn-captura por separado */
+.btn-captura {
+  background: none;       /* o el color que prefieras */
+  color: inherit;         /* usa el color por defecto */
+  border: none;
+  border-radius: 4px;     /* ajusta si necesitas */
+  padding: 4px 8px;       /* ajusta si necesitas */
+  cursor: pointer;
+}
+
+/* Si lo quieres con hover distinto */
+.btn-captura:hover {
+  background: #e0e0e0;   /* un gris claro, p.ej */
+}
+
+
+.boton-eliminar { cursor:pointer; color:#d11a2a; }
+
+
+
+/* tablas */
+.tabla-container { margin-top:1rem; overflow-x:auto; }
+.tabla-header   { background:#d6d6d6; text-align:center; }
+.tabla-principal, .tabla-interna {
+  width:100%; border-collapse:collapse; margin-bottom:1rem;
+}
+.tabla-principal th, .tabla-principal td,
+.tabla-interna   th, .tabla-interna   td {
+  border:1px solid #ccc; padding:.35rem; text-align:center;
+}
+
+
+.puestos-separados-container { margin:1.5rem 0; }
+
+.fila-total-area th { background:#e9ecef; font-weight:bold; }
+
+/* botón oculto durante la captura */
+.captura-hide { display:none !important; }

@@ -30,7 +30,7 @@ const ResumenAccion = () => {
           grave: doc.data().grave || 0,
         }));
         setData((prevData) => [...prevData, ...areasData17]);
-      }
+      },
     );
 
     const unsubscribe04 = onSnapshot(
@@ -44,7 +44,7 @@ const ResumenAccion = () => {
           grave: doc.data().grave || 0,
         }));
         setData((prevData) => [...prevData, ...areasData04]);
-      }
+      },
     );
 
     return () => {
@@ -62,7 +62,7 @@ const ResumenAccion = () => {
       elevado: acc.elevado + row.elevado,
       grave: acc.grave + row.grave,
     }),
-    { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 }
+    { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 },
   );
 
   return (
@@ -70,8 +70,12 @@ const ResumenAccion = () => {
       <table className="risk-summary-table">
         <thead>
           <tr>
-            <th rowSpan="6" className="left-header">RESUMEN DE ACCIÓN</th>
-            <th colSpan="2" className="evaluation-header">Evaluación de riesgos</th>
+            <th rowSpan="6" className="left-header">
+              RESUMEN DE ACCIÓN
+            </th>
+            <th colSpan="2" className="evaluation-header">
+              Evaluación de riesgos
+            </th>
           </tr>
         </thead>
         <tbody>

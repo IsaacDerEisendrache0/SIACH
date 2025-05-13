@@ -5,26 +5,24 @@ import Modal from "react-modal";
 import {
   collection,
   getDocs,
-  addDoc,
   updateDoc,
   doc,
   getDoc,
   setDoc,
-  deleteDoc,
-  query,
-  where,
-  serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../firebase"; // Importar la configuración de Firebase
 import logo from "../logos/logo.png";
 import maxion from "../logos/maxion.jpeg";
 import safran from "../logos/safran.jpeg";
-import cimarron from "../logos/cimarron.png";
 import { getAuth } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import cimarron from "../logos/cimarron.png";
 
-const RiskAssessmentTable = () => {
+
+const RiskAssessmentTableEditor = () => {
   const [areas, setAreas] = useState([]);
-
+  const [empresas, setEmpresas] = useState([]);
+  const [selectedEmpresaId, setSelectedEmpresaId] = useState("");
   const [isEditing, setIsEditing] = useState(false); // Estado para modo de edición
 
   const [hazards, setHazards] = useState({
@@ -41,98 +39,27 @@ const RiskAssessmentTable = () => {
     "Calentamiento de materia prima, subproducto o producto": false,
   });
 
-  const defaultAreas = [
-    {
-      nombre: "Producción",
-      puestos: [
-        "Ayudante de empaque y envase",
-        "Ayudante de limpieza",
-        "Operador de peletizadora",
-        "Dosificador de micros",
-        "Operador de rolado",
-        "Operador de molino",
-        "Dosificador de mezclas",
-        "Coordinador de mantenimiento",
-        "Ayudante de mantenimiento",
-        "Operador de caldera",
-        "Ayudante de mantenimiento soldadura",
-        "Ayudante de mantenimiento eléctrico",
-        "Ayudante de mantenimiento mecánico",
-        "Embolsador",
-        "Auxiliar de calidad",
-        "Ayudante de albañil",
-        "Supervisor de planta",
-        "Recibidor de granos",
-        "Coordinador de empaque",
-        "Coordinador de seguridad e higiene",
-        "MVZ. Responsable",
-        "Superintendente de producción",
-        "Ingeniero en proyectos",
-      ],
-    },
-    {
-      nombre: "Operación",
-      puestos: [
-        "Ayudante de almacén",
-        "Almacenista",
-        "Montacarguista",
-        "Operador de enmelazadora",
-        "Investigación y desarrollo",
-      ],
-    },
-    {
-      nombre: "Envase y empaque",
-      puestos: [
-        "Envasador",
-        "Ayudante de empaque, envase (Cosedor)",
-        "Estibadores",
-        "Ayudante de empaque, envase (Circulante)",
-        "Ayudante de empaque, envase (amarrador)",
-      ],
-    },
-    {
-      nombre: "Ventas",
-      puestos: ["Estibador", "Repartidor", "Chofer"],
-    },
+  const hazardOrder = [
+    "Caídas de Altura",
+    "Exposición a Temperaturas",
+    "Exposición a Electricidad Estática",
+    "Exposición a Sustancias Químicas",
+    "Exposición a Radiaciones",
+    "Exposición agentes Biológicos",
+    "Exposición a Ruido",
+    "Exposición a Vibraciones",
+    "Superficies cortantes",
+    "Caídas a nivel o desnivel",
+    "Calentamiento de materia prima, subproducto o producto",
   ];
-
-  const [bodyPartsSelected, setBodyPartsSelected] = useState({
-    "Cabeza y Oídos": false,
-    "Ojos y Cara": false,
-    "Sistema respiratorio": false,
-    "Tronco": false,
-    "Brazos y Manos": false,
-    "Extremidades inferiores": false,
-  });
   
 
-  const handleInjectAreas = async () => {
-    try {
-      // 1. Apuntamos al documento EXACTO en "Empresas_17"
-      //    con id = "BOwQ6hFVylImBmxn5xyd"
-      const docRef = doc(db, "Empresas_17", "BOwQ6hFVylImBmxn5xyd");
-
-      // 2. Recorremos el array de defaultAreas y creamos un documento
-      //    en la subcolección "areas" para cada elemento
-      for (const area of defaultAreas) {
-        await addDoc(collection(docRef, "areas"), area);
-      }
-
-      alert(
-        "Subcolección 'areas' inyectada correctamente con los puestos predeterminados.",
-      );
-    } catch (error) {
-      console.error("Error al inyectar áreas:", error);
-      alert("Error al inyectar áreas, revisa la consola.");
-    }
-  };
-
-  const STORAGE_KEY = "riskAssessmentData_v1";
+  const STORAGE_KEY = "riskAssessmentData_editor";
 
   // Coloca los hooks dentro del componente funcional
   const [areaSeleccionada, setAreaSeleccionada] = useState("");
   const [puestoSeleccionado, setPuestoSeleccionado] = useState("");
-  const [puestos, setPuestos] = useState([]); // Se poblará con el campo "puestos" del área seleccionada
+  const [puestos, setPuestos] = useState([]);
   const [descripcionActividad1, setDescripcionActividad1] = useState("");
   const [descripcionActividad2, setDescripcionActividad2] = useState("");
 
@@ -140,12 +67,13 @@ const RiskAssessmentTable = () => {
   const [folders, setFolders] = useState([]);
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
   const [fechaActual, setFechaActual] = useState("");
+  const navigate = useNavigate();
 
-  // Al cambiar de área, actualizamos el estado local (ya sin localStorage)
   const handleAreaChange = (e) => {
     const selectedName = e.target.value;
     setAreaSeleccionada(selectedName);
 
+    // Buscar la definición del área en el arreglo areas
     const selectedArea = areas.find((a) => a.nombre === selectedName);
     if (selectedArea) {
       setPuestos(selectedArea.puestos || []);
@@ -189,6 +117,7 @@ const RiskAssessmentTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar si el modal está abierto o cerrado
   const [puestosSeleccionadosParaBorrar, setPuestosSeleccionadosParaBorrar] =
     useState([]); // Estado para almacenar los puestos seleccionados para borrar
+  // Para almacenar las imágenes seleccionadas por peligro
   const [selectedImages, setSelectedImages] = useState([]); // Para almacenar las imágenes seleccionadas para "Equipo de protección personal sugerido"
 
   const [selectedOptionEquipoUtilizado, setSelectedOptionEquipoUtilizado] =
@@ -250,7 +179,6 @@ const RiskAssessmentTable = () => {
       width: ${textarea.offsetWidth}px;
       height: ${textarea.offsetHeight}px;
     `;
-
   
     tempDiv.className = textarea.className;
     tempDiv.id = "descripcion-actividad-1-fake";
@@ -261,8 +189,9 @@ const RiskAssessmentTable = () => {
   
     // Oculta botones
     const buttons = document.querySelectorAll(
-      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra, .remove-logo-button, .btn-agregar-empresa,.epp-dropdown, .btn-add-empresa, .epp-select, .delete-button"
+      ".btn-agregar, .btn-borrar, .download-button, .save-button, .reset-button, .btn-extra, .remove-logo-button, .btn-agregar-empresa, .epp-dropdown, .btn-add-empresa, .hidden-during-capture, .epp-select, .delete-button"
     );
+    
     buttons.forEach((button) => button.classList.add("hidden-buttons"));
   
     const tableElement = document.querySelector(".main-table");
@@ -273,7 +202,7 @@ const RiskAssessmentTable = () => {
     const originalMargin = tableElement.style.margin;
   
     // Ajuste temporal
-    tableElement.style.width = "1750px";
+    tableElement.style.width = "1780px";
     tableElement.style.transform = "scale(1)";
     tableElement.style.margin = "auto";
   
@@ -314,46 +243,8 @@ const RiskAssessmentTable = () => {
   };
   
 
-  const handleDeleteSelectedPuestos = async () => {
-    if (puestosSeleccionadosParaBorrar.length === 0) {
-      alert("Selecciona al menos un puesto para borrar.");
-      return;
-    }
-
-    // Filtrar el arreglo de puestos para remover los puestos seleccionados
-    const nuevosPuestos = puestos.filter(
-      (puesto) => !puestosSeleccionadosParaBorrar.includes(puesto),
-    );
-    setPuestos(nuevosPuestos);
-
-    // Buscar el área actual
-    const selectedAreaObj = areas.find(
-      (area) => area.nombre === areaSeleccionada,
-    );
-
-    if (!selectedAreaObj || !selectedEmpresaId) {
-      console.error(
-        "No se encontró el área o la empresa no está seleccionada.",
-      );
-      alert("No se pudo borrar el puesto: selecciona una empresa y un área.");
-      return;
-    }
-
-    try {
-      // Actualiza el documento del área con el nuevo arreglo de puestos
-      await updateDoc(
-        doc(db, "Empresas_17", selectedEmpresaId, "areas", selectedAreaObj.id),
-        { puestos: nuevosPuestos },
-      );
-      console.log("Puestos actualizados tras borrar");
-    } catch (error) {
-      console.error("Error al borrar puestos en Firebase:", error);
-      alert("Error al borrar el puesto, revisa la consola.");
-    }
-
-    // Limpia la selección de puestos para borrar y cierra el modal
-    setPuestosSeleccionadosParaBorrar([]);
-    setIsModalOpen(false);
+  const handleDeletePuestoClick = () => {
+    setIsModalOpen(true);
   };
 
   const handleModalClose = () => {
@@ -377,36 +268,39 @@ const RiskAssessmentTable = () => {
   };
 
   useEffect(() => {
-    const selectedArea = areas.find((a) => a.nombre === areaSeleccionada);
-    setPuestos(selectedArea ? selectedArea.puestos : []);
+    if (areaSeleccionada) {
+      const areaSeleccionadaKey = `puestos_${areaSeleccionada}`;
+      const savedPuestos = JSON.parse(
+        localStorage.getItem(areaSeleccionadaKey),
+      );
+
+      if (savedPuestos && savedPuestos.length > 0) {
+        setPuestos(savedPuestos);
+      } else {
+        const areaObj = areas.find((area) => area.nombre === areaSeleccionada);
+        if (areaObj) {
+          setPuestos(areaObj.puestos);
+          localStorage.setItem(
+            areaSeleccionadaKey,
+            JSON.stringify(areaObj.puestos),
+          );
+        }
+      }
+    }
   }, [areaSeleccionada, areas]);
 
-  // Función para agregar un nuevo puesto y guardarlo en Firebase
-  // Asegúrate de tener el useEffect para asignar el área automáticamente:
-  useEffect(() => {
-    if (areas.length > 0 && !areaSeleccionada) {
-      setAreaSeleccionada(areas[0].nombre);
-      setPuestos(areas[0].puestos || []);
-    }
-  }, [areas]);
-
+  // Función para agregar un nuevo puesto
   const handleAddPuestoClick = async () => {
     const nuevoPuesto = prompt("Ingrese el nuevo puesto:");
     if (nuevoPuesto && nuevoPuesto.trim() !== "") {
-      const newPuesto = nuevoPuesto.trim();
-      const updatedPuestos = [...puestos, newPuesto];
+      const updatedPuestos = [...puestos, nuevoPuesto.trim()];
       setPuestos(updatedPuestos);
       setPuestoSeleccionado("");
-
-      // Buscar el objeto del área seleccionada en el arreglo "areas"
       const selectedAreaObj = areas.find(
         (area) =>
           area.nombre.trim().toLowerCase() ===
           areaSeleccionada.trim().toLowerCase(),
       );
-      console.log("Área encontrada:", selectedAreaObj);
-
-      // Verificación para asegurarnos de que tanto la empresa como el área estén seleccionados
       if (!selectedAreaObj || !selectedEmpresaId) {
         console.error(
           "No se encontró el área o la empresa no está seleccionada.",
@@ -421,7 +315,6 @@ const RiskAssessmentTable = () => {
         );
         return;
       }
-
       try {
         await updateDoc(
           doc(
@@ -441,13 +334,22 @@ const RiskAssessmentTable = () => {
     }
   };
 
-  // Función auxiliar: actualiza los puestos del área seleccionada en Firebase
-  
+  // Función para borrar los puestos seleccionados
+  const handleDeleteSelectedPuestos = () => {
+    const nuevosPuestos = puestos.filter(
+      (puesto) => !puestosSeleccionadosParaBorrar.includes(puesto),
+    );
+    setPuestos(nuevosPuestos); // Actualiza los puestos eliminando los seleccionados
 
-  const handleDeletePuestoClick = () => {
-    setIsModalOpen(true);
+    // Guardamos los puestos actualizados en localStorage para el área seleccionada
+    const areaSeleccionadaKey = `puestos_${areaSeleccionada}`;
+    localStorage.setItem(areaSeleccionadaKey, JSON.stringify(nuevosPuestos));
+
+    setPuestosSeleccionadosParaBorrar([]); // Limpiar la selección
+    setIsModalOpen(false); // Cerrar el modal
   };
 
+  /*
   const saveTable = async (empresaId, normaId) => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -455,20 +357,18 @@ const RiskAssessmentTable = () => {
       alert("No estás autenticado.");
       return;
     }
-    const uid = user.uid;
-  
+    const uid = user.uid; // Obtener UID del usuario
+
     const tableData = {
       uid,
       areaSeleccionada,
       puestoSeleccionado,
       hazards,
       consequence,
-      bodyPartsSelected,
       exposure,
       probability,
       risk: calculateRisk(),
       selectedImages,
-      logoSeleccionado,
       descripcionActividad1,
       descripcionActividad2,
       selectedOptionEquipoUtilizado,
@@ -477,34 +377,23 @@ const RiskAssessmentTable = () => {
       norma: "N-017",
       fecha: new Date().toLocaleDateString(),
       hora: new Date().toLocaleTimeString(),
-      selectedMainOption,
       nombreEmpresa: empresaSeleccionada,
-      selectionList,
     };
-  
+
     try {
-      // Guardar la tabla
+      // Guardar la tabla en la subcolección "tablas" de la norma seleccionada dentro de la empresa
       await addDoc(
         collection(db, "empresas", empresaId, "normas", normaId, "tablas"),
-        tableData
+        tableData,
       );
       alert("Tabla guardada con éxito en Firestore.");
-  
-      // 📌 ACTUALIZAR EL RESUMEN
-      const resumenRef = doc(
-        db,
-        "resumen_17",
-        empresaSeleccionada,
-        "areas",
-        areaSeleccionada
-      );
-  
-      console.log("📌 Guardando resumen en:", resumenRef.path);
-  
+
+      // Actualizar el resumen correspondiente si es necesario (este bloque se mantiene igual)
+      const resumenRef = doc(db, "resumen_17", areaSeleccionada);
       const resumenSnapshot = await getDoc(resumenRef);
-  
+
       let newResumenData = {
-        uid, // NECESARIO para filtrarlo en TablaResumen.jsx
+        uid,
         tolerable: 0,
         moderado: 0,
         notable: 0,
@@ -512,12 +401,12 @@ const RiskAssessmentTable = () => {
         grave: 0,
         puestos: [],
       };
-  
+
       const risk = calculateRisk();
       if (resumenSnapshot.exists()) {
         newResumenData = resumenSnapshot.data();
       }
-  
+
       const puestoRiesgo = {
         nombre: puestoSeleccionado,
         tolerable: risk <= 20 ? 1 : 0,
@@ -526,63 +415,79 @@ const RiskAssessmentTable = () => {
         elevado: risk > 200 && risk <= 400 ? 1 : 0,
         grave: risk > 400 ? 1 : 0,
       };
-  
-      newResumenData.puestos.push(puestoRiesgo);
+
+      newResumenData.puestos = [
+        ...newResumenData.puestos.filter(
+          (p) => p.nombre !== puestoSeleccionado,
+        ),
+        puestoRiesgo,
+      ];
+
       newResumenData.tolerable += puestoRiesgo.tolerable;
       newResumenData.moderado += puestoRiesgo.moderado;
       newResumenData.notable += puestoRiesgo.notable;
       newResumenData.elevado += puestoRiesgo.elevado;
       newResumenData.grave += puestoRiesgo.grave;
-  
-      // 🟢 GUARDAR EL RESUMEN CON UID
-      await setDoc(resumenRef, {
-        ...newResumenData,
-        uid, // 🔐 Esto asegura que la tabla de resumen lo muestre
-      });
-  
-      // Limpiar campos
-      setDescripcionActividad1("");
-      setDescripcionActividad2("");
-  
-      // Persistencia en localStorage
-      localStorage.setItem("empresaPersistente", empresaSeleccionada);
-      localStorage.setItem("empresaIdPersistente", empresaId);
-      localStorage.setItem("areaPersistente", areaSeleccionada);
-      localStorage.setItem("puestosPersistentes", JSON.stringify(puestos));
+
+      await setDoc(resumenRef, newResumenData);
     } catch (error) {
-      console.error("❌ Error al guardar en Firestore:", error);
+      console.error("Error al guardar en Firestore:", error);
       alert("Error al guardar la tabla.");
     }
-  };
-  
+  }; */
 
-  const updateTable = async (empresaId, normaId) => {
+  // Ejemplo de función para asignar color según el nivel de riesgo
+  // Función simple para generar un ID único (sin librerías)
+  const generateUniqueId = () => {
+    return Date.now().toString() + Math.floor(Math.random() * 1000).toString();
+  };
+
+  const updateTable = async () => {
+    const empresa = tableToEdit?.empresaSeleccionada || "";
+    const normaAuto = tableToEdit?.norma || "N-017";
+    const empresaId = tableToEdit?.empresaId || "";
+    const normaId = tableToEdit?.normaId || "";
+
+    // Si ya existe un id para el puesto, lo usamos; de lo contrario, generamos uno
+    // Esto debe estar guardado para futuras actualizaciones
+    const puestoId = tableToEdit?.puestoId || generateUniqueId();
+
+    // Incluimos el puestoId en el objeto actualizado para persistirlo
     const updatedTable = {
       areaSeleccionada,
       puestoSeleccionado,
       hazards,
       consequence,
+      logoSeleccionado,
       exposure,
       probability,
+      bodyPartsSelected,
       risk: calculateRisk(),
       selectedImages,
       descripcionActividad1,
       descripcionActividad2,
       selectedOptionEquipoUtilizado,
       selectedOptionProteccionSugerida,
-      selectedMainOption, // Equipo principal
       tiempoExposicion,
-      norma: "N-017",
-      fecha,
-      hora,
-      nombreEmpresa: empresaSeleccionada, // Nombre de la empresa
+      norma: normaAuto,
+      fecha: tableToEdit.fecha,
+      hora: tableToEdit.hora,
+
+      nombreEmpresa: empresaSeleccionada,
+      selectedMainOption,
+      selectionList,
+      puestoId, // ID único del puesto
     };
 
     try {
       if (!tableId) {
         throw new Error("No se encontró el ID de la tabla para actualizar.");
       }
-      // Actualizar la tabla en la subcolección "tablas" de la norma seleccionada
+      if (!empresaId || !normaId) {
+        throw new Error("No se encontraron los IDs de la empresa o la norma.");
+      }
+
+      // 1. Actualiza el documento principal (tablas)
       const docRef = doc(
         db,
         "empresas",
@@ -592,17 +497,21 @@ const RiskAssessmentTable = () => {
         "tablas",
         tableId,
       );
-      await updateDoc(docRef, updatedTable);
+      await setDoc(docRef, updatedTable, { merge: true });
 
-      // Actualizar el resumen (este bloque se mantiene igual)
+      // 2. Actualiza el resumen en la ruta que coincide con la Tabla de Resumen
+      const resumenCollection = "resumen_17"; // O "resumen_004" según corresponda
+      const empresaFolder = empresaSeleccionada;
+      const areaDocId = areaSeleccionada;
       const resumenRef = doc(
         db,
-        "resumen_17",
-        empresaSeleccionada,
+        resumenCollection,
+        empresaFolder,
         "areas",
-        areaSeleccionada,
+        areaDocId,
       );
       const resumenSnapshot = await getDoc(resumenRef);
+
       let areaData = resumenSnapshot.exists()
         ? resumenSnapshot.data()
         : {
@@ -614,53 +523,118 @@ const RiskAssessmentTable = () => {
             grave: 0,
           };
 
-      console.log("Datos del área antes de actualizar:", areaData);
+      // 3. Construye el objeto puesto
+      const risk = calculateRisk();
+      const newPuesto = {
+        id: puestoId, // ID único para identificar el puesto
+        nombre: puestoSeleccionado,
+        magnitudRiesgo: risk,
+        riskColor: getRiskColor(risk),
+        tolerable: 0,
+        moderado: 0,
+        notable: 0,
+        elevado: 0,
+        grave: 0,
+      };
 
-      const updatedPuestos = [
-        ...areaData.puestos.filter((p) => p.nombre !== puestoSeleccionado),
-        {
-          nombre: puestoSeleccionado,
-          magnitudRiesgo: calculateRisk(),
-          categoria:
-            calculateRisk() <= 20
-              ? "Tolerable"
-              : calculateRisk() <= 70
-                ? "Moderado"
-                : calculateRisk() <= 200
-                  ? "Notable"
-                  : calculateRisk() <= 400
-                    ? "Elevado"
-                    : "Grave",
-        },
-      ];
+      // Asigna la categoría y el "1" en la columna correspondiente
+      if (risk <= 20) {
+        newPuesto.categoria = "Tolerable";
+        newPuesto.tolerable = 1;
+      } else if (risk <= 70) {
+        newPuesto.categoria = "Moderado";
+        newPuesto.moderado = 1;
+      } else if (risk <= 200) {
+        newPuesto.categoria = "Notable";
+        newPuesto.notable = 1;
+      } else if (risk <= 400) {
+        newPuesto.categoria = "Elevado";
+        newPuesto.elevado = 1;
+      } else {
+        newPuesto.categoria = "Grave";
+        newPuesto.grave = 1;
+      }
 
-      console.log("Puestos actualizados:", updatedPuestos);
+      // 4. Actualiza la lista de puestos:
+      // Primero, intenta encontrar el puesto por ID; si no existe, como respaldo busca por nombre
+      let copyPuestos = Array.isArray(areaData.puestos)
+        ? [...areaData.puestos]
+        : [];
+      let puestoIndex = copyPuestos.findIndex((p) => p.id === puestoId);
 
-      const newTotals = updatedPuestos.reduce(
+      if (puestoIndex === -1) {
+        // Si no se encontró por ID, intenta encontrarlo por nombre
+        puestoIndex = copyPuestos.findIndex(
+          (p) => p.nombre === puestoSeleccionado,
+        );
+      }
+
+      if (puestoIndex !== -1) {
+        // Actualiza el puesto existente (sin duplicar)
+        copyPuestos[puestoIndex] = newPuesto;
+      } else {
+        // Si no se encontró ningún puesto, se agrega (esto ocurrirá sólo la primera vez)
+        copyPuestos.push(newPuesto);
+      }
+
+      // 5. Recalcula totales acumulados
+      const newTotals = copyPuestos.reduce(
         (acc, puesto) => {
-          const { magnitudRiesgo } = puesto;
-          if (magnitudRiesgo <= 20) acc.tolerable++;
-          else if (magnitudRiesgo <= 70) acc.moderado++;
-          else if (magnitudRiesgo <= 200) acc.notable++;
-          else if (magnitudRiesgo <= 400) acc.elevado++;
-          else acc.grave++;
+          acc.tolerable += puesto.tolerable || 0;
+          acc.moderado += puesto.moderado || 0;
+          acc.notable += puesto.notable || 0;
+          acc.elevado += puesto.elevado || 0;
+          acc.grave += puesto.grave || 0;
           return acc;
         },
         { tolerable: 0, moderado: 0, notable: 0, elevado: 0, grave: 0 },
       );
 
-      console.log("Nuevos totales calculados:", newTotals);
+      // 6. Guarda el área actualizada en el resumen
+      await setDoc(
+        resumenRef,
+        {
+          area: areaSeleccionada,
+          puesto: puestoSeleccionado,
+          riskScore: risk,
+          riskColor: getRiskColor(risk),
+          puestos: copyPuestos,
+          ...newTotals, // Totales por categoría
+        },
+        { merge: true },
+      );
 
-      await setDoc(resumenRef, {
-        ...areaData,
-        puestos: updatedPuestos,
-        ...newTotals,
-      });
+      // 7. Lee el documento para refrescar el estado local
+      const updatedSnapshot = await getDoc(docRef);
+      const updatedData = updatedSnapshot.data();
 
-      alert("Tabla actualizada con éxito en Firestore.");
+      // 8. Actualiza los estados del editor
+      setAreaSeleccionada(updatedData.areaSeleccionada || "");
+      setPuestoSeleccionado(updatedData.puestoSeleccionado || "");
+      setHazards(updatedData.hazards || {});
+      setConsequence(updatedData.consequence || 1);
+      setExposure(updatedData.exposure || 1);
+      setProbability(updatedData.probability || 0.1);
+      setSelectedImages(updatedData.selectedImages || []);
+      setDescripcionActividad1(updatedData.descripcionActividad1 || "");
+      setDescripcionActividad2(updatedData.descripcionActividad2 || "");
+      setSelectedOptionEquipoUtilizado(
+        updatedData.selectedOptionEquipoUtilizado || "",
+      );
+      setSelectedOptionProteccionSugerida(
+        updatedData.selectedOptionProteccionSugerida || "",
+      );
+      setTiempoExposicion(updatedData.tiempoExposicion || "8hrs");
+
+      localStorage.setItem("tableToEdit", JSON.stringify(updatedTable));
+      localStorage.removeItem("riskAssessmentData_editor");
+
+      alert(
+        "Tabla y resumen actualizados con éxito en Firestore y en pantalla.",
+      );
     } catch (error) {
       console.error("Error al actualizar en Firestore:", error);
-      alert("Error al actualizar la tabla.");
+      alert("Error al actualizar la tabla y el resumen.");
     }
   };
 
@@ -668,34 +642,122 @@ const RiskAssessmentTable = () => {
   const [tiempoExposicion, setTiempoExposicion] = useState("8hrs");
   const [hora, setHora] = useState(new Date().toLocaleTimeString());
   const [tableId, setTableId] = useState(null);
+  console.log(JSON.parse(localStorage.getItem("tableToEdit")));
+  const [tableToEdit, setTableToEdit] = useState(null);
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("tableToEdit"));
+    setTableToEdit(storedData);
+  }, []); // Se ejecuta una vez al montar el componente
+
+  // ...
 
   useEffect(() => {
-    const tableToEdit = JSON.parse(localStorage.getItem("tableToEdit"));
-    if (tableToEdit) {
-      setAreaSeleccionada(tableToEdit.areaSeleccionada);
-      setPuestoSeleccionado(tableToEdit.puestoSeleccionado);
-      setHazards(tableToEdit.hazards);
-      setConsequence(tableToEdit.consequence);
-      setExposure(tableToEdit.exposure);
-      setProbability(tableToEdit.probability);
-      setSelectedImages(tableToEdit.selectedImages || []);
-      setDescripcionActividad1(tableToEdit.descripcionActividad1 || "");
-      setSelectedOptionEquipoUtilizado(
-        tableToEdit.selectedOptionEquipoUtilizado || "",
-      );
-      setSelectedOptionProteccionSugerida(
-        tableToEdit.selectedOptionProteccionSugerida || "",
-      );
-      setTiempoExposicion(tableToEdit.tiempoExposicion || "");
-      setFecha(tableToEdit.fecha); // Establecer la fecha de la tabla en edición
-      setHora(tableToEdit.hora); // Establecer la hora de creación
-      setTableId(tableToEdit.id); // Guardar el ID del documento para actualizar
-      localStorage.removeItem("tableToEdit");
-      setSelectedMainOption(tableToEdit.selectedMainOption || "");
-      setEmpresaSeleccionada(tableToEdit.nombreEmpresa || "");
-      setSelectionList(tableToEdit.selectionList || []); // <--- Aquí
+    if (!tableToEdit) return;
+
+    console.log("Datos recuperados en el editor:", tableToEdit);
+
+    // 1. Datos generales que ya tenías
+    setAreaSeleccionada(tableToEdit.areaSeleccionada || "");
+    setPuestoSeleccionado(tableToEdit.puestoSeleccionado || "");
+    setSelectedOptionEquipoUtilizado(
+      tableToEdit.selectedOptionEquipoUtilizado || "",
+    );
+    setSelectedOptionProteccionSugerida(
+      tableToEdit.selectedOptionProteccionSugerida || "",
+    );
+    setSelectedImages(tableToEdit.selectedImages || []);
+    setHazards(tableToEdit.hazards || {});
+    setConsequence(tableToEdit.consequence || 1);
+    setExposure(tableToEdit.exposure || 1);
+    setProbability(tableToEdit.probability || 0.1);
+    setDescripcionActividad1(tableToEdit.descripcionActividad1 || "");
+    setDescripcionActividad2(tableToEdit.descripcionActividad2 || "");
+    setTiempoExposicion(tableToEdit.tiempoExposicion || "8hrs");
+    setLogoSeleccionado(tableToEdit.logoSeleccionado || null);
+
+    
+    setBodyPartsSelected({
+      "Cabeza y Oídos": false,
+      "Ojos y Cara": false,
+      "Sistema respiratorio": false,
+      "Tronco": false,
+      "Brazos y Manos": false,
+      "Extremidades inferiores": false,
+      ...(tableToEdit.bodyPartsSelected || {}),
+    });
+    
+    
+
+    
+
+    // En vez de poner new Date(), asignas directamente la fecha guardada
+    if (tableToEdit.fecha) {
+      setFecha(parseDdMmYyyyToIso(tableToEdit.fecha));
     }
-  }, []);
+    
+    
+    // Si no hay hora guardada, usas la actual
+    setHora(tableToEdit.hora || new Date().toLocaleTimeString());
+
+    setTableId(tableToEdit.id || null);
+    setSelectedMainOption(tableToEdit.selectedMainOption || "");
+    setEmpresaSeleccionada(tableToEdit.nombreEmpresa || "");
+    setSelectionList(tableToEdit.selectionList || []);
+
+    // 2. Sincronizar la EMPRESA guardada con la lista "empresas"
+    if (empresas.length > 0 && tableToEdit.nombreEmpresa) {
+      const matchedEmpresa = empresas.find(
+        (emp) => emp.nombre === tableToEdit.nombreEmpresa,
+      );
+      if (matchedEmpresa) {
+        setSelectedEmpresaId(matchedEmpresa.id);
+        setEmpresaSeleccionada(matchedEmpresa.nombre);
+      } else {
+        // Creamos una empresa "temporal"
+        const tempId = "temp-" + Date.now();
+        const tempEmpresa = { id: tempId, nombre: tableToEdit.nombreEmpresa };
+        setEmpresas((prev) => [...prev, tempEmpresa]);
+        setSelectedEmpresaId(tempId);
+        setEmpresaSeleccionada(tableToEdit.nombreEmpresa);
+      }
+    }
+
+    // 3. Sincronizar el ÁREA guardada con la lista "areas"
+    if (areas.length > 0 && tableToEdit.areaSeleccionada) {
+      const matchedArea = areas.find(
+        (a) => a.nombre === tableToEdit.areaSeleccionada,
+      );
+      if (matchedArea) {
+        setAreaSeleccionada(matchedArea.nombre);
+      } else {
+        const tempAreaId = "temp-" + Date.now();
+        const tempArea = {
+          id: tempAreaId,
+          nombre: tableToEdit.areaSeleccionada,
+          puestos: [],
+        };
+        setAreas((prev) => [...prev, tempArea]);
+        setAreaSeleccionada(tempArea.nombre);
+      }
+    }
+  }, [tableToEdit, empresas, areas]);
+
+  function parseDdMmYyyyToIso(fechaStr) {
+    if (!fechaStr) return "";
+  
+    // Detectar si ya está en formato ISO
+    if (/^\d{4}-\d{2}-\d{2}$/.test(fechaStr)) {
+      return fechaStr;
+    }
+  
+    // Si viene en formato dd/mm/yyyy
+    const [dd, mm, yyyy] = fechaStr.split("/");
+    if (!dd || !mm || !yyyy) return "";
+  
+    return `${yyyy}-${mm.padStart(2, "0")}-${dd.padStart(2, "0")}`;
+  }
+  
+  
 
   const handleImageRemove = (imageToRemove) => {
     setSelectedImages((prevSelectedImages) =>
@@ -703,41 +765,28 @@ const RiskAssessmentTable = () => {
     );
   };
 
-  // Función para agregar un área nueva a Firebase (en lugar de usar localStorage)
-  const handleAddAreaClick = async () => {
-    // Verifica que haya una empresa seleccionada
-    if (!selectedEmpresaId) {
-      alert("Selecciona una empresa antes de agregar un área.");
-      return;
-    }
-
+  const handleAddAreaClick = () => {
     const nuevaArea = prompt("Ingrese el nombre de la nueva área:");
     if (nuevaArea && nuevaArea.trim() !== "") {
-      try {
-        // Referencia al documento de la empresa en "Empresas_17"
-        const empresaRef = doc(db, "Empresas_17", selectedEmpresaId);
-        // Referencia a la subcolección "areas" dentro de esa empresa
-        const areasRef = collection(empresaRef, "areas");
-        // Crea el nuevo documento en la subcolección "areas"
-        const docRef = await addDoc(areasRef, {
-          nombre: nuevaArea.trim(),
-          puestos: [], // Inicialmente sin puestos
-        });
-        // Actualiza el estado local para incluir el nuevo área
-        const newArea = {
-          id: docRef.id,
-          nombre: nuevaArea.trim(),
-          puestos: [],
-        };
-        setAreas((prevAreas) => [...prevAreas, newArea]);
-        setAreaSeleccionada(newArea.nombre);
-        alert("Área agregada correctamente.");
-      } catch (error) {
-        console.error("Error al agregar el área:", error);
-        alert("Error al agregar el área, revisa la consola.");
-      }
+      const updatedAreas = [
+        ...areas,
+        { nombre: nuevaArea.trim(), puestos: [] },
+      ];
+      setAreas(updatedAreas);
+
+      // Guardamos el área en localStorage
+      localStorage.setItem("areas", JSON.stringify(updatedAreas));
+      setAreaSeleccionada(nuevaArea.trim()); // Cambia a la nueva área
     }
   };
+
+  useEffect(() => {
+    // Intenta cargar las áreas desde localStorage
+    const savedAreas = JSON.parse(localStorage.getItem("areas"));
+    if (savedAreas && savedAreas.length > 0) {
+      setAreas(savedAreas); // Si existen áreas guardadas, las carga en el estado
+    }
+  }, []);
 
   const [selectedMainOption, setSelectedMainOption] = useState(""); // Estado para la opción principal
   const [selectedSubOption, setSelectedSubOption] = useState(""); // Estado para la subcategoría seleccionada
@@ -783,7 +832,13 @@ const RiskAssessmentTable = () => {
       "Bata",
     ],
     // Nuevas clasificaciones
-    "Equipo de Audición": ["Conchas Acústicas", "Tapones Auditivos"],
+
+    "Equipo de Audición": 
+    [
+      "Conchas Acústicas", 
+      "Tapones Auditivos"
+    ],
+    
     Respiradores: [
       "Respirador contra Gases y Vapores",
       "Respirador contra Partículas",
@@ -802,7 +857,6 @@ const RiskAssessmentTable = () => {
       "Bata",
       "Ropa contra Sustancias Peligrosas",
       "Polainas",
-      "Chaleco de proteccion",
     ],
     "Equipos Especiales": [
       "Equipo de Protección contra Caídas de Altura",
@@ -812,6 +866,16 @@ const RiskAssessmentTable = () => {
     Mangas: ["Mangas"],
     Arnés: ["Arnés"],
   };
+
+  // Estado que controla qué partes del cuerpo están marcadas con “X”
+  const [bodyPartsSelected, setBodyPartsSelected] = useState({
+    "Cabeza y Oídos": false,
+    "Ojos y Cara": false,
+    "Sistema respiratorio": false,
+    Tronco: false,
+    "Brazos y Manos": false,
+    "Extremidades inferiores": false,
+  });
 
   // Maneja la selección de subcategoría, agrega a la lista y oculta el menú
   const handleSubOptionChange = (e) => {
@@ -829,6 +893,8 @@ const RiskAssessmentTable = () => {
 
   // Estado para manejar opciones seleccionadas automáticamente
 
+  // Nuevo useEffect para actualizar el menú basado en la selección de imágenes de EPP
+
   const handleMainOptionChange = (e) => {
     const value = e.target.value;
     setSelectedMainOption(value);
@@ -837,26 +903,22 @@ const RiskAssessmentTable = () => {
   };
 
   const logos = [
-    { nombre: "Safran", url: safran },
-    { nombre: "Maxion", url: maxion },
-    { nombre: "Cimarron", url: cimarron },
-  ];
+      { nombre: "Safran", url: safran },
+      { nombre: "Maxion", url: maxion },
+      { nombre: "Cimarron", url: cimarron },
+    ];
 
   // Estado para almacenar el logo seleccionado
-  const [logoSeleccionado, setLogoSeleccionado] = useState(() => {
-    return localStorage.getItem("logoSeleccionado") || null;
-  }); 
-  
+  const [logoSeleccionado, setLogoSeleccionado] = useState(null);
 
-  useEffect(() => {
-    if (logoSeleccionado) {
-      localStorage.setItem("logoSeleccionado", logoSeleccionado);
-    } else {
-      localStorage.removeItem("logoSeleccionado");
-    }
-  }, [logoSeleccionado]);
 
   
+
+  // Maneja el cambio de selección en el menú desplegable
+  const handleLogoChange = (event) => {
+    setLogoSeleccionado(event.target.value); // Guarda la URL del logo seleccionado
+  };
+
   // Maneja la eliminación del logo y muestra el menú desplegable nuevamente
   const handleRemoveLogo = () => {
     setLogoSeleccionado(null); // Elimina el logo seleccionado
@@ -882,15 +944,10 @@ const RiskAssessmentTable = () => {
     });
 
     tableContainer.addEventListener("touchmove", (e) => {
-      // Si hay más de un dedo tocando la pantalla,
-      // lo más probable es que sea un pinch-zoom y NO un drag horizontal.
-      if (e.touches.length > 1) return;
-
-      // Ahora sí, si solo hay 1 dedo, hacemos el drag
       if (!isDragging) return;
-      e.preventDefault(); // Se evita scroll del body, pero no pinch
+      e.preventDefault();
       const x = e.touches[0].pageX - tableContainer.offsetLeft;
-      const walk = (x - startX) * 2;
+      const walk = (x - startX) * 2; // Ajusta la velocidad del desplazamiento
       tableContainer.scrollLeft = scrollLeft - walk;
     });
   });
@@ -905,61 +962,64 @@ const RiskAssessmentTable = () => {
     setSelectedSubOption("");
   };
 
-
+  const handleCustomLogoUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setLogoSeleccionado(reader.result); // Establece la imagen cargada como el logo seleccionado
+      };
+      reader.readAsDataURL(file); // Lee el archivo como una URL de datos
+    }
+  };
 
   // Estado para las partes desmarcadas manualmente
   const [removedParts, setRemovedParts] = useState([]); // Partes desmarcadas manualmente
 
   // Función para alternar la selección de una parte del cuerpo
-  function toggleBodyPart(part) {
-    setBodyPartsSelected((prevState) => ({
-      ...prevState,
-      [part]: !prevState[part],
+  const toggleBodyPart = (part) => {
+    setBodyPartsSelected((prev) => ({
+      ...prev,
+      [part]: !prev[part],
     }));
-  }
+  };
 
   // Determinar si mostrar "X" (si está en affectedBodyParts y no en removedParts)
 
   useEffect(() => {
-    const savedData = localStorage.getItem(STORAGE_KEY);
-    if (savedData) {
-      const parsed = JSON.parse(savedData);
-
-      // Restaurar cada campo (valida si existe en el objeto)
-      if (parsed.areaSeleccionada) setAreaSeleccionada(parsed.areaSeleccionada);
-      if (parsed.puestoSeleccionado)
-        setPuestoSeleccionado(parsed.puestoSeleccionado);
-
-      if (parsed.descripcionActividad1)
-        setDescripcionActividad1(parsed.descripcionActividad1);
-      if (parsed.descripcionActividad2)
-        setDescripcionActividad2(parsed.descripcionActividad2);
-
-      if (parsed.hazards) setHazards(parsed.hazards);
-      if (parsed.removedParts) setRemovedParts(parsed.removedParts);
-
-      if (parsed.consequence) setConsequence(parsed.consequence);
-      if (parsed.exposure) setExposure(parsed.exposure);
-      if (parsed.probability) setProbability(parsed.probability);
-
-      if (parsed.selectedImages) setSelectedImages(parsed.selectedImages);
-      if (parsed.selectedOptionEquipoUtilizado) {
-        setSelectedOptionEquipoUtilizado(parsed.selectedOptionEquipoUtilizado);
+    if (!isEditing) {
+      // Solo cargar si NO estamos editando
+      const savedData = localStorage.getItem(STORAGE_KEY);
+      if (savedData) {
+        const parsed = JSON.parse(savedData);
+        if (parsed.areaSeleccionada)
+          setAreaSeleccionada(parsed.areaSeleccionada);
+        if (parsed.puestoSeleccionado)
+          setPuestoSeleccionado(parsed.puestoSeleccionado);
+        if (parsed.descripcionActividad1)
+          setDescripcionActividad1(parsed.descripcionActividad1);
+        if (parsed.descripcionActividad2)
+          setDescripcionActividad2(parsed.descripcionActividad2);
+        if (parsed.hazards) setHazards(parsed.hazards);
+        if (parsed.consequence) setConsequence(parsed.consequence);
+        if (parsed.exposure) setExposure(parsed.exposure);
+        if (parsed.probability) setProbability(parsed.probability);
+        if (parsed.selectedImages) setSelectedImages(parsed.selectedImages);
+        if (parsed.selectedOptionEquipoUtilizado) {
+          setSelectedOptionEquipoUtilizado(
+            parsed.selectedOptionEquipoUtilizado,
+          );
+        }
+        if (parsed.selectedOptionProteccionSugerida) {
+          setSelectedOptionProteccionSugerida(
+            parsed.selectedOptionProteccionSugerida,
+          );
+        }
+        if (parsed.tiempoExposicion)
+          setTiempoExposicion(parsed.tiempoExposicion);
       }
-      if (parsed.selectedOptionProteccionSugerida) {
-        setSelectedOptionProteccionSugerida(
-          parsed.selectedOptionProteccionSugerida,
-        );
-      }
-      if (parsed.selectedMainOption)
-        setSelectedMainOption(parsed.selectedMainOption);
-      if (parsed.selectedSubOption)
-        setSelectedSubOption(parsed.selectedSubOption);
-      if (parsed.selectionList) setSelectionList(parsed.selectionList);
-
-      if (parsed.tiempoExposicion) setTiempoExposicion(parsed.tiempoExposicion);
     }
-  }, []);
+  }, [isEditing]);
 
   // ==== 3. CADA VEZ QUE ALGÚN ESTADO CAMBIA: GUARDO EN LOCALSTORAGE ====
   useEffect(() => {
@@ -1052,19 +1112,8 @@ const RiskAssessmentTable = () => {
   // Función para cargar las empresas desde Firestore
   const loadFolders = async () => {
     try {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      if (!user) {
-        console.warn(
-          "No hay usuario autenticado, no se pueden cargar empresas.",
-        );
-        return;
-      }
-
-      // Filtramos la colección "empresas" por el UID del usuario
-      const q = query(collection(db, "empresas"), where("uid", "==", user.uid));
-
-      const querySnapshot = await getDocs(q);
+      // Se lee de la colección "empresas" en lugar de "carpetas"
+      const querySnapshot = await getDocs(collection(db, "empresas"));
       const fetchedFolders = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         nombre: doc.data().nombre,
@@ -1074,28 +1123,21 @@ const RiskAssessmentTable = () => {
       console.error("Error al cargar las empresas:", error);
     }
   };
+
   useEffect(() => {
     loadFolders();
   }, []);
 
-  const [showNormasSection, setShowNormasSection] = useState(false);
-  const [empresaEnSeleccion, setEmpresaEnSeleccion] = useState("");
-
   // Abrir el modal
-  const openFolderModal = () => {
-    setIsFolderModalOpen(true);
-    setShowNormasSection(false); // 👈 fuerza a mostrar vista de empresa
-  };
-  
-  
+
 
   // Cerrar el modal
   const closeFolderModal = () => {
     setIsFolderModalOpen(false);
-    // No resetees los estados si ya cargaste empresa y áreas
+    setSelectedEmpresaId("");
+    setSelectedNormaId("");
+    setNormas([]);
   };
-  
-  
 
   useEffect(() => {
     const hoy = new Date().toISOString().split("T")[0]; // Obtiene la fecha actual en formato YYYY-MM-DD
@@ -1103,7 +1145,6 @@ const RiskAssessmentTable = () => {
   }, []);
 
   // Estado para la empresa seleccionada (anteriormente selectedFolderId)
-  const [selectedEmpresaId, setSelectedEmpresaId] = useState("");
 
   // Estado para la norma seleccionada dentro de la empresa
   const [selectedNormaId, setSelectedNormaId] = useState("");
@@ -1126,7 +1167,11 @@ const RiskAssessmentTable = () => {
     }
   };
 
-
+  const handleSelectEmpresa = (empresaId) => {
+    setSelectedEmpresaId(empresaId);
+    // Cargar las normas correspondientes a la empresa seleccionada:
+    loadNormas(empresaId);
+  };
 
   const handleSelectNorma = (normaId) => {
     setSelectedNormaId(normaId);
@@ -1155,7 +1200,7 @@ const RiskAssessmentTable = () => {
     );
   };
 
-  const handleDeleteSelectedAreas = async () => {
+  const handleDeleteSelectedAreas = () => {
     if (areasSeleccionadasParaBorrar.length === 0) {
       alert("Selecciona al menos un área para eliminar.");
       return;
@@ -1166,131 +1211,88 @@ const RiskAssessmentTable = () => {
     );
     if (!confirmDelete) return;
 
-    // Borrar cada área de Firebase
-    for (const areaName of areasSeleccionadasParaBorrar) {
-      const areaToDelete = areas.find((area) => area.nombre === areaName);
-      if (areaToDelete && areaToDelete.id) {
-        await deleteAreaFromFirebase(areaToDelete.id);
-      }
-    }
-
-    // Actualiza el estado local eliminando las áreas borradas
-    setAreas((prevAreas) =>
-      prevAreas.filter(
-        (area) => !areasSeleccionadasParaBorrar.includes(area.nombre),
-      ),
+    const updatedAreas = areas.filter(
+      (area) => !areasSeleccionadasParaBorrar.includes(area.nombre),
     );
+    setAreas(updatedAreas);
+    localStorage.setItem("areas", JSON.stringify(updatedAreas));
 
     setAreasSeleccionadasParaBorrar([]);
     setIsAreaModalOpen(false);
+    alert("Áreas eliminadas con éxito.");
   };
 
   const risk = calculateRisk();
 
-  // Estados para el modal y selección de empresas a borrar
-  const [isEmpresaModalOpen, setIsEmpresaModalOpen] = useState(false);
-  const [empresasSeleccionadasParaBorrar, setEmpresasSeleccionadasParaBorrar] =
-    useState([]);
-  const STORAGE_KEY_EMPRESAS = "empresasList";
-  const [empresas, setEmpresas] = useState(() => {
-    const savedEmpresas = localStorage.getItem(STORAGE_KEY_EMPRESAS);
-    return savedEmpresas
-      ? JSON.parse(savedEmpresas)
-      : ["Maxion", "Safran", "Soisa", "Bafar"];
-  });
+  // Define el estado inicial de las empresas
+
+  // Función para agregar una nueva empresa
+  
+
+  // Función para borrar la empresa seleccionada
+ 
+
+  const handleEmpresaChange = (e) => {
+    const selectedId = e.target.value;
+    setSelectedEmpresaId(selectedId);
+
+    // Opcional: guardar en otro estado el nombre de la empresa
+    const selected = empresas.find((emp) => emp.id === selectedId);
+    setEmpresaSeleccionada(selected ? selected.nombre : "");
+
+    // Limpia áreas y puestos mientras se carga la nueva información
+    setAreas([]);
+    setAreaSeleccionada("");
+    setPuestos([]);
+    setPuestoSeleccionado("");
+  };
+
+  // DECLARAMOS FUERA
+  const loadEmpresas = async () => {
+    try {
+      const snapshot = await getDocs(collection(db, "Empresas_17"));
+      const empresasList = snapshot.docs.map((doc) => doc.data().nombre);
+      setEmpresas(empresasList);
+    } catch (error) {
+      console.error("Error al cargar las empresas:", error);
+    }
+  };
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_EMPRESAS, JSON.stringify(empresas));
-  }, [empresas]);
+    loadEmpresas(); // Se ejecuta al montar el componente
+  }, []);
 
-  // Función para abrir el modal
-  const openEmpresaModal = () => {
-    setIsEmpresaModalOpen(true);
-  };
+  useEffect(() => {
+    loadEmpresas(); // Puede llamarse aquí
+  }, []);
 
-  // Función para cerrar el modal
-  const closeEmpresaModal = () => {
-    setIsEmpresaModalOpen(false);
-    setEmpresasSeleccionadasParaBorrar([]);
-  };
+  
 
-  // Manejo del cambio en la selección de checkbox
-  const handleEmpresaSelectionChange = (event) => {
-    const value = event.target.value;
-    setEmpresasSeleccionadasParaBorrar((prev) =>
-      prev.includes(value)
-        ? prev.filter((empresa) => empresa !== value)
-        : [...prev, value],
-    );
-  };
+  // useEffect que carga las áreas
+  useEffect(() => {
+    if (!selectedEmpresaId) return; // si no hay empresa, no cargamos
 
-  // Función para borrar las empresas seleccionadas
-  const handleDeleteSelectedEmpresas = async () => {
-    if (empresasSeleccionadasParaBorrar.length === 0) {
-      alert("Seleccione al menos una empresa para borrar.");
-      return;
-    }
+    const fetchAreas = async () => {
+      try {
+        // Documento de la empresa
+        const empresaRef = doc(db, "Empresas_17", selectedEmpresaId);
+        // Subcolección "areas"
+        const areasRef = collection(empresaRef, "areas");
+        const querySnapshot = await getDocs(areasRef);
 
-    const confirmDelete = window.confirm(
-      `¿Seguro que deseas eliminar las siguientes empresas?\n${empresasSeleccionadasParaBorrar.join(", ")}`,
-    );
-    if (!confirmDelete) return;
+        const dbAreas = querySnapshot.docs.map((docItem) => ({
+          id: docItem.id,
+          ...docItem.data(),
+        }));
 
-    try {
-      // Para cada empresa seleccionada, borramos primero la subcolección "areas"
-      for (const empresaId of empresasSeleccionadasParaBorrar) {
-        // Obtenemos todos los documentos de la subcolección "areas" de esta empresa
-        const areasSnapshot = await getDocs(
-          collection(db, "Empresas_17", empresaId, "areas"),
-        );
-        for (const areaDoc of areasSnapshot.docs) {
-          // Borramos cada documento de la subcolección "areas"
-          await deleteDoc(areaDoc.ref);
-        }
-        // Una vez borradas todas las áreas, borramos el documento de la empresa
-        await deleteDoc(doc(db, "Empresas_17", empresaId));
+        setAreas(dbAreas);
+      } catch (error) {
+        console.error("Error al cargar áreas desde Firebase:", error);
       }
+    };
 
-      // Actualizamos el estado local para eliminar las empresas borradas
-      setEmpresas((prevEmpresas) =>
-        prevEmpresas.filter(
-          (emp) => !empresasSeleccionadasParaBorrar.includes(emp.id),
-        ),
-      );
-      setEmpresasSeleccionadasParaBorrar([]);
-      closeEmpresaModal();
-      alert("Empresas eliminadas con éxito.");
-    } catch (error) {
-      console.error("Error al borrar empresas:", error);
-      alert("Ocurrió un error al borrar las empresas. Revisa la consola.");
-    }
-  };
-
-  // Ejemplo de creación de empresa (si aplica en tu caso):
-  const handleAddEmpresa = async () => {
-    const nuevaEmpresa = prompt("Ingrese el nombre de la nueva empresa:");
-    if (!nuevaEmpresa) return;
-
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (!user) {
-      alert("No estás autenticado.");
-      return;
-    }
-
-    try {
-      // Agrega la empresa a la colección "Empresas_17"
-      await addDoc(collection(db, "Empresas_17"), {
-        nombre: nuevaEmpresa,
-        uid: user.uid,
-        fechaCreacion: serverTimestamp(),
-      });
-      alert("Empresa agregada con éxito en Empresas_17.");
-    } catch (error) {
-      console.error("Error al agregar empresa:", error);
-      alert("Error al agregar empresa, revisa la consola.");
-    }
-  };
+    fetchAreas();
+  }, [selectedEmpresaId]);
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
@@ -1302,68 +1304,6 @@ const RiskAssessmentTable = () => {
       [name]: checked, // Actualiza el valor booleano
     }));
   };
-
-  // Dentro de tu componente:
-  useEffect(() => {
-    const loadCompanies = async () => {
-      try {
-        const companiesRef = collection(db, "Empresas_17");
-        const querySnapshot = await getDocs(companiesRef);
-        // Extraemos el campo "nombre" de cada documento
-        const companiesList = querySnapshot.docs.map(
-          (doc) => doc.data().nombre,
-        );
-        setEmpresas(companiesList);
-      } catch (error) {
-        console.error("Error al cargar empresas desde Firebase:", error);
-      }
-    };
-
-    loadCompanies();
-  }, []);
-
-  useEffect(() => {
-    if (!selectedEmpresaId) return;
-  
-    const fetchAreas = async () => {
-      try {
-        const empresaRef = doc(db, "Empresas_17", selectedEmpresaId);
-        const areasRef = collection(empresaRef, "areas");
-        const querySnapshot = await getDocs(areasRef);
-  
-        const dbAreas = querySnapshot.docs.map((docItem) => ({
-          id: docItem.id,
-          ...docItem.data(),
-        }));
-  
-        // ✅ Evitar sobrescribir si ya hay áreas cargadas
-        if (areas.length === 0) {
-          setAreas(dbAreas);
-        }
-      } catch (error) {
-        console.error("Error al cargar áreas desde Firebase:", error);
-      }
-    };
-  
-    fetchAreas();
-  }, [selectedEmpresaId]);
-  
-
-  const deleteAreaFromFirebase = async (areaId) => {
-    if (!selectedEmpresaId) return; // Verifica que haya empresa seleccionada
-
-    try {
-      // Borra el doc dentro de "Empresas_17" / selectedEmpresaId / "areas" / areaId
-      await deleteDoc(
-        doc(db, "Empresas_17", selectedEmpresaId, "areas", areaId),
-      );
-      console.log("Área eliminada de Firebase");
-    } catch (error) {
-      console.error("Error eliminando área en Firebase:", error);
-    }
-  };
-
-  const riskColor = getRiskColor(risk);
 
   const eppNames = {
     "/images/1.png": "Mandil de temperaturas",
@@ -1400,33 +1340,6 @@ const RiskAssessmentTable = () => {
   };
 
   useEffect(() => {
-    const loadEmpresas = async () => {
-      const companiesRef = collection(db, "Empresas_17");
-      const querySnapshot = await getDocs(companiesRef);
-      // Mapeas a { id, nombre, ... }
-      const companiesList = querySnapshot.docs.map((docItem) => ({
-        id: docItem.id,
-        ...docItem.data(),
-      }));
-      setEmpresas(companiesList);
-    };
-    loadEmpresas();
-  }, []);
-
-  // ==========================================================
-  // 2. Al seleccionar una empresa, guardar su ID y nombre y cargar sus áreas
-  // ==========================================================
-  const handleEmpresaChange = (e) => {
-    const selectedId = e.target.value;
-    setSelectedEmpresaId(selectedId);
-  
-    // Guarda el nombre visible de la empresa
-    const selected = empresas.find((emp) => emp.id === selectedId);
-    setEmpresaSeleccionada(selected ? selected.nombre : "");
-  };
-  
-
-  useEffect(() => {
     if (!selectedEmpresaId) return;
     const loadAreas = async () => {
       const empresaRef = doc(db, "Empresas_17", selectedEmpresaId);
@@ -1441,59 +1354,44 @@ const RiskAssessmentTable = () => {
     loadAreas();
   }, [selectedEmpresaId]);
 
+  useEffect(() => {
+    const loadCompanies = async () => {
+      try {
+        const companiesRef = collection(db, "Empresas_17");
+        const querySnapshot = await getDocs(companiesRef);
+        // Extraemos el campo "nombre" de cada documento
+        const companiesList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(), // doc.data().nombre, etc.
+        }));
+        setEmpresas(companiesList);
+      } catch (error) {
+        console.error("Error al cargar empresas desde Firebase:", error);
+      }
+    };
+
+    loadCompanies();
+  }, []);
+
+  const riskColor = getRiskColor(risk);
 
   const autoResizeTextarea = (e) => {
-  const textarea = e.target;
-  textarea.style.height = "auto"; // Reinicia la altura
-  textarea.style.height = `${textarea.scrollHeight}px`; // Ajusta a contenido
-};
-
-useEffect(() => {
-  const storedData = JSON.parse(localStorage.getItem("tableToEdit"));
-
-  if (storedData) {
-    localStorage.setItem("empresaPersistente", storedData.nombreEmpresa || "");
-    localStorage.setItem("empresaIdPersistente", storedData.empresaId || "");
-    localStorage.setItem("areaPersistente", storedData.areaSeleccionada || "");
-    localStorage.setItem("puestosPersistentes", JSON.stringify(storedData.puestos || []));
-  }
-}, []);
-
-
-
-useEffect(() => {
-  const empresa = localStorage.getItem("empresaPersistente");
-  const empresaId = localStorage.getItem("empresaIdPersistente");
-  const area = localStorage.getItem("areaPersistente");
-  const puestosGuardados = JSON.parse(localStorage.getItem("puestosPersistentes") || "[]");
-
-  if (empresa && empresaId) {
-    setEmpresaSeleccionada(empresa);
-    setSelectedEmpresaId(empresaId);
-  }
-
-  if (area) {
-    setAreaSeleccionada(area);
-  }
-
-  if (puestosGuardados.length > 0) {
-    setPuestos(puestosGuardados);
-  }
-}, []);
-
-
-
-useEffect(() => {
-  localStorage.setItem("empresaPersistente", empresaSeleccionada);
-  localStorage.setItem("empresaIdPersistente", selectedEmpresaId);
-  localStorage.setItem("areaPersistente", areaSeleccionada);
-  localStorage.setItem("puestosPersistentes", JSON.stringify(puestos));
-}, [empresaSeleccionada, selectedEmpresaId, areaSeleccionada, puestos]);
-
-
+    const textarea = e.target;
+    textarea.style.height = "auto"; // Reinicia la altura
+    textarea.style.height = `${textarea.scrollHeight}px`; // Ajusta a contenido
+  };
+  
 
   return (
     <div class="main-table">
+      {/* Botón para regresar a la pantalla de registros (por ejemplo: /savedTables) */}
+      <button
+  onClick={() => navigate("/savedTables")}
+  className="btn-exit-editor hidden-during-capture"
+>
+  ← Volver a los Registros
+</button>
+
       <table
         class="custom-table"
         className="table-container"
@@ -1529,60 +1427,43 @@ useEffect(() => {
                 </div>
               ) : (
                 <div className="logo-upload-container">
-  {logoSeleccionado ? (
-    <div className="logo-container">
-      <img
-        src={logoSeleccionado}
-        alt="Logo de la Empresa"
-        className="company-logo"
-      />
-      <button onClick={() => setLogoSeleccionado(null)} className="remove-logo-button">
-        ×
-      </button>
-    </div>
-  ) : (
-    <>
-      <select onChange={(e) => setLogoSeleccionado(e.target.value)} className="logo-dropdown">
-        <option value="">Selecciona una empresa</option>
-        {logos.map((logo, index) => (
-          <option key={index} value={logo.url}>
-            {logo.nombre}
-          </option>
-        ))}
-      </select>
-      <label htmlFor="upload-logo" className="upload-button">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="black"
-          className="upload-icon"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3 16.5V19a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 19v-2.5M16.5 12l-4.5-4.5m0 0L7.5 12m4.5-4.5V19"
-          />
-        </svg>
-      </label>
-      <input
-        type="file"
-        id="upload-logo"
-        accept="image/*"
-        style={{ display: "none" }}
-        onChange={(e) => {
-          const file = e.target.files[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.onload = () => setLogoSeleccionado(reader.result);
-          reader.readAsDataURL(file);
-        }}
-      />
-    </>
-  )}
-</div>
+                  <select
+                      value={logoSeleccionado || ""}
+                      onChange={handleLogoChange}
+                      className="logo-dropdown"
+                    >
+                      <option value="">Selecciona una empresa</option>
+                      {logos.map((logo, index) => (
+                        <option key={index} value={logo.url}>
+                          {logo.nombre}
+                        </option>
+                      ))}
+                    </select>
 
+                  <label htmlFor="upload-logo" className="upload-button">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="black"
+                      className="upload-icon"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M3 16.5V19a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 19v-2.5M16.5 12l-4.5-4.5m0 0L7.5 12m4.5-4.5V19"
+                      />
+                    </svg>
+                  </label>
+                  <input
+                    type="file"
+                    id="upload-logo"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={handleCustomLogoUpload}
+                  />
+                </div>
               )}
             </td>
           </tr>
@@ -1631,126 +1512,119 @@ useEffect(() => {
           </Modal>
 
           <Modal
-  isOpen={isFolderModalOpen}
-  onRequestClose={closeFolderModal}
-  contentLabel="Seleccionar Empresa y Norma"
-  className="folder-modal"
-  overlayClassName="folder-modal-overlay"
->
-  {/* VISTA 1: Seleccionar empresa */}
-  {!showNormasSection && (
-    <>
-      <h2>Selecciona una Empresa</h2>
-      <div className="folder-selection">
-        <h3>Empresas Existentes:</h3>
-        {folders.length > 0 ? (
-          <ul>
-            {folders.map((empresa) => (
-              <li key={empresa.id}>
-                <label>
-                  <input
-                    type="radio"
-                    name="selectedEmpresa"
-                    value={empresa.id}
-                    checked={empresaEnSeleccion === empresa.id}
-                    onChange={() => setEmpresaEnSeleccion(empresa.id)}
-                  />
-                  {empresa.nombre}
-                </label>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No hay empresas existentes.</p>
-        )}
-      </div>
-      <div className="modal-buttons">
-        <button
-          onClick={() => {
-            if (empresaEnSeleccion) {
-              setShowNormasSection(true);
-              loadNormas(empresaEnSeleccion); // ⬅ cargar normas aquí
-            } else {
-              alert("Por favor, selecciona una empresa.");
-            }
-          }}
-          className="next-button"
-        >
-          Siguiente
-        </button>
-        <button onClick={closeFolderModal} className="cancel-button">
-          Cancelar
-        </button>
-      </div>
-    </>
-  )}
+            isOpen={isFolderModalOpen}
+            onRequestClose={closeFolderModal}
+            contentLabel="Seleccionar Empresa y Norma"
+            className="folder-modal"
+            overlayClassName="folder-modal-overlay"
+          >
+            {/* Si aún no se ha seleccionado la empresa, mostramos la lista de empresas */}
+            {!selectedEmpresaId && (
+              <>
+                <h2>Selecciona una Empresa</h2>
+                <div className="folder-selection">
+                  <h3>Empresas Existentes:</h3>
+                  {folders.length > 0 ? (
+                    <ul>
+                      {folders.map((empresa) => (
+                        <li key={empresa.id}>
+                          <label>
+                            <input
+                              type="radio"
+                              name="selectedEmpresa"
+                              value={empresa.id}
+                              checked={selectedEmpresaId === empresa.id}
+                              onChange={() => handleSelectEmpresa(empresa.id)}
+                            />
+                            {empresa.nombre}
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No hay empresas existentes.</p>
+                  )}
+                </div>
+                <div className="modal-buttons">
+                  <button
+                    onClick={() => {
+                      if (selectedEmpresaId) {
+                        // Se cargan las normas, ya se hizo en handleSelectEmpresa
+                        // Ahora el modal cambiará a mostrar la lista de normas
+                      } else {
+                        alert("Por favor, selecciona una empresa.");
+                      }
+                    }}
+                    className="next-button"
+                  >
+                    Siguiente
+                  </button>
+                  <button onClick={closeFolderModal} className="cancel-button">
+                    Cancelar
+                  </button>
+                </div>
+              </>
+            )}
 
-  {/* VISTA 2: Seleccionar norma */}
-  {showNormasSection && (
-    <>
-      <h2>Selecciona una Norma</h2>
-      <div className="folder-selection">
-        <h3>Normas Existentes:</h3>
-        {normas.length > 0 ? (
-          <ul>
-            {normas.map((norma) => (
-              <li key={norma.id}>
-                <label>
-                  <input
-                    type="radio"
-                    name="selectedNorma"
-                    value={norma.id}
-                    checked={selectedNormaId === norma.id}
-                    onChange={() => handleSelectNorma(norma.id)}
-                  />
-                  {norma.nombre}
-                </label>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No hay normas existentes para esta empresa.</p>
-        )}
-      </div>
-      <div className="modal-buttons">
-        <button
-          onClick={() => {
-            if (selectedNormaId) {
-              // Guarda tabla
-              if (isEditing) {
-                updateTable(empresaEnSeleccion, selectedNormaId);
-              } else {
-                saveTable(empresaEnSeleccion, selectedNormaId);
-              }
-          
-              //  Cierra solo el modal, no reseta estados
-              setIsFolderModalOpen(false);
-              //  NO llames a setEmpresaSeleccionada("") ni setShowNormasSection(false)
-            } else {
-              alert("Por favor, selecciona una norma.");
-            }
-          }}
-          
-          className="confirm-button"
-        >
-          Confirmar
-        </button>
-        <button
-          onClick={() => {
-            setShowNormasSection(false);
-            setEmpresaEnSeleccion("");
-            setSelectedNormaId("");
-          }}
-          className="back-button"
-        >
-          Volver a Empresas
-        </button>
-      </div>
-    </>
-  )}
-</Modal>
-
-
+            {/* Si se ha seleccionado una empresa, mostramos la lista de normas para esa empresa */}
+            {selectedEmpresaId && (
+              <>
+                <h2>Selecciona una Norma</h2>
+                <div className="folder-selection">
+                  <h3>Normas Existentes:</h3>
+                  {normas.length > 0 ? (
+                    <ul>
+                      {normas.map((norma) => (
+                        <li key={norma.id}>
+                          <label>
+                            <input
+                              type="radio"
+                              name="selectedNorma"
+                              value={norma.id}
+                              checked={selectedNormaId === norma.id}
+                              onChange={() => handleSelectNorma(norma.id)}
+                            />
+                            {norma.nombre}
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No hay normas existentes para esta empresa.</p>
+                  )}
+                </div>
+                <div className="modal-buttons">
+                  <button
+                    onClick={() => {
+                      if (selectedNormaId) {
+                        // Llamamos a la función de guardado o actualización usando ambos IDs
+                        if (isEditing) {
+                          updateTable(selectedEmpresaId, selectedNormaId);
+                        }
+                        closeFolderModal();
+                      } else {
+                        alert("Por favor, selecciona una norma.");
+                      }
+                    }}
+                    className="confirm-button"
+                  >
+                    Confirmar
+                  </button>
+                  <button
+                    onClick={() => {
+                      // Permite volver atrás para elegir otra empresa
+                      setSelectedEmpresaId("");
+                      setSelectedNormaId("");
+                      setNormas([]);
+                    }}
+                    className="back-button"
+                  >
+                    Volver a Empresas
+                  </button>
+                </div>
+              </>
+            )}
+          </Modal>
 
           <tr>
             <td className="no-border-cell" colSpan="3">
@@ -1766,14 +1640,11 @@ useEffect(() => {
                   id="puesto"
                   value={puestoSeleccionado}
                   onChange={handlePuestoChange}
-                  className="select-puesto"
                 >
-                  <option value="" disabled>
-                    Seleccione un puesto
-                  </option>
-                  {puestos.map((puesto, index) => (
-                    <option key={index} value={puesto}>
-                      {puesto}
+                  <option value="">Seleccione un puesto</option>
+                  {puestos.map((p) => (
+                    <option key={p} value={p}>
+                      {p}
                     </option>
                   ))}
                 </select>
@@ -1795,7 +1666,7 @@ useEffect(() => {
                 </>
               )}
 
-              {/* Área de descripción de actividad */}
+             {/* Área de descripción de actividad */}
 <div className="contenedor-descripcion">
   <label
     htmlFor="descripcion-actividad"
@@ -1818,7 +1689,6 @@ useEffect(() => {
     style={{ resize: "none", overflow: "hidden" }}
   ></textarea>
 </div>
-
 
             </td>
 
@@ -1974,7 +1844,6 @@ useEffect(() => {
                         id="empresa"
                         value={selectedEmpresaId}
                         onChange={handleEmpresaChange}
-                        className="large-text-dropdown"
                       >
                         <option value="">Seleccione una empresa</option>
                         {empresas.map((empresa) => (
@@ -2014,13 +1883,14 @@ useEffect(() => {
                   <tr>
                     <td className="label-cell">Fecha de inspección:</td>
                     <td colSpan="2" className="input-cell">
-                      <input
-                        type="date"
-                        id="fechaInspeccion"
-                        value={fechaActual} // Establece la fecha actual como valor
-                        onChange={(e) => setFechaActual(e.target.value)} // Permite modificar la fecha manualmente
-                        className="date-input"
-                      />
+                    <input
+  type="date"
+  id="fechaInspeccion"
+  value={fecha}
+  onChange={(e) => setFecha(e.target.value)}
+  className="date-input"
+/>
+
                     </td>
                   </tr>
                   <tr>
@@ -2033,7 +1903,7 @@ useEffect(() => {
                         placeholder="Ingrese tiempo en horas (e.g., 8hrs)"
                         value={tiempoExposicion}
                         onChange={(e) => setTiempoExposicion(e.target.value)}
-                      />  
+                      />
                     </td>
                   </tr>
                   {/* ...y así sucesivamente */}
@@ -2048,7 +1918,7 @@ useEffect(() => {
             <td colSpan="3" className="left-section">
               <div className="text1">Identificación de peligros</div>
               <ul className="hazard-list">
-                {Object.keys(hazards).map((hazard) => (
+                {hazardOrder.map((hazard) => (
                   <li key={hazard} className="hazard-item">
                     <span>{hazard}</span>
                     <label className="hazard-checkbox">
@@ -2056,53 +1926,13 @@ useEffect(() => {
                         type="checkbox"
                         name={hazard}
                         checked={hazards[hazard]}
-                        onChange={handleCheckboxChange}
+                        onChange={handleCheckboxChange} // <-- Añade esta línea
                       />
                     </label>
                   </li>
                 ))}
               </ul>
             </td>
-
-            {/* Modal para borrar empresas */}
-            <Modal
-              isOpen={isEmpresaModalOpen}
-              onRequestClose={closeEmpresaModal}
-              className="modal-container"
-            >
-              <h2>Eliminar Empresas</h2>
-              <p>Selecciona las empresas que deseas eliminar:</p>
-              <div className="empresa-selection-list">
-                {empresas.length > 0 ? (
-                  empresas.map((empresa) => (
-                    <label key={empresa.id} className="checkbox-label">
-                      <input
-                        type="checkbox"
-                        value={empresa.id} // <-- Guardas el ID del doc
-                        checked={empresasSeleccionadasParaBorrar.includes(
-                          empresa.id,
-                        )}
-                        onChange={handleEmpresaSelectionChange}
-                      />
-                      {empresa.nombre} {/* Muestras el nombre de la empresa */}
-                    </label>
-                  ))
-                ) : (
-                  <p>No hay empresas disponibles.</p>
-                )}
-              </div>
-              <div className="modal-buttons">
-                <button
-                  onClick={handleDeleteSelectedEmpresas}
-                  className="confirm-button"
-                >
-                  Confirmar Eliminación
-                </button>
-                <button onClick={closeEmpresaModal} className="cancel-button">
-                  Cancelar
-                </button>
-              </div>
-            </Modal>
 
             <td
               colSpan="2"
@@ -2319,10 +2149,8 @@ useEffect(() => {
                   )}
                 </div>
               </div>
-
             </td>
           </tr>
-
           <td colSpan={8}>
             <span></span>
             <textarea
@@ -2335,7 +2163,6 @@ useEffect(() => {
               onChange={(e) => setDescripcionActividad2(e.target.value)}
             ></textarea>
           </td>
-
           <tr>
             <td colSpan="7" className="right-aligned">
               <div className="banana-title">
@@ -2424,10 +2251,18 @@ useEffect(() => {
                     </td>
 
                     <td
-                      className={`blueberry-risk ${riskColor === "yellow" ? "yellow-bg" : ""}`}
-                      style={{ backgroundColor: riskColor }}
+                      style={{
+                        backgroundColor: getRiskColor(calculateRisk()),
+                        color:
+                          getRiskColor(calculateRisk()) === "yellow"
+                            ? "black"
+                            : "white",
+                        fontSize: "24px",
+                        fontWeight: "bold",
+                        textAlign: "center",
+                      }}
                     >
-                      {risk.toFixed(2)}
+                      {calculateRisk().toFixed(2)}
                     </td>
                   </tr>
                 </tbody>
@@ -2493,33 +2328,24 @@ useEffect(() => {
           </tr>
         </tbody>
       </table>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        {/* Botones que se mantienen a la izquierda */}
-        <div>
-          <button onClick={downloadImage} className="download-button">
-            Descargar PDF
-          </button>
-          <button onClick={openFolderModal} className="save-button">
-            Guardar Tabla
-          </button>
-          <button onClick={handleReset} className="reset-button">
-            Reiniciar Tabla
-          </button>
-        </div>
+      <div className="button-container">
+        <button onClick={downloadImage} className="download-button">
+          Descargar PDF
+        </button>
 
-        {/* Botones que se moverán a la derecha */}
-        <div style={{ marginLeft: "auto" }}>
-          <button onClick={handleAddEmpresa} className="btn-add-empresa">
-            Agregar Empresa
-          </button>
+        <button onClick={updateTable} className="save-button">
+          Actualizar Tabla
+        </button>
 
-          <button className="btn-extra" onClick={openEmpresaModal}>
-            Borrar Empresa
-          </button>
-        </div>
+        <button
+          onClick={handleReset}
+          className={`reset-button ${hideButtons ? "hidden-buttons" : ""}`}
+        >
+          Reiniciar Tabla
+        </button>
       </div>
     </div>
   );
 };
 
-export default RiskAssessmentTable;
+export default RiskAssessmentTableEditor;

@@ -100,7 +100,8 @@
   margin-top: 10px;
 }
 
-.btn-edit, .btn-delete {
+.btn-edit,
+.btn-delete {
   padding: 5px 10px;
   margin-left: 10px;
   border: none;
@@ -149,11 +150,125 @@
 
 /* Responsividad */
 @media (max-width: 768px) {
-  .folders-list, .saved-table {
+  .folders-list,
+  .saved-table {
     width: 95%;
   }
 
   .input-folder-name {
     width: 200px;
   }
+}
+
+.btn-back-main {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-back-main:hover {
+  background-color: #0056b3;
+}
+
+/* Contenedor del botón hamburger y menú */
+.hamburger-menu-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 999;
+}
+
+/* Botón hamburger (3 líneas) */
+.hamburger-btn {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+/* Menú de filtros con animación */
+.filter-container {
+  position: absolute; /* relativo a .hamburger-menu-container */
+  top: 40px; /* debajo del botón a 40px */
+  right: 0; /* se alinea a la derecha */
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column; /* Forzar que los elementos estén en columna */
+  gap: 10px;
+  align-items: flex-start; /* Alinear el contenido a la izquierda */
+
+  /* Ancho mínimo para evitar que se aplaste */
+  min-width: 180px;
+  width: auto;
+
+  /* Animaciones */
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+/* Estado "mostrado": se ve y se puede interactuar */
+.filter-container.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Etiquetas y selects */
+.filter-container label {
+  font-weight: bold;
+  margin: 0;
+}
+
+.filter-container select {
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  width: 100%; /* Hacer que el select ocupe el ancho disponible */
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  margin: 0 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  margin: 0 10px;
+  font-weight: bold;
 }

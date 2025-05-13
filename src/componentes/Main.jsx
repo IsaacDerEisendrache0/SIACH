@@ -1,8 +1,8 @@
 // src/componentes/Main.jsx
-import React from 'react';
-import { getAuth, signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-import LogoutButton from './LogoutButton';
+import React from "react";
+import { getAuth, signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import LogoutButton from "./LogoutButton";
 
 function Main() {
   const auth = getAuth();
@@ -11,10 +11,10 @@ function Main() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      console.log('Sesión cerrada correctamente');
-      navigate('/login', { replace: true }); // Asegura que navega al login y no se pueda regresar con el botón de atrás
+      console.log("Sesión cerrada correctamente");
+      navigate("/login", { replace: true }); // Asegura que navega al login y no se pueda regresar con el botón de atrás
     } catch (err) {
-      console.error('Error al cerrar sesión:', err);
+      console.error("Error al cerrar sesión:", err);
     }
   };
 

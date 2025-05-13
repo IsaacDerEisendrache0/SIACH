@@ -1,6 +1,6 @@
 /* Estilo general para el contenedor */
 .norma-noms-container {
-  font-family: 'Roboto', Arial, sans-serif;
+  font-family: "Roboto", Arial, sans-serif;
   margin: 0 auto;
   padding: 40px;
   max-width: 800px;
@@ -47,7 +47,9 @@
   border-radius: 8px;
   background-color: #f8f9fa;
   font-size: 16px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
   color: #202124;
 }
 
@@ -75,7 +77,9 @@
   font-weight: 500;
   color: #ffffff;
   background-color: #1a73e8;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .buttons button:hover {
