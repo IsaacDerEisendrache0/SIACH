@@ -18,8 +18,13 @@ const RiskTable = () => {
     const savedAreas = JSON.parse(localStorage.getItem("areas")) || [];
     setAreas(savedAreas.filter((area) => area && area.nombre));
 
+   
+
     const savedPuestos = JSON.parse(localStorage.getItem("puestos")) || [];
     setPuestos(savedPuestos.filter((puesto) => puesto && puesto.nombre));
+
+    
+
   }, []);
 
   /**ome pongo a escribir para que piensen que estoy trabajando alv, por que is no m eregañan a la chingada

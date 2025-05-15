@@ -9,28 +9,14 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-
-  // Actualiza las variables CSS según la posición del cursor
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      const x = e.clientX / window.innerWidth;
-      const y = e.clientY / window.innerHeight;
-      // Actualiza las variables CSS en el root del documento
-      document.documentElement.style.setProperty("--bg-x", `${x * 100}%`);
-      document.documentElement.style.setProperty("--bg-y", `${y * 100}%`);
-    };
-
-    document.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
+    
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -52,49 +38,70 @@ function Login() {
       navigate("/");
     } catch (err) {
       console.error("Error de inicio de sesión:", err);
-      setError("Credenciales incorrectas o error en el inicio de sesión");
+      setError("Credenciales incorrectas. Por favor, intente nuevamente.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="login-container">
-      <video autoPlay muted loop className="video-background">
-        <source src="/videos/72544-543388333_small.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-      <main className="form-signin text-center">
+      <div className="login-background-overlay"></div>
+      <main className="login-form">
+        <div className="login-header">
+          <img src="/images/industrial-logo.png" alt="" className="login-logo" />
+        
+         
+        </div>
+        
         <form onSubmit={handleSubmit}>
-          <h1 className="h3 mb-3 fw-normal">LOGIN</h1>
-          <div className="form-floating mb-3">
+          {error && <div className="login-error">{error}</div>}
+          
+          <div className="form-group">
+            <label htmlFor="email">Correo Electrónico</label>
             <input
               type="email"
-              className="form-control"
-              id="floatingInput"
-              placeholder="name@example.com"
+              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              placeholder="usuario@empresa.com"
             />
-            <label htmlFor="floatingInput">Email</label>
+            <span className="input-icon">
+              <i className="fas fa-envelope"></i>
+            </span>
           </div>
-          <div className="form-floating mb-3">
+          
+          <div className="form-group">
+            <label htmlFor="password">Contraseña</label>
             <input
               type="password"
-              className="form-control"
-              id="floatingPassword"
-              placeholder="Contraseña"
+              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              placeholder="••••••••"
             />
-            <label htmlFor="floatingPassword">Contraseña</label>
+            <span className="input-icon">
+              <i className="fas fa-lock"></i>
+            </span>
           </div>
-          <button className="w-100 btn btn-lg mt-3" type="submit">
-            Iniciar Sesión
+          
+          <button type="submit" className="login-button" disabled={isLoading}>
+            {isLoading ? (
+              <span className="spinner"></span>
+            ) : (
+              "INICIAR SESIÓN"
+            )}
           </button>
-          {error && <p className="text-danger mt-3">{error}</p>}
-          <p className="mt-5 mb-3 text-muted">&copy; 2023</p>
+          
+          <div className="login-footer">
+            <span className="divider">|</span>
+            
+          </div>
         </form>
+        
+        
       </main>
     </div>
   );

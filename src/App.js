@@ -222,56 +222,55 @@ function Dashboard() {
         <header className="header">
           <div className="header-right">
             <div
-              className="profile-section"
-              onClick={toggleMenu}
-              style={{
-                cursor: "pointer",
-                position: "relative",
-                display: "flex",
-                alignItems: "center",
-                padding: "12px",
-                borderRadius: "12px",
-                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.15)",
-                backgroundColor: "#fff",
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-              }}
-            >
-              <img
-                src={profileImage}
-                alt="User Avatar"
-                className="profile-pic"
-                style={{
-                  width: "55px",
-                  height: "55px",
-                  borderRadius: "50%",
-                  marginRight: "12px",
-                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                }}
-                onClick={(e) => {
-                  e.stopPropagation(); // Evita que se active toggleMenu
-                  openModal(); // Abre el modal al hacer clic en la imagen
-                }}
-              />
-              <div
-                className="profile-details"
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <p
-                  className="user-email"
-                  style={{
-                    margin: 0,
-                    fontSize: "15px",
-                    color: "#333",
-                    fontWeight: 500,
-                  }}
-                >
-                  {userEmail || "Cargando correo..."}
-                </p>
-              </div>
+  className="profile-section"
+  onClick={toggleMenu}
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    padding: "10px 16px",
+    borderRadius: "12px",
+    backgroundColor: "#fff",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+    cursor: "pointer",
+    maxWidth: "260px",
+    transition: "box-shadow 0.3s",
+  }}
+>
+  <img
+    src={profileImage}
+    alt="Foto de perfil"
+    onError={(e) => (e.target.src = "https://via.placeholder.com/60")}
+    style={{
+      width: "60px",
+      height: "60px",
+      borderRadius: "50%",
+      objectFit: "cover",
+      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+    }}
+    onClick={(e) => {
+      e.stopPropagation();
+      openModal();
+    }}
+  />
 
+  <div style={{ flex: 1 }}>
+    <p
+  style={{
+    margin: 0,
+    fontSize: "15px",
+    fontWeight: 500,
+    color: "#2d3748",
+    whiteSpace: "nowrap",        // <- fuerza a mantenerse en una sola línea
+    overflowWrap: "normal",      // <- evita cortes inusuales
+    maxWidth: "160px",           // <- opcional: para evitar que se desborde mucho
+    overflow: "hidden",          // <- oculta exceso si es muy largo
+    textOverflow: "ellipsis",    // <- muestra "..." si se corta
+  }}
+>
+  {userEmail || "Cargando..."}
+</p>
+  </div>
               {isMenuOpen && (
                 <div
                   className="custom-dropdown"
@@ -289,144 +288,164 @@ function Dashboard() {
                   }}
                 >
                   {/* Botón Inicio */}
-                  <button
-                    className="dropdown-item"
-                    style={{
-                      display: "block",
-                      margin: "8px 0",
-                      width: "100%",
-                      padding: "12px 15px",
-                      textAlign: "left",
-                      backgroundColor: "transparent",
-                      border: "none",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                      fontSize: "14px",
-                      color: "#212529",
-                      fontWeight: 500,
-                      transition:
-                        "background-color 0.3s ease, transform 0.2s ease",
-                    }}
-                    onMouseOver={(e) => {
-                      e.target.style.backgroundColor = "#007bff";
-                      e.target.style.color = "#fff";
-                    }}
-                    onMouseOut={(e) => {
-                      e.target.style.backgroundColor = "transparent";
-                      e.target.style.color = "#212529";
-                    }}
-                    onClick={() => navigate("/")}
-                  >
-                    Inicio
-                  </button>
+<button
+  className="dropdown-item"
+  style={{
+    display: "flex",
+    alignItems: "center",
+    margin: "6px 0",
+    width: "100%",
+    padding: "10px 16px",
+    textAlign: "left",
+    backgroundColor: "transparent",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontSize: "14px",
+    color: "#2d3748",
+    fontWeight: 500,
+    transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+    boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+  }}
+  onMouseOver={(e) => {
+    e.target.style.backgroundColor = "#ebf4ff";
+    e.target.style.color = "#2b6cb0";
+    e.target.style.boxShadow = "0 1px 3px 0 rgba(0, 0, 0, 0.1)";
+  }}
+  onMouseOut={(e) => {
+    e.target.style.backgroundColor = "transparent";
+    e.target.style.color = "#2d3748";
+    e.target.style.boxShadow = "0 1px 2px 0 rgba(0, 0, 0, 0.05)";
+  }}
+  onClick={() => navigate("/")}
+>
+  <svg style={{ width: "18px", height: "18px", marginRight: "10px" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+  </svg>
+  Inicio
+</button>
 
-                  {/* Botón Cerrar Sesión */}
-                  <button
-                    className="dropdown-item"
-                    style={{
-                      display: "block",
-                      margin: "8px 0",
-                      width: "100%",
-                      padding: "12px 15px",
-                      textAlign: "left",
-                      backgroundColor: "transparent",
-                      border: "none",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                      fontSize: "14px",
-                      color: "#212529",
-                      fontWeight: 500,
-                      transition:
-                        "background-color 0.3s ease, transform 0.2s ease",
-                    }}
-                    onMouseOver={(e) => {
-                      e.target.style.backgroundColor = "#007bff";
-                      e.target.style.color = "#fff";
-                    }}
-                    onMouseOut={(e) => {
-                      e.target.style.backgroundColor = "transparent";
-                      e.target.style.color = "#212529";
-                    }}
-                    onClick={handleLogout}
-                  >
-                    Cerrar sesión
-                  </button>
+{/* Botón Cerrar Sesión */}
+<button
+  className="dropdown-item"
+  style={{
+    display: "flex",
+    alignItems: "center",
+    margin: "6px 0",
+    width: "100%",
+    padding: "10px 16px",
+    textAlign: "left",
+    backgroundColor: "transparent",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontSize: "14px",
+    color: "#2d3748",
+    fontWeight: 500,
+    transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+    boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+  }}
+  onMouseOver={(e) => {
+    e.target.style.backgroundColor = "#fff5f5";
+    e.target.style.color = "#c53030";
+    e.target.style.boxShadow = "0 1px 3px 0 rgba(0, 0, 0, 0.1)";
+  }}
+  onMouseOut={(e) => {
+    e.target.style.backgroundColor = "transparent";
+    e.target.style.color = "#2d3748";
+    e.target.style.boxShadow = "0 1px 2px 0 rgba(0, 0, 0, 0.05)";
+  }}
+  onClick={handleLogout}
+>
+  <svg style={{ width: "18px", height: "18px", marginRight: "10px" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+  </svg>
+  Cerrar sesión
+</button>
 
-                  {/* Botón Agregar Imagen */}
-                  <button
-                    className="dropdown-item"
-                    style={{
-                      display: "block",
-                      margin: "8px 0",
-                      width: "100%",
-                      padding: "12px 15px",
-                      textAlign: "left",
-                      backgroundColor: "transparent",
-                      border: "none",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                      fontSize: "14px",
-                      color: "#212529",
-                      fontWeight: 500,
-                      transition:
-                        "background-color 0.3s ease, transform 0.2s ease",
-                    }}
-                    onMouseOver={(e) => {
-                      e.target.style.backgroundColor =
-                        "#28a745"; /* Fondo verde */
-                      e.target.style.color = "#fff"; /* Texto blanco */
-                    }}
-                    onMouseOut={(e) => {
-                      e.target.style.backgroundColor = "transparent";
-                      e.target.style.color = "#212529";
-                    }}
-                    onClick={() => document.getElementById("fileInput").click()}
-                  >
-                    Agregar Imagen
-                  </button>
+{/* Botón Agregar Imagen */}
+<button
+  className="dropdown-item"
+  style={{
+    display: "flex",
+    alignItems: "center",
+    margin: "6px 0",
+    width: "100%",
+    padding: "10px 16px",
+    textAlign: "left",
+    backgroundColor: "transparent",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontSize: "14px",
+    color: "#2d3748",
+    fontWeight: 500,
+    transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+    boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+  }}
+  onMouseOver={(e) => {
+    e.target.style.backgroundColor = "#f0fff4";
+    e.target.style.color = "#2f855a";
+    e.target.style.boxShadow = "0 1px 3px 0 rgba(0, 0, 0, 0.1)";
+  }}
+  onMouseOut={(e) => {
+    e.target.style.backgroundColor = "transparent";
+    e.target.style.color = "#2d3748";
+    e.target.style.boxShadow = "0 1px 2px 0 rgba(0, 0, 0, 0.05)";
+  }}
+  onClick={() => document.getElementById("fileInput").click()}
+>
+  <svg style={{ width: "18px", height: "18px", marginRight: "10px" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+  </svg>
+  Agregar Imagen
+</button>
 
-                  {/* Botón Eliminar Imagen */}
-                  <button
-                    className="dropdown-item"
-                    style={{
-                      display: "block",
-                      margin: "8px 0",
-                      width: "100%",
-                      padding: "12px 15px",
-                      textAlign: "left",
-                      backgroundColor: "transparent",
-                      border: "none",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                      fontSize: "14px",
-                      color: "#212529",
-                      fontWeight: 500,
-                      transition:
-                        "background-color 0.3s ease, transform 0.2s ease",
-                    }}
-                    onMouseOver={(e) => {
-                      e.target.style.backgroundColor =
-                        "#dc3545"; /* Fondo rojo */
-                      e.target.style.color = "#fff"; /* Texto blanco */
-                    }}
-                    onMouseOut={(e) => {
-                      e.target.style.backgroundColor = "transparent";
-                      e.target.style.color = "#212529";
-                    }}
-                    onClick={() =>
-                      setProfileImage("https://via.placeholder.com/100")
-                    }
-                  >
-                    Eliminar Imagen
-                  </button>
+{/* Botón Eliminar Imagen */}
+<button
+  className="dropdown-item"
+  style={{
+    display: "flex",
+    alignItems: "center",
+    margin: "6px 0",
+    width: "100%",
+    padding: "10px 16px",
+    textAlign: "left",
+    backgroundColor: "transparent",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontSize: "14px",
+    color: "#2d3748",
+    fontWeight: 500,
+    transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+    boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+  }}
+  onMouseOver={(e) => {
+    e.target.style.backgroundColor = "#fff5f5";
+    e.target.style.color = "#c53030";
+    e.target.style.boxShadow = "0 1px 3px 0 rgba(0, 0, 0, 0.1)";
+  }}
+  onMouseOut={(e) => {
+    e.target.style.backgroundColor = "transparent";
+    e.target.style.color = "#2d3748";
+    e.target.style.boxShadow = "0 1px 2px 0 rgba(0, 0, 0, 0.05)";
+  }}
+  onClick={() => setProfileImage("https://via.placeholder.com/100")}
+>
+  <svg style={{ width: "18px", height: "18px", marginRight: "10px" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+  </svg>
+  Eliminar Imagen
+</button>
 
-                  {/* Input oculto para cargar imagen */}
-                  <input
-                    type="file"
-                    id="fileInput"
-                    style={{ display: "none" }}
-                    onChange={handleImageChange}
-                  />
+{/* Input oculto para cargar imagen */}
+<input
+  type="file"
+  id="fileInput"
+  style={{ display: "none" }}
+  onChange={handleImageChange}
+/>
                 </div>
               )}
             </div>

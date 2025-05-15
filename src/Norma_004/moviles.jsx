@@ -25,8 +25,14 @@ const RiskTable = () => {
   const [poe, setPoe] = useState("");
   const [tiempoExposicion, setTiempoExposicion] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const [fechaInspeccion, setFechaInspeccion] = useState("");
+  const [fechaInspeccion, setFechaInspeccion] = useState(() => {
+  const hoy = new Date();
+  return hoy.toISOString().split("T")[0]; // formato: yyyy-mm-dd
+});
   const [puestos, setPuestos] = useState([]);
+  const [empresasLocales, setEmpresasLocales] = useState([]);
+  const [newEmpresa, setNewEmpresa] = useState("");
+  const [empresaAEliminar, setEmpresaAEliminar] = useState(null);
   const [newPuesto, setNewPuesto] = useState("");
   const [selectedPuestoToRemove, setSelectedPuestoToRemove] = useState("");
   const [tableId, setTableId] = useState(null);
@@ -376,6 +382,10 @@ const RiskTable = () => {
   useEffect(() => {
     const savedAreas = JSON.parse(localStorage.getItem("areas"));
     if (savedAreas) setAreas(savedAreas);
+    
+    const savedEmpresas = JSON.parse(localStorage.getItem("empresasLocales"));
+    if (savedEmpresas) setEmpresasLocales(savedEmpresas);
+
     const savedPuestos = JSON.parse(localStorage.getItem("puestos"));
     if (savedPuestos) setPuestos(savedPuestos);
 
@@ -550,18 +560,28 @@ const RiskTable = () => {
               <button onClick={handleRemoveLogo}>×</button>
             </div>
           ) : (
-            <select
-              value={empresaSeleccionada}
-              onChange={handleEmpresaChange}
-              className="dropdown-logo-04"
-            >
-              <option value="">Seleccione empresa</option>
-              {empresas.map((emp, idx) => (
-                <option key={idx} value={emp.nombre}>
-                  {emp.nombre}
-                </option>
-              ))}
-            </select>
+<select
+  value={empresaSeleccionada}
+  onChange={handleEmpresaChange}
+  className="dropdown-empresa"
+>
+  <option value="">Seleccione una empresa</option>
+
+  {/* Empresas agregadas por el usuario */}
+  {empresasLocales.map((emp, index) => (
+    <option key={`local-${index}`} value={emp.nombre}>
+      {emp.nombre}
+    </option>
+  ))}
+
+  {/* Empresas predefinidas */}
+  {empresas.map((emp, index) => (
+    <option key={`fija-${index}`} value={emp.nombre}>
+      {emp.nombre}
+    </option>
+  ))}
+</select>
+
           )}
         </div>
       </div>
@@ -589,30 +609,59 @@ const RiskTable = () => {
         style={{ width: "100%" }}
       />
     </td>
-    <td>
-      <select
-        name="areas"
-        value={area}
-        onChange={(e) => setArea(e.target.value)}
-        className="dropdown-areas"
+   <td>
+  <div style={{ display: "flex", flexDirection: "column" }}>
+    <select
+      name="areas"
+      value={area}
+      onChange={(e) => setArea(e.target.value)}
+      className="dropdown-areas"
+    >
+      <option value="">Seleccione un área</option>
+      {areas.map((ar, index) => (
+        <option key={index} value={ar.nombre}>
+          {ar.nombre}
+        </option>
+      ))}
+    </select>
+    <div style={{ display: "flex", gap: "5px", marginTop: "5px" }}>
+      <button
+        type="button"
+        className="button-small"
+        onClick={() => openModal("Agregar")}
+        title="Agregar área"
       >
-        <option value="">Seleccione un área</option>
-        {areas.map((ar, index) => (
-          <option key={index} value={ar.nombre}>
-            {ar.nombre}
-          </option>
-        ))}
-      </select>
-    </td>
+        ➕
+      </button>
+      <button
+        type="button"
+        className="button-small"
+        onClick={() => openModal("Eliminar")}
+        title="Eliminar área"
+      >
+        🗑️
+      </button>
+    </div>
+  </div>
+</td>
     <td>
-      <select
+     <select
         value={empresaSeleccionada}
         onChange={handleEmpresaChange}
         className="dropdown-empresa"
       >
         <option value="">Seleccione una empresa</option>
+
+        {/* Empresas agregadas manualmente */}
+        {empresasLocales.map((emp, index) => (
+          <option key={`local-${index}`} value={emp.nombre}>
+            {emp.nombre}
+          </option>
+        ))}
+
+        {/* Empresas predefinidas */}
         {empresas.map((emp, index) => (
-          <option key={index} value={emp.nombre}>
+          <option key={`fija-${index}`} value={emp.nombre}>
             {emp.nombre}
           </option>
         ))}
@@ -987,102 +1036,157 @@ const RiskTable = () => {
       )}
 
       <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="Área Modal"
-        ariaHideApp={false}
-        style={{
-          content: {
-            top: "50%",
-            left: "50%",
-            right: "auto",
-            bottom: "auto",
-            marginRight: "-50%",
-            transform: "translate(-50%, -50%)",
-          },
-        }}
-      >
-        <h2>{modalAction} Área</h2>
-        <div>
-          {modalAction === "Agregar" && (
-            <div>
-              <input
-                type="text"
-                placeholder="Nombre del área"
-                value={newArea}
-                onChange={(e) => setNewArea(e.target.value)}
-                style={{ marginBottom: "10px", width: "100%" }}
-              />
-              <button onClick={handleAddArea}>Confirmar Agregar Área</button>
-            </div>
-          )}
-          {modalAction === "Eliminar" && (
-            <div>
-              <select
-                value={selectedAreaToRemove?.nombre || ""}
-                onChange={(e) =>
-                  setSelectedAreaToRemove(
-                    areas.find((ar) => ar.nombre === e.target.value),
-                  )
-                }
-                style={{ marginBottom: "10px", width: "100%" }}
-              >
-                <option value="">Seleccione un área para eliminar</option>
-                {areas.map((ar, idx) => (
-                  <option key={idx} value={ar.nombre}>
-                    {ar.nombre}
-                  </option>
-                ))}
-              </select>
-              <button onClick={handleRemoveArea}>
-                Confirmar Eliminar Área
-              </button>
-            </div>
-          )}
-          <div style={{ marginTop: "20px" }}>
-            <h2>Puestos</h2>
-            <input
-              type="text"
-              placeholder="Nombre del puesto"
-              value={newPuesto}
-              onChange={(e) => setNewPuesto(e.target.value)}
-              style={{ marginBottom: "10px", width: "100%" }}
-            />
-            <button onClick={handleAddPuesto} style={{ marginRight: "10px" }}>
-              Agregar Puesto
-            </button>
-            <select
-              value={selectedPuestoToRemove?.nombre || ""}
-              onChange={(e) =>
-                setSelectedPuestoToRemove(
-                  puestos.find((p) => p.nombre === e.target.value),
-                )
-              }
-              style={{ marginBottom: "10px", width: "100%" }}
-            >
-              <option value="">Seleccione un puesto para eliminar</option>
-              {puestos.map((p, idx) => (
-                <option key={idx} value={p.nombre}>
-                  {p.nombre}
-                </option>
-              ))}
-            </select>
-            <button onClick={handleRemovePuesto}>Eliminar Puesto</button>
-          </div>
-          <button onClick={closeModal} style={{ marginTop: "20px" }}>
-            Cancelar
-          </button>
-        </div>
-      </Modal>
+  isOpen={modalIsOpen}
+  onRequestClose={closeModal}
+  contentLabel="Área Modal"
+  ariaHideApp={false}
+  style={{
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      maxHeight: "90vh",
+      overflowY: "auto"
+    },
+  }}
+>
+  <h2>{modalAction} Área</h2>
+  {/* Sección: Agregar Área */}
+{modalAction === "Agregar" && (
+  <>
+    {/* Sección: Agregar Área */}
+    <div>
+      <h2></h2>
+      <input
+        type="text"
+        placeholder="Nombre del área"
+        value={newArea}
+        onChange={(e) => setNewArea(e.target.value)}
+        style={{ marginBottom: "10px", width: "100%" }}
+      />
+      <button onClick={handleAddArea}>Confirmar Agregar Área</button>
+    </div>
 
-      <div className="button-group" style={{ display: "flex", gap: "0" }}>
-        <button className="button-area" onClick={() => openModal("Agregar")}>
-          Agregar área
-        </button>
-        <button className="button-area" onClick={() => openModal("Eliminar")}>
-          Eliminar área
-        </button>
+    <hr />
+
+    {/* Sección: Agregar Empresa */}
+    <h2>Empresas</h2>
+    <input
+      type="text"
+      placeholder="Nombre de la empresa"
+      value={newEmpresa}
+      onChange={(e) => setNewEmpresa(e.target.value)}
+      style={{ marginBottom: "10px", width: "100%" }}
+    />
+    <button
+      onClick={() => {
+        if (newEmpresa.trim()) {
+          const nuevas = [...empresasLocales, { nombre: newEmpresa.trim() }];
+          setEmpresasLocales(nuevas);
+          localStorage.setItem("empresasLocales", JSON.stringify(nuevas));
+          setNewEmpresa("");
+        }
+      }}
+    >
+      Agregar Empresa
+    </button>
+
+    <hr />
+
+    {/* Sección: Agregar Puesto */}
+    <h2>Puestos</h2>
+    <input
+      type="text"
+      placeholder="Nombre del puesto"
+      value={newPuesto}
+      onChange={(e) => setNewPuesto(e.target.value)}
+      style={{ marginBottom: "10px", width: "100%" }}
+    />
+    <button onClick={handleAddPuesto}>Agregar Puesto</button>
+  </>
+)}
+
+  {/* Sección: Eliminar Área / Puesto / Empresa */}
+  {modalAction === "Eliminar" && (
+    <>
+      <div>
+        <h3></h3>
+        <select
+          value={selectedAreaToRemove?.nombre || ""}
+          onChange={(e) =>
+            setSelectedAreaToRemove(
+              areas.find((ar) => ar.nombre === e.target.value)
+            )
+          }
+          style={{ marginBottom: "10px", width: "100%" }}
+        >
+          <option value="">Seleccione un área para eliminar</option>
+          {areas.map((ar, idx) => (
+            <option key={idx} value={ar.nombre}>{ar.nombre}</option>
+          ))}
+        </select>
+        <button onClick={handleRemoveArea}>Eliminar Área</button>
       </div>
+
+      <hr />
+      <div>
+        <h3>Eliminar Puesto</h3>
+        <select
+          value={selectedPuestoToRemove?.nombre || ""}
+          onChange={(e) =>
+            setSelectedPuestoToRemove(
+              puestos.find((p) => p.nombre === e.target.value)
+            )
+          }
+          style={{ marginBottom: "10px", width: "100%" }}
+        >
+          <option value="">Seleccione un puesto para eliminar</option>
+          {puestos.map((p, idx) => (
+            <option key={idx} value={p.nombre}>{p.nombre}</option>
+          ))}
+        </select>
+        <button onClick={handleRemovePuesto}>Eliminar Puesto</button>
+      </div>
+
+      <hr />
+      <div>
+        <h3>Eliminar Empresa</h3>
+        <select
+          value={empresaAEliminar?.nombre || ""}
+          onChange={(e) =>
+            setEmpresaAEliminar(
+              empresasLocales.find((emp) => emp.nombre === e.target.value)
+            )
+          }
+          style={{ marginBottom: "10px", width: "100%" }}
+        >
+          <option value="">Seleccione una empresa para eliminar</option>
+          {empresasLocales.map((emp, idx) => (
+            <option key={idx} value={emp.nombre}>{emp.nombre}</option>
+          ))}
+        </select>
+        <button onClick={() => {
+          if (empresaAEliminar) {
+            const filtradas = empresasLocales.filter(
+              (e) => e.nombre !== empresaAEliminar.nombre
+            );
+            setEmpresasLocales(filtradas);
+            localStorage.setItem("empresasLocales", JSON.stringify(filtradas));
+            setEmpresaAEliminar(null);
+          }
+        }}>Eliminar Empresa</button>
+      </div>
+    </>
+  )}
+
+  <button onClick={closeModal} style={{ marginTop: "20px" }}>
+    Cancelar
+  </button>
+</Modal>
+
 
       <Modal
         isOpen={isFolderModalOpen}
