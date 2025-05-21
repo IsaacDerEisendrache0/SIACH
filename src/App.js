@@ -26,6 +26,20 @@ import HerramientasManuales from "./Norma_004/herramientasMan";
 import ResumenAccion from "./ResumenTabla/resumenAccion";
 import RiskAssessmentTableEditor from "./Norma_17/norma_17_editor"; // Editor nuevo
 
+console.log(`
+██ ███    ██  ██████         ██ ███████  █████   █████   ██████ 
+██ ████   ██ ██              ██ ██      ██   ██ ██   ██ ██      
+██ ██ ██  ██ ██   ███        ██ ███████ ███████ ███████ ██      
+██ ██  ██ ██ ██    ██        ██      ██ ██   ██ ██   ██ ██      
+██ ██   ████  ██████  ██     ██ ███████ ██   ██ ██   ██  ██████ 
+                                                                
+                                                                                                                                                                                                                      
+                                                                                                                                                            
+                                                                                                                
+  `);
+  
+
+
 function Dashboard() {
   const navigate = useNavigate();
   const [selectedNorma, setSelectedNorma] = useState(null);
