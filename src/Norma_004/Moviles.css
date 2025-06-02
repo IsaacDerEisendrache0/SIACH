@@ -493,6 +493,9 @@ body {
 }
 
 /* Botón de eliminación del logo */
+/* ... (todo tu CSS anterior) */
+
+/* Botón de eliminación del logo */
 .remove-logo-button-04 {
   background-color: red;
   color: white;
@@ -514,4 +517,25 @@ td[colspan="2"].logo-cell-04 {
   background: none !important;
   border: none !important;
   padding: 5px;
+}
+
+/* ✅ Ocultar botones durante captura con html2canvas */
+.risk-table-container.capturing .botones-no-imprimir {
+  display: none !important;
+}
+
+/* Ocultar todos los elementos que tengan la clase .ocultar-al-exportar */
+.risk-table-container.capturing .ocultar-al-exportar {
+  display: none !important;
+}
+/* ✅ Responsividad para tablas */
+.tabla-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tabla-responsive table {
+  width: 100%;
+  min-width: 1000px; /* Aumenta esto si tu tabla tiene muchas columnas */
+  border-collapse: collapse;
 }
