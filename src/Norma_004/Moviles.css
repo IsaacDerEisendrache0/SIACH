@@ -59,14 +59,17 @@
 
 .epp-images-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 5px;
+  grid-template-columns: repeat(2, 1fr); /* 2 columnas */
+  gap: 10px;
+  justify-items: center;
+  align-items: center;
   margin-top: 10px;
 }
 
+
 .epp-images-grid img {
-  width: 60px;
-  height: 60px;
+  width: 80px;   /* antes 60px */
+  height: 80px;  /* antes 60px */
   border-radius: var(--border-radius);
   padding: 2px;
   transition:
@@ -539,3 +542,57 @@ td[colspan="2"].logo-cell-04 {
   min-width: 1000px; /* Aumenta esto si tu tabla tiene muchas columnas */
   border-collapse: collapse;
 }
+
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+}
+
+
+.risk-score-cell {
+  font-weight: bold;
+  color: black !important; /* Asegura contraste en fondos claros como amarillo */
+}
+
+.red {
+  background-color: #909ba0;
+  color: white;
+  font-weight: bold;
+  text-align: left;
+  padding: 8px;
+}
+
+
+th.red {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  padding: 10px;
+  white-space: normal;
+}
+
+.image-section {
+  padding: 0;
+  margin: 0;
+  height: auto;
+}
+
+
+
+

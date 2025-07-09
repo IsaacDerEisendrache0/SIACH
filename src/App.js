@@ -515,7 +515,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [showInactivityMessage, setShowInactivityMessage] = useState(false); // Nuevo estado
   const navigate = useNavigate();
-  const INACTIVITY_LIMIT = 1800000; // 30 minutos
+  const INACTIVITY_LIMIT = 3600000; // 1 hora
 
   // Función para cerrar sesión por inactividad
   const handleLogout = useCallback(async () => {
@@ -600,19 +600,19 @@ function App() {
       )}
 
       <header className="App-header">
-        <Routes>
-          <Route path="/norma_17" element={<Norma17 />} />
-          <Route path="/norma_004" element={<Norma04 />} />
-          <Route path="/norma_030" element={<Norma030 />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/saved-tables" element={<SavedTables />} />
-          <Route path="/" element={<Dashboard />} />
-          <Route
-            path="/norma_17_editor"
-            element={<RiskAssessmentTableEditor />}
-          />
-          <Route path="/savedTables" element={<SavedTables />} />
-        </Routes>
+       <Routes>
+  <Route path="/norma_17" element={<Norma17 />} />
+  <Route path="/norma_004" element={<Norma04 />} />
+  <Route path="/norma_030" element={<Norma030 />} />
+  <Route path="/login" element={<Login />} />
+  <Route path="/saved-tables" element={<SavedTables />} />
+  <Route path="/" element={<Dashboard />} />
+  <Route path="/norma_17_editor" element={<RiskAssessmentTableEditor />} />
+  <Route path="/tabla_moviles" element={<Moviles />} />
+  <Route path="/tabla_maquinaria" element={<Maquinaria />} />
+  <Route path="/tabla_herramientas" element={<HerramientasManuales />} />
+</Routes>
+
       </header>
     </div>
   );

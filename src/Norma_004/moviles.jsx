@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Moviles.css";
 import html2canvas from "html2canvas";
+
+
 import {
   getDoc,
   setDoc,
@@ -10,6 +12,8 @@ import {
   updateDoc,
   getDocs,
   serverTimestamp,
+  query,          // 👈 AGREGAR
+  where,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
@@ -21,17 +25,54 @@ import Modal from "react-modal";
 const RiskTable = () => {
   const [nombreMaquinaria, setNombreMaquinaria] = useState("");
   const [logosGuardados, setLogosGuardados] = useState([]);
+  useEffect(() => {
+  const logosEnLocalStorage = localStorage.getItem("logosGuardados");
+  if (logosEnLocalStorage) {
+    setLogosGuardados(JSON.parse(logosEnLocalStorage));
+  }
+}, []);
+
+   const [mostrarOpcionesLogo, setMostrarOpcionesLogo] = useState(false);
   const [area, setArea] = useState("");
-  const [areas, setAreas] = useState([]);
   const [poe, setPoe] = useState("");
+  const [energiaUtilizada, setEnergiaUtilizada] = useState("");
   const [tiempoExposicion, setTiempoExposicion] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [fechaInspeccion, setFechaInspeccion] = useState(() => {
   const hoy = new Date();
   return hoy.toISOString().split("T")[0]; // formato: yyyy-mm-dd
+  
+  
+  
+  
 });
+
+
+
+const handleDeleteLogo = (nombre) => {
+  const confirmacion = window.confirm(`¿Eliminar el logo "${nombre}"?`);
+  if (confirmacion) {
+    const nuevos = logosGuardados.filter((logo) => logo.nombre !== nombre);
+    setLogosGuardados(nuevos);
+    localStorage.setItem("logosGuardados", JSON.stringify(nuevos));
+    if (empresaSeleccionada === nombre) {
+      setEmpresaSeleccionada("");
+      setLogoSeleccionado(null);
+    }
+  }
+};
+
+
   const [puestos, setPuestos] = useState([]);
   const [empresasLocales, setEmpresasLocales] = useState([]);
+  const [nuevaEmpresaNombre, setNuevaEmpresaNombre] = useState("");
+const [nuevaAreaNombre, setNuevaAreaNombre] = useState("");
+const [empresaSeleccionadaParaArea, setEmpresaSeleccionadaParaArea] = useState("");
+const [areasPorEmpresa, setAreasPorEmpresa] = useState(() => {
+  const data = localStorage.getItem("areasPorEmpresa");
+  return data ? JSON.parse(data) : {};
+});
+
   const [newEmpresa, setNewEmpresa] = useState("");
   const [empresaAEliminar, setEmpresaAEliminar] = useState(null);
   const [newPuesto, setNewPuesto] = useState("");
@@ -55,13 +96,40 @@ const RiskTable = () => {
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState("");
   const [newFolderName, setNewFolderName] = useState("");
+  const [empresasFirebase, setEmpresasFirebase] = useState([]);
+const [selectedEmpresaId, setSelectedEmpresaId] = useState("");
+const [normasFirebase, setNormasFirebase] = useState([]);
+const [selectedNormaId, setSelectedNormaId] = useState("");
+const [empresaSeleccionadaFirebase, setEmpresaSeleccionadaFirebase] = useState("");
+const showAgregarEmpresaYAreaModal = () => {
+  setModalAction("Agregar");
+  setShowModal(true);
+};
+
+
+const [opcionesIdentificacionesSeleccionadas, setOpcionesIdentificacionesSeleccionadas] = useState(Array(7).fill(""));
+const [sistemasSeguridadSeleccionados, setSistemasSeguridadSeleccionados] = useState(Array(7).fill(""));
+
+
+
+
 
   const empresas = [
-    { nombre: "Maxion", url: Maxion },
-    { nombre: "Safran", url: Safran },
-    { nombre: "OtraEmpresa", url: "" },
+    { nombre: "", url: Maxion },
+    { nombre: "", url: Safran },
+    { nombre: "", url: "" },
   ];
-  const [empresaSeleccionada, setEmpresaSeleccionada] = useState("");
+const [empresaSeleccionada, setEmpresaSeleccionada] = useState("");
+
+const areas = areasPorEmpresa[empresaSeleccionada] || [];
+const [empresaParaArea, setEmpresaParaArea] = useState("");
+const [showModal, setShowModal] = useState(false);
+
+
+
+
+
+
   const [logoSeleccionado, setLogoSeleccionado] = useState(null);
 
   const [bodyParts, setBodyParts] = useState({
@@ -112,7 +180,6 @@ const RiskTable = () => {
 
   const eppImagesList = [
     "/images/1.png",
-    "/images/2.png",
     "/images/3.png",
     "/images/4.png",
     "/images/5.png",
@@ -138,7 +205,6 @@ const RiskTable = () => {
 
   const eppNames = {
     "/images/1.png": "Ojos y Cara",
-    "/images/2.png": "Casco Dieléctrico",
     "/images/3.png": "Gafas con filtro UV",
     "/images/4.png": "Botas de seguridad",
     "/images/5.png": "Protección Auditiva",
@@ -181,7 +247,7 @@ const RiskTable = () => {
     "Paro de emergencia",
     "Sistema ANSUL",
     "Extintores",
-    "freno de emergencia",
+    "Freno de emergencia",
     "Bandas antiestática",
     "Sistema de anclaje",
     "Programa de mantenimiento",
@@ -315,10 +381,14 @@ const RiskTable = () => {
       setImage(imageUrl);
     }
   };
+// Ajusta todos los textareas para que muestren el contenido completo antes de capturar
+
 
   const downloadImage = () => {
   const container = document.querySelector(".risk-table-container");
   container.classList.add("capturing");
+
+
 
   setTimeout(() => {
     html2canvas(container, {
@@ -339,36 +409,39 @@ const RiskTable = () => {
   }, 100);
 };
 
+const handleReset = () => {
+  setNombreMaquinaria("");
+  setArea("");
+  setPoe("");
+  setTiempoExposicion("");
+  setDescripcion("");
+  setFechaInspeccion("");
+  setNewPuesto("");
+  setSelectedPuestoToRemove("");
+  setIsEditing(false);
+  setTableId(null);
+  setConsequence("Lesiones sin baja");
+  setExposure("Ocasionalmente");
+  setProbability("Coincidencia extremadamente remota pero concebible");
+  setImage(null);
+  setSelectedBodyImage(null); // ✅ esto limpia la imagen del cuerpo
+  setSelectedEPPImages([]);
+  setEmpresaSeleccionada("");
+  setLogoSeleccionado(null);
+  setBodyParts({
+    "Cabeza y Oídos": false,
+    "Ojos y Cara": false,
+    "Sistema respiratorio": false,
+    "Brazos y Manos": false,
+    Tronco: false,
+    "Extremidades inferiores": false,
+  });
 
-  const handleReset = () => {
-    setNombreMaquinaria("");
-    setArea("");
-    setPoe("");
-    setTiempoExposicion("");
-    setDescripcion("");
-    setFechaInspeccion("");
-    setNewPuesto("");
-    setSelectedPuestoToRemove("");
-    setIsEditing(false);
-    setTableId(null);
-    setConsequence("Lesiones sin baja");
-    setExposure("Ocasionalmente");
-    setProbability("Coincidencia extremadamente remota pero concebible");
-    setImage(null);
-    setSelectedBodyImage(null);
-    setSelectedEPPImages([]);
-    setEmpresaSeleccionada("");
-    setLogoSeleccionado(null);
-    setBodyParts({
-      "Cabeza y Oídos": false,
-      "Ojos y Cara": false,
-      "Sistema respiratorio": false,
-      "Brazos y Manos": false,
-      Tronco: false,
-      "Extremidades inferiores": false,
-    });
-  };
+  // ✅ limpia selects de identificación y seguridad
+setOpcionesIdentificacionesSeleccionadas(Array(7).fill(""));
+setSistemasSeguridadSeleccionados(Array(7).fill(""));
 
+};
   const openModal = (action) => {
     setModalAction(action);
     setModalIsOpen(true);
@@ -379,40 +452,55 @@ const RiskTable = () => {
   };
 
   useEffect(() => {
-    const savedAreas = JSON.parse(localStorage.getItem("areas"));
-    if (savedAreas) setAreas(savedAreas);
+  const empresasFromLS = JSON.parse(localStorage.getItem("empresasLocales")) || [];
+setEmpresasLocales(empresasFromLS);
+
+const areasFromLS = JSON.parse(localStorage.getItem("areasPorEmpresa")) || {};
+setAreasPorEmpresa(areasFromLS);
+
 
     
     
     const savedEmpresas = JSON.parse(localStorage.getItem("empresasLocales"));
     if (savedEmpresas) setEmpresasLocales(savedEmpresas);
 
-    const savedPuestos = JSON.parse(localStorage.getItem("puestos"));
-    if (savedPuestos) setPuestos(savedPuestos);
-
+ 
     const logosLocales = JSON.parse(localStorage.getItem("logosGuardados")) || [];
     setLogosGuardados(logosLocales);
 
 
-    const tableToEdit = JSON.parse(localStorage.getItem("tableToEdit"));
-    if (tableToEdit) {
-      setArea(tableToEdit.areaSeleccionada || "");
-      setConsequence(tableToEdit.consequence || "Lesiones sin baja");
-      setExposure(tableToEdit.exposure || "Ocasionalmente");
-      setProbability(
-        tableToEdit.probability ||
-          "Coincidencia extremadamente remota pero concebible",
-      );
-      setSelectedEPPImages(tableToEdit.selectedImages || []);
-      setDescripcion(tableToEdit.descripcionActividad || "");
-      setPoe(tableToEdit.selectedOptionEquipoUtilizado || "");
-      setTiempoExposicion(tableToEdit.tiempoExposicion || "");
-      setFechaInspeccion(tableToEdit.fecha || "");
-      setIsEditing(true);
-      localStorage.removeItem("tableToEdit");
-      setTableId(tableToEdit.id);
-      setIsEditing(true);
-    }
+ const tableToEdit = JSON.parse(localStorage.getItem("tableToEdit"));
+if (tableToEdit) {
+  setNombreMaquinaria(tableToEdit.nombreMaquinaria || "");
+  setArea(tableToEdit.area || "");
+  setEmpresaSeleccionada(tableToEdit.empresaSeleccionada || "");
+  setLogoSeleccionado(logosGuardados.find(logo => logo.nombre === tableToEdit.empresaSeleccionada)?.url || null);
+  setPoe(tableToEdit.poe || "");
+  setLogoSeleccionado(tableToEdit.logoSeleccionado || null); // ✅ recupera el logo elegido
+  setLogosGuardados(tableToEdit.logosGuardados || []);        // ✅ recupera la lista de logos (por si acaso)
+  setEnergiaUtilizada(tableToEdit.energiaUtilizada || "");
+  setTiempoExposicion(tableToEdit.tiempoExposicion || "");
+  setFechaInspeccion(tableToEdit.fechaInspeccion || "");
+  setDescripcion(tableToEdit.descripcion || "");
+
+  setConsequence(tableToEdit.consequence || "Lesiones sin baja");
+  setExposure(tableToEdit.exposure || "Ocasionalmente");
+  setProbability(tableToEdit.probability || "Coincidencia extremadamente remota pero concebible");
+
+  setImage(tableToEdit.image || null);
+  setSelectedBodyImage(tableToEdit.selectedBodyImage || null);
+  setSelectedEPPImages(tableToEdit.selectedEPPImages || []);
+  setBodyParts(tableToEdit.bodyParts || {});
+
+  setOpcionesIdentificacionesSeleccionadas(tableToEdit.opcionesIdentificacionesSeleccionadas || []);
+  setSistemasSeguridadSeleccionados(tableToEdit.sistemasSeguridadSeleccionados || []);
+
+  setIsEditing(true);
+  setTableId(tableToEdit.id);
+
+  localStorage.removeItem("tableToEdit");
+}
+
 
     const loadFolders = async () => {
       const q = await getDocs(collection(db, "carpetas"));
@@ -422,27 +510,96 @@ const RiskTable = () => {
     loadFolders();
   }, []);
 
-  const handleAddArea = () => {
-    if (newArea.trim() && !areas.some((a) => a.nombre === newArea.trim())) {
-      const updatedAreas = [...areas, { nombre: newArea.trim() }];
-      setAreas(updatedAreas);
-      localStorage.setItem("areas", JSON.stringify(updatedAreas));
-      setNewArea("");
-    }
-    closeModal();
+   const loadFolders = async () => {
+      const q = await getDocs(collection(db, "carpetas"));
+      const fetched = q.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setCarpetas(fetched);
+    };
+    loadFolders();
+
+
+    useEffect(() => {
+  const fetchEmpresas = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const q = query(collection(db, "empresas"), where("uid", "==", user.uid));
+    const snapshot = await getDocs(q);
+    const fetched = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    setEmpresasFirebase(fetched);
   };
 
-  const handleRemoveArea = () => {
-    if (selectedAreaToRemove) {
-      const updated = areas.filter(
-        (a) => a.nombre !== selectedAreaToRemove.nombre,
-      );
-      setAreas(updated);
-      localStorage.setItem("areas", JSON.stringify(updated));
-      setArea("");
-    }
-    closeModal();
+  fetchEmpresas();
+}, []);
+
+useEffect(() => {
+  const fetchNormas = async () => {
+    if (!empresaSeleccionadaFirebase) return;
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const normasRef = collection(db, "empresas", empresaSeleccionadaFirebase, "normas");
+    const q = query(normasRef, where("uid", "==", user.uid));
+    const snapshot = await getDocs(q);
+    const normas = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    setNormasFirebase(normas);
   };
+
+  fetchNormas();
+}, [empresaSeleccionadaFirebase]);
+
+
+
+
+  
+
+
+
+
+
+  const handleAddArea = () => {
+  if (!empresaSeleccionada) {
+    alert("Selecciona una empresa antes de agregar un área.");
+    return;
+  }
+
+  const nuevasAreas = [...(areasPorEmpresa[empresaSeleccionada] || [])];
+  if (!nuevasAreas.some((a) => a.nombre === newArea.trim())) {
+    nuevasAreas.push({ nombre: newArea.trim() });
+
+    const actualizado = {
+      ...areasPorEmpresa,
+      [empresaSeleccionada]: nuevasAreas,
+    };
+
+    setAreasPorEmpresa(actualizado);
+    localStorage.setItem("areasPorEmpresa", JSON.stringify(actualizado));
+    setNewArea("");
+  }
+
+  closeModal();
+};
+
+
+ const handleRemoveArea = () => {
+  const nuevasAreas = (areasPorEmpresa[empresaSeleccionada] || []).filter(
+    (a) => a.nombre !== selectedAreaToRemove.nombre
+  );
+
+  const actualizado = {
+    ...areasPorEmpresa,
+    [empresaSeleccionada]: nuevasAreas,
+  };
+
+  setAreasPorEmpresa(actualizado);
+  localStorage.setItem("areasPorEmpresa", JSON.stringify(actualizado));
+  setArea("");
+  closeModal();
+};
+
 
   const handleAddPuesto = () => {
     if (
@@ -456,6 +613,8 @@ const RiskTable = () => {
     }
   };
 
+  
+
   const handleRemovePuesto = () => {
     if (selectedPuestoToRemove) {
       const updated = puestos.filter(
@@ -466,6 +625,62 @@ const RiskTable = () => {
       setSelectedPuestoToRemove(null);
     }
   };
+
+  const handleGuardarEmpresa = () => {
+  if (nuevaEmpresaNombre.trim()) {
+    const yaExiste = empresasLocales.some(
+      (emp) => emp.nombre === nuevaEmpresaNombre.trim()
+    );
+
+    if (!yaExiste) {
+      const nuevas = [...empresasLocales, { nombre: nuevaEmpresaNombre.trim() }];
+      setEmpresasLocales(nuevas);
+      localStorage.setItem("empresasLocales", JSON.stringify(nuevas));
+      setNuevaEmpresaNombre("");
+
+      alert("Empresa guardada con éxito."); // ✅ Alerta aquí
+    } else {
+      alert("Esta empresa ya existe."); // ✅ Advertencia si ya existe
+    }
+  } else {
+    alert("Debes escribir un nombre de empresa."); // ✅ Validación básica
+  }
+};
+
+
+const handleVincularAreaAEmpresa = () => {
+  if (empresaSeleccionadaParaArea && nuevaAreaNombre.trim()) {
+    const copia = { ...areasPorEmpresa };
+
+    // Asegúrate que exista el array para la empresa
+    if (!copia[empresaSeleccionadaParaArea]) {
+      copia[empresaSeleccionadaParaArea] = [];
+    }
+
+    // Validar si ya existe esa área por nombre
+    const existe = copia[empresaSeleccionadaParaArea].some(
+      (area) => area.nombre === nuevaAreaNombre.trim()
+    );
+
+    if (!existe) {
+      copia[empresaSeleccionadaParaArea].push({
+        nombre: nuevaAreaNombre.trim(),
+      });
+
+      alert("Área vinculada con éxito."); // ✅ Alerta aquí
+    } else {
+      alert("Esta área ya existe para la empresa seleccionada."); // ✅ Mensaje de advertencia
+    }
+
+    setAreasPorEmpresa(copia);
+    localStorage.setItem("areasPorEmpresa", JSON.stringify(copia));
+    setNuevaAreaNombre("");
+  } else {
+    alert("Debes seleccionar una empresa y escribir un nombre de área."); // ✅ Validación básica
+  }
+};
+
+
 
   const openFolderModal = () => setIsFolderModalOpen(true);
   const closeFolderModal = () => setIsFolderModalOpen(false);
@@ -485,54 +700,88 @@ const RiskTable = () => {
     setSelectedFolderId(folderId);
   };
 
-  const saveTableData = async (folderId) => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (!user) {
-      alert("No estás autenticado.");
-      return;
+  const saveTableData = async () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  if (!user) {
+    alert("No estás autenticado.");
+    return;
+  }
+
+  if (!selectedEmpresaId || !selectedNormaId) {
+    alert("Selecciona una empresa y una norma.");
+    return;
+  }
+
+  const uid = user.uid;
+  const magnitud = calcularMagnitudRiesgo();
+  const { clasificacion } = obtenerClasificacionRiesgo(magnitud);
+
+  const tableData = {
+  uid,
+  nombreMaquinaria,
+  poe,
+  energiaUtilizada,
+  tiempoExposicion,
+  descripcion,
+  fechaInspeccion: fechaInspeccion || new Date().toLocaleDateString(),
+  logosGuardados,
+  logoSeleccionado, // ✅ Nuevo: guarda el logo elegido
+  consequence,
+  exposure,
+  probability,
+  magnitud,
+  clasificacion,
+  selectedEPPImages,
+  selectedBodyImage,
+  areaSeleccionada: area, // 👈 nombre correcto
+  puestoSeleccionado: puestos.map((p) => p.nombre).join(", "), // 👈 convertir a texto
+  norma: "N-004 (Moviles)",
+  fecha: new Date().toLocaleDateString(),
+  hora: new Date().toLocaleTimeString(),
+  risk: calcularMagnitudRiesgo(),
+  nombreEmpresa: empresaSeleccionada, // 👈 nombre correcto
+  bodyParts,
+  image,
+  opcionesIdentificacionesSeleccionadas,
+  sistemasSeguridadSeleccionados,
+
+};
+
+
+
+  try {
+    if (isEditing && tableId) {
+      const tableRef = doc(
+        db,
+        "empresas",
+        selectedEmpresaId,
+        "normas",
+        selectedNormaId,
+        "tablas",
+        tableId
+      );
+      await updateDoc(tableRef, tableData);
+      alert("Tabla actualizada exitosamente.");
+    } else {
+      await addDoc(
+        collection(
+          db,
+          "empresas",
+          selectedEmpresaId,
+          "normas",
+          selectedNormaId,
+          "tablas"
+        ),
+        tableData
+      );
+      alert("Tabla guardada exitosamente.");
     }
-    const uid = user.uid;
-    const magnitud = calcularMagnitudRiesgo();
-    const { clasificacion } = obtenerClasificacionRiesgo(magnitud);
-    const tableData = {
-      uid,
-      nombreMaquinaria,
-      poe,
-      tiempoExposicion,
-      descripcion,
-      fechaInspeccion: fechaInspeccion || new Date().toLocaleDateString(),
-      consequence,
-      exposure,
-      probability,
-      magnitud,
-      clasificacion,
-      selectedEPPImages,
-      selectedBodyImage,
-      area,
-      puestos,
-      norma: "N-004 (Moviles)",
-      fecha: new Date().toLocaleDateString(),
-      hora: new Date().toLocaleTimeString(),
-      risk: calcularMagnitudRiesgo(),
-      empresaSeleccionada,
-      bodyParts,
-      // Agrega esta línea
-      nombreEmpresa: empresaSeleccionada, // O el nombre que desees
-    };
-    try {
-      if (isEditing && tableId) {
-        const tableRef = doc(db, "carpetas", folderId, "tablas", tableId);
-        await updateDoc(tableRef, tableData);
-        alert("Tabla actualizada exitosamente.");
-      } else {
-        await addDoc(collection(db, "carpetas", folderId, "tablas"), tableData);
-        alert("Tabla guardada exitosamente.");
-      }
-    } catch (error) {
-      alert("Hubo un problema al guardar la tabla.");
-    }
-  };
+  } catch (error) {
+    console.error("Error al guardar tabla:", error);
+    alert("Hubo un problema al guardar la tabla.");
+  }
+};
 
   return (
     <div className="risk-table-container">
@@ -555,89 +804,120 @@ const RiskTable = () => {
           NOM-004-STPS-1999
         </h4>
 <div style={{ display: "flex", alignItems: "center" }}>
-  {logoSeleccionado ? (
-    <div style={{ display: "flex", alignItems: "center" }}>
-      <img
-        src={logoSeleccionado}
-        alt="Logo"
-        style={{ width: "80px", height: "auto", marginRight: "8px" }}
-      />
-      <button onClick={handleRemoveLogo} className="ocultar-al-exportar">×</button>
-    </div>
-  ) : (
-    <div className="ocultar-al-exportar" style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+{logoSeleccionado ? (
+  <div style={{ display: "flex", alignItems: "center" }}>
+    <img
+      src={logoSeleccionado}
+      alt="Logo"
+      style={{ width: "80px", height: "auto", marginRight: "8px" }}
+    />
+    <button onClick={handleRemoveLogo} className="ocultar-al-exportar">×</button>
+  </div>
+) : (
+  <>
+    <button
+      className="ocultar-al-exportar"
+      title="Seleccionar logo"
+      onClick={() => setMostrarOpcionesLogo(true)}
+      style={{
+        background: "none",
+        border: "2px dashed #007bff",
+        color: "#007bff",
+        fontSize: "20px",
+        padding: "10px",
+        borderRadius: "8px",
+        cursor: "pointer",
+      }}
+    >
+      📁
+    </button>
 
-      <select
-        value={empresaSeleccionada}
-        onChange={(e) => {
-          const selectedName = e.target.value;
-          setEmpresaSeleccionada(selectedName);
-          const encontrada =
-            logosGuardados.find((l) => l.nombre === selectedName) ||
-            empresasLocales.find((e) => e.nombre === selectedName) ||
-            empresas.find((e) => e.nombre === selectedName);
-          setLogoSeleccionado(encontrada?.url || null);
-        }}
-        className="dropdown-empresa"
-      >
-        <option value="">Seleccione una empresa o logo guardado</option>
-        {logosGuardados.map((logo, index) => (
-          <option key={`logo-${index}`} value={logo.nombre}>
-            {logo.nombre}
-          </option>
-        ))}
-        {empresasLocales.map((emp, index) => (
-          <option key={`local-${index}`} value={emp.nombre}>
-            {emp.nombre}
-          </option>
-        ))}
-        {empresas.map((emp, index) => (
-          <option key={`fija-${index}`} value={emp.nombre}>
-            {emp.nombre}
-          </option>
-        ))}
-      </select>
-
-      <label
-        htmlFor="custom-logo-upload"
+    {mostrarOpcionesLogo && (
+      <div
         style={{
-          cursor: "pointer",
-          color: "#007bff",
-          fontSize: "14px",
-          textDecoration: "underline",
+          background: "#f9f9f9",
+          padding: "16px",
+          border: "1px solid #ccc",
+          borderRadius: "8px",
+          marginTop: "10px",
         }}
       >
-        subir un logo
-      </label>
-      <input
-        type="file"
-        id="custom-logo-upload"
-        accept="image/*"
-        style={{ display: "none" }}
-        onChange={(e) => {
-          const file = e.target.files[0];
-          if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              const base64Logo = reader.result;
-              const nombreEmpresa = prompt("Nombre para este logo:");
-              if (nombreEmpresa) {
-                const nuevosLogos = [
-                  ...(JSON.parse(localStorage.getItem("logosGuardados")) || []),
-                  { nombre: nombreEmpresa, url: base64Logo },
-                ];
-                localStorage.setItem("logosGuardados", JSON.stringify(nuevosLogos));
-                setLogosGuardados(nuevosLogos);
-                setEmpresaSeleccionada(nombreEmpresa);
-                setLogoSeleccionado(base64Logo);
+        <p><strong>¿Qué deseas hacer?</strong></p>
+
+        {/* Subir nuevo logo */}
+        <button onClick={() => document.getElementById("logo-file-input").click()}>
+          Subir nuevo logo
+        </button>
+
+        <input
+          type="file"
+          id="logo-file-input"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                const base64Logo = reader.result;
+                const nombre = prompt("Nombre para el logo:");
+                if (nombre) {
+                  const nuevos = [...logosGuardados, { nombre, url: base64Logo }];
+                  localStorage.setItem("logosGuardados", JSON.stringify(nuevos));
+                  setLogosGuardados(nuevos);
+                  setEmpresaSeleccionada(nombre);
+                  setLogoSeleccionado(base64Logo);
+                  setMostrarOpcionesLogo(false);
+                }
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
+        />
+
+        {/* Selección por nombre */}
+        <div style={{ marginTop: "10px" }}>
+          <p><strong>Seleccionar logo guardado:</strong></p>
+          <select
+            onChange={(e) => {
+              const seleccionado = logosGuardados.find(
+                (logo) => logo.nombre === e.target.value
+              );
+              if (seleccionado) {
+                setLogoSeleccionado(seleccionado.url);
+                setEmpresaSeleccionada(seleccionado.nombre);
+                setMostrarOpcionesLogo(false);
               }
-            };
-            reader.readAsDataURL(file);
-          }
-        }}
-      />
-    </div>
-  )}
+            }}
+            style={{ width: "100%", padding: "8px" }}
+          >
+            <option value="">-- Seleccionar --</option>
+            {logosGuardados.map((logo, i) => (
+              <option key={i} value={logo.nombre}>
+                {logo.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <button
+          onClick={() => setMostrarOpcionesLogo(false)}
+          style={{
+            marginTop: "10px",
+            color: "#dc3545",
+            border: "1px solid #dc3545",
+            padding: "6px 12px",
+            borderRadius: "6px",
+            backgroundColor: "white",
+            cursor: "pointer",
+          }}
+        >
+          Cancelar
+        </button>
+      </div>
+    )}
+  </>
+)}
 
 
 
@@ -649,133 +929,109 @@ const RiskTable = () => {
       <div className="tabla-responsive">
       <table className="risk-table" style={{ backgroundColor: "white" }}>
         
-      <thead className="thead-responsive">
-  {/* Fila 1: Etiquetas */}
-  <tr>
-    <th className="red">NOMBRE DE LA MAQUINARIA</th>
+    <thead className="thead-responsive">
+  {/* Fila 1: Encabezados */}
+  <tr className="fila-ancha">
+    <th className="red columna-ancha" style={{ textAlign: "center", lineHeight: "1.2" }}>
+      Nombre de<br />la maquinaria
+    </th>
+<th className="red" style={{ textAlign: "center", lineHeight: "1.2" }}>
+  	DESCRIPCIÓN del <br /> EQUIPO
+</th>
     <th className="red">ÁREA</th>
     <th className="red">EMPRESA</th>
     <th className="red">POE</th>
-    <th className="red">TIEMPO DE EXPOSICIÓN</th>
-    <th className="red">FECHA DE INSPECCIÓN</th>
+    <th className="red" style={{ textAlign: "center", lineHeight: "1.2" }}>
+  ENERGÍA<br />UTILIZADA
+</th>
+<th className="red" style={{ textAlign: "center", lineHeight: "1.2" }}>
+  TIEMPO DE<br />EXPOSICIÓN
+</th>
+<th className="red" style={{ textAlign: "center", lineHeight: "1.2" }}>
+  FECHA DE<br />INSPECCIÓN
+</th>
   </tr>
+</thead>
 
-  {/* Fila 2: Inputs */}
+<tbody>
   <tr>
+    {/* NOMBRE */}
     <td>
-      <textarea
+      <input
         placeholder="Introduzca un nombre"
         value={nombreMaquinaria}
         onChange={(e) => setNombreMaquinaria(e.target.value)}
-        style={{ width: "100%" }}
+        style={{
+          width: "100%",
+          height: "40px",
+          fontSize: "15px",
+          padding: "8px",
+          borderRadius: "6px",
+          border: "1px solid #ccc"
+        }}
       />
     </td>
-   <td>
-  <div style={{ display: "flex", flexDirection: "column" }}>
-    <select
-      name="areas"
-      value={area}
-      onChange={(e) => setArea(e.target.value)}
-      className="dropdown-areas"
-    >
-      <option value="">Seleccione un área</option>
-      {areas.map((ar, index) => (
-        <option key={index} value={ar.nombre}>
-          {ar.nombre}
-        </option>
-      ))}
-    </select>
-   <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>
-  {/* Botón Agregar - Tamaño aumentado */}
-  <button
-    type="button"
-    className="button-small ocultar-al-exportar"
-    onClick={() => openModal("Agregar")}
-    title="Agregar área"
-    style={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      width: "42px",
-      height: "42px",
-      backgroundColor: "#f0fdf4",
-      border: "1px solid #bbf7d0",
-      borderRadius: "8px",
-      cursor: "pointer",
-      color: "#16a34a",
-      fontSize: "16px",
-      transition: "all 0.2s ease",
-      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-      ":hover": {
-        backgroundColor: "#dcfce7",
-        transform: "scale(1.05)",
-        boxShadow: "0 3px 6px rgba(0, 0, 0, 0.15)"
-      },
-      ":active": {
-        transform: "scale(0.98)"
-      }
-    }}
-  >
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-    </svg>
-  </button>
 
-  {/* Botón Eliminar - Tamaño aumentado */}
-  <button
-    type="button"
-        className="button-small ocultar-al-exportar"
-
-    onClick={() => openModal("Eliminar")}
-    title="Eliminar área"
-    
+    {/* DESCRIPCIÓN */}
+{/* DESCRIPCIÓN */}
+<td>
+  <textarea
+    value={descripcion}
+    onChange={(e) => setDescripcion(e.target.value)}
+    rows={3} // Fijo a 3 renglones, puedes ajustar
     style={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      width: "42px",
-      height: "42px",
-      backgroundColor: "#fef2f2",
-      border: "1px solid #fecaca",
-      borderRadius: "8px",
-      cursor: "pointer",
-      color: "#dc2626",
-      fontSize: "16px",
-      transition: "all 0.2s ease",
-      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-      ":hover": {
-        backgroundColor: "#fee2e2",
-        transform: "scale(1.05)",
-        boxShadow: "0 3px 6px rgba(0, 0, 0, 0.15)"
-      },
-      ":active": {
-        transform: "scale(0.98)"
-      }
+      width: "100%",
+      height: "60px",            // 🔒 Altura fija
+      resize: "none",            // 🔒 No redimensionable por el usuario
+      fontSize: "15px",
+      padding: "6px 10px",
+      borderRadius: "6px",
+      border: "1px solid #ccc",
+      boxSizing: "border-box",   // 🧱 Asegura que padding no expanda el tamaño
+      overflow: "hidden",        // 🔒 Sin scroll visible
+      wordBreak: "break-word",
+      whiteSpace: "pre-wrap",
+      lineHeight: "1.2",
+      outline: "none",
+      fontFamily: "inherit",
     }}
-  >
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-    </svg>
-  </button>
-</div>
-  </div>
+  />
 </td>
+
+
+
+    {/* ÁREA */}
     <td>
-     <select
+      <select
+        name="areas"
+        value={area}
+        onChange={(e) => setArea(e.target.value)}
+        className="dropdown-areas"
+        style={{ width: "100%" }}
+      >
+        <option value="">Seleccione un área</option>
+        {(areasPorEmpresa[empresaSeleccionada] || []).map((ar, index) => (
+          <option key={index} value={ar.nombre}>
+            {ar.nombre}
+          </option>
+        ))}
+      </select>
+    </td>
+
+    {/* EMPRESA */}
+    <td>
+      <select
         value={empresaSeleccionada}
         onChange={handleEmpresaChange}
         className="dropdown-empresa"
+        style={{ width: "100%" }}
       >
         <option value="">Seleccione una empresa</option>
-
-        {/* Empresas agregadas manualmente */}
         {empresasLocales.map((emp, index) => (
           <option key={`local-${index}`} value={emp.nombre}>
             {emp.nombre}
           </option>
         ))}
-
-        {/* Empresas predefinidas */}
         {empresas.map((emp, index) => (
           <option key={`fija-${index}`} value={emp.nombre}>
             {emp.nombre}
@@ -783,158 +1039,329 @@ const RiskTable = () => {
         ))}
       </select>
     </td>
+
+    {/* POE */}
     <td>
       <input
         placeholder="Introduzca el POE"
         type="text"
         value={poe}
         onChange={(e) => setPoe(e.target.value)}
-        style={{ width: "100%" }}
+        style={{
+          width: "100%",
+          height: "40px",
+          fontSize: "15px",
+          padding: "8px",
+          borderRadius: "6px",
+          border: "1px solid #ccc"
+        }}
       />
     </td>
-    <td>
-      <textarea
-        placeholder="Introduzca el tiempo"
-        value={tiempoExposicion}
-        onChange={(e) => setTiempoExposicion(e.target.value)}
-        style={{ width: "100%" }}
-      />
-    </td>
-    <td>
-      <input
-        type="date"
-        value={fechaInspeccion}
-        onChange={(e) => setFechaInspeccion(e.target.value)}
-        style={{ width: "100%" }}
-      />
-    </td>
-  </tr>
 
-  {/* Fila 3: Descripción y Puestos */}
- 
-</thead>
+    <td>
+ <select
+  value={energiaUtilizada}
+  onChange={(e) => setEnergiaUtilizada(e.target.value)}
+  style={{
+    width: "100%",
+    height: "40px",
+    fontSize: "15px",
+    padding: "8px",
+    borderRadius: "6px",
+    border: "1px solid #ccc",
+    boxSizing: "border-box",
+  }}
+>
+  <option value="">Seleccione la energía utilizada</option>
+  <option value="Eléctrica">Eléctrica</option>
+  <option value="Manual">Manual</option>
+  <option value="Mecánica">Mecánica</option>
+  <option value="Hidráulica">Hidráulica</option>
+  <option value="Eólica">Eólica</option>
+  <option value="Térmica por combustión">Térmica por combustión</option>
+  <option value="Hidroneumatica">Hidroneumatica</option>
+  <option value="Neumatica">Neumatica</option>
+</select>
+
+</td>
+
+
+    {/* TIEMPO */}
+  {/* TIEMPO DE EXPOSICIÓN */}
+<td>
+  <input
+    type="text"
+    placeholder="Tiempo"
+    value={tiempoExposicion}
+    onChange={(e) => setTiempoExposicion(e.target.value)}
+    style={{
+      width: "100%",
+      height: "40px",
+      fontSize: "15px",
+      padding: "8px 12px",
+      borderRadius: "6px",
+      border: "1px solid #ccc",
+      boxSizing: "border-box"
+    }}
+  />
+</td>
+
+{/* FECHA DE INSPECCIÓN */}
+<td>
+  <input
+    type="date"
+    value={fechaInspeccion}
+    onChange={(e) => setFechaInspeccion(e.target.value)}
+    style={{
+      width: "100%",
+      height: "40px",
+      fontSize: "15px",
+      padding: "8px 12px",
+      borderRadius: "6px",
+      border: "1px solid #ccc",
+      boxSizing: "border-box"
+    }}
+  />
+</td>
+
+
+
+  </tr>
+</tbody>
 
 
         <tbody>
           <tr>
-            <tr>
-              <td className="image-section" colSpan="3">
-                <div
-                  className="uploaded"
-                  onClick={() =>
-                    document.getElementById("upload-image").click()
-                  }
-                >
-                  {image ? (
-                    <img src={image} alt="Uploaded" />
-                  ) : (
-                    <p className="image-placeholder">
-                      Haz clic para cargar una imagen
-                    </p>
-                  )}
-                </div>
-                <input
-                  id="upload-image"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  style={{ display: "none" }}
-                />
-              </td>
-            </tr>
+           <tr>
+  <td className="image-section" colSpan="3">
+    <div
+      className="uploaded"
+      onClick={() => document.getElementById("upload-image").click()}
+    >
+      {image ? (
+        <img src={image} alt="Uploaded" />
+      ) : (
+        <p className="image-placeholder">
+          Haz clic para cargar una imagen
+        </p>
+      )}
+    </div>
+    <input
+      id="upload-image"
+      type="file"
+      accept="image/*"
+      onChange={handleImageUpload}
+      style={{ display: "none" }}
+    />
+  </td>
+</tr>
+
             <td className="risk-info" colSpan="5">
-              <h4 className="blacktitle-small">Identificación de riesgos</h4>
-              {[...Array(7)].map((_, index) => (
-                <select key={index} className="dropdown-large-text">
-                  <option value="">Seleccione un riesgo</option>
-                  {opcionesIdentificaciones.map((opt, idx) => (
-                    <option key={idx} value={opt}>
-                      {opt}
-                    </option>
-                  ))}
-                </select>
-              ))}
-            </td>
-            <td className="safety-info" colSpan="3">
-              <h4 className="blacktitle-small">Sistemas de seguridad</h4>
-              {[...Array(7)].map((_, index) => (
-                <select key={index} className="dropdown-large-text">
-                  <option value="">Seleccione un sistema de seguridad</option>
-                  {opcionesSistemaseguridad.map((opt, idx) => (
-                    <option key={idx} value={opt}>
-                      {opt}
-                    </option>
-                  ))}
-                </select>
-              ))}
-            </td>
+  <h4 className="blacktitle-small">Identificación de riesgos</h4>
+  {[...Array(7)].map((_, index) => (
+    <select
+      key={index}
+      className="dropdown-large-text"
+      value={opcionesIdentificacionesSeleccionadas[index] || ""}
+      onChange={(e) => {
+        const updated = [...opcionesIdentificacionesSeleccionadas];
+        updated[index] = e.target.value;
+        setOpcionesIdentificacionesSeleccionadas(updated);
+      }}
+    >
+      <option value="">Seleccione un riesgo</option>
+      {opcionesIdentificaciones.map((opt, idx) => (
+        <option key={idx} value={opt}>
+          {opt}
+        </option>
+      ))}
+    </select>
+  ))}
+</td>
+           <td className="safety-info" colSpan="3">
+  <h4 className="blacktitle-small">Sistemas de seguridad</h4>
+  {[...Array(7)].map((_, index) => (
+    <select
+      key={index}
+      className="dropdown-large-text"
+      value={sistemasSeguridadSeleccionados[index] || ""}
+      onChange={(e) => {
+        const updated = [...sistemasSeguridadSeleccionados];
+        updated[index] = e.target.value;
+        setSistemasSeguridadSeleccionados(updated);
+      }}
+    >
+      <option value="">Seleccione un sistema de seguridad</option>
+      {opcionesSistemaseguridad.map((opt, idx) => (
+        <option key={idx} value={opt}>
+          {opt}
+        </option>
+      ))}
+    </select>
+  ))}
+</td>
           </tr>
 
-          <table id="body-parts-table" colSpan="8">
-            <tbody>
-              <tr>
-                <th colSpan="6">
-                  Principales partes del cuerpo expuestas al riesgo:
-                </th>
-              </tr>
-              <tr>
-                <td>Cabeza y Oídos</td>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={bodyParts["Cabeza y Oídos"]}
-                    onChange={() => handleBodyPartChange("Cabeza y Oídos")}
-                  />
-                </td>
-                <td>Ojos y Cara</td>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={bodyParts["Ojos y Cara"]}
-                    onChange={() => handleBodyPartChange("Ojos y Cara")}
-                  />
-                </td>
-                <td>Sistema respiratorio</td>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={bodyParts["Sistema respiratorio"]}
-                    onChange={() =>
-                      handleBodyPartChange("Sistema respiratorio")
-                    }
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>Brazos y Manos</td>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={bodyParts["Brazos y Manos"]}
-                    onChange={() => handleBodyPartChange("Brazos y Manos")}
-                  />
-                </td>
-                <td>Tronco</td>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={bodyParts["Tronco"]}
-                    onChange={() => handleBodyPartChange("Tronco")}
-                  />
-                </td>
-                <td>Extremidades inferiores</td>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={bodyParts["Extremidades inferiores"]}
-                    onChange={() =>
-                      handleBodyPartChange("Extremidades inferiores")
-                    }
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+         <table id="body-parts-table" colSpan="8">
+  <thead>
+    <tr>
+      <th colSpan="6">
+        Principales partes del cuerpo expuestas al riesgo:
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cabeza y Oídos</td>
+      <td
+        data-check="true"
+        onClick={() =>
+          setBodyParts((prev) => ({
+            ...prev,
+            "Cabeza y Oídos": !prev["Cabeza y Oídos"],
+          }))
+        }
+        style={{
+    border: "1px solid #ccc",
+    cursor: "pointer",
+    textAlign: "center",
+    fontWeight: "bold",
+    width: "70px",
+    height: "30px",
+    verticalAlign: "middle",
+    lineHeight: "30px",
+    padding: "0",
+  }}
+
+      >
+        {bodyParts["Cabeza y Oídos"] ? "X" : ""}
+      </td>
+
+      <td>Ojos y Cara</td>
+      <td
+        data-check="true"
+        onClick={() =>
+          setBodyParts((prev) => ({
+            ...prev,
+            "Ojos y Cara": !prev["Ojos y Cara"],
+          }))
+        }
+            style={{
+    border: "1px solid #ccc",
+    cursor: "pointer",
+    textAlign: "center",
+    fontWeight: "bold",
+    width: "70px",
+    height: "30px",
+    verticalAlign: "middle",
+    lineHeight: "30px",
+    padding: "0",
+  }}
+      >
+        {bodyParts["Ojos y Cara"] ? "X" : ""}
+      </td>
+
+      <td>Sistema respiratorio</td>
+      <td
+        data-check="true"
+        onClick={() =>
+          setBodyParts((prev) => ({
+            ...prev,
+            "Sistema respiratorio": !prev["Sistema respiratorio"],
+          }))
+        }
+            style={{
+    border: "1px solid #ccc",
+    cursor: "pointer",
+    textAlign: "center",
+    fontWeight: "bold",
+    width: "70px",
+    height: "30px",
+    verticalAlign: "middle",
+    lineHeight: "30px",
+    padding: "0",
+  }}
+      >
+        {bodyParts["Sistema respiratorio"] ? "X" : ""}
+      </td>
+    </tr>
+    <tr>
+      <td>Brazos y Manos</td>
+      <td
+        data-check="true"
+        onClick={() =>
+          setBodyParts((prev) => ({
+            ...prev,
+            "Brazos y Manos": !prev["Brazos y Manos"],
+          }))
+        }
+            style={{
+    border: "1px solid #ccc",
+    cursor: "pointer",
+    textAlign: "center",
+    fontWeight: "bold",
+    width: "70px",
+    height: "30px",
+    verticalAlign: "middle",
+    lineHeight: "30px",
+    padding: "0",
+  }}
+      >
+        {bodyParts["Brazos y Manos"] ? "X" : ""}
+      </td>
+
+      <td>Tronco</td>
+      <td
+        data-check="true"
+        onClick={() =>
+          setBodyParts((prev) => ({
+            ...prev,
+            Tronco: !prev["Tronco"],
+          }))
+        }
+            style={{
+    border: "1px solid #ccc",
+    cursor: "pointer",
+    textAlign: "center",
+    fontWeight: "bold",
+    width: "70px",
+    height: "30px",
+    verticalAlign: "middle",
+    lineHeight: "30px",
+    padding: "0",
+  }}
+      >
+        {bodyParts["Tronco"] ? "X" : ""}
+      </td>
+
+      <td>Extremidades inferiores</td>
+      <td
+        data-check="true"
+        onClick={() =>
+          setBodyParts((prev) => ({
+            ...prev,
+            "Extremidades inferiores":
+              !prev["Extremidades inferiores"],
+          }))
+        }
+           style={{
+    border: "1px solid #ccc",
+    cursor: "pointer",
+    textAlign: "center",
+    fontWeight: "bold",
+    width: "70px",
+    height: "30px",
+    verticalAlign: "middle",
+    lineHeight: "30px",
+    padding: "0",
+  }}
+      >
+        {bodyParts["Extremidades inferiores"] ? "X" : ""}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 
           <tr>
             <td colSpan="4" className="risk-evaluation-section">
@@ -1123,6 +1550,43 @@ const RiskTable = () => {
     <button onClick={handleReset} className="reset-button">
       Reiniciar Tabla
     </button>
+
+    {/* 👇 Agrega aquí los botones de área */}
+    <button
+      type="button"
+      className="button-small ocultar-al-exportar"
+      onClick={() => openModal("Agregar")}
+      title="Agregar área"
+      style={{
+        marginLeft: "16px",
+        backgroundColor: "#f0fdf4",
+        border: "1px solid #bbf7d0",
+        color: "#16a34a",
+        borderRadius: "6px",
+        padding: "8px 12px",
+        cursor: "pointer",
+      }}
+    >
+      + Agregar Área o Empresa
+    </button>
+
+    <button
+      type="button"
+      className="button-small ocultar-al-exportar"
+      onClick={() => openModal("Eliminar")}
+      title="Eliminar área"
+      style={{
+        marginLeft: "8px",
+        backgroundColor: "#fef2f2",
+        border: "1px solid #fecaca",
+        color: "#dc2626",
+        borderRadius: "6px",
+        padding: "8px 12px",
+        cursor: "pointer",
+      }}
+    >
+      x Eliminar Área o Empresa
+    </button>
   </div>
 )}
 
@@ -1150,44 +1614,58 @@ const RiskTable = () => {
 
 >
   {modalAction === "Agregar" && (
-    <>
-      <h3 style={{ marginBottom: "10px" }}>Agregar Área</h3>
-      <input
-        type="text"
-        placeholder="Nombre del área"
-        value={newArea}
-        onChange={(e) => setNewArea(e.target.value)}
-        style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
-      />
-      <button onClick={handleAddArea} style={{ width: "100%", marginBottom: "20px" }}>
-        Confirmar Agregar Área
-      </button>
+  <div className="agregar-empresa-container">
+    <h2 className="titulo-seccion">Agregar Empresa y Área</h2>
 
-      <h3 style={{ marginBottom: "10px" }}>Agregar Empresa</h3>
+    {/* Sección Empresa */}
+    <div className="form-group">
+      <label className="form-label">Nueva Empresa:</label>
       <input
         type="text"
-        placeholder="Nombre de la empresa"
-        value={newEmpresa}
-        onChange={(e) => setNewEmpresa(e.target.value)}
-        style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
+        className="form-input"
+        placeholder=""
+        value={nuevaEmpresaNombre}
+        onChange={(e) => setNuevaEmpresaNombre(e.target.value)}
       />
-      <button
-        onClick={() => {
-          if (newEmpresa.trim()) {
-            const nuevas = [...empresasLocales, { nombre: newEmpresa.trim() }];
-            setEmpresasLocales(nuevas);
-            localStorage.setItem("empresasLocales", JSON.stringify(nuevas));
-            setNewEmpresa("");
-          }
-        }}
-        style={{ width: "100%", marginBottom: "20px" }}
+      <button className="form-button" onClick={handleGuardarEmpresa}>
+        Guardar Empresa
+      </button>
+    </div>
+
+    {/* Sección Área */}
+    <h3 className="titulo-subseccion">Vincular Área a Empresa</h3>
+    
+    <div className="form-group">
+      <label className="form-label">Empresa:</label>
+      <select
+        className="form-select"
+        value={empresaSeleccionadaParaArea}
+        onChange={(e) => setEmpresaSeleccionadaParaArea(e.target.value)}
       >
-        Agregar Empresa
-      </button>
+        <option value="">Selecciona una empresa</option>
+        {empresasLocales.map((emp, idx) => (
+          <option key={idx} value={emp.nombre}>
+            {emp.nombre}
+          </option>
+        ))}
+      </select>
+    </div>
 
-     
-    </>
-  )}
+    <div className="form-group">
+      <label className="form-label">Nueva Área:</label>
+      <input
+        type="text"
+        className="form-input"
+        placeholder=""
+        value={nuevaAreaNombre}
+        onChange={(e) => setNuevaAreaNombre(e.target.value)}
+      />
+      <button className="form-button" onClick={handleVincularAreaAEmpresa}>
+        Vincular Área a Empresa
+      </button>
+    </div>
+  </div>
+)}
   {/* Sección: Eliminar Área / Puesto / Empresa */}
   {modalAction === "Eliminar" && (
   <>
@@ -1228,37 +1706,7 @@ const RiskTable = () => {
 
     {/* Eliminar Puesto */}
     <div style={{ marginBottom: "20px" }}>
-      <h2 style={{ marginBottom: "10px" }}>Eliminar Puesto</h2>
-      <select
-        value={selectedPuestoToRemove?.nombre || ""}
-        onChange={(e) =>
-          setSelectedPuestoToRemove(
-            puestos.find((p) => p.nombre === e.target.value)
-          )
-        }
-        style={{
-          width: "100%",
-          padding: "10px",
-          fontSize: "16px",
-          marginBottom: "10px",
-        }}
-      >
-        <option value="">Seleccione un puesto para eliminar</option>
-        {puestos.map((p, idx) => (
-          <option key={idx} value={p.nombre}>{p.nombre}</option>
-        ))}
-      </select>
-      <button
-        onClick={handleRemovePuesto}
-        style={{
-          width: "100%",
-          padding: "10px",
-          fontSize: "16px",
-          cursor: "pointer",
-        }}
-      >
-        Eliminar Puesto
-      </button>
+      
     </div>
 
     {/* Eliminar Empresa */}
@@ -1327,65 +1775,83 @@ const RiskTable = () => {
 </Modal>
 
 
-      <Modal
-        isOpen={isFolderModalOpen}
-        onRequestClose={closeFolderModal}
-        contentLabel="Seleccionar Carpeta"
-        ariaHideApp={false}
-        style={{
-          content: {
-            top: "50%",
-            left: "50%",
-            right: "auto",
-            bottom: "auto",
-            marginRight: "-50%",
-            transform: "translate(-50%, -50%)",
-          },
-        }}
-      >
-        <h2>Selecciona o crea una Carpeta</h2>
-        {carpetas.length > 0 ? (
-          carpetas.map((f) => (
-            <div key={f.id} style={{ marginBottom: "10px" }}>
-              <label>
-                <input
-                  type="radio"
-                  name="folder"
-                  checked={selectedFolderId === f.id}
-                  onChange={() => handleSelectFolder(f.id)}
-                />
-                {f.nombre}
-              </label>
-            </div>
-          ))
-        ) : (
-          <p>No hay carpetas existentes</p>
-        )}
-        <input
-          type="text"
-          placeholder="Nombre nueva carpeta"
-          value={newFolderName}
-          onChange={(e) => setNewFolderName(e.target.value)}
-          style={{ width: "100%", marginBottom: "10px" }}
-        />
-        <button onClick={handleCreateNewFolder}>Crear</button>
-        <div style={{ marginTop: "20px" }}>
-          <button
-            onClick={() => {
-              if (!selectedFolderId) {
-                alert("Selecciona o crea una carpeta primero.");
-                return;
-              }
-              saveTableData(selectedFolderId);
-              closeFolderModal();
-            }}
-            style={{ marginRight: "10px" }}
-          >
-            Guardar Tabla
-          </button>
-          <button onClick={closeFolderModal}>Cancelar</button>
+     <Modal
+  isOpen={isFolderModalOpen}
+  onRequestClose={closeFolderModal}
+  contentLabel="Seleccionar Empresa y Norma"
+  ariaHideApp={false}
+  style={{
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+    },
+  }}
+>
+  <h2>Selecciona una Empresa</h2>
+  {empresasFirebase.map((empresa) => (
+    <div key={empresa.id} style={{ marginBottom: "10px" }}>
+      <label>
+       <input
+  type="radio"
+  name="empresa"
+  value={empresa.id}
+  checked={selectedEmpresaId === empresa.id}
+  onChange={() => {
+  setSelectedEmpresaId(empresa.id);
+  setEmpresaSeleccionadaFirebase(empresa.id); // 👈 necesario para cargar normas
+}}
+/>
+
+        {empresa.nombre}
+      </label>
+    </div>
+  ))}
+
+  {empresaSeleccionadaFirebase && (
+    <>
+      <h3>Selecciona una Norma</h3>
+      {normasFirebase.map((norma) => (
+        <div key={norma.id}>
+          <label>
+            <input
+  type="radio"
+  name="norma"
+  value={norma.id}
+  checked={selectedNormaId === norma.id}
+  onChange={() => setSelectedNormaId(norma.id)}
+/>
+
+            {norma.nombre}
+          </label>
         </div>
-      </Modal>
+      ))}
+    </>
+  )}
+
+  <div style={{ marginTop: "20px" }}>
+    <button
+      onClick={() => {
+  if (!selectedEmpresaId || !selectedNormaId) {
+    alert("Selecciona una empresa y una norma.");
+    return;
+  }
+  saveTableData(); // Ya usa selectedEmpresaId y selectedNormaId internamente
+  closeFolderModal();
+}}
+
+      style={{ marginRight: "10px" }}
+    >
+      Guardar Tabla
+    </button>
+    <button onClick={closeFolderModal}>Cancelar</button>
+  </div>
+</Modal>
+
+
     </div>
   );
 };

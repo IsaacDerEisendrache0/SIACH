@@ -1,207 +1,291 @@
-/* General Styles */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f9;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.risk-table-container {
-  padding: 20px;
-  background-color: #ffffff;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  margin: 20px auto;
-}
-
-.risk-table-wrapper {
-  overflow: hidden;
-}
-
-.risk-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: center;
-  table-layout: fixed;
-}
-
-/* Compact Table Design */
-.main-table th,
-.main-table td {
-  padding: 5px;
-  line-height: 1.2;
-  font-size: 0.9em;
-  border: 1px solid;
-}
-
-/* Highlighted Titles */
-.main-table th.nombre-maquinaria,
-.main-table th.descripcion-maquinaria,
-.main-table th.energia-utilizada,
-.main-table th.area,
-.main-table th.poe,
-.main-table th.tiempo-exposicion,
-.main-table th.localizacion-esquematica {
-  background-color: #e13b3b;
-  color: #fff;
-  font-weight: bold;
-  border: 1px solid #000000;
-}
-
-/* General Cell Styles */
-.main-table td {
-  background-color: #fff;
-}
-
-.image-sectionn {
-  width: 340px; /* Ancho fijo del cuadro */
-  height: 250px; /* Alto fijo del cuadro */
+/* Contenedor principal */
+.herramientas-wrapper {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden; /* Esconde desbordamientos */
-  background-color: #f9f9f9; /* Fondo claro */
-  position: relative; /* Para posicionar el input */
+  flex-direction: column;
+  width: 100%;
+  max-width: 1600px;
+  margin: auto;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-x: auto;
+  background: #f4f4f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.image-preview {
-  width: 100%; /* Ancho ajustado al cuadro */
-  height: 100%; /* Alto ajustado al cuadro */
-  object-fit: contain; /* Mantiene las proporciones de la imagen */
-}
-
-.image-placeholder {
-  color: #999;
-  font-size: 14px;
+/* Título */
+.titulo-principal {
   text-align: center;
+  font-weight: bold;
+  font-size: 1.3em;
+  margin-bottom: 20px;
 }
 
-.image-input {
-  position: absolute;
-  top: 0;
-  left: 0;
+/* Agrupación de campos en una fila horizontal */
+.fila-datos {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+/* Cada campo dentro de la fila */
+.campo {
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  flex: 1;
+}
+
+/* Etiquetas y campos */
+.campo label {
+  font-weight: 600;
+  font-size: 0.9em;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  padding: 6px 10px;
+  font-size: 0.85em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  resize: none;
+}
+
+/* Evaluación de Riesgo */
+.evaluacion-riesgo {
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.evaluacion-riesgo h3 {
+  color: #2c3e50;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 6px;
+  margin-bottom: 15px;
+}
+
+/* Evaluación horizontal */
+.campos-evaluacion {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 20px;
+  justify-content: space-between;
+  overflow-x: auto;
+}
+
+.campos-evaluacion .campo {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* Resultado de magnitud de riesgo */
+.resultado-riesgo {
+  margin-top: 20px;
+  text-align: center;
+  padding: 10px;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  font-size: 1em;
+}
+
+/* Botones */
+.botones-acciones {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.botones-acciones button {
+  padding: 10px 20px;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.2s ease;
+}
+
+.botones-acciones button:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive para móvil */
+@media screen and (max-width: 768px) {
+  .fila-datos {
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+
+  .campos-evaluacion {
+    flex-direction: column;
+  }
+
+  .botones-acciones {
+    flex-direction: column;
+  }
+
+  .tabla-epp {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==== Identificación del Riesgo ==== */
+.lista-peligros {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.peligro-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.95em;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.peligro-item input[type="checkbox"] {
+  margin-top: 3px;
+}
+
+/* Imagen */
+.image-sectionn {
+  width: 100%;
+  height: 200px;
+  border: 1px solid #ccc;
+  background: #f7f7f7;
+  text-align: center;
+  line-height: 200px;
+  color: #aaa;
+}
+
+.full-image {
   width: 100%;
   height: 100%;
-  opacity: 0; /* Oculta el input */
-  cursor: pointer; /* Cambia el cursor para indicar interactividad */
-}
-
-.image-preview {
+  object-fit: cover;
   display: block;
 }
 
-/* Observations */
-textarea#observaciones {
-  width: 100%;
-  height: 100% !important;
-  font-size: 1.5em;
-}
-
-/* EPP Table */
-.epp-table th {
-  background-color: #4caf50;
+/* Botón custom */
+.custom-upload-button {
+  background-color: #e60000;
   color: #fff;
-  font-weight: bold;
-}
-
-.epp-table td {
-  border: 1px solid #ddd;
-  padding: 5px;
-}
-
-/* Download Button */
-.download-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
+  padding: 5px 10px;
+  font-size: 12px;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
+  margin-top: 5px;
   cursor: pointer;
-  font-size: 1em;
-} /*disque estoy jalando pero ni de pedo, al rato que vean los comentarios pa q se caguen de risa xd*/
-/*Pinche jale mierda, ya quiero volver a la uni :not() */
-
-.download-button:hover {
-  background-color: #0056b3;
 }
-/* Ajusta el tamaño de fuente para los apartados específicos */
-.nombre-maquinaria,
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+}
+
+/* Tablas */
+th, td {
+  padding: 6px 8px;
+  font-size: 14px;
+}
+
+/* Colores */
 .descripcion-maquinaria,
-.energia-utilizada,
 .area,
-.poe,
-.tiempo-exposicion {
-  font-size: 0.1em; /* Reduce el tamaño de la letra */
-}
-
-textarea.nombre-maquinaria,
-textarea.descripcion-maquinaria,
-select.energia-utilizada,
-input.area,
-input.poe,
-select.tiempo-exposicion {
-  font-size: 0.7em; /* Ajusta también el tamaño del texto en los inputs y selects */
-}
-/* Risk Body Table Styles */
-.risk-body-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-  height: 400px; /* Altura específica ajustada */
-}
-
-.risk-body-table th,
-.risk-body-table td {
-  padding: 12px; /* Espaciado vertical moderado */
-  line-height: 1.4; /* Espaciado entre líneas más compacto */
-  font-size: 0.95em; /* Tamaño de fuente ligeramente reducido */
-  border: 1px solid #ddd; /* Borde de celda */
-  text-align: center; /* Alineación de texto */
-}
-
-.risk-body-table th {
-  background-color: #cc4141; /* Fondo azul para los encabezados */
-  color: #ffffff; /* Texto blanco */
+.energia-utilizada {
+  background-color: #dfe6e9;
   font-weight: bold;
 }
 
-.risk-body-table td {
-  background-color: #ffffff; /* Fondo blanco para celdas */
+/* Ocultar exportación */
+.hidden-during-export {
+  display: none !important;
 }
 
-/* Alterna colores de filas para mejor legibilidad */
-.risk-body-table tr:nth-child(even) {
-  background-color: #f9f9f9;
+/* Puntaje de riesgo */
+.risk-score-cell {
+  color: black !important;
+  font-weight: bold;
 }
 
-.risk-body-table tr:nth-child(odd) {
-  background-color: #ffffff;
+/* Contenedor tabla principal */
+.risk-table-wrapper {
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Para ajustar ancho de columnas si es necesario */
-.risk-body-table th.columna-ancha,
-.risk-body-table td.columna-ancha {
-  width: 200px; /* Ancho específico para columnas particulares */
+/* EPP horizontal */
+.tabla-epp {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 30px;
+  align-items: start;
 }
 
-.risk-body-table-wrapper {
-  overflow-x: auto; /* Permite desplazamiento horizontal en pantallas pequeñas */
-  margin: 20px auto;
+/* Grid inputs si se necesita agrupar */
+.input-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
 }
 
-/* Botón de acción relacionado con la tabla */
-.risk-body-table .action-button {
-  padding: 10px 15px;
-  background-color: #d31d38;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
+.risk-table th[colspan],
+.risk-table td[colspan] {
+  min-width: 170px;
+  white-space: normal;
+  text-align: center;
+  vertical-align: middle;
+  padding: 8px;
+  font-size: 13px;
+  box-sizing: border-box;
 }
 
-.risk-body-table .action-button:hover {
-  background-color: #b33232;
+.risk-table th[colspan] textarea,
+.risk-table td[colspan] textarea,
+.risk-table th[colspan] select,
+.risk-table td[colspan] select,
+.risk-table th[colspan] input,
+.risk-table td[colspan] input {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 13px;
+  padding: 6px 8px;
+  resize: vertical;
 }

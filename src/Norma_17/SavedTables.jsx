@@ -57,6 +57,10 @@ const SavedTables = () => {
     };
   }, []);
 
+
+
+  
+
   // Si aún no se ha obtenido el usuario, podemos mostrar un mensaje de carga
   // (Los hooks ya fueron declarados de forma incondicional, por lo que no se viola la regla)
   // Nota: Si user es null, podrías redireccionar o mostrar "Cargando..."
@@ -284,27 +288,26 @@ const SavedTables = () => {
   // Parseo de fecha y hora
   // ------------------------------------------------------------------
   function parseDateTime(fecha, hora) {
-    // Ejemplo de fecha "15/4/2025" => day=15, month=4, year=2025
+  if (!fecha || !hora) {
+    return new Date(0); // Devuelve fecha antigua si está incompleto
+  }
+
+  try {
     const [day, month, year] = fecha.split("/").map(num => parseInt(num, 10));
-    
-    // Ejemplo de hora "4:58:37 p.m."
-    let [time, ampm] = hora.split(" ");        
-    
-    // Normalizamos "p.m." => "PM", "a.m." => "AM" (quitamos puntos y subimos a mayúsculas)
-    if (ampm) {
-      ampm = ampm.replace(/\./g, "").toUpperCase(); // "p.m." -> "PM"
-    }
-    
-    // Separamos "4:58:37" en hh, mm, ss
+
+    let [time, ampm] = hora.split(" ");
+    if (ampm) ampm = ampm.replace(/\./g, "").toUpperCase();
+
     let [hh, mm, ss] = time.split(":").map(num => parseInt(num, 10));
-    
-    // Ajuste AM/PM
     if (ampm === "PM" && hh < 12) hh += 12;
     if (ampm === "AM" && hh === 12) hh = 0;
-    
+
     return new Date(year, month - 1, day, hh, mm, ss);
+  } catch (err) {
+    console.warn("Fecha u hora inválida:", fecha, hora);
+    return new Date(0);
   }
-  
+}
 
   // ------------------------------------------------------------------
   // CARGAR REGISTROS CON ACTUALIZACIÓN EN TIEMPO REAL
@@ -396,24 +399,52 @@ const SavedTables = () => {
   // EDITAR REGISTRO
   // ------------------------------------------------------------------
   const handleEditRegistro = (registro) => {
-    console.log("Registro a editar:", registro);
-    localStorage.setItem(
-      "tableToEdit",
-      JSON.stringify({
-        ...registro,
-        empresaId: selectedEmpresa.id,
-        normaId: selectedNorma.id,
-        consequence: registro.consequence || 1,
-        exposure: registro.exposure || 1,
-        probability: registro.probability || 0.1,
-        hazards: registro.hazards || {},
-        selectedMainOption: registro.selectedMainOption || "",
-        nombreEmpresa: registro.nombreEmpresa || "",
-        selectionList: registro.selectionList || [],
-      }),
-    );
+  console.log("Registro a editar:", registro);
+
+  // Guardamos todos los datos en localStorage
+  localStorage.setItem(
+    "tableToEdit",
+    JSON.stringify({
+      ...registro,
+      empresaId: selectedEmpresa.id,
+      normaId: selectedNorma.id,
+      consequence: registro.consequence || "Lesiones sin baja",
+      exposure: registro.exposure || "Ocasionalmente",
+      probability: registro.probability || "Coincidencia extremadamente remota pero concebible",
+      hazards: registro.hazards || {},
+      selectedMainOption: registro.selectedMainOption || "",
+      nombreEmpresa: registro.nombreEmpresa || "",
+      selectionList: registro.selectionList || [],
+      area: registro.area || "",
+      puestos: registro.puestos || [],
+      selectedEPPImages: registro.selectedEPPImages || [],
+      selectedBodyImage: registro.selectedBodyImage || null,
+      bodyParts: registro.bodyParts || {},
+      descripcion: registro.descripcion || "",
+      poe: registro.poe || "",
+      tiempoExposicion: registro.tiempoExposicion || "",
+      image: registro.image || null,
+      opcionesIdentificacionesSeleccionadas: registro.opcionesIdentificacionesSeleccionadas || [],
+      sistemasSeguridadSeleccionados: registro.sistemasSeguridadSeleccionados || [],
+    })
+  );
+
+  // 🧠 Ruta dinámica basada en la norma
+  const norma = registro.norma || "";
+  if (norma.includes("017")) {
     navigate("/norma_17_editor");
-  };
+  } else if (norma.toLowerCase().includes("moviles")) {
+    navigate("/tabla_moviles");
+  } else if (norma.toLowerCase().includes("maquinaria")) {
+    navigate("/tabla_maquinaria");
+  } else if (norma.toLowerCase().includes("herramientas")) {
+    navigate("/tabla_herramientas");
+  } else {
+    alert("No se pudo determinar a qué tabla redirigir.");
+  }
+};
+
+
 
   // ------------------------------------------------------------------
   // BOTONES PARA REGRESAR

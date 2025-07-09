@@ -722,7 +722,7 @@ button {
   padding: 10px;
   background-color: #808b96 !important;
   font-weight: bold;
-  color: white;
+  color: rgb(253, 252, 252);
   font-size: 20px !important; /* Aumenta el tamaño de las etiquetas */
 }
 
@@ -1555,4 +1555,9 @@ button.btn-icon {
   padding: 1rem; 
   margin-top: 1rem;
   */
+}
+
+
+.risk-mark-cell {
+  background-color: white !important;
 }

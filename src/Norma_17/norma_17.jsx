@@ -1013,41 +1013,54 @@ const RiskAssessmentTable = () => {
 
     tiempoExposicion,
   ]);
+const handleReset = () => {
+  localStorage.removeItem(STORAGE_KEY);
 
-  const handleReset = () => {
-    localStorage.removeItem(STORAGE_KEY);
+  // 1. Quita o comenta la línea que resetea el área
+  // setAreaSeleccionada('');  <-- la quitas o comentas
 
-    // 1. Quita o comenta la línea que resetea el área
-    // setAreaSeleccionada('');  <-- la quitas o comentas
+  setPuestoSeleccionado("");
+  setDescripcionActividad1("");
+  setDescripcionActividad2("");
+  setHazards({
+    "Caídas de Altura": false,
+    "Exposición a Temperaturas": false,
+    "Exposición a Electricidad Estática": false,
+    "Exposición a Sustancias Químicas": false,
+    "Exposición a Radiaciones": false,
+    "Exposición agentes Biológicos": false,
+    "Exposición a Ruido": false,
+    "Exposición a Vibraciones": false,
+    "Superficies cortantes": false,
+    "Caídas a nivel o desnivel": false,
+    "Calentamiento de materia prima, subproducto o producto": false,
+  });
+  setRemovedParts([]);
+  setConsequence(1);
+  setExposure(1);
+  setProbability(0.1);
+  setSelectedImages([]);
+  setSelectedOptionEquipoUtilizado("");
+  setSelectedOptionProteccionSugerida("");
+  setSelectedMainOption("");
+  setSelectedSubOption("");
+  setSelectionList([]);
+  setTiempoExposicion("8hrs");
 
-    setPuestoSeleccionado("");
-    setDescripcionActividad1("");
-    setDescripcionActividad2("");
-    setHazards({
-      "Caídas de Altura": false,
-      "Exposición a Temperaturas": false,
-      "Exposición a Electricidad Estática": false,
-      "Exposición a Sustancias Químicas": false,
-      "Exposición a Radiaciones": false,
-      "Exposición agentes Biológicos": false,
-      "Exposición a Ruido": false,
-      "Exposición a Vibraciones": false,
-      "Superficies cortantes": false,
-      "Caídas a nivel o desnivel": false,
-      "Calentamiento de materia prima, subproducto o producto": false,
-    });
-    setRemovedParts([]);
-    setConsequence(1);
-    setExposure(1);
-    setProbability(0.1);
-    setSelectedImages([]);
-    setSelectedOptionEquipoUtilizado("");
-    setSelectedOptionProteccionSugerida("");
-    setSelectedMainOption("");
-    setSelectedSubOption("");
-    setSelectionList([]);
-    setTiempoExposicion("8hrs");
-  };
+  // 🔴 NUEVO: Reiniciar las partes del cuerpo
+  setBodyPartsSelected({
+    "Cabeza y Oídos": false,
+    "Ojos y Cara": false,
+    "Sistema respiratorio": false,
+    "Tronco": false,
+    "Brazos y Manos": false,
+    "Extremidades inferiores": false,
+  });
+
+  // 🔴 NUEVO: Quitar logo seleccionado
+  setLogoSeleccionado(null);
+};
+
 
   // Función para cargar las empresas desde Firestore
   const loadFolders = async () => {
