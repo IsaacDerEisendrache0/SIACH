@@ -272,3 +272,17 @@
   margin: 0 10px;
   font-weight: bold;
 }
+
+.btn-download-all {
+  margin: 10px 0;
+  padding: 10px 16px;
+  background-color: #1976d2;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-download-all:hover {
+  background-color: #1259a6;
+}

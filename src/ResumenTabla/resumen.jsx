@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef} from "react";
 import html2canvas from "html2canvas";
 import {
   collection, onSnapshot, addDoc, deleteDoc, doc,
@@ -8,6 +8,25 @@ import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
 import { FaTrash } from "react-icons/fa";
 import "./TablaResumen.css";
+
+// 🔵 IMPORTA LOS COMPONENTES DE RECHARTS
+
+import {
+  ResponsiveContainer,
+  BarChart,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  Bar,
+  ReferenceLine,
+  
+} from "recharts";
+
+
+
+
+
 
 const TablaResumen = () => {
   // ESTADOS
@@ -24,6 +43,8 @@ const TablaResumen = () => {
 
   const auth = getAuth();
   const uid = auth.currentUser ? auth.currentUser.uid : null;
+
+  
 
   // 1. Cargar Empresas
   useEffect(() => {
@@ -52,40 +73,49 @@ const TablaResumen = () => {
 
   // 3. Cargar Áreas
   useEffect(() => {
-    if (!selectedEmpresa || !selectedNorma || !uid) return;
-    const n = selectedNorma.nombre.toLowerCase();
-    const collectionName =
-      n === "norma_17" || n === "nom_17"
-        ? "resumen_17"
-        : n === "norma_04" || n === "nom_04"
-        ? "resumen_004"
-        : null;
-    if (!collectionName) return;
+  if (!selectedEmpresa || !selectedNorma || !uid) return;
 
-    const empresaFolder = selectedEmpresa.nombre;
-    const q = query(
-      collection(db, collectionName, empresaFolder, "areas"),
-      where("uid", "==", uid)
-    );
+  const n = selectedNorma.nombre.toLowerCase();
 
-    return onSnapshot(q, (snap) => {
-      const areas = snap.docs.map((docSnap) => {
-        const d = docSnap.data();
-        return {
-          area: docSnap.id,
-          collectionName,
-          nombreEmpresa: empresaFolder,
-          puestos: Array.isArray(d.puestos) ? d.puestos : [],
-          tolerable: d.tolerable ?? 0,
-          moderado: d.moderado ?? 0,
-          notable: d.notable ?? 0,
-          elevado: d.elevado ?? 0,
-          grave: d.grave ?? 0,
-        };
-      });
-      setData(areas);
+  let collectionName = null;
+
+  if (n.includes("norma_17") || n.includes("nom_17")) {
+    collectionName = "resumen_17";
+  } else if (n.includes("moviles")) {
+    collectionName = "resumen_004_moviles";
+  } else if (n.includes("maquinaria")) {
+    collectionName = "resumen_004_maquinaria";
+  } else if (n.includes("herramientas")) {
+    collectionName = "resumen_004_herramientas";
+  }
+
+  if (!collectionName) return;
+
+  const empresaFolder = selectedEmpresa.nombre;
+  const q = query(
+    collection(db, collectionName, empresaFolder, "areas"),
+    where("uid", "==", uid)
+  );
+
+  return onSnapshot(q, (snap) => {
+    const areas = snap.docs.map((docSnap) => {
+      const d = docSnap.data();
+      return {
+        area: docSnap.id,
+        collectionName,
+        nombreEmpresa: empresaFolder,
+        puestos: Array.isArray(d.puestos) ? d.puestos : [],
+        tolerable: d.tolerable ?? 0,
+        moderado: d.moderado ?? 0,
+        notable: d.notable ?? 0,
+        elevado: d.elevado ?? 0,
+        grave: d.grave ?? 0,
+      };
     });
-  }, [selectedEmpresa, selectedNorma, uid]);
+    setData(areas);
+  });
+}, [selectedEmpresa, selectedNorma, uid]);
+
 
   // Toggle expandir area
   const toggleExpandArea = (id) =>
@@ -397,10 +427,191 @@ const TablaResumen = () => {
               ) : null
             )}
           </div>
+          {data.length > 0 && (
+  <DashboardResumen
+    data={data.map((area) => ({
+      name: area.area,
+      tolerable: area.tolerable,
+      moderado: area.moderado,
+      notable: area.notable,
+      elevado: area.elevado,
+      grave: area.grave,
+    }))}
+  />
+)}
         </>
       )}
     </div>
+    
   );
 };
+
+
+
+const COLORS = {
+  tolerable: '#00BFFF', // Green for positive/tolerable
+  moderado: '#5dd339ff',  // Yellow for moderate
+  notable: '#f9fd15ff',   // Amber for notable
+  elevado: '#FF7043',   // Orange for elevated
+  grave: '#EF5350',     // Red for grave
+};
+
+
+const DashboardResumen = ({ data }) => {
+  const chartWrapperRef = useRef(null);
+
+  const capturarGrafica = async () => {
+    const nodo = chartWrapperRef.current;
+    if (!nodo) return;
+
+    const btn = document.getElementById("btn-captura-grafica");
+    if (btn) btn.classList.add("captura-hide");
+
+    // Guarda estilos actuales
+    const prev = {
+      overflow: nodo.style.overflow,
+      width: nodo.style.width,
+      height: nodo.style.height,
+    };
+
+    // Expande al tamaño total scrolleable para que NO se recorte nada
+    const fullWidth = nodo.scrollWidth || nodo.getBoundingClientRect().width;
+    const fullHeight = nodo.scrollHeight || nodo.getBoundingClientRect().height;
+
+    nodo.style.overflow = "visible";
+    nodo.style.width = fullWidth + "px";
+    nodo.style.height = fullHeight + "px";
+
+    try {
+      const canvas = await html2canvas(nodo, {
+        scale: 2,
+        backgroundColor: "#fff",
+        useCORS: true,
+        width: fullWidth,
+        height: fullHeight,
+      });
+
+      const a = document.createElement("a");
+      a.download = "Grafica_Resumen.png";
+      a.href = canvas.toDataURL("image/png");
+      a.click();
+    } catch (e) {
+      console.error(e);
+      alert("Error al capturar la gráfica.");
+    } finally {
+      // Restaura estilos
+      nodo.style.overflow = prev.overflow;
+      nodo.style.width = prev.width;
+      nodo.style.height = prev.height;
+      if (btn) btn.classList.remove("captura-hide");
+    }
+  };
+
+  return (
+    <div style={styles.card}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
+        <h3 style={styles.title}>Visualización Gráfica por Área de Riesgo</h3>
+        <button id="btn-captura-grafica" className="btn-captura" onClick={capturarGrafica}>
+          📸 Capturar Gráfica
+        </button>
+      </div>
+
+      {/* ⬇️ Este contenedor es el MISMO pero con ref; lo expandimos al capturar */}
+      <div ref={chartWrapperRef} style={{ overflowX: "auto", overflowY: "hidden", background: "#fff", padding: 8 }}>
+        <div style={{ width: `${data.length * 80}px`, minWidth: "100%" }}>
+          <ResponsiveContainer width="100%" height={600}>
+            <BarChart
+              data={data}
+              margin={{ top: 80, right: 30, left: 20, bottom: 80 }}
+            >
+              <XAxis
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                interval={0}
+                angle={-30}
+                textAnchor="end"
+                height={80}
+                style={styles.axisLabels}
+              />
+              <YAxis axisLine={false} tickLine={false} style={styles.axisLabels} />
+
+              {data.slice(1).map((entry, index) => (
+                <ReferenceLine
+                  key={`sep-${index}`}
+                  x={(index + 0.5).toString()}
+                  stroke="#999"
+                  strokeDasharray="3 3"
+                  strokeWidth={0.7}
+                />
+              ))}
+
+              <Tooltip
+                cursor={{ fill: "rgba(0,0,0,0.1)" }}
+                contentStyle={styles.tooltipContent}
+                labelStyle={styles.tooltipLabel}
+              />
+              <Legend
+                verticalAlign="top"
+                align="center"
+                wrapperStyle={styles.legend}
+                iconType="circle"
+                formatter={(value) => (
+                  <span style={styles.legendItemText}>
+                    {value.charAt(0).toUpperCase() + value.slice(1)}
+                  </span>
+                )}
+              />
+
+              <Bar dataKey="tolerable" stackId="a" fill={COLORS.tolerable} />
+              <Bar dataKey="moderado" stackId="a" fill={COLORS.moderado} />
+              <Bar dataKey="notable" stackId="a" fill={COLORS.notable} />
+              <Bar dataKey="elevado" stackId="a" fill={COLORS.elevado} />
+              <Bar dataKey="grave" stackId="a" fill={COLORS.grave} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const styles = {
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: '8px',
+    padding: '20px',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    marginTop: '20px',
+  },
+  title: {
+    fontSize: '1.5rem',
+    marginBottom: '20px',
+    textAlign: 'center',
+  },
+  axisLabels: {
+    fontSize: '14px',
+    fill: '#666',
+  },
+  tooltipContent: {
+    backgroundColor: '#fff',
+    borderColor: '#ccc',
+    borderRadius: '4px',
+    padding: '10px',
+  },
+  tooltipLabel: {
+    fontWeight: 'bold',
+  },
+  legend: {
+    paddingBottom: "20px",
+    textAlign: "center",
+  },
+  legendItemText: {
+    fontSize: '15px',
+    color: '#333',
+  },
+};
+
+
 
 export default TablaResumen;

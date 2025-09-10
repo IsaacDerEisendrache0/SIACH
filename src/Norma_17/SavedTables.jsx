@@ -17,6 +17,9 @@ import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
 import "./SavedTables.css";
 
+
+
+
 const SavedTables = () => {
   const navigate = useNavigate();
   const auth = getAuth();

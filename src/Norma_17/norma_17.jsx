@@ -290,7 +290,7 @@ const RiskAssessmentTable = () => {
         const imgData = canvas.toDataURL("image/png");
         const link = document.createElement("a");
         link.href = imgData;
-        link.download = "tabla_herramientas_manual.png";
+        link.download = "tabla_17.png";
   
         document.body.appendChild(link);
         link.click();

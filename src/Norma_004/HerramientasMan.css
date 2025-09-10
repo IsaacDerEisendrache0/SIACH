@@ -283,9 +283,40 @@ th, td {
 .risk-table td[colspan] select,
 .risk-table th[colspan] input,
 .risk-table td[colspan] input {
-  width: 100%;
+  width: 300%;
   box-sizing: border-box;
   font-size: 13px;
   padding: 6px 8px;
   resize: vertical;
 }
+
+
+/* Forzar estilos visuales para exportación */
+body.capturing select,
+body.capturing input,
+body.capturing textarea {
+  background-color: white !important;
+  color: black !important;
+  border: 1px solid #000 !important;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: none !important;
+}
+
+/* Eliminar flechas de inputs numéricos si usas alguno */
+body.capturing input[type=number]::-webkit-outer-spin-button,
+body.capturing input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
